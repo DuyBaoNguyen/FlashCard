@@ -4,14 +4,18 @@
     ViewData["Title"] = "Register";
 }
 
-<h1>@ViewData["Title"]</h1>
-
-<div class="row">
-    <div class="col-md-4">
+<div class="content">
+    <div class="register">
+        
         <form asp-route-returnUrl="@Model.ReturnUrl" method="post">
-            <h4>Create a new account.</h4>
-            <hr />
+             <h1>Register</h1>
+                <hr />
             <div asp-validation-summary="All" class="text-danger"></div>
+             <div class="form-group">
+                <label>Name</label>
+                <input class="form-control" />
+                <span class="text-danger"></span>
+            </div>
             <div class="form-group">
                 <label asp-for="Input.Email"></label>
                 <input asp-for="Input.Email" class="form-control" />
@@ -29,11 +33,12 @@
             </div>
             <button type="submit" class="btn btn-primary">Register</button>
         </form>
-    </div>
-    <div class="col-md-6 col-md-offset-2">
+
+        <div class="google-login">
         <section>
-            <h4>Use another service to register.</h4>
             <hr />
+            <h5>Use another service to register.</h5>
+            <br />
             @{
                 if ((Model.ExternalLogins?.Count ?? 0) == 0)
                 {
@@ -51,7 +56,14 @@
                             <p>
                                 @foreach (var provider in Model.ExternalLogins)
                                 {
-                                    <button type="submit" class="btn btn-primary" name="provider" value="@provider.Name" title="Log in using your @provider.DisplayName account">@provider.DisplayName</button>
+                                    <button type="submit" class="btn btn-primary" name="provider" value="@provider.Name" title="Log in using your @provider.DisplayName account">                                        
+                                        <div class="image">
+                                            <img class="google-icon" src="http://assets.stickpng.com/thumbs/5847f9cbcef1014c0b5e48c8.png"/>
+                                        </div>
+                                       <div class="text">
+                                            Register with Google
+                                       </div>
+                                    </button>
                                 }
                             </p>
                         </div>
@@ -59,6 +71,7 @@
                 }
             }
         </section>
+    </div>
     </div>
 </div>
 

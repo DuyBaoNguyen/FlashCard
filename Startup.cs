@@ -12,6 +12,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Data.SqlClient;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 
 namespace FlashCard
 {
@@ -38,13 +39,27 @@ namespace FlashCard
 
             services.AddIdentityServer()
                 .AddApiAuthorization<ApplicationUser, ApplicationDbContext>();
+                // .AddDeveloperSigningCredential()
+                // .AddInMemoryIdentityResources(Config.GetIdentityResources())
+                // .AddInMemoryApiResources(Config.GetApiResources())
+                // .AddInMemoryClients(Config.GetClients())
+                // .AddAspNetIdentity<ApplicationUser>();
 
-            services.AddAuthentication()
+            services.AddAuthentication(options =>
+                {
+                    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                })
                 .AddIdentityServerJwt()
                 .AddGoogle(options =>
                 {
                     options.ClientId = Configuration["Authentication:Google:ClientId"];
                     options.ClientSecret = Configuration["Authentication:Google:ClientSecret"];
+                })
+                .AddJwtBearer(options =>
+                {
+                    options.Authority = "https://localhost:5001";
+                    options.Audience = "FlashCardAPI";
                 });
 
             services.AddControllersWithViews();
