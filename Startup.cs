@@ -56,11 +56,16 @@ namespace FlashCard
                     options.ClientId = Configuration["Authentication:Google:ClientId"];
                     options.ClientSecret = Configuration["Authentication:Google:ClientSecret"];
                 })
-                .AddJwtBearer(options =>
+                .AddFacebook(options =>
                 {
-                    options.Authority = "https://localhost:5001";
-                    options.Audience = "FlashCardAPI";
+                    options.AppId = Configuration["Authentication:Facebook:AppId"];
+                    options.AppSecret = Configuration["Authentication:Facebook:AppSecret"];
                 });
+                // .AddJwtBearer(options =>
+                // {
+                //     options.Authority = "https://localhost:5001";
+                //     options.Audience = "FlashCardAPI";
+                // });
 
             services.AddControllersWithViews();
             services.AddRazorPages();

@@ -11,10 +11,10 @@
              <h1>Register</h1>
                 <hr />
             <div asp-validation-summary="All" class="text-danger"></div>
-             <div class="form-group">
-                <label>Name</label>
-                <input class="form-control" />
-                <span class="text-danger"></span>
+            <div class="form-group">
+                <label asp-for="Input.Name"></label>
+                <input asp-for="Input.Name" class="form-control" />
+                <span asp-validation-for="Input.Name" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Input.Email"></label>
@@ -56,14 +56,28 @@
                             <p>
                                 @foreach (var provider in Model.ExternalLogins)
                                 {
-                                    <button type="submit" class="btn btn-primary" name="provider" value="@provider.Name" title="Log in using your @provider.DisplayName account">                                        
+                                    var providerName = provider.Name.ToLower();
+                                    var id = "login-" + providerName;
+
+                                    <div class="button" id="@id">
+                                        <button type="submit" class="btn btn-primary" name="provider" value="@provider.Name" title="Log in using your @provider.DisplayName account">
+                                        
                                         <div class="image">
-                                            <img class="google-icon" src="http://assets.stickpng.com/thumbs/5847f9cbcef1014c0b5e48c8.png"/>
+                                            @switch (providerName)
+                                            {
+                                                case "google":
+                                                    <img class="google-icon" src="http://assets.stickpng.com/thumbs/5847f9cbcef1014c0b5e48c8.png"/>
+                                                    break;
+                                                case "facebook":
+                                                    <img class="google-icon" src="http://assets.stickpng.com/thumbs/5847f9cbcef1014c0b5e48c8.png"/>
+                                                    break;
+                                            }
                                         </div>
                                        <div class="text">
-                                            Register with Google
+                                            Login with @provider.Name
                                        </div>
-                                    </button>
+                                        </button>
+                                    </div>
                                 }
                             </p>
                         </div>

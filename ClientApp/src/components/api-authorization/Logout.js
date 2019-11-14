@@ -1,8 +1,10 @@
-import React from 'react'
+import React from 'react';
+import { Redirect } from 'react-router-dom';
 import { Component } from 'react';
 import authService from './AuthorizeService';
 import { AuthenticationResultStatus } from './AuthorizeService';
 import { QueryParameterNames, LogoutActions, ApplicationPaths } from './ApiAuthorizationConstants';
+import Dashboard from '../Users/Dashboard/Dashboard';
 
 // The main responsibility of this component is to handle the user's logout process.
 // This is the starting point for the logout process, which is usually initiated when a
@@ -14,8 +16,12 @@ export class Logout extends Component {
         this.state = {
             message: undefined,
             isReady: false,
-            authenticated: false
+            authenticated: false,
         };
+    }
+
+    redirectLogin = () => {
+        return <Redirect to="/login" />;
     }
 
     componentDidMount() {
@@ -24,6 +30,7 @@ export class Logout extends Component {
             case LogoutActions.Logout:
                 if (!!window.history.state.state.local) {
                     this.logout(this.getReturnUrl());
+
                 } else {
                     // This prevents regular links to <app>/authentication/logout from triggering a logout
                     this.setState({ isReady: true, message: "The logout was not initiated from within the page." });
@@ -34,6 +41,8 @@ export class Logout extends Component {
                 break;
             case LogoutActions.LoggedOut:
                 this.setState({ isReady: true, message: "You successfully logged out!" });
+
+
                 break;
             default:
                 throw new Error(`Invalid action '${action}'`);
@@ -48,7 +57,8 @@ export class Logout extends Component {
             return <div></div>
         }
         if (!!message) {
-            return (<div>{message}</div>);
+            // return (<div>{message}</div>);
+            return <Redirect to="/" Component={Dashboard} />;
         } else {
             const action = this.props.action;
             switch (action) {
@@ -83,6 +93,7 @@ export class Logout extends Component {
             }
         } else {
             this.setState({ message: "You successfully logged out!" });
+            alert("ahihi");
         }
     }
 
