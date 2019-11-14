@@ -1,0 +1,33 @@
+body {
+  font-family: 'Roboto';
+}
+
+.admin {
+  width: 100%;
+  min-height: 100vh;
+  height: auto;
+  background-color: #eeeeee;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: start;
+      -ms-flex-pack: start;
+          justify-content: flex-start;
+}
+
+.admin .admin-sidebar {
+  background-color: white;
+  min-height: 100vh;
+  padding: 15px;
+  width: 15%;
+}
+
+.admin ul li {
+  padding: 15px;
+}
+
+.admin .admin-manager {
+  width: 85%;
+  padding: 30px;
+}
+/*# sourceMappingURL=AdminDashboard.css.map */

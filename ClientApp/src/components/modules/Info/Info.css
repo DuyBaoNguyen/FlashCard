@@ -1,0 +1,44 @@
+.info .info-field {
+  margin-top: 15px;
+  padding: 15px;
+  width: 328px;
+  min-height: 168px;
+  height: auto;
+  border-radius: 6px;
+  background-color: white;
+  border: solid 1px #EEEEEE;
+}
+
+.info .info-field .info-field-item {
+  margin-bottom: 15px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: start;
+      -ms-flex-pack: start;
+          justify-content: flex-start;
+}
+
+.info .info-field .info-field-item .info-field-item-white {
+  width: 80%;
+  font-size: 14px;
+  font-weight: 300;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: normal;
+  letter-spacing: normal;
+  color: black;
+}
+
+.info .info-field .info-field-item .info-field-item-orange {
+  width: 20%;
+  font-size: 14px;
+  font-weight: 500;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: normal;
+  letter-spacing: normal;
+  text-align: right;
+  color: #007bff;
+}
+/*# sourceMappingURL=Info.css.map */
