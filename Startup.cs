@@ -45,11 +45,12 @@ namespace FlashCard
                 // .AddInMemoryClients(Config.GetClients())
                 // .AddAspNetIdentity<ApplicationUser>();
 
-            services.AddAuthentication(options =>
-                {
-                    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-                })
+            services.AddAuthentication()
+                // .AddAuthentication(options =>
+                // {
+                //     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                //     options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                // })
                 .AddIdentityServerJwt()
                 .AddGoogle(options =>
                 {

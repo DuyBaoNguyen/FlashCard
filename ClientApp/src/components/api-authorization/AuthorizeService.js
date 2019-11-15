@@ -23,7 +23,19 @@ export class AuthorizeService {
 
         await this.ensureUserManagerInitialized();
         const user = await this.userManager.getUser();
-        return user && user.profile;
+        let profile = user && user.profile;
+
+        if (profile != null) {
+            let response = await fetch("api/currentuser", {
+                headers: !user.access_token ? {} : { 'Authorization': `Bearer ${user.access_token}` }
+            });
+            if (response.status === 200) {
+                let data = await response.json();
+                profile = { ...profile, ...data };
+            }
+        }
+        
+        return profile;
     }
 
     async getAccessToken() {

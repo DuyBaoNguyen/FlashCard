@@ -20,10 +20,6 @@ export class Logout extends Component {
         };
     }
 
-    redirectLogin = () => {
-        return <Redirect to="/login" />;
-    }
-
     componentDidMount() {
         const action = this.props.action;
         switch (action) {
@@ -41,8 +37,6 @@ export class Logout extends Component {
                 break;
             case LogoutActions.LoggedOut:
                 this.setState({ isReady: true, message: "You successfully logged out!" });
-
-
                 break;
             default:
                 throw new Error(`Invalid action '${action}'`);
