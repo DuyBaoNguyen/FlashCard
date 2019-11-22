@@ -3,6 +3,7 @@
 
 .vscode
 *.css.map
+tempkey.rsa
 
 # User-specific files
 *.suo
