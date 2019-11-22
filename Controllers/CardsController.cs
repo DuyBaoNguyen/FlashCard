@@ -31,7 +31,7 @@ namespace FlashCard.Controllers
         }
 
         [HttpGet]
-        public async Task<IEnumerable<CardApiModel>> GetAllByUser(int pageSize = 10, int pageIndex = 1)
+        public async Task<IEnumerable<CardApiModel>> GetAllByUser(int? pageSize, int pageIndex = 1)
         {
             var user = await UserService.GetUser(userManager, User);
             var cards = dbContext.Cards
@@ -40,9 +40,25 @@ namespace FlashCard.Controllers
                             .Include(c => c.CardOwners)
                                 .ThenInclude(co => co.User)
                             .Where(c => c.CardOwners.FirstOrDefault(co => co.UserId == user.Id) != null)
-                            .Skip((pageIndex - 1) * pageSize)
-                            .Take(pageSize)
                             .AsNoTracking();
+
+            if (pageSize != null)
+            {
+                var numberPages = await GetNumberOfCardPages(pageSize.Value);
+
+                if (pageIndex <= 0)
+                {
+                    pageIndex = 1;
+                }
+                else if (pageIndex > numberPages)
+                {
+                    pageIndex = numberPages;
+                }
+
+                pageSize = pageSize <= 0 ? 1 : pageSize;
+
+                cards = cards.Skip((pageIndex - 1) * pageSize.Value).Take(pageSize.Value);
+            }
 
             var cardmodels = new List<CardApiModel>();
 
@@ -53,15 +69,7 @@ namespace FlashCard.Controllers
 
                 foreach (var back in backs)
                 {
-                    backmodels.Add(new BackApiModel
-                    {
-                        Id = back.Id,
-                        Type = back.Type,
-                        Meaning = back.Meaning,
-                        Example = back.Example,
-                        Image = back.Image == null ? null : $"data:image/{back.ImageType};base64,{Convert.ToBase64String(back.Image)}",
-                        Author = back.Author == null ? null : new { Id = back.AuthorId, DisplayName = back.Author.Name }
-                    });
+                    backmodels.Add(new BackApiModel(back));
                 }
 
                 cardmodels.Add(new CardApiModel
@@ -75,17 +83,27 @@ namespace FlashCard.Controllers
             return cardmodels;
         }
 
+        // [HttpPost]
+        // [ProducesResponseType(StatusCodes.Status201Created)]
+        // [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        // public async Task<ActionResult<CardApiModel>> Create(CardRequestModel cardmodel)
+        // {
+
+        // }
+
         [HttpGet("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult<CardApiModel>> GetById(int id)
         {
+            var user = await UserService.GetUser(userManager, User);
             var card = await dbContext.Cards
                             .Include(c => c.Backs)
                                 .ThenInclude(b => b.Author)
                             .Include(c => c.CardOwners)
                                 .ThenInclude(co => co.User)
+                            .Where(c => c.CardOwners.FirstOrDefault(co => co.UserId == user.Id) != null)
                             .AsNoTracking()
                             .FirstOrDefaultAsync(c => c.Id == id);
 
@@ -94,24 +112,12 @@ namespace FlashCard.Controllers
                 return NotFound();
             }
 
-            var user = await UserService.GetUser(userManager, User);
-            var isAdmin = await userManager.IsInRoleAsync(user, Roles.Administrator);
-            
-
             var backs = card.Backs.Where(b => b.OwnerId == user.Id);
             var backmodels = new List<BackApiModel>();
 
             foreach (var back in backs)
             {
-                backmodels.Add(new BackApiModel
-                {
-                    Id = back.Id,
-                    Type = back.Type,
-                    Meaning = back.Meaning,
-                    Example = back.Example,
-                    Image = back.Image == null ? null : $"data:image/{back.ImageType};base64,{Convert.ToBase64String(back.Image)}",
-                    Author = back.Author == null ? null : new { Id = back.AuthorId, DisplayName = back.Author.Name }
-                });
+                backmodels.Add(new BackApiModel(back));
             }
 
             return new CardApiModel
@@ -120,6 +126,23 @@ namespace FlashCard.Controllers
                 Front = card.Front,
                 Backs = backmodels
             };
+        }
+
+        [HttpGet("pages")]
+        public async Task<int> GetNumberOfCardPages(int pageSize)
+        {
+            var user = await UserService.GetUser(userManager, User);
+            var numberCards = await dbContext.Cards
+                                .Include(c => c.CardOwners)
+                                    .ThenInclude(co => co.User)
+                                .Where(c => c.CardOwners.FirstOrDefault(co => co.UserId == user.Id) != null)
+                                .CountAsync();
+
+            if (pageSize <= 0)
+            {
+                return 1;
+            }
+            return (int)Math.Ceiling((float)numberCards / pageSize);
         }
     }
 }
