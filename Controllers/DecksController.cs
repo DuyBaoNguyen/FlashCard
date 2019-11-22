@@ -56,51 +56,7 @@ namespace FlashCard.Controllers
 
             foreach (var deck in decks)
             {
-                var source = deck.Source == null ? null : new DeckApiModel
-                {
-                    Id = deck.Source.Id,
-                    Name = deck.Source.Name,
-                    Description = deck.Source.Description,
-                    Public = deck.Source.Public,
-                    CreatedDate = deck.Source.CreatedDate,
-                    LastModified = deck.Source.LastModified,
-                    Approved = deck.Source.Approved,
-                    Owner = new { Id = deck.Source.OwnerId, DisplayName = deck.Source.Owner.Name },
-                    Author = deck.Source.Author == null ? null :
-                        new { Id = deck.Source.AuthorId, DisplayName = deck.Source.Author.Name },
-                    Category = new CategoryApiModel() { Id = deck.Source.CategoryId, Name = deck.Source.Category.Name },
-                    TotalCards = deck.Source.CardAssignments.Count()
-                };
-
-                var contributors = new List<object>();
-
-                foreach (var proposal in deck.Proposals)
-                {
-                    if (proposal.UserId == user.Id && proposal.Approved)
-                    {
-                        contributors.Add(new { Id = proposal.UserId, DisplayName = proposal.User.Name });
-                    }
-                }
-
-                var deckmodel = new DeckApiModel
-                {
-                    Id = deck.Id,
-                    Name = deck.Name,
-                    Description = deck.Description,
-                    Public = deck.Public,
-                    CreatedDate = deck.CreatedDate,
-                    LastModified = deck.LastModified,
-                    Approved = deck.Approved,
-                    Owner = new { Id = deck.OwnerId, DisplayName = deck.Owner.Name },
-                    Author = deck.Author == null ? null :
-                        new { Id = deck.AuthorId, DisplayName = deck.Author.Name },
-                    Contributors = contributors,
-                    Category = new CategoryApiModel() { Id = deck.CategoryId, Name = deck.Category.Name },
-                    Source = source,
-                    TotalCards = deck.CardAssignments.Count()
-                };
-
-                deckmodels.Add(deckmodel);
+                deckmodels.Add(new DeckApiModel(deck));
             }
 
             return deckmodels;
@@ -142,7 +98,7 @@ namespace FlashCard.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<DeckApiModel>> GetById(int id)
+        public async Task<ActionResult<DeckApiModel>> GetById(int id, int? pageSize, int pageIndex = 1)
         {
             var deck = await dbContext.Decks
                             .Include(d => d.Category)
@@ -173,59 +129,49 @@ namespace FlashCard.Controllers
             bool userIsInUserRole = await userManager.IsInRoleAsync(user, Roles.User);
             bool ownerIsInUserRole = await userManager.IsInRoleAsync(deck.Owner, Roles.User);
 
-            // Check the deck belongs with current user or is pucblic, if user is in administrator
+            // Check the deck belongs with current user or is pucblic, if user is in administrator, it will be ignored
             if (userIsInUserRole && deck.OwnerId != user.Id && (ownerIsInUserRole || !deck.Public || !deck.Approved))
             {
                 return Forbid();
             }
 
-            var source = deck.Source == null ? null : new DeckApiModel
-            {
-                Id = deck.Source.Id,
-                Name = deck.Source.Name,
-                Description = deck.Source.Description,
-                Public = deck.Source.Public,
-                CreatedDate = deck.Source.CreatedDate,
-                LastModified = deck.Source.LastModified,
-                Approved = deck.Source.Approved,
-                Owner = new { Id = deck.Source.OwnerId, DisplayName = deck.Source.Owner.Name },
-                Author = deck.Source.Author == null ? null :
-                    new { Id = deck.Source.AuthorId, DisplayName = deck.Source.Author.Name },
-                Category = new CategoryApiModel() { Id = deck.Source.CategoryId, Name = deck.Source.Category.Name },
-                TotalCards = deck.Source.CardAssignments.Count()
-            };
+            // Paginate cards of deck if pageSize parameter is specified
+            var cardAssignments = deck.CardAssignments;
 
-            var contributors = new List<object>();
-
-            foreach (var proposal in deck.Proposals)
+            if (pageSize != null)
             {
-                if (proposal.UserId == user.Id && proposal.Approved)
+                var numberPages = await GetNumberOfCardPages(id, pageSize.Value);
+
+                if (pageIndex <= 0)
                 {
-                    contributors.Add(new { Id = proposal.UserId, DisplayName = proposal.User.Name });
+                    pageIndex = 1;
                 }
+                else if (pageIndex > numberPages.Value)
+                {
+                    pageIndex = numberPages.Value;
+                }
+
+                if (pageSize.Value <= 0)
+                {
+                    pageSize = 1;
+                }
+
+                cardAssignments = cardAssignments.Skip((pageIndex - 1) * pageSize.Value).Take(pageSize.Value).ToArray();
             }
 
-            var cards = new List<CardApiModel>();
-
-            foreach (var cardAssignment in deck.CardAssignments)
+            var cardmodels = new List<CardApiModel>();
+            
+            foreach (var cardAssignment in cardAssignments)
             {
                 var backs = cardAssignment.Card.Backs.Where(b => b.OwnerId == user.Id);
                 var backmodels = new List<BackApiModel>();
 
                 foreach (var back in backs)
                 {
-                    backmodels.Add(new BackApiModel
-                    {
-                        Id = back.Id,
-                        Type = back.Type,
-                        Meaning = back.Meaning,
-                        Example = back.Example,
-                        Image = back.Image == null ? null : $"data:image/{back.ImageType};base64,{Convert.ToBase64String(back.Image)}",
-                        Author = back.Author == null ? null : new { Id = back.AuthorId, DisplayName = back.Author.Name }
-                    });
+                    backmodels.Add(new BackApiModel(back));
                 }
 
-                cards.Add(new CardApiModel
+                cardmodels.Add(new CardApiModel
                 {
                     Id = cardAssignment.CardId,
                     Front = cardAssignment.Card.Front,
@@ -233,24 +179,8 @@ namespace FlashCard.Controllers
                 });
             }
 
-            var deckmodel = new DeckApiModel
-            {
-                Id = deck.Id,
-                Name = deck.Name,
-                Description = deck.Description,
-                Public = deck.Public,
-                CreatedDate = deck.CreatedDate,
-                LastModified = deck.LastModified,
-                Approved = deck.Approved,
-                Owner = new { Id = deck.OwnerId, DisplayName = deck.Owner.Name },
-                Author = deck.Author == null ? null :
-                    new { Id = deck.AuthorId, DisplayName = deck.Author.Name },
-                Contributors = contributors,
-                Category = new CategoryApiModel() { Id = deck.CategoryId, Name = deck.Category.Name },
-                Source = source,
-                TotalCards = deck.CardAssignments.Count(),
-                Cards = cards
-            };
+            var deckmodel = new DeckApiModel(deck);
+            deckmodel.Cards = cardmodels;
 
             return deckmodel;
         }
@@ -318,6 +248,38 @@ namespace FlashCard.Controllers
             await dbContext.SaveChangesAsync();
 
             return NoContent();
+        }
+
+        [HttpGet("{id}/pages")]
+        public async Task<ActionResult<int>> GetNumberOfCardPages(int id, int pageSize)
+        {
+            var deck = await dbContext.Decks
+                            .Include(d => d.Owner)
+                            .Include(d => d.CardAssignments)
+                            .AsNoTracking()
+                            .FirstOrDefaultAsync(d => d.Id == id);
+
+            if (deck == null)
+            {
+                return NotFound();
+            }
+
+            var user = await UserService.GetUser(userManager, User);
+
+            bool userIsInUserRole = await userManager.IsInRoleAsync(user, Roles.User);
+            bool ownerIsInUserRole = await userManager.IsInRoleAsync(deck.Owner, Roles.User);
+
+            // Check the deck belongs with current user or is pucblic, if user is in administrator
+            if (userIsInUserRole && deck.OwnerId != user.Id && (ownerIsInUserRole || !deck.Public || !deck.Approved))
+            {
+                return Forbid();
+            }
+
+            if (pageSize <= 0)
+            {
+                return 1;
+            }
+            return (int)Math.Ceiling((float)deck.CardAssignments.Count / pageSize);
         }
     }
 }
