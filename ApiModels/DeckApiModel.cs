@@ -14,11 +14,11 @@ namespace FlashCard.ApiModels
         public DateTime CreatedDate { get; set; }
         public DateTime LastModified { get; set; }
         public bool Approved { get; set; }
-        public int Version { get; set; }
         public CategoryApiModel Category { get; set; }
         public DeckApiModel Source { get; set; }
-        public string Owner { get; set; }
-        public string Author { get; set; }
+        public object Owner { get; set; }
+        public object Author { get; set; }
+        public ICollection<object> Contributors { get; set; }
         public int TotalCards { get; set; }
         public ICollection<CardApiModel> Cards { get; set; }
 
@@ -36,10 +36,9 @@ namespace FlashCard.ApiModels
             LastModified = deck.LastModified;
             Public = deck.Public;
             Approved = deck.Approved;
-            Version = deck.Version;
             Category = new CategoryApiModel() { Id = deck.CategoryId, Name = deck.Category.Name };
-            Owner = deck.Owner.Name;
-            Author = deck.Author.Name;
+            Owner = new { Id = deck.OwnerId, DisplayName = deck.Owner.Name };
+            Author = deck.Author == null ? null : new { Id = deck.AuthorId, DisplayName = deck.Author.Name };
             TotalCards = deck.CardAssignments == null ? 0 : deck.CardAssignments.Count;
         }
     }

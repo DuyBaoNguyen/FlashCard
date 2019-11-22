@@ -15,6 +15,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
 using System.Security.Claims;
+using FlashCard.Services;
 
 namespace FlashCard.Areas.Identity.Pages.Account
 {
@@ -84,7 +85,7 @@ namespace FlashCard.Areas.Identity.Pages.Account
                 var result = await _userManager.CreateAsync(user, Input.Password);
                 if (result.Succeeded)
                 {
-                    await _userManager.AddToRoleAsync(user, "user");
+                    await _userManager.AddToRoleAsync(user, Roles.User);
 
                     _logger.LogInformation("User created a new account with password.");
 

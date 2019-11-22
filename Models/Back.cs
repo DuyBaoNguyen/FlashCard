@@ -19,6 +19,9 @@ namespace FlashCard.Models
 
         public byte[] Image { get; set; }
 
+        [StringLength(4)]
+        public string ImageType { get; set; }
+
         public bool Public { get; set; }
 
         [DataType(DataType.DateTime)]

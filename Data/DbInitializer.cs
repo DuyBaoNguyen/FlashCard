@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using FlashCard.Models;
+using FlashCard.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -15,7 +16,7 @@ namespace FlashCard.Data
         {
             // Seed user role
             var roleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
-            string[] roles = new string[] { "admin", "user" };
+            string[] roles = new string[] { Roles.Administrator, Roles.User };
 
             foreach (var role in roles)
             {
@@ -42,7 +43,7 @@ namespace FlashCard.Data
 
                 if (result.Succeeded)
                 {
-                    result = await userManager.AddToRoleAsync(user, "admin");
+                    result = await userManager.AddToRoleAsync(user, Roles.Administrator);
                 }
 
                 // Seed users
@@ -59,7 +60,7 @@ namespace FlashCard.Data
 
                     if (result.Succeeded)
                     {
-                        result = await userManager.AddToRoleAsync(user, "user");
+                        result = await userManager.AddToRoleAsync(user, Roles.User);
                     }
                 }
             }
@@ -197,7 +198,6 @@ namespace FlashCard.Data
                     new Card() { Front = "reserved" },
                     new Card() { Front = "liberal" },
                     new Card() { Front = "hard-working" },
-                    new Card() { Front = "romantic" },
                     new Card() { Front = "independent" },
                     new Card() { Front = "idealistic" },
                     new Card() { Front = "selfish" },
@@ -364,7 +364,7 @@ namespace FlashCard.Data
 
                 dbContext.SaveChanges();
 
-                // Seed CardAssigments
+                // Seed CardAssigments and CardOwner
                 foreach (var user in userManager.Users)
                 {
                     var userDecks = decks.Where(d => d.OwnerId == user.Id);
@@ -392,8 +392,285 @@ namespace FlashCard.Data
                         }
                     }
                 }
+                dbContext.SaveChanges();
+
+                // Seed Backs
+                foreach (var user in userManager.Users)
+                {
+                    var userDecks = decks.Where(d => d.OwnerId == user.Id);
+                    
+                    foreach (var deck in userDecks)
+                    {
+                        var cards = cardDictionary[deck.Category.Name];
+                        var backs = getBacks(deck.Category.Name);
+
+                        for (int i = 0; i < cards.Length; i++)
+                        {
+                            var back = backs[i];
+
+                            back.LastModified = DateTime.Now;
+                            back.CardId = cards[i].Id;
+                            back.OwnerId = user.Id;
+                            back.AuthorId = user.Id;
+                        }
+
+                        dbContext.Backs.AddRange(backs);
+                    }
+                }
 
                 dbContext.SaveChanges();
+
+                // Remove cards having no back
+                foreach (var cards in cardDictionary.Values)
+                {
+                    foreach (var card in cards)
+                    {
+                        if (card.Backs.Count == 0)
+                        {
+                            dbContext.Cards.Remove(card);
+                        }
+                    }
+                }
+
+                dbContext.SaveChanges();
+            }
+        }
+
+        private static Back[] getBacks(string category)
+        {
+            switch (category)
+            {
+                case "Family":
+                    return new Back[]
+                    {
+                        new Back() { Type = "noun", Meaning = "cha", Example = "This is an example" },
+                        new Back() { Type = "noun", Meaning = "mẹ", Example = "This is an example" },
+                        new Back() { Type = "noun", Meaning = "con trai", Example = "This is an example" },
+                        new Back() { Type = "noun", Meaning = "con gái", Example = "This is an example" },
+                        new Back() { Type = "noun", Meaning = "cha mẹ", Example = "This is an example" },
+                        new Back() { Type = "noun", Meaning = "đứa trẻ", Example = "This is an example" },
+                        new Back() { Type = "noun", Meaning = "những đứa trẻ", Example = "This is an example" },
+                        new Back() { Type = "noun", Meaning = "chồng", Example = "This is an example" },
+                        new Back() { Type = "noun", Meaning = "vợ", Example = "This is an example" },
+                        new Back() { Type = "noun", Meaning = "anh, em trai", Example = "This is an example" },
+                        new Back() { Type = "noun", Meaning = "chị, em gái", Example = "This is an example" },
+                        new Back() { Type = "noun", Meaning = "chú, cậu", Example = "This is an example" },
+                        new Back() { Type = "noun", Meaning = "cô, gì", Example = "This is an example" },
+                        new Back() { Type = "noun", Meaning = "cháu trai", Example = "This is an example" },
+                        new Back() { Type = "noun", Meaning = "cháu gái", Example = "This is an example" },
+                        new Back() { Type = "noun", Meaning = "bà", Example = "This is an example" },
+                        new Back() { Type = "noun", Meaning = "ông", Example = "This is an example" },
+                        new Back() { Type = "noun", Meaning = "ông bà", Example = "This is an example" },
+                        new Back() { Type = "noun", Meaning = "cháu trai", Example = "This is an example" },
+                        new Back() { Type = "noun", Meaning = "cháu gái", Example = "This is an example" },
+                        new Back() { Type = "noun", Meaning = "cháu", Example = "This is an example" },
+                        new Back() { Type = "noun", Meaning = "anh chị em họ", Example = "This is an example" }
+                    };
+                case "Career":
+                    return new Back[]
+                    {
+                        new Back() { Type = "noun", Meaning = "bác sĩ", Example = "This is an example" },
+                        new Back() { Type = "noun", Meaning = "nha sĩ", Example = "This is an example" },
+                        new Back() { Type = "noun", Meaning = "thu ngân", Example = "This is an example" },
+                        new Back() { Type = "noun", Meaning = "thợ xây dựng", Example = "This is an example" },
+                        new Back() { Type = "noun", Meaning = "phóng viên", Example = "This is an example" },
+                        new Back() { Type = "noun", Meaning = "thợ may", Example = "This is an example" },
+                        new Back() { Type = "noun", Meaning = "giáo viên", Example = "This is an example" },
+                        new Back() { Type = "noun", Meaning = "đầu bếp", Example = "This is an example" },
+                        new Back() { Type = "noun", Meaning = "ảo thuật gia", Example = "This is an example" },
+                        new Back() { Type = "noun", Meaning = "thợ làm bánh", Example = "This is an example" },
+                        new Back() { Type = "noun", Meaning = "ca sĩ", Example = "This is an example" },
+                        new Back() { Type = "noun", Meaning = "họa sĩ", Example = "This is an example" },
+                        new Back() { Type = "noun", Meaning = "bồi bàn", Example = "This is an example" },
+                        new Back() { Type = "noun", Meaning = "thợ mộc", Example = "This is an example" },
+                        new Back() { Type = "noun", Meaning = "diễn viên", Example = "This is an example" },
+                        new Back() { Type = "noun", Meaning = "y tá", Example = "This is an example" },
+                        new Back() { Type = "noun", Meaning = "thư kí", Example = "This is an example" },
+                        new Back() { Type = "noun", Meaning = "người làm vườn", Example = "This is an example" },
+                        new Back() { Type = "noun", Meaning = "bác sĩ thú y", Example = "This is an example" },
+                        new Back() { Type = "noun", Meaning = "doanh nhân", Example = "This is an example" },
+                        new Back() { Type = "noun", Meaning = "cảnh sát", Example = "This is an example" },
+                        new Back() { Type = "noun", Meaning = "thợ sơn nhà", Example = "This is an example" },
+                        new Back() { Type = "noun", Meaning = "thợ cắt tóc", Example = "This is an example" },
+                        new Back() { Type = "noun", Meaning = "vũ công", Example = "This is an example" },
+                        new Back() { Type = "noun", Meaning = "nông dân", Example = "This is an example" }
+                    };
+                case "Personality":
+                    return new Back[]
+                    {
+                        new Back() { Type = "adjective", Meaning = "nhiều hoài bão", Example = "This is an example" },
+                        new Back() { Type = "adjective", Meaning = "theo chủ nghĩa cá nhân", Example = "This is an example" },
+                        new Back() { Type = "adjective", Meaning = "dễ xúc động", Example = "This is an example" },
+                        new Back() { Type = "adjective", Meaning = "bất cẩn", Example = "This is an example" },
+                        new Back() { Type = "adjective", Meaning = "dễ thương, đáng yêu", Example = "This is an example" },
+                        new Back() { Type = "adjective", Meaning = "nhút nhát, rụt rè", Example = "This is an example" },
+                        new Back() { Type = "adjective", Meaning = "hay chuyện trò", Example = "This is an example" },
+                        new Back() { Type = "adjective", Meaning = "tính khí thất thường", Example = "This is an example" },
+                        new Back() { Type = "adjective", Meaning = "khoan dung", Example = "This is an example" },
+                        new Back() { Type = "adjective", Meaning = "vui vẻ", Example = "This is an example" },
+                        new Back() { Type = "adjective", Meaning = "thân mật, thoải mái", Example = "This is an example" },
+                        new Back() { Type = "adjective", Meaning = "lãng mạn", Example = "This is an example" },
+                        new Back() { Type = "adjective", Meaning = "ngây ngô", Example = "This is an example" },
+                        new Back() { Type = "adjective", Meaning = "được lòng người khác", Example = "This is an example" },
+                        new Back() { Type = "adjective", Meaning = "gần gũi, hòa đồng", Example = "This is an example" },
+                        new Back() { Type = "adjective", Meaning = "thích cạnh tranh, ganh đua", Example = "This is an example" },
+                        new Back() { Type = "adjective", Meaning = "thiếu thận trọng, hấp tấp", Example = "This is an example" },
+                        new Back() { Type = "adjective", Meaning = "lịch sự", Example = "This is an example" },
+                        new Back() { Type = "adjective", Meaning = "chu đáo", Example = "This is an example" },
+                        new Back() { Type = "adjective", Meaning = "đáng tin cậy", Example = "This is an example" },
+                        new Back() { Type = "adjective", Meaning = "hợp lí, suy nghĩ có logic", Example = "This is an example" },
+                        new Back() { Type = "adjective", Meaning = "dễ gần", Example = "This is an example" },
+                        new Back() { Type = "adjective", Meaning = "dè dặt, kín đáo", Example = "This is an example" },
+                        new Back() { Type = "adjective", Meaning = "khoan hồng, rộng lòng; rộng rãi, hào phóng", Example = "This is an example" },
+                        new Back() { Type = "adjective", Meaning = "chăm chỉ", Example = "This is an example" },
+                        new Back() { Type = "adjective", Meaning = "độc lập", Example = "This is an example" },
+                        new Back() { Type = "adjective", Meaning = "(người) luôn hướng đến những chuẩn mực hoàn hảo, nhưng đôi lúc thiếu thực tế", Example = "This is an example" },
+                        new Back() { Type = "adjective", Meaning = "ích kỉ", Example = "This is an example" },
+                        new Back() { Type = "adjective", Meaning = "sáng tạo", Example = "This is an example" },
+                        new Back() { Type = "adjective", Meaning = "không kiên nhẫn", Example = "This is an example" },
+                        new Back() { Type = "adjective", Meaning = "khôn ngoan, có óc phán đoán", Example = "This is an example" },
+                        new Back() { Type = "adjective", Meaning = "quả quyết", Example = "This is an example" },
+                        new Back() { Type = "adjective", Meaning = "tốt bụng", Example = "This is an example" },
+                        new Back() { Type = "adjective", Meaning = "nhạy cảm", Example = "This is an example" },
+                        new Back() { Type = "adjective", Meaning = "kiêu ngạo, tự phụ", Example = "This is an example" }
+                    };
+                case "Vehicle":
+                    return new Back[]
+                    {
+                        new Back() { Type = "noun", Meaning = "xe hơi", Example = "This is an example" },
+                        new Back() { Type = "noun", Meaning = "xe tải", Example = "This is an example" },
+                        new Back() { Type = "noun", Meaning = "xe buýt", Example = "This is an example" },
+                        new Back() { Type = "noun", Meaning = "xe đạp", Example = "This is an example" },
+                        new Back() { Type = "noun", Meaning = "xe tay ga", Example = "This is an example" },
+                        new Back() { Type = "noun", Meaning = "xe máy", Example = "This is an example" },
+                        new Back() { Type = "noun", Meaning = "xe lửa", Example = "This is an example" },
+                        new Back() { Type = "noun", Meaning = "tàu điện ngầm", Example = "This is an example" },
+                        new Back() { Type = "noun", Meaning = "máy bay phản lực", Example = "This is an example" },
+                        new Back() { Type = "noun", Meaning = "ngựa", Example = "This is an example" },
+                        new Back() { Type = "noun", Meaning = "tàu, thuyền", Example = "This is an example" },
+                        new Back() { Type = "noun", Meaning = "tàu du lịch", Example = "This is an example" },
+                        new Back() { Type = "noun", Meaning = "tàu chở hàng", Example = "This is an example" },
+                        new Back() { Type = "noun", Meaning = "tàu cánh ngầm", Example = "This is an example" },
+                        new Back() { Type = "noun", Meaning = "lừa", Example = "This is an example" },
+                        new Back() { Type = "noun", Meaning = "máy bay trực thăng", Example = "This is an example" },
+                        new Back() { Type = "noun", Meaning = "tên lửa", Example = "This is an example" },
+                        new Back() { Type = "noun", Meaning = "lạc đà", Example = "This is an example" },
+                        new Back() { Type = "noun", Meaning = "khinh khí cầu", Example = "This is an example" },
+                        new Back() { Type = "noun", Meaning = "thuyền buồm", Example = "This is an example" },
+                        new Back() { Type = "noun", Meaning = "máy bay", Example = "This is an example" },
+                        new Back() { Type = "noun", Meaning = "máy bay xài động cơ cánh quạt", Example = "This is an example" }
+                    };
+                case "Furniture":
+                    return new Back[]
+                    {
+                        new Back() { Type = "noun", Meaning = "giường", Example = "This is an example" },
+                        new Back() { Type = "noun", Meaning = "rương, hòm, tủ", Example = "This is an example" },
+                        new Back() { Type = "noun", Meaning = "rèm, màn", Example = "This is an example" },
+                        new Back() { Type = "noun", Meaning = "ngăn kéo", Example = "This is an example" },
+                        new Back() { Type = "noun", Meaning = "ghế đẩu", Example = "This is an example" },
+                        new Back() { Type = "noun", Meaning = "tủ sách", Example = "This is an example" },
+                        new Back() { Type = "noun", Meaning = "kệ, ngăn, giá", Example = "This is an example" },
+                        new Back() { Type = "noun", Meaning = "bàn", Example = "This is an example" },
+                        new Back() { Type = "noun", Meaning = "ghế", Example = "This is an example" },
+                        new Back() { Type = "noun", Meaning = "tấm thảm", Example = "This is an example" },
+                        new Back() { Type = "noun", Meaning = "bộ giá đỡ có một hoặc nhiều cửa ở phía mặt (hoặc xây chìm vào tường)", Example = "This is an example" },
+                        new Back() { Type = "noun", Meaning = "tủ quần áo", Example = "This is an example" },
+                        new Back() { Type = "noun", Meaning = "tủ ngăn kéo", Example = "This is an example" },
+                        new Back() { Type = "noun", Meaning = "đồ đạc (trong nhà)", Example = "This is an example" },
+                        new Back() { Type = "noun", Meaning = "bàn viết; bàn làm việc", Example = "This is an example" },
+                        new Back() { Type = "noun", Meaning = "bệ rửa", Example = "This is an example" },
+                        new Back() { Type = "noun", Meaning = "đèn bàn", Example = "This is an example" },
+                        new Back() { Type = "noun", Meaning = "giá sách", Example = "This is an example" },
+                        new Back() { Type = "noun", Meaning = "ghế sofa", Example = "This is an example" },
+                        new Back() { Type = "noun", Meaning = "ghế băng dài", Example = "This is an example" },
+                        new Back() { Type = "noun", Meaning = "ghế bành", Example = "This is an example" },
+                        new Back() { Type = "noun", Meaning = "đèn chùm", Example = "This is an example" },
+                        new Back() { Type = "noun", Meaning = "ghế bập bênh, ghế chao", Example = "This is an example" },
+                        new Back() { Type = "noun", Meaning = "ô đựng tài liệu, hồ sơ", Example = "This is an example" }
+                    };
+                case "Animal":
+                    return new Back[]
+                    {
+                        new Back() { Type = "noun", Meaning = "con chó", Example = "This is an example" },
+                        new Back() { Type = "noun", Meaning = "con mèo", Example = "This is an example" },
+                        new Back() { Type = "noun", Meaning = "động vật", Example = "This is an example" },
+                        new Back() { Type = "noun", Meaning = "con gấu", Example = "This is an example" },
+                        new Back() { Type = "noun", Meaning = "con hắc tinh tinh", Example = "This is an example" },
+                        new Back() { Type = "noun", Meaning = "con voi", Example = "This is an example" },
+                        new Back() { Type = "noun", Meaning = "con cáo", Example = "This is an example" },
+                        new Back() { Type = "noun", Meaning = "con hươu cao cổ", Example = "This is an example" },
+                        new Back() { Type = "noun", Meaning = "con hà mã", Example = "This is an example" },
+                        new Back() { Type = "noun", Meaning = "con báo đốm", Example = "This is an example" },
+                        new Back() { Type = "noun", Meaning = "con sư tử", Example = "This is an example" },
+                        new Back() { Type = "noun", Meaning = "con nhím", Example = "This is an example" },
+                        new Back() { Type = "noun", Meaning = "con gấu mèo", Example = "This is an example" },
+                        new Back() { Type = "noun", Meaning = "con tê giác", Example = "This is an example" },
+                        new Back() { Type = "noun", Meaning = "con sóc", Example = "This is an example" },
+                        new Back() { Type = "noun", Meaning = "con cá sấu", Example = "This is an example" },
+                        new Back() { Type = "noun", Meaning = "con dơi", Example = "This is an example" },
+                        new Back() { Type = "noun", Meaning = "con hươu", Example = "This is an example" },
+                        new Back() { Type = "noun", Meaning = "con chó sói", Example = "This is an example" },
+                        new Back() { Type = "noun", Meaning = "con hải ly", Example = "This is an example" },
+                        new Back() { Type = "noun", Meaning = "con sóc chuột", Example = "This is an example" }
+                    };
+                case "Nature":
+                    return new Back[]
+                    {
+                        new Back() { Type = "noun", Meaning = "đồng cỏ", Example = "This is an example" },
+                        new Back() { Type = "noun", Meaning = "rừng nhiệt đới", Example = "This is an example" },
+                        new Back() { Type = "noun", Meaning = "rừng", Example = "This is an example" },
+                        new Back() { Type = "noun", Meaning = "rừng mưa nhiệt đới", Example = "This is an example" },
+                        new Back() { Type = "noun", Meaning = "núi", Example = "This is an example" },
+                        new Back() { Type = "noun", Meaning = "hẻm núi", Example = "This is an example" },
+                        new Back() { Type = "noun", Meaning = "bờ vực", Example = "This is an example" },
+                        new Back() { Type = "noun", Meaning = "đồi", Example = "This is an example" },
+                        new Back() { Type = "noun", Meaning = "vách đá", Example = "This is an example" },
+                        new Back() { Type = "noun", Meaning = "đá", Example = "This is an example" },
+                        new Back() { Type = "noun", Meaning = "thung lũng", Example = "This is an example" },
+                        new Back() { Type = "noun", Meaning = "cồn cát", Example = "This is an example" },
+                        new Back() { Type = "noun", Meaning = "sa mạc", Example = "This is an example" },
+                        new Back() { Type = "noun", Meaning = "núi lửa", Example = "This is an example" },
+                        new Back() { Type = "noun", Meaning = "đất liền", Example = "This is an example" },
+                        new Back() { Type = "noun", Meaning = "mặt đất", Example = "This is an example" },
+                        new Back() { Type = "noun", Meaning = "đất trồng trọt", Example = "This is an example" },
+                        new Back() { Type = "noun", Meaning = "đồng bằng", Example = "This is an example" },
+                        new Back() { Type = "noun", Meaning = "đại dương", Example = "This is an example" },
+                        new Back() { Type = "noun", Meaning = "biển", Example = "This is an example" },
+                        new Back() { Type = "noun", Meaning = "bãi biển", Example = "This is an example" },
+                        new Back() { Type = "noun", Meaning = "vùng đất sát biển", Example = "This is an example" },
+                        new Back() { Type = "noun", Meaning = "bờ biển", Example = "This is an example" },
+                        new Back() { Type = "noun", Meaning = "đảo", Example = "This is an example" },
+                        new Back() { Type = "noun", Meaning = "hồ", Example = "This is an example" }
+                    };
+                case "Fruit":
+                    return new Back[]
+                    {
+                        new Back() { Type = "noun", Meaning = "trái táo", Example = "This is an example" },
+                        new Back() { Type = "noun", Meaning = "trái táo xanh", Example = "This is an example" },
+                        new Back() { Type = "noun", Meaning = "trái nho tím", Example = "This is an example" },
+                        new Back() { Type = "noun", Meaning = "trái chuối", Example = "This is an example" },
+                        new Back() { Type = "noun", Meaning = "trái lê", Example = "This is an example" },
+                        new Back() { Type = "noun", Meaning = "trái lựu", Example = "This is an example" },
+                        new Back() { Type = "noun", Meaning = "trái cam", Example = "This is an example" },
+                        new Back() { Type = "noun", Meaning = "trái nho xanh", Example = "This is an example" },
+                        new Back() { Type = "noun", Meaning = "trái dâu tây", Example = "This is an example" },
+                        new Back() { Type = "noun", Meaning = "trái thơm", Example = "This is an example" },
+                        new Back() { Type = "noun", Meaning = "trái đào", Example = "This is an example" },
+                        new Back() { Type = "noun", Meaning = "trái thanh long", Example = "This is an example" },
+                        new Back() { Type = "noun", Meaning = "trái khế", Example = "This is an example" },
+                        new Back() { Type = "noun", Meaning = "trái chanh dây", Example = "This is an example" },
+                        new Back() { Type = "noun", Meaning = "trái mít", Example = "This is an example" },
+                        new Back() { Type = "noun", Meaning = "trái ổi", Example = "This is an example" },
+                        new Back() { Type = "noun", Meaning = "trái chà là", Example = "This is an example" },
+                        new Back() { Type = "noun", Meaning = "trái xoài", Example = "This is an example" },
+                        new Back() { Type = "noun", Meaning = "trái dừa", Example = "This is an example" },
+                        new Back() { Type = "noun", Meaning = "trái vải", Example = "This is an example" },
+                        new Back() { Type = "noun", Meaning = "trái nhãn", Example = "This is an example" },
+                        new Back() { Type = "noun", Meaning = "trái sầu riêng", Example = "This is an example" },
+                        new Back() { Type = "noun", Meaning = "trái quýt", Example = "This is an example" }
+                    };
+                default:
+                    return null;
             }
         }
     }

@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace FlashCard.RequestModel
+namespace FlashCard.RequestModels
 {
     public class DeckRequestModel
     {
@@ -11,7 +11,8 @@ namespace FlashCard.RequestModel
         [StringLength(400)]
         public string Description { get; set; }
 
-        [Required]
-        public int CategoryId { get; set; }
+        public bool? Public { get; set; }
+
+        public CategoryRequestModel Category { get; set; }
     }
 }

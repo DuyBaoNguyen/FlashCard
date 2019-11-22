@@ -6,14 +6,13 @@ using System.Threading.Tasks;
 using FlashCard.ApiModels;
 using FlashCard.Data;
 using FlashCard.Models;
-using FlashCard.RequestModel;
+using FlashCard.RequestModels;
 using FlashCard.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
 
 namespace FlashCard.Controllers
 {
@@ -40,14 +39,21 @@ namespace FlashCard.Controllers
                             .Include(d => d.Category)
                             .Include(d => d.Source)
                                 .ThenInclude(s => s.CardAssignments)
+                            .Include(d => d.Source)
+                                .ThenInclude(s => s.Owner)
+                            .Include(d => d.Source)
+                                .ThenInclude(s => s.Author)
                             .Include(d => d.Owner)
                             .Include(d => d.Author)
                             .Include(d => d.CardAssignments)
                                 .ThenInclude(ca => ca.Card)
+                            .Include(d => d.Proposals)
+                                .ThenInclude(p => p.User)
                             .Where(d => d.OwnerId == user.Id)
                             .AsNoTracking();
 
             var deckmodels = new List<DeckApiModel>();
+
             foreach (var deck in decks)
             {
                 var source = deck.Source == null ? null : new DeckApiModel
@@ -59,12 +65,22 @@ namespace FlashCard.Controllers
                     CreatedDate = deck.Source.CreatedDate,
                     LastModified = deck.Source.LastModified,
                     Approved = deck.Source.Approved,
-                    Version = deck.Source.Version,
-                    Owner = deck.Source.Owner.Name,
-                    Author = deck.Source.Author?.Name,
+                    Owner = new { Id = deck.Source.OwnerId, DisplayName = deck.Source.Owner.Name },
+                    Author = deck.Source.Author == null ? null :
+                        new { Id = deck.Source.AuthorId, DisplayName = deck.Source.Author.Name },
                     Category = new CategoryApiModel() { Id = deck.Source.CategoryId, Name = deck.Source.Category.Name },
                     TotalCards = deck.Source.CardAssignments.Count()
                 };
+
+                var contributors = new List<object>();
+
+                foreach (var proposal in deck.Proposals)
+                {
+                    if (proposal.UserId == user.Id && proposal.Approved)
+                    {
+                        contributors.Add(new { Id = proposal.UserId, DisplayName = proposal.User.Name });
+                    }
+                }
 
                 var deckmodel = new DeckApiModel
                 {
@@ -75,9 +91,10 @@ namespace FlashCard.Controllers
                     CreatedDate = deck.CreatedDate,
                     LastModified = deck.LastModified,
                     Approved = deck.Approved,
-                    Version = deck.Version,
-                    Owner = deck.Owner.Name,
-                    Author = deck.Author?.Name,
+                    Owner = new { Id = deck.OwnerId, DisplayName = deck.Owner.Name },
+                    Author = deck.Author == null ? null :
+                        new { Id = deck.AuthorId, DisplayName = deck.Author.Name },
+                    Contributors = contributors,
                     Category = new CategoryApiModel() { Id = deck.CategoryId, Name = deck.Category.Name },
                     Source = source,
                     TotalCards = deck.CardAssignments.Count()
@@ -95,12 +112,12 @@ namespace FlashCard.Controllers
         public async Task<ActionResult<DeckApiModel>> Create(DeckRequestModel deckModel)
         {
             var user = await UserService.GetUser(userManager, User);
-            
-            var category = await dbContext.Categories.FindAsync(deckModel.CategoryId);
+
+            var category = deckModel.Category == null ? null : await dbContext.Categories.FindAsync(deckModel.Category.Id);
 
             if (category == null)
             {
-                ModelState.AddModelError("CategoryId", "Category does not exist");
+                ModelState.AddModelError("Category", "Category does not exist");
                 return BadRequest(ModelState);
             }
 
@@ -122,31 +139,42 @@ namespace FlashCard.Controllers
         }
 
         [HttpGet("{id}")]
-        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult<DeckApiModel>> GetById(int id)
         {
-            var user = await UserService.GetUser(userManager, User);
             var deck = await dbContext.Decks
                             .Include(d => d.Category)
                             .Include(d => d.Source)
                                 .ThenInclude(s => s.CardAssignments)
+                            .Include(d => d.Source)
+                                .ThenInclude(s => s.Owner)
+                            .Include(d => d.Source)
+                                .ThenInclude(s => s.Author)
                             .Include(d => d.Owner)
                             .Include(d => d.Author)
                             .Include(d => d.CardAssignments)
                                 .ThenInclude(ca => ca.Card)
+                                    .ThenInclude(c => c.Backs)
+                                        .ThenInclude(b => b.Author)
+                            .Include(d => d.Proposals)
+                                .ThenInclude(p => p.User)
                             .AsNoTracking()
                             .FirstOrDefaultAsync(d => d.Id == id);
-            
+
             if (deck == null)
             {
                 return NotFound();
             }
-            
-            bool isAdmin = await userManager.IsInRoleAsync(deck.Owner, "admin");
 
-            if (deck.OwnerId != user.Id && (isAdmin == false || (isAdmin == true && deck.Public == false)))
+            var user = await UserService.GetUser(userManager, User);
+
+            bool userIsInUserRole = await userManager.IsInRoleAsync(user, Roles.User);
+            bool ownerIsInUserRole = await userManager.IsInRoleAsync(deck.Owner, Roles.User);
+
+            // Check the deck belongs with current user or is pucblic, if user is in administrator
+            if (userIsInUserRole && deck.OwnerId != user.Id && (ownerIsInUserRole || !deck.Public || !deck.Approved))
             {
                 return Forbid();
             }
@@ -160,21 +188,48 @@ namespace FlashCard.Controllers
                 CreatedDate = deck.Source.CreatedDate,
                 LastModified = deck.Source.LastModified,
                 Approved = deck.Source.Approved,
-                Version = deck.Source.Version,
-                Owner = deck.Source.Owner.Name,
-                Author = deck.Source.Author?.Name,
+                Owner = new { Id = deck.Source.OwnerId, DisplayName = deck.Source.Owner.Name },
+                Author = deck.Source.Author == null ? null :
+                    new { Id = deck.Source.AuthorId, DisplayName = deck.Source.Author.Name },
                 Category = new CategoryApiModel() { Id = deck.Source.CategoryId, Name = deck.Source.Category.Name },
                 TotalCards = deck.Source.CardAssignments.Count()
             };
+
+            var contributors = new List<object>();
+
+            foreach (var proposal in deck.Proposals)
+            {
+                if (proposal.UserId == user.Id && proposal.Approved)
+                {
+                    contributors.Add(new { Id = proposal.UserId, DisplayName = proposal.User.Name });
+                }
+            }
 
             var cards = new List<CardApiModel>();
 
             foreach (var cardAssignment in deck.CardAssignments)
             {
+                var backs = cardAssignment.Card.Backs.Where(b => b.OwnerId == user.Id);
+                var backmodels = new List<BackApiModel>();
+
+                foreach (var back in backs)
+                {
+                    backmodels.Add(new BackApiModel
+                    {
+                        Id = back.Id,
+                        Type = back.Type,
+                        Meaning = back.Meaning,
+                        Example = back.Example,
+                        Image = back.Image == null ? null : $"data:image/{back.ImageType};base64,{Convert.ToBase64String(back.Image)}",
+                        Author = back.Author == null ? null : new { Id = back.AuthorId, DisplayName = back.Author.Name }
+                    });
+                }
+
                 cards.Add(new CardApiModel
                 {
                     Id = cardAssignment.CardId,
-                    Front = cardAssignment.Card.Front
+                    Front = cardAssignment.Card.Front,
+                    Backs = backmodels
                 });
             }
 
@@ -187,9 +242,10 @@ namespace FlashCard.Controllers
                 CreatedDate = deck.CreatedDate,
                 LastModified = deck.LastModified,
                 Approved = deck.Approved,
-                Version = deck.Version,
-                Owner = deck.Owner.Name,
-                Author = deck.Author?.Name,
+                Owner = new { Id = deck.OwnerId, DisplayName = deck.Owner.Name },
+                Author = deck.Author == null ? null :
+                    new { Id = deck.AuthorId, DisplayName = deck.Author.Name },
+                Contributors = contributors,
                 Category = new CategoryApiModel() { Id = deck.CategoryId, Name = deck.Category.Name },
                 Source = source,
                 TotalCards = deck.CardAssignments.Count(),
@@ -204,31 +260,36 @@ namespace FlashCard.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> Update(int id, DeckRequestModel deckModel)
+        public async Task<IActionResult> Update(int id, DeckRequestModel deckmodel)
         {
-            var user = await UserService.GetUser(userManager, User);
-            var deck = await dbContext.Decks.FindAsync(id);
+            var deck = await dbContext.Decks.FirstOrDefaultAsync(d => d.Id == id);
 
             if (deck == null)
             {
                 return NotFound();
             }
-            if (deck.OwnerId != user.Id)
+
+            var user = await UserService.GetUser(userManager, User);
+            var userIsInAdminRole = await userManager.IsInRoleAsync(user, Roles.Administrator);
+
+            if (!userIsInAdminRole && deck.OwnerId != user.Id)
             {
                 return Forbid();
             }
 
-            var category = await dbContext.Categories.FindAsync(deckModel.CategoryId);
+            var category = deckmodel.Category == null ? null : await dbContext.Categories.FindAsync(deckmodel.Category.Id);
 
             if (category == null)
             {
-                ModelState.AddModelError("CategoryId", "Category does not exist");
+                ModelState.AddModelError("Category", "Category does not exist");
                 return BadRequest(ModelState);
             }
 
-            deck.Name = deckModel.Name;
-            deck.Description = deckModel.Description;
+            deck.Name = deckmodel.Name;
+            deck.Description = deckmodel.Description;
             deck.Category = category;
+            deck.Public = userIsInAdminRole && deckmodel.Public != null ? deckmodel.Public.Value : deck.Public;
+            deck.Approved = deck.Public;
 
             await dbContext.SaveChangesAsync();
 

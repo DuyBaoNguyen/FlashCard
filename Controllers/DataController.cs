@@ -6,7 +6,6 @@ using Microsoft.AspNetCore.Mvc;
 namespace FlashCard.Controllers
 {
     [ApiController]
-    [Authorize]
     [Route("api/data")]
     public class DataController : ControllerBase
     {

@@ -36,15 +36,15 @@
                     <button type="submit" class="btn btn-primary">Log in</button>
                 </div>
                 <div class="form-group">
-                    <!-- <p>
+                    @* <p>
                         <a id="forgot-password" asp-page="./ForgotPassword">Forgot your password?</a>
-                    </p> -->
+                    </p> *@
                     <p>
                         <a asp-page="./Register" asp-route-returnUrl="@Model.ReturnUrl">Register as a new user</a>
                     </p>
-                    <!-- <p>
+                    @* <p>
                         <button type="submit" asp-page-handler="SendVerificationEmail" class="btn-link" style="padding:0px;margin:0px;border:0px">Resend email confirmation</button>
-                    </p> -->
+                    </p> *@
                 </div>
             </form>
         </section>
@@ -52,7 +52,6 @@
         <section>
             <hr />
             <h5>Use another service to login</h5>
-            <br />
             @{
                 if ((Model.ExternalLogins?.Count ?? 0) == 0)
                 {
@@ -74,22 +73,22 @@
 
                                     <div class="button" id="@id">
                                         <button type="submit" class="btn btn-primary" name="provider" value="@provider.Name" title="Log in using your @provider.DisplayName account">
-                                        
-                                        <div class="image">
-                                            @switch (providerName)
-                                            {
-                                                case "google":
-                                                    <img class="google-icon" src="http://assets.stickpng.com/thumbs/5847f9cbcef1014c0b5e48c8.png"/>
-                                                    break;
-                                                case "facebook":
-                                                    <img class="google-icon" src="http://assets.stickpng.com/thumbs/5847f9cbcef1014c0b5e48c8.png"/>
-                                                    break;
-                                            }
-                                        </div>
-                                       <div class="text">
-                                            Login with @provider.Name
-                                       </div>
+                                            <div class="image">
+                                                @switch (providerName)
+                                                {
+                                                    case "google":
+                                                        <img class="google-icon" src="http://assets.stickpng.com/thumbs/5847f9cbcef1014c0b5e48c8.png"/>
+                                                        break;
+                                                    case "facebook":
+                                                        <img class="google-icon" src="~/images/facebook-icon.png"/>
+                                                        break;
+                                                }
+                                            </div>
+                                            <div class="text">
+                                                    Login with @provider.Name
+                                            </div>
                                         </button>
+                                        <br />
                                     </div>
                                 }
                             </p>

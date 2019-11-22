@@ -14,6 +14,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
+using FlashCard.Services;
 
 namespace FlashCard.Areas.Identity.Pages.Account
 {
@@ -130,7 +131,7 @@ namespace FlashCard.Areas.Identity.Pages.Account
                 var result = await _userManager.CreateAsync(user);
                 if (result.Succeeded)
                 {
-                    await _userManager.AddToRoleAsync(user, "user");
+                    await _userManager.AddToRoleAsync(user, Roles.User);
 
                     result = await _userManager.AddLoginAsync(user, info);
                     if (result.Succeeded)
