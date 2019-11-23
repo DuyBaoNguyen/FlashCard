@@ -27,7 +27,7 @@ export default class App extends Component {
 			<Layout>
 				<Switch>
 					<AuthorizeRoute exact path="/" component={Dashboard} />
-					<AuthorizeRoute exact path="/decks/7" component={DeckDetail} />
+					<Route exact path="/decks/7" component={DeckDetail} />
 					{/* <AuthorizeRoute exact path='/DB' component={CardManegement} /> */}
 					<AuthorizeRoute path="/counter" component={Counter} />
 					<AuthorizeRoute path="/fetch-data" component={FetchData} />
