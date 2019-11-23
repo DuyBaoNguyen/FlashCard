@@ -1,37 +1,35 @@
 import React, { Component } from 'react';
+import authService from '../../api-authorization/AuthorizeService';
 
 import './DeckList.css';
 import Deck from '../Deck/Deck';
-
-var decks = [
-	{
-		deckName: '123',
-		cardNumber: 123,
-		date: 'Oct 17th, 2019'
-	},
-	{
-		deckName: 'test',
-		cardNumber: 23,
-		date: 'Oct 17th, 2019'
-	},
-	{
-		deckName: 'test',
-		cardNumber: 12,
-		date: 'Oct 17th, 2019'
-	}
-];
 
 class DeckList extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			redirect: false
+			redirect: false,
+			deckData : [],
 		};
 	}
 
+	componentDidMount() {
+    this.getDeckData();
+	}
+	
+	getDeckData = async () => {
+		const token = await authService.getAccessToken();
+    const response = await fetch('/api/decks/', {
+      headers: !token ? {} : { 'Authorization': `Bearer ${token}` }
+    });
+		const data = await response.json();
+    this.setState({ deckData: data, loading: false });
+	}
+
 	render() {
-		var element = decks.map((deck, index) => {
-			return <Deck deck={deck} />;
+		var {deckData} = this.state;
+		var element = deckData.map((deck, index) => {
+			return <Deck deck={deck}/>;
 		});
 		return (
 			<div className="menu">

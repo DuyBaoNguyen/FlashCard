@@ -1,0 +1,171 @@
+.deck-fields {
+  padding: 35px 72px 35px 72px;
+  width: 100%;
+  min-height: 100vh;
+  height: auto;
+  background-color: #eeeeee;
+  display: block;
+}
+
+.deck-fields .deck-back {
+  margin-bottom: 30px;
+}
+
+.deck-fields .deck-title {
+  width: 246px;
+  height: 24px;
+  font-family: Roboto;
+  font-size: 20px;
+  font-weight: 500;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: normal;
+  letter-spacing: 0.25px;
+  color: rgba(0, 0, 0, 0.87);
+  margin-bottom: 23px;
+}
+
+.deck-fields .deck-content {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+}
+
+.deck-fields .deck-content .deck-content-statistics {
+  width: 30%;
+}
+
+.deck-fields .deck-content .deck-content-statistics .deck-statistics-info-field {
+  margin-top: 15px;
+  padding: 15px;
+  width: 328px;
+  min-height: 168px;
+  height: auto;
+  border-radius: 6px;
+  -webkit-box-shadow: 0 1px 4px 0 rgba(0, 0, 0, 0.15);
+          box-shadow: 0 1px 4px 0 rgba(0, 0, 0, 0.15);
+  background-color: #2f2e2a;
+}
+
+.deck-fields .deck-content .deck-content-statistics .deck-statistics-info-field .deck-statistics-info-field-item {
+  margin-bottom: 15px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: start;
+      -ms-flex-pack: start;
+          justify-content: flex-start;
+}
+
+.deck-fields .deck-content .deck-content-statistics .deck-statistics-info-field .deck-statistics-info-field-item .deck-statistics-info-field-item-white {
+  width: 80%;
+  font-size: 14px;
+  font-weight: 300;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: normal;
+  letter-spacing: normal;
+  color: #ffffff;
+}
+
+.deck-fields .deck-content .deck-content-statistics .deck-statistics-info-field .deck-statistics-info-field-item .deck-statistics-info-field-item-orange {
+  width: 20%;
+  font-size: 14px;
+  font-weight: 500;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: normal;
+  letter-spacing: normal;
+  text-align: right;
+  color: #ff6f28;
+}
+
+.deck-fields .deck-content .deck-content-advanced {
+  width: 30%;
+}
+
+.deck-fields .deck-content .deck-content-advanced .deck-content-advanced-features {
+  margin-bottom: 30px;
+}
+
+.deck-fields .deck-content .deck-content-advanced .deck-content-advanced-features .deck-content-advanced-features-items {
+  margin-bottom: 10px;
+}
+
+.deck-fields .deck-content .deck-content-advanced .deck-content-advanced-features .deck-content-advanced-features-items i {
+  margin-left: 10px;
+  text-align: right;
+}
+
+.deck-fields .deck-content .deck-content-advanced .deck-content-advanced-features .deck-content-advanced-features-items a {
+  font-size: 14px;
+  font-weight: normal;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: 1.43;
+  letter-spacing: 0.25px;
+  color: #ff6f28;
+}
+
+.deck-fields .deck-content .deck-content-info {
+  width: 20%;
+}
+
+.deck-fields .deck-content .deck-content-info .deck-content-info-line {
+  margin-bottom: 10px;
+  width: 213px;
+  height: 20px;
+  font-size: 14px;
+  font-weight: normal;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: 1.43;
+  letter-spacing: 0.25px;
+  color: #2f2e2a;
+}
+
+.deck-fields .deck-button {
+  width: 100%;
+  height: 36px;
+  position: fixed;
+  bottom: 30px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  border-radius: 4px;
+  -webkit-box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.2), 0 2px 1px -1px rgba(0, 0, 0, 0.12), 0 1px 1px 0 rgba(0, 0, 0, 0.14);
+          box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.2), 0 2px 1px -1px rgba(0, 0, 0, 0.12), 0 1px 1px 0 rgba(0, 0, 0, 0.14);
+  margin-top: 70px;
+  background-color: #ff6f28;
+  -webkit-transition: 0.3s;
+  transition: 0.3s;
+  text-transform: uppercase;
+  font-weight: 500;
+}
+
+.deck-fields .deck-button:hover {
+  -webkit-transition: 0.3s;
+  transition: 0.3s;
+  opacity: 0.8;
+}
+
+.deck-fields .deck-button p {
+  font-size: 14px;
+  font-weight: 500;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: 1.14;
+  letter-spacing: 1.25px;
+  text-align: center;
+  color: #ffffff;
+}
+/*# sourceMappingURL=DeckDetail.css.map */
