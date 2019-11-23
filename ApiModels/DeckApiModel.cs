@@ -40,6 +40,22 @@ namespace FlashCard.ApiModels
             Owner = new { Id = deck.OwnerId, DisplayName = deck.Owner.Name };
             Author = deck.Author == null ? null : new { Id = deck.AuthorId, DisplayName = deck.Author.Name };
             TotalCards = deck.CardAssignments == null ? 0 : deck.CardAssignments.Count;
+            Source = deck.Source == null ? null : new DeckApiModel(deck.Source);    
+
+            if (deck.Proposals != null)
+            {
+                var contributors = new List<object>();
+
+                foreach (var proposal in deck.Proposals)
+                {
+                    if (proposal.Approved)
+                    {
+                        contributors.Add(new { Id = proposal.UserId, DisplayName = proposal.User.Name });
+                    }
+                }
+
+                Contributors = contributors;
+            }
         }
     }
 }
