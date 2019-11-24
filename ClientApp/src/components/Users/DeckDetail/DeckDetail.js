@@ -39,11 +39,11 @@ class DeckDetail extends Component {
 	};
 
 	getDeckData = async () => {
-		var url = '/api/decks/7';
+		var url = '/api/decks/' + this.state.id;
 		const token = await authService.getAccessToken();
     const response = await fetch(url, {
       headers: !token ? {} : { 'Authorization': `Bearer ${token}` }
-    });
+		});
 		const data = await response.json();
     this.setState({ deckData: data, loading: false });
 	}
@@ -56,7 +56,7 @@ class DeckDetail extends Component {
 
 	render() {
 		var date = new Date(this.state.deckData.createdDate);
-		// console.log('/api/decks/' + this.state.id.toString());
+		console.log('/api/decks/' + this.state.id.toString());
 		var testURL = '/testing/' + this.state.id.toString();
 		if (this.state.redirectTesting === true) {
 			return <Redirect to={testURL} Component={Testing} />;
