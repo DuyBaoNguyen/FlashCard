@@ -14,5 +14,10 @@ namespace FlashCard.RequestModels
         public bool? Public { get; set; }
 
         public CategoryRequestModel Category { get; set; }
+
+        public DeckRequestModel()
+        {
+            Category = new CategoryRequestModel();
+        }
     }
 }

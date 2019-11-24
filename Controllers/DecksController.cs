@@ -16,7 +16,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace FlashCard.Controllers
 {
-    [ApiController]
+    // [ApiController]
     [Authorize]
     [Route("api/[controller]")]
     [Produces(MediaTypeNames.Application.Json)]
@@ -65,17 +65,21 @@ namespace FlashCard.Controllers
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<DeckApiModel>> Create(DeckRequestModel deckModel)
+        public async Task<ActionResult<DeckApiModel>> Create([FromBody] DeckRequestModel deckModel)
         {
-            var user = await UserService.GetUser(userManager, User);
-
-            var category = deckModel.Category == null ? null : await dbContext.Categories.FindAsync(deckModel.Category.Id);
+            var category = await dbContext.Categories.FirstOrDefaultAsync(c => c.Id == deckModel.Category.Id);
 
             if (category == null)
             {
-                ModelState.AddModelError("Category", "Category does not exist");
+                ModelState.AddModelError("Category.Id", "The Category Id is not provided or does not exist.");
+            }
+
+            if (!ModelState.IsValid)
+            {
                 return BadRequest(ModelState);
             }
+
+            var user = await UserService.GetUser(userManager, User);
 
             var deck = new Deck()
             {
@@ -163,20 +167,7 @@ namespace FlashCard.Controllers
             
             foreach (var cardAssignment in cardAssignments)
             {
-                var backs = cardAssignment.Card.Backs.Where(b => b.OwnerId == user.Id);
-                var backmodels = new List<BackApiModel>();
-
-                foreach (var back in backs)
-                {
-                    backmodels.Add(new BackApiModel(back));
-                }
-
-                cardmodels.Add(new CardApiModel
-                {
-                    Id = cardAssignment.CardId,
-                    Front = cardAssignment.Card.Front,
-                    Backs = backmodels
-                });
+                cardmodels.Add(new CardApiModel(cardAssignment.Card, user));
             }
 
             var deckmodel = new DeckApiModel(deck);
@@ -190,7 +181,7 @@ namespace FlashCard.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> Update(int id, DeckRequestModel deckmodel)
+        public async Task<IActionResult> Update(int id, [FromBody] DeckRequestModel deckmodel)
         {
             var deck = await dbContext.Decks.FirstOrDefaultAsync(d => d.Id == id);
 
@@ -200,20 +191,24 @@ namespace FlashCard.Controllers
             }
 
             var user = await UserService.GetUser(userManager, User);
-            var userIsInAdminRole = await userManager.IsInRoleAsync(user, Roles.Administrator);
 
-            if (!userIsInAdminRole && deck.OwnerId != user.Id)
+            if (deck.OwnerId != user.Id)
             {
                 return Forbid();
             }
 
-            var category = deckmodel.Category == null ? null : await dbContext.Categories.FindAsync(deckmodel.Category.Id);
+            var category = await dbContext.Categories.FindAsync(deckmodel.Category.Id);
 
             if (category == null)
             {
-                ModelState.AddModelError("Category", "Category does not exist");
+                ModelState.AddModelError("Category.Id", "The Category Id is not provided or does not exist.");
+            }
+            if (!ModelState.IsValid)
+            {
                 return BadRequest(ModelState);
             }
+
+            var userIsInAdminRole = await userManager.IsInRoleAsync(user, Roles.Administrator);
 
             deck.Name = deckmodel.Name;
             deck.Description = deckmodel.Description;
@@ -232,19 +227,21 @@ namespace FlashCard.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> Delete(int id)
         {
-            var user = await UserService.GetUser(userManager, User);
-            var deck = await dbContext.Decks.FindAsync(id);
+            var deck = await dbContext.Decks.FirstOrDefaultAsync(d => d.Id == id);
 
             if (deck == null)
             {
                 return NotFound();
             }
+
+            var user = await UserService.GetUser(userManager, User);
+
             if (deck.OwnerId != user.Id)
             {
                 return Forbid();
             }
 
-            dbContext.Decks.RemoveRange(deck);
+            dbContext.Decks.Remove(deck);
             await dbContext.SaveChangesAsync();
 
             return NoContent();
