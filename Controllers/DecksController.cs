@@ -16,7 +16,6 @@ using Microsoft.EntityFrameworkCore;
 
 namespace FlashCard.Controllers
 {
-    // [ApiController]
     [Authorize]
     [Route("api/[controller]")]
     [Produces(MediaTypeNames.Application.Json)]
@@ -32,6 +31,7 @@ namespace FlashCard.Controllers
         }
 
         [HttpGet]
+        [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<IEnumerable<DeckApiModel>> GetAllByUser()
         {
             var user = await UserService.GetUser(userManager, User);
@@ -120,6 +120,7 @@ namespace FlashCard.Controllers
                                         .ThenInclude(b => b.Author)
                             .Include(d => d.Proposals)
                                 .ThenInclude(p => p.User)
+                            .Include(d => d.Tests)
                             .AsNoTracking()
                             .FirstOrDefaultAsync(d => d.Id == id);
 
@@ -163,14 +164,48 @@ namespace FlashCard.Controllers
                 cardAssignments = cardAssignments.Skip((pageIndex - 1) * pageSize.Value).Take(pageSize.Value).ToArray();
             }
 
+            // Get list of cards of the deck
             var cardmodels = new List<CardApiModel>();
-            
+
             foreach (var cardAssignment in cardAssignments)
             {
                 cardmodels.Add(new CardApiModel(cardAssignment.Card, user));
             }
 
+            // Get statistics of the deck
+            object statistics = null;
+
+            int totalCards = 0;
+            int totalCardsToday = 0;
+            int failedCards = 0;
+            int failedCardsToday = 0;
+            var now = DateTime.Now;
+
+            foreach (var test in deck.Tests)
+            {
+                totalCards += test.TotalCards;
+                failedCards += test.FailedCards.Count();
+
+                if (test.DateTime.Date == now.Date)
+                {
+                    totalCardsToday += test.TotalCards;
+                    failedCardsToday += test.FailedCards.Count();
+                }
+            }
+
+            statistics = new
+            {
+                TotalCards = totalCards,
+                FailedCards = failedCards,
+                GradePointAverage = deck.Tests.Count == 0 ? 0 : deck.Tests.Average(t => t.Score),
+                TotalCardsToday = totalCardsToday,
+                FailedCardsToday = failedCardsToday,
+                gradePointAverageToday = deck.Tests.Count == 0 ? 0 :
+                    deck.Tests.Where(t => t.DateTime.Date == DateTime.Now.Date).Average(t => t.Score)
+            };
+
             var deckmodel = new DeckApiModel(deck);
+            deckmodel.Statistics = statistics;
             deckmodel.Cards = cardmodels;
 
             return deckmodel;
@@ -242,6 +277,106 @@ namespace FlashCard.Controllers
             }
 
             dbContext.Decks.Remove(deck);
+            await dbContext.SaveChangesAsync();
+
+            return NoContent();
+        }
+
+        [HttpPut("{id}/cards")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> InsertCards(int id, [FromBody] int[] cardIds)
+        {
+            var deck = await dbContext.Decks.FirstOrDefaultAsync(d => d.Id == id);
+
+            if (deck == null)
+            {
+                return NotFound();
+            }
+
+            var user = await UserService.GetUser(userManager, User);
+
+            if (deck.OwnerId != user.Id)
+            {
+                return Forbid();
+            }
+
+            var cards = await dbContext.Cards
+                            .Include(c => c.CardOwners)
+                            .Include(c => c.CardAssignments)
+                            .Where(c => c.CardOwners.FirstOrDefault(co => co.UserId == user.Id) != null &&
+                                cardIds.Contains(c.Id))
+                            .ToListAsync();
+
+            if (cards.Count != cardIds.Length)
+            {
+                ModelState.AddModelError("CardIds",
+                    "At least a card that does not belong with you or does not exist");
+            }
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            foreach (var card in cards)
+            {
+                if (await dbContext.CardAssignments.FirstOrDefaultAsync(ca => ca.DeckId == deck.Id && 
+                    ca.CardId == card.Id) == null)
+                {
+                    dbContext.CardAssignments.Add(new CardAssignment
+                    {
+                        DeckId = deck.Id,
+                        CardId = card.Id
+                    });
+                }
+            }
+
+            await dbContext.SaveChangesAsync();
+
+            return NoContent();
+        }
+
+        [HttpDelete("{id}/cards")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> RemoveCards(int id, [FromBody] int[] cardIds)
+        {
+            var deck = await dbContext.Decks.FirstOrDefaultAsync(d => d.Id == id);
+
+            if (deck == null)
+            {
+                return NotFound();
+            }
+
+            var user = await UserService.GetUser(userManager, User);
+
+            if (deck.OwnerId != user.Id)
+            {
+                return Forbid();
+            }
+
+            var cardAssignments = await dbContext.CardAssignments
+                                        .Include(ca => ca.Card)
+                                            .ThenInclude(c => c.CardOwners)
+                                        .Where(ca => ca.DeckId == deck.Id && cardIds.Contains(ca.CardId) &&
+                                            ca.Card.CardOwners.FirstOrDefault(co => co.UserId == user.Id) != null)
+                                        .ToListAsync();
+
+            if (cardAssignments.Count != cardIds.Length)
+            {
+                ModelState.AddModelError("CardIds",
+                    "At least a card that does not belong with you or is not included in this deck or does not exist");
+            }
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            dbContext.CardAssignments.RemoveRange(cardAssignments);
             await dbContext.SaveChangesAsync();
 
             return NoContent();
