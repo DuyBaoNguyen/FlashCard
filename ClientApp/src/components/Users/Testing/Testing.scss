@@ -3,15 +3,14 @@ body {
 }
 
 .field {
-	padding: 35px 72px 35px 72px;
 	width: 100%;
 	min-height: 100vh;
 	height: auto;
-	background-color: #eeeeee;
+	background-color: white;
 }
 
 .test-button {
-	width: 95%;
+	// width: 50%;
 	position: fixed;
 	bottom: 30px;
 	display: flex;
@@ -67,12 +66,12 @@ body {
 	}
 }
 
-.display-button {
-	display: none;
+.display {
+	display: flex;
 }
 
-.none-display-button {
-	display: flex;
+.none-display {
+	display: none;
 }
 
 .content {

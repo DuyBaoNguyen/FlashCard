@@ -13,13 +13,17 @@ import Navbar from '../../modules/NavBar/Navbar';
 import classnames from 'classnames';
 import './Testing.css';
 
+var next = undefined;
+var array = [];
 class Testing extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			nextButton: false,
-			rememberButton: true,
-			deckData : [],
+			id: '',
+			nextButton: true,
+			removeCard: false,
+			deckData: [],
+			firstDisplay: false
 		};
 	}
 
@@ -34,6 +38,13 @@ class Testing extends Component {
 	componentDidMount() {
 		this.getDeckData();
 	}
+
+	isFinish = () => {
+		if (array === null) {
+			alert('Done');
+			// return <Redirect to="/" Component={Dashboard} />;
+		}
+	};
 
 	getDeckIDFromPath = url => {
 		return url.substr(9);
@@ -53,61 +64,75 @@ class Testing extends Component {
 	onRemember = () => {
 		this.setState({
 			nextButton: true,
-			rememberButton: false
+			removeCard: true
 		});
 	};
 
 	onDontRemember = () => {
 		this.setState({
-			nextButton: true,
-			rememberButton: false
+			nextButton: true
 		});
 	};
 
 	onNext = () => {
+		array = this.state.deckData.cards;
+		next = array[Math.floor(Math.random() * array.length)];
+		console.log(next.backs);
+		if (this.state.removeCard === true) {
+			array.splice(array.indexOf(next), 1);
+		}
+		this.isFinish();
 		this.setState({
 			nextButton: false,
-			rememberButton: true
+			removeCard: false,
+			firstDisplay: true
 		});
+		console.log(array);
 	};
 
 	render() {
 		var data = this.state.deckData.cards;
-		console.log(data);
-		var elm = data.map((card, index) => {
-		return <div>{card.id}</div>
-		})
+		// console.log(data);
+		console.log(this.state.firstDisplay);
+		// var backSize = next.backs
 		return (
 			<div>
-				{/* {elm} */}
 				<div className="field">
 					<div className="back-button">
 						<a href="#">Back</a>
 					</div>
-
-					<div className="content">
-						<div className="content-front">
-							<p>This is the front side</p>
-						</div>
-						<div
-							className={classnames(
-								'content-back',
-								this.state.rememberButton === true ? 'display-button' : ''
-							)}
-						>
-							<div className="content-back-side">
-								<p>This is the back side</p>
+					<div
+						className={classnames(
+							this.state.firstDisplay === false ? 'none-display' : ''
+						)}
+					>
+						<div className="content">
+							<div className="content-front">
+								{next === undefined ? (
+									<p>
+										There's no card left but still dont know how to deal with it
+									</p>
+								) : (
+									<p>{next.front}</p>
+								)}
+								{/* {array === undefined ? 'loading...' : array[0]._id} */}
 							</div>
-							<div className="content-back-side">
-								<p>This is the back side</p>
+							<div
+								className={classnames(
+									'content-back',
+									this.state.nextButton === false ? 'none-display' : ''
+								)}
+							>
+								{/* {backSide} */}
 							</div>
 						</div>
 					</div>
+
 					<div className="buttons">
 						<div
 							className={classnames(
 								'test-button',
-								this.state.nextButton === true ? 'display-button' : ''
+								this.state.nextButton === true ? 'none-display' : ''
 							)}
 						>
 							<Button
@@ -120,7 +145,7 @@ class Testing extends Component {
 							</Button>
 							<Button
 								className="test-button-orange"
-								onClick={this.onDontRemember}
+								onClick={this.onRemember}
 								type="button"
 								color="primary"
 							>
@@ -130,7 +155,7 @@ class Testing extends Component {
 						<div
 							className={classnames(
 								'test-button',
-								this.state.rememberButton === true ? 'display-button' : ''
+								this.state.nextButton === false ? 'none-display' : ''
 							)}
 						>
 							<Button

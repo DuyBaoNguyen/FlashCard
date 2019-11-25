@@ -49,48 +49,35 @@ class DeckDetail extends Component {
 	};
 
 	transData = () => {
-		var mockData = {};
+		var mockData = [];
 		var oldVocab = Object.create(null);
-		console.log(this.state.deckData.cards);
-		// Object.keys(this.state.deckData.cards).map((vocab, index) => {
-			// oldVocab = {
-			// 	id : vocab.id,
-			// 	front : vocab.front,
-			// 	backs : vocab.backs.map((back, index2) => {
-			// 		return back + ' ';
-			// 	})
-			// console.log(vocab.id);
-			// };
-			// mockData.push(oldVocab);
-		// });
-		// return mockData;
-
-		// data.map((vocab, index) => {
-		// 	// oldVocab.id = vocab[index].id;
-		// 	// oldVocab.front = vocab[index].front;
-		// 	// oldVocab.backs = vocab[index].backs.map((back,index2) => {
-		// 	// 	newBackVocab += back[index2];
-		// 	// 	return newBackVocab;
-		// 	// });
-		// 	// mockData.push(oldVocab);
-		// 	console.log(vocab.id);
-		// });
+		var data = this.state.deckData.cards;
+		if (data != undefined) {
+			data.map((vocab, index) => {
+				oldVocab = {
+					id: vocab.id,
+					front: vocab.front,
+					backs: vocab.backs.map((back, index2) => {
+						return back.meaning;
+					})
+				};
+				mockData.push(oldVocab);
+			});
+			console.log(mockData);
+			return mockData;
+		}
 	};
 
 	table = () => {
-		var data = this.state.deckData.cards;
-		// Array.isArray(data.map((test, index) =>{
-		// 	console.log("hihi");
-		// }));
 		var newData = this.transData();
 		return (
 			<MaterialTable
 				title="Cards in deck"
 				columns={[
 					{ title: 'Front', field: 'front' },
-					{ title: 'Back', field: 'backs.meaning' }
+					{ title: 'Back', field: 'backs' }
 				]}
-				data={this.state.deckData.cards}
+				data={newData}
 				options={{
 					search: true,
 					minBodyHeight: 100
