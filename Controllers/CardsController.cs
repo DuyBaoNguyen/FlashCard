@@ -31,6 +31,7 @@ namespace FlashCard.Controllers
         }
 
         [HttpGet]
+        [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<IEnumerable<CardApiModel>> GetAllByUser(int? pageSize, int pageIndex = 1)
         {
             var user = await UserService.GetUser(userManager, User);
@@ -181,7 +182,7 @@ namespace FlashCard.Controllers
 
             // Remove relationship between the card and the user
             dbContext.CardOwners.Remove(dbContext.CardOwners.First(co => co.UserId == user.Id && co.CardId == card.Id));
-
+            
             // Remove relationship between the card and decks containing it
             var decks = dbContext.Decks
                             .Include(d => d.CardAssignments)
@@ -230,8 +231,10 @@ namespace FlashCard.Controllers
                 back.Card = updatedCard;
             }
 
+            await dbContext.SaveChangesAsync();
+
             // Remove the old card if no user owns it
-            if (await dbContext.CardOwners.FirstOrDefaultAsync(co => co.CardId == card.Id) == null)
+            if (await dbContext.CardOwners.CountAsync(co => co.CardId == card.Id) == 0)
             {
                 dbContext.Cards.Remove(card);
             }
@@ -263,7 +266,9 @@ namespace FlashCard.Controllers
                                                     .Where(ca => ca.CardId == card.Id && ca.Deck.OwnerId == user.Id));
             dbContext.Backs.RemoveRange(dbContext.Backs.Where(b => b.CardId == card.Id && b.OwnerId == user.Id));
 
-            if (await dbContext.CardOwners.FirstOrDefaultAsync(co => co.CardId == card.Id) == null)
+            await dbContext.SaveChangesAsync();
+
+            if (await dbContext.CardOwners.CountAsync(co => co.CardId == card.Id) == 0)
             {
                 dbContext.Cards.Remove(card);
             }

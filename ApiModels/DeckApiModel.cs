@@ -11,14 +11,15 @@ namespace FlashCard.ApiModels
         public string Name { get; set; }
         public string Description { get; set; }
         public bool Public { get; set; }
+        public bool Approved { get; set; }
         public DateTime CreatedDate { get; set; }
         public DateTime LastModified { get; set; }
-        public bool Approved { get; set; }
         public CategoryApiModel Category { get; set; }
         public DeckApiModel Source { get; set; }
         public object Owner { get; set; }
         public object Author { get; set; }
         public ICollection<object> Contributors { get; set; }
+        public object Statistics { get; set; }
         public int TotalCards { get; set; }
         public ICollection<CardApiModel> Cards { get; set; }
 

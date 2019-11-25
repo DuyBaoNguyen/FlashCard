@@ -43,6 +43,5 @@ namespace FlashCard.Models
         public ICollection<Test> Tests { get; set; }
         public ICollection<CardAssignment> CardAssignments { get; set; }
         public ICollection<Proposal> Proposals { get; set; }
-        // public ICollection<Contributor> Contributors { get; set; }
     }
 }
