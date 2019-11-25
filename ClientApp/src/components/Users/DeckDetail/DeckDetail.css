@@ -1,9 +1,8 @@
 .deck-fields {
-  padding: 35px 72px 35px 72px;
   width: 100%;
   min-height: 100vh;
   height: auto;
-  background-color: #eeeeee;
+  background-color: white;
   display: block;
 }
 
@@ -21,7 +20,7 @@
   font-style: normal;
   line-height: normal;
   letter-spacing: 0.25px;
-  color: rgba(0, 0, 0, 0.87);
+  color: #007bff;
   margin-bottom: 23px;
 }
 
@@ -80,19 +79,19 @@
   line-height: normal;
   letter-spacing: normal;
   text-align: right;
-  color: #ff6f28;
+  color: #007bff;
 }
 
 .deck-fields .deck-content .deck-content-advanced {
   width: 30%;
 }
 
-.deck-fields .deck-content .deck-content-advanced .deck-content-advanced-features {
-  margin-bottom: 30px;
+.deck-fields .deck-content .deck-content-advanced .deck-content-advanced-share {
+  margin-top: 100px;
 }
 
-.deck-fields .deck-content .deck-content-advanced .deck-content-advanced-features .deck-content-advanced-features-items {
-  margin-bottom: 10px;
+.deck-fields .deck-content .deck-content-advanced .deck-content-advanced-features {
+  margin-bottom: 30px;
 }
 
 .deck-fields .deck-content .deck-content-advanced .deck-content-advanced-features .deck-content-advanced-features-items i {
@@ -101,13 +100,10 @@
 }
 
 .deck-fields .deck-content .deck-content-advanced .deck-content-advanced-features .deck-content-advanced-features-items a {
+  margin-top: 15px;
   font-size: 14px;
-  font-weight: normal;
-  font-stretch: normal;
-  font-style: normal;
-  line-height: 1.43;
   letter-spacing: 0.25px;
-  color: #ff6f28;
+  color: #007bff;
 }
 
 .deck-fields .deck-content .deck-content-info {
@@ -128,7 +124,7 @@
 }
 
 .deck-fields .deck-button {
-  width: 100%;
+  width: 1110px;
   height: 36px;
   position: fixed;
   bottom: 30px;
@@ -145,7 +141,7 @@
   -webkit-box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.2), 0 2px 1px -1px rgba(0, 0, 0, 0.12), 0 1px 1px 0 rgba(0, 0, 0, 0.14);
           box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.2), 0 2px 1px -1px rgba(0, 0, 0, 0.12), 0 1px 1px 0 rgba(0, 0, 0, 0.14);
   margin-top: 70px;
-  background-color: #ff6f28;
+  background-color: #007bff;
   -webkit-transition: 0.3s;
   transition: 0.3s;
   text-transform: uppercase;
@@ -159,6 +155,7 @@
 }
 
 .deck-fields .deck-button p {
+  margin-bottom: 0;
   font-size: 14px;
   font-weight: 500;
   font-stretch: normal;
@@ -167,5 +164,9 @@
   letter-spacing: 1.25px;
   text-align: center;
   color: #ffffff;
+}
+
+.table {
+  margin-top: 20px;
 }
 /*# sourceMappingURL=DeckDetail.css.map */

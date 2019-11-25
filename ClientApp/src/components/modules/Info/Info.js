@@ -14,7 +14,7 @@ class Info extends Component {
 		return (
 			<div className="info">
 				<div className="info-title">
-					<h6>Info</h6>
+					<h6>Statistics</h6>
 				</div>
 				<div className="info-field">
 					<div className="info-field-item">

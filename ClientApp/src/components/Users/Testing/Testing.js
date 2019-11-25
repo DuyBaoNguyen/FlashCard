@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import authService from '../../api-authorization/AuthorizeService';
 import { Route } from 'react-router';
 import Button from '@material-ui/core/Button';
 import {
@@ -17,9 +18,37 @@ class Testing extends Component {
 		super(props);
 		this.state = {
 			nextButton: false,
-			rememberButton: true
+			rememberButton: true,
+			deckData : [],
 		};
 	}
+
+	componentWillMount() {
+		var deckID = this.getDeckIDFromPath(window.location.pathname);
+		console.log(deckID);
+		this.setState({
+			id: deckID
+		});
+	}
+
+	componentDidMount() {
+		this.getDeckData();
+	}
+
+	getDeckIDFromPath = url => {
+		return url.substr(9);
+	};
+
+	getDeckData = async () => {
+		var url = '/api/decks/' + this.state.id;
+		const token = await authService.getAccessToken();
+		const response = await fetch(url, {
+			headers: !token ? {} : { Authorization: `Bearer ${token}` }
+		});
+		const data = await response.json();
+		// console.log(data);
+		this.setState({ deckData: data, loading: false });
+	};
 
 	onRemember = () => {
 		this.setState({
@@ -43,9 +72,14 @@ class Testing extends Component {
 	};
 
 	render() {
+		var data = this.state.deckData.cards;
+		console.log(data);
+		var elm = data.map((card, index) => {
+		return <div>{card.id}</div>
+		})
 		return (
 			<div>
-				<Navbar navTitle="Testing" />
+				{/* {elm} */}
 				<div className="field">
 					<div className="back-button">
 						<a href="#">Back</a>

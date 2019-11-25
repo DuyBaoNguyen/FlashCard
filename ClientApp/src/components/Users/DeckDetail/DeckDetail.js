@@ -1,23 +1,17 @@
 import React, { Component } from 'react';
 import authService from '../../api-authorization/AuthorizeService';
-import {
-	BrowserRouter as Router,
-	Redirect,
-} from 'react-router-dom';
-import FormGroup from '@material-ui/core/FormGroup';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Switch from '@material-ui/core/Switch';
-import Navbar from '../../modules/NavBar/Navbar';
+import { BrowserRouter as Router, Redirect } from 'react-router-dom';
 import './DeckDetail.css';
 import Info from '../../modules/Info/Info';
 import Testing from '../Testing/Testing';
+import MaterialTable from 'material-table';
 
 class DeckDetail extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
 			id: '',
-			deckData: [],
+			deckData: {},
 			redirectTesting: false
 		};
 	}
@@ -41,17 +35,68 @@ class DeckDetail extends Component {
 	getDeckData = async () => {
 		var url = '/api/decks/' + this.state.id;
 		const token = await authService.getAccessToken();
-    const response = await fetch(url, {
-      headers: !token ? {} : { 'Authorization': `Bearer ${token}` }
+		const response = await fetch(url, {
+			headers: !token ? {} : { Authorization: `Bearer ${token}` }
 		});
 		const data = await response.json();
-    this.setState({ deckData: data, loading: false });
-	}
+		this.setState({ deckData: data, loading: false });
+	};
 
 	redirectTesting = () => {
 		this.setState({
 			redirectTesting: true
 		});
+	};
+
+	transData = () => {
+		var mockData = {};
+		var oldVocab = Object.create(null);
+		console.log(this.state.deckData.cards);
+		// Object.keys(this.state.deckData.cards).map((vocab, index) => {
+			// oldVocab = {
+			// 	id : vocab.id,
+			// 	front : vocab.front,
+			// 	backs : vocab.backs.map((back, index2) => {
+			// 		return back + ' ';
+			// 	})
+			// console.log(vocab.id);
+			// };
+			// mockData.push(oldVocab);
+		// });
+		// return mockData;
+
+		// data.map((vocab, index) => {
+		// 	// oldVocab.id = vocab[index].id;
+		// 	// oldVocab.front = vocab[index].front;
+		// 	// oldVocab.backs = vocab[index].backs.map((back,index2) => {
+		// 	// 	newBackVocab += back[index2];
+		// 	// 	return newBackVocab;
+		// 	// });
+		// 	// mockData.push(oldVocab);
+		// 	console.log(vocab.id);
+		// });
+	};
+
+	table = () => {
+		var data = this.state.deckData.cards;
+		// Array.isArray(data.map((test, index) =>{
+		// 	console.log("hihi");
+		// }));
+		var newData = this.transData();
+		return (
+			<MaterialTable
+				title="Cards in deck"
+				columns={[
+					{ title: 'Front', field: 'front' },
+					{ title: 'Back', field: 'backs.meaning' }
+				]}
+				data={this.state.deckData.cards}
+				options={{
+					search: true,
+					minBodyHeight: 100
+				}}
+			/>
+		);
 	};
 
 	render() {
@@ -61,9 +106,9 @@ class DeckDetail extends Component {
 		if (this.state.redirectTesting === true) {
 			return <Redirect to={testURL} Component={Testing} />;
 		}
+		var table = this.table();
 		return (
 			<div>
-				<Navbar navTitle="Deck Detail" />
 				<div className="deck-fields">
 					<div className="deck-back">
 						<a href="/">Back</a>
@@ -90,7 +135,7 @@ class DeckDetail extends Component {
 							<div class="deck-content-advanced-features-items">
 								<a href="#">Delete deck</a>
 							</div>
-							<div class="deck-content-advanced-share">
+							{/* <div class="deck-content-advanced-share">
 								<div class="deck-title">Share deck</div>
 								<div class="switch">
 									<FormGroup row>
@@ -100,9 +145,10 @@ class DeckDetail extends Component {
 										/>
 									</FormGroup>
 								</div>
-							</div>
+							</div> */}
 						</div>
 					</div>
+					<div className="table">{table}</div>
 					<div class="deck-button" onClick={this.redirectTesting}>
 						<p>Review</p>
 					</div>
