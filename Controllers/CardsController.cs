@@ -89,6 +89,7 @@ namespace FlashCard.Controllers
                             .Include(c => c.Backs)
                             .FirstOrDefaultAsync(c => c.Front == cardmodel.Front);
             bool createNewCard = false;
+            var image = ImageService.GetImage(cardmodel.Back.Image);
 
             if (card == null)
             {
@@ -112,6 +113,8 @@ namespace FlashCard.Controllers
                 Type = cardmodel.Back.Type,
                 Meaning = cardmodel.Back.Meaning,
                 Example = cardmodel.Back.Example,
+                Image = image?.Data,
+                ImageType = image?.Type,
                 LastModified = DateTime.Now,
                 OwnerId = user.Id,
                 AuthorId = user.Id
