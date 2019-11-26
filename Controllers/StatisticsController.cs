@@ -29,6 +29,7 @@ namespace FlashCard.Controllers
         }
 
         [HttpGet]
+        [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<object> GetAll()
         {
             var user = await UserService.GetUser(userManager, User);
@@ -67,7 +68,6 @@ namespace FlashCard.Controllers
 
         [HttpGet("{deckId}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult<object>> GetByDeckId(int deckId)

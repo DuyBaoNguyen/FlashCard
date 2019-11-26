@@ -170,19 +170,30 @@ namespace FlashCard.Controllers
             {
                 return NotFound();
             }
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
+
             // Check if the new front equals the old front
             if (front == cardmodel.Front)
             {
                 return NoContent();
             }
 
+            var newCard = await dbContext.Cards
+                                .Include(c => c.CardOwners)
+                                .FirstOrDefaultAsync(c => c.Front == cardmodel.Front &&
+                                    c.CardOwners.FirstOrDefault(co => co.UserId == user.Id) != null);
+
+            if (newCard != null)
+            {
+                ModelState.AddModelError("Front", "The Front is already taken");
+            }
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
             // Remove relationship between the card and the user
             dbContext.CardOwners.Remove(dbContext.CardOwners.First(co => co.UserId == user.Id && co.CardId == card.Id));
-            
+
             // Remove relationship between the card and decks containing it
             var decks = dbContext.Decks
                             .Include(d => d.CardAssignments)
@@ -194,12 +205,24 @@ namespace FlashCard.Controllers
                 dbContext.CardAssignments.Remove(deck.CardAssignments.First(ca => ca.CardId == card.Id));
             }
 
+            // Remove relationship between the card and tests
+            var tests = dbContext.Tests
+                            .Include(t => t.Deck)
+                            .Include(t => t.FailedCards)
+                            .Where(t => t.Deck.OwnerId == user.Id &&
+                                t.FailedCards.FirstOrDefault(f => f.CardId == card.Id) != null);
+
+            foreach (var test in tests)
+            {
+                dbContext.FailedCards.Remove(test.FailedCards.First(f => f.CardId == card.Id));
+            }
+
             // Check if there is card being new front
             var updatedCard = await dbContext.Cards
                                 .Include(c => c.CardAssignments)
                                 .Include(c => c.CardOwners)
                                 .FirstOrDefaultAsync(c => c.Front == cardmodel.Front);
-            bool createNewCard = false;
+            var backs = dbContext.Backs.Where(b => b.OwnerId == user.Id && b.CardId == card.Id);
 
             if (updatedCard == null)
             {
@@ -209,7 +232,7 @@ namespace FlashCard.Controllers
                     CardAssignments = new List<CardAssignment>(),
                     CardOwners = new List<CardOwner>()
                 };
-                createNewCard = true;
+                dbContext.Cards.Add(updatedCard);
             }
 
             updatedCard.CardOwners.Add(new CardOwner() { UserId = user.Id });
@@ -218,14 +241,10 @@ namespace FlashCard.Controllers
             {
                 updatedCard.CardAssignments.Add(new CardAssignment() { DeckId = deck.Id });
             }
-
-            if (createNewCard)
+            foreach (var test in tests)
             {
-                dbContext.Cards.Add(updatedCard);
+                updatedCard.FailedCards.Add(new FailedCard() { TestId = test.Id });
             }
-
-            var backs = dbContext.Backs.Where(b => b.OwnerId == user.Id && b.CardId == card.Id);
-
             foreach (var back in backs)
             {
                 back.Card = updatedCard;
@@ -259,12 +278,16 @@ namespace FlashCard.Controllers
                 return NotFound();
             }
 
-            // Remove relationship between the card and the user
+            // Remove relationship between the card and the user, decks and tests
             dbContext.CardOwners.Remove(dbContext.CardOwners.First(co => co.UserId == user.Id && co.CardId == card.Id));
             dbContext.CardAssignments.RemoveRange(dbContext.CardAssignments
                                                     .Include(ca => ca.Deck)
                                                     .Where(ca => ca.CardId == card.Id && ca.Deck.OwnerId == user.Id));
             dbContext.Backs.RemoveRange(dbContext.Backs.Where(b => b.CardId == card.Id && b.OwnerId == user.Id));
+            dbContext.FailedCards.RemoveRange(dbContext.FailedCards
+                                                .Include(f => f.Test)
+                                                    .ThenInclude(t => t.Deck)
+                                                .Where(f => f.Test.Deck.OwnerId == user.Id && f.CardId == card.Id));
 
             await dbContext.SaveChangesAsync();
 
