@@ -1,5 +1,6 @@
 using System;
 using FlashCard.Models;
+using FlashCard.Services;
 
 namespace FlashCard.ApiModels
 {
@@ -23,7 +24,7 @@ namespace FlashCard.ApiModels
             Type = back.Type;
             Meaning = back.Meaning;
             Example = back.Example;
-            Image = back.Image == null ? null : $"data:image/{back.ImageType};base64,{Convert.ToBase64String(back.Image)}";
+            Image = ImageService.GetBase64(back.Image, back.ImageType);
             Author = back.Author == null ? null : new { Id = back.AuthorId, DisplayName = back.Author.Name };
         }
     }

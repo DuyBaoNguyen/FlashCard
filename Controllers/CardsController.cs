@@ -83,6 +83,7 @@ namespace FlashCard.Controllers
             }
 
             var user = await UserService.GetUser(userManager, User);
+            var userIsInAdminRole = await userManager.IsInRoleAsync(user, Roles.Administrator);
 
             var card = await dbContext.Cards
                             .Include(c => c.CardAssignments)
@@ -116,6 +117,8 @@ namespace FlashCard.Controllers
                 Example = cardmodel.Back.Example,
                 Image = image?.Data,
                 ImageType = image?.Type,
+                Public = userIsInAdminRole,
+                Approved = userIsInAdminRole,
                 LastModified = DateTime.Now,
                 OwnerId = user.Id,
                 AuthorId = user.Id

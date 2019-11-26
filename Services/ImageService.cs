@@ -28,5 +28,10 @@ namespace FlashCard.Services
                 Type = Regex.Replace(prefix, pattern, "$1")
             };
         }
+
+        public static string GetBase64(byte[] image, string type)
+        {
+            return image == null ? null : $"data:image/{type};base64,{Convert.ToBase64String(image)}";
+        }
     }
 }

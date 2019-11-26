@@ -277,6 +277,13 @@ namespace FlashCard.Controllers
                 return Forbid();
             }
 
+            var derivedDecks = dbContext.Decks.Where(d => d.SourceId == deck.Id);
+
+            foreach (var derivedDeck in derivedDecks)
+            {
+                derivedDeck.SourceId = null;
+            }
+
             dbContext.Decks.Remove(deck);
             await dbContext.SaveChangesAsync();
 
