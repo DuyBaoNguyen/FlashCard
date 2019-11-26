@@ -32,7 +32,7 @@ namespace FlashCard.Data
         public DbSet<CardAssignment> CardAssignments { get; set; }
         public DbSet<Proposal> Proposals { get; set; }
         public DbSet<CardOwner> CardOwners { get; set; }
-        public DbSet<FailedCard> FailedCards { get; set; }
+        public DbSet<TestedCard> TestedCards { get; set; }
 
         Task<int> IPersistedGrantDbContext.SaveChangesAsync() => base.SaveChangesAsync();
 
@@ -58,11 +58,11 @@ namespace FlashCard.Data
             builder.Entity<CardAssignment>().ToTable("CardAssignment");
             builder.Entity<Proposal>().ToTable("Proposal");
             builder.Entity<CardOwner>().ToTable("CardOwner");
-            builder.Entity<FailedCard>().ToTable("FailedCard");
+            builder.Entity<TestedCard>().ToTable("TestedCard");
 
             builder.Entity<CardAssignment>().HasKey(c => new { c.CardId, c.DeckId });
             builder.Entity<CardOwner>().HasKey(c => new { c.CardId, c.UserId });
-            builder.Entity<FailedCard>().HasKey(f => new { f.CardId, f.TestId });
+            builder.Entity<TestedCard>().HasKey(f => new { f.CardId, f.TestId });
 
             builder.Entity<Deck>()
                 .HasOne(d => d.Owner)

@@ -15,6 +15,6 @@ namespace FlashCard.Models
         public ICollection<Proposal> Proposals { get; set; }
         public ICollection<CardOwner> CardOwners { get; set; }
         public ICollection<Back> Backs { get; set; }
-        public ICollection<FailedCard> FailedCards { get; set; }
+        public ICollection<TestedCard> TestedCards { get; set; }
     }
 }

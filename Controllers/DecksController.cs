@@ -121,6 +121,7 @@ namespace FlashCard.Controllers
                             .Include(d => d.Proposals)
                                 .ThenInclude(p => p.User)
                             .Include(d => d.Tests)
+                                .ThenInclude(t => t.TestedCards)
                             .AsNoTracking()
                             .FirstOrDefaultAsync(d => d.Id == id);
 
@@ -183,13 +184,13 @@ namespace FlashCard.Controllers
 
             foreach (var test in deck.Tests)
             {
-                totalCards += test.TotalCards;
-                failedCards += test.FailedCards.Count();
+                totalCards += test.TestedCards.Count;
+                failedCards += test.TestedCards.Where(t => t.Failed).Count();
 
                 if (test.DateTime.Date == now.Date)
                 {
-                    totalCardsToday += test.TotalCards;
-                    failedCardsToday += test.FailedCards.Count();
+                    totalCardsToday += test.TestedCards.Count;
+                    failedCardsToday += test.TestedCards.Where(t => t.Failed).Count();
                 }
             }
 
@@ -313,7 +314,7 @@ namespace FlashCard.Controllers
             if (cards.Count != cardIds.Length)
             {
                 ModelState.AddModelError("CardIds",
-                    "At least a card that does not belong with you or does not exist");
+                    "At least one card that does not belong with you or does not exist");
             }
             if (!ModelState.IsValid)
             {
@@ -322,7 +323,7 @@ namespace FlashCard.Controllers
 
             foreach (var card in cards)
             {
-                if (await dbContext.CardAssignments.FirstOrDefaultAsync(ca => ca.DeckId == deck.Id && 
+                if (await dbContext.CardAssignments.FirstOrDefaultAsync(ca => ca.DeckId == deck.Id &&
                     ca.CardId == card.Id) == null)
                 {
                     dbContext.CardAssignments.Add(new CardAssignment
@@ -369,7 +370,7 @@ namespace FlashCard.Controllers
             if (cardAssignments.Count != cardIds.Length)
             {
                 ModelState.AddModelError("CardIds",
-                    "At least a card that does not belong with you or is not included in this deck or does not exist");
+                    "At least one card that does not belong with you or is not included in this deck or does not exist");
             }
             if (!ModelState.IsValid)
             {
@@ -377,9 +378,101 @@ namespace FlashCard.Controllers
             }
 
             dbContext.CardAssignments.RemoveRange(cardAssignments);
+
+            var testedCards = dbContext.TestedCards
+                                .Include(tc => tc.Test)
+                                .Where(tc => tc.Test.DeckId == deck.Id && cardIds.Contains(tc.CardId));
+
+            dbContext.TestedCards.RemoveRange(testedCards);
+
             await dbContext.SaveChangesAsync();
 
             return NoContent();
+        }
+
+        [HttpPost("{id}/test")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> CreateTest(int id, [FromBody] TestRequestModel testmodel)
+        {
+            var deck = await dbContext.Decks.FirstOrDefaultAsync(d => d.Id == id);
+
+            if (deck == null)
+            {
+                return NotFound();
+            }
+
+            var user = await UserService.GetUser(userManager, User);
+
+            if (deck.OwnerId != user.Id)
+            {
+                return Forbid();
+            }
+
+            foreach (var failedCardId in testmodel.FailedCardIds)
+            {
+                if (testmodel.SuccessCardIds.Contains(failedCardId))
+                {
+                    ModelState.AddModelError("", "At least one card belongs to both");
+                    break;
+                }
+            }
+
+            int failedCardsCount = await dbContext.CardAssignments
+                                        .Include(c => c.Deck)
+                                        .Where(c => c.DeckId == deck.Id && testmodel.FailedCardIds.Contains(c.CardId))
+                                        .CountAsync();
+            int successCardsCount = await dbContext.CardAssignments
+                                        .Include(c => c.Deck)
+                                        .Where(c => c.DeckId == deck.Id && testmodel.SuccessCardIds.Contains(c.CardId))
+                                        .CountAsync();
+
+            if (failedCardsCount != testmodel.FailedCardIds.Length)
+            {
+                ModelState.AddModelError("FailedCardIds",
+                    "The FailedCardIds containing card does not belong with deck or does not exist");
+            }
+            if (successCardsCount != testmodel.SuccessCardIds.Length)
+            {
+                ModelState.AddModelError("SuccessCardIds",
+                    "The SuccessCardIds containing card does not belong with deck or does not exist");
+            }
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var test = new Test()
+            {
+                DateTime = DateTime.Now,
+                DeckId = deck.Id,
+                Score = (float)testmodel.FailedCardIds.Length / (testmodel.FailedCardIds.Length + testmodel.SuccessCardIds.Length),
+                TestedCards = new List<TestedCard>()
+            };
+
+            foreach (var failedCardId in testmodel.FailedCardIds)
+            {
+                test.TestedCards.Add(new TestedCard()
+                {
+                    CardId = failedCardId,
+                    Failed = true
+                });
+            }
+            foreach (var successCardId in testmodel.SuccessCardIds)
+            {
+                test.TestedCards.Add(new TestedCard()
+                {
+                    CardId = successCardId,
+                    Failed = false
+                });
+            }
+
+            dbContext.Tests.Add(test);
+            await dbContext.SaveChangesAsync();
+
+            return Ok();
         }
 
         [HttpGet("{id}/pages")]

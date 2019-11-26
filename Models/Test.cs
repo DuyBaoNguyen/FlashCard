@@ -13,11 +13,9 @@ namespace FlashCard.Models
 
         public float Score { get; set; }
         
-        public int TotalCards { get; set; }
-
         public int DeckId { get; set; }
 
         public Deck Deck { get; set; }
-        public ICollection<FailedCard> FailedCards { get; set; }
+        public ICollection<TestedCard> TestedCards { get; set; }
     }
 }
