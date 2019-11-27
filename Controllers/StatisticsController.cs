@@ -29,45 +29,33 @@ namespace FlashCard.Controllers
         }
 
         [HttpGet]
+        [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<object> GetAll()
         {
             var user = await UserService.GetUser(userManager, User);
             var tests = await dbContext.Tests
                             .Include(t => t.Deck)
-                            .Include(t => t.FailedCards)
+                            .Include(t => t.TestedCards)
                             .AsNoTracking()
                             .Where(t => t.Deck.OwnerId == user.Id)
                             .ToListAsync();
 
-            var totalCards = 0;
-            var totalCardsToday = 0;
-            var failedCards = 0;
-            var failedCardsToday = 0;
-
-            foreach (var test in tests)
-            {
-                totalCards += test.TotalCards;
-                failedCards += test.FailedCards.Count;
-
-                if (test.DateTime.Date == DateTime.Now.Date)
-                {
-                    totalCardsToday += test.TotalCards;
-                    failedCardsToday += test.FailedCards.Count;
-                }
-            }
+            var now = DateTime.Now;
+            var testsToday = tests.Where(t => t.DateTime.Date == now.Date);
 
             return new
             {
-                TotalCards = totalCards,
-                FailedCards = failedCards,
-                TotalCardsToday = totalCardsToday,
-                FailedCardsToday = failedCardsToday
+                TotalCards = tests.Sum(t => t.TestedCards.Count),
+                FailedCards = tests.Sum(t => t.TestedCards.Where(tc => tc.Failed).Count()),
+                GradePointAverage = tests.Count == 0 ? 0 : tests.Average(t => t.Score),
+                TotalCardsToday = testsToday.Sum(t => t.TestedCards.Count),
+                FailedCardsToday = testsToday.Sum(t => t.TestedCards.Where(tc => tc.Failed).Count()),
+                gradePointAverageToday = testsToday.Count() == 0 ? 0 : testsToday.Average(t => t.Score)
             };
         }
 
         [HttpGet("{deckId}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult<object>> GetByDeckId(int deckId)
@@ -87,38 +75,22 @@ namespace FlashCard.Controllers
 
             var tests = await dbContext.Tests
                             .Include(t => t.Deck)
-                            .Include(t => t.FailedCards)
+                            .Include(t => t.TestedCards)
                             .AsNoTracking()
                             .Where(t => t.DeckId == deckId)
                             .ToListAsync();
 
-            int totalCards = 0;
-            int totalCardsToday = 0;
-            int failedCards = 0;
-            int failedCardsToday = 0;
             var now = DateTime.Now;
-
-            foreach (var test in tests)
-            {
-                totalCards += test.TotalCards;
-                failedCards += test.FailedCards.Count();
-
-                if (test.DateTime.Date == now.Date)
-                {
-                    totalCardsToday += test.TotalCards;
-                    failedCardsToday += test.FailedCards.Count();
-                }
-            }
+            var testsToday = tests.Where(t => t.DateTime.Date == now.Date);
 
             return new
             {
-                TotalCards = totalCards,
-                FailedCards = failedCards,
+                TotalCards = tests.Sum(t => t.TestedCards.Count),
+                FailedCards = tests.Sum(t => t.TestedCards.Where(tc => tc.Failed).Count()),
                 GradePointAverage = tests.Count == 0 ? 0 : tests.Average(t => t.Score),
-                TotalCardsToday = totalCardsToday,
-                FailedCardsToday = failedCardsToday,
-                gradePointAverageToday = tests.Count == 0 ? 0 : 
-                    tests.Where(t => t.DateTime.Date == DateTime.Now.Date).Average(t => t.Score)
+                TotalCardsToday = testsToday.Sum(t => t.TestedCards.Count),
+                FailedCardsToday = testsToday.Sum(t => t.TestedCards.Where(tc => tc.Failed).Count()),
+                gradePointAverageToday = testsToday.Count() == 0 ? 0 : testsToday.Average(t => t.Score)
             };
         }
     }

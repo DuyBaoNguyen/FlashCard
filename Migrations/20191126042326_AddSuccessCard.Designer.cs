@@ -4,14 +4,16 @@ using FlashCard.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace FlashCard.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20191126042326_AddSuccessCard")]
+    partial class AddSuccessCard
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -115,9 +117,6 @@ namespace FlashCard.Migrations
                     b.Property<string>("Example")
                         .HasColumnType("nvarchar(400)")
                         .HasMaxLength(400);
-
-                    b.Property<bool>("FromAdmin")
-                        .HasColumnType("bit");
 
                     b.Property<byte[]>("Image")
                         .HasColumnType("varbinary(max)");
@@ -255,9 +254,6 @@ namespace FlashCard.Migrations
                         .HasColumnType("nvarchar(400)")
                         .HasMaxLength(400);
 
-                    b.Property<bool>("FromAdmin")
-                        .HasColumnType("bit");
-
                     b.Property<DateTime>("LastModified")
                         .HasColumnType("datetime2");
 
@@ -294,6 +290,21 @@ namespace FlashCard.Migrations
                         .HasFilter("[SourceId] IS NOT NULL");
 
                     b.ToTable("Deck");
+                });
+
+            modelBuilder.Entity("FlashCard.Models.FailedCard", b =>
+                {
+                    b.Property<int>("CardId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("TestId")
+                        .HasColumnType("int");
+
+                    b.HasKey("CardId", "TestId");
+
+                    b.HasIndex("TestId");
+
+                    b.ToTable("FailedCard");
                 });
 
             modelBuilder.Entity("FlashCard.Models.Proposal", b =>
@@ -334,6 +345,21 @@ namespace FlashCard.Migrations
                     b.ToTable("Proposal");
                 });
 
+            modelBuilder.Entity("FlashCard.Models.SuccessCard", b =>
+                {
+                    b.Property<int>("CardId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("TestId")
+                        .HasColumnType("int");
+
+                    b.HasKey("CardId", "TestId");
+
+                    b.HasIndex("TestId");
+
+                    b.ToTable("SuccessCard");
+                });
+
             modelBuilder.Entity("FlashCard.Models.Test", b =>
                 {
                     b.Property<int>("Id")
@@ -355,24 +381,6 @@ namespace FlashCard.Migrations
                     b.HasIndex("DeckId");
 
                     b.ToTable("Test");
-                });
-
-            modelBuilder.Entity("FlashCard.Models.TestedCard", b =>
-                {
-                    b.Property<int>("CardId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("TestId")
-                        .HasColumnType("int");
-
-                    b.Property<bool>("Failed")
-                        .HasColumnType("bit");
-
-                    b.HasKey("CardId", "TestId");
-
-                    b.HasIndex("TestId");
-
-                    b.ToTable("TestedCard");
                 });
 
             modelBuilder.Entity("IdentityServer4.EntityFramework.Entities.DeviceFlowCodes", b =>
@@ -672,6 +680,21 @@ namespace FlashCard.Migrations
                         .OnDelete(DeleteBehavior.NoAction);
                 });
 
+            modelBuilder.Entity("FlashCard.Models.FailedCard", b =>
+                {
+                    b.HasOne("FlashCard.Models.Card", "Card")
+                        .WithMany("FailedCards")
+                        .HasForeignKey("CardId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("FlashCard.Models.Test", "Test")
+                        .WithMany("FailedCards")
+                        .HasForeignKey("TestId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("FlashCard.Models.Proposal", b =>
                 {
                     b.HasOne("FlashCard.Models.Card", "Card")
@@ -692,26 +715,26 @@ namespace FlashCard.Migrations
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
-            modelBuilder.Entity("FlashCard.Models.Test", b =>
-                {
-                    b.HasOne("FlashCard.Models.Deck", "Deck")
-                        .WithMany("Tests")
-                        .HasForeignKey("DeckId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("FlashCard.Models.TestedCard", b =>
+            modelBuilder.Entity("FlashCard.Models.SuccessCard", b =>
                 {
                     b.HasOne("FlashCard.Models.Card", "Card")
-                        .WithMany("TestedCards")
+                        .WithMany("SuccessCards")
                         .HasForeignKey("CardId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("FlashCard.Models.Test", "Test")
-                        .WithMany("TestedCards")
+                        .WithMany("SuccessCards")
                         .HasForeignKey("TestId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("FlashCard.Models.Test", b =>
+                {
+                    b.HasOne("FlashCard.Models.Deck", "Deck")
+                        .WithMany("Tests")
+                        .HasForeignKey("DeckId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

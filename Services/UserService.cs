@@ -1,9 +1,12 @@
 using System;
+using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using FlashCard.ApiModels;
+using FlashCard.Data;
 using FlashCard.Models;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 
 namespace FlashCard.Services
 {
@@ -17,6 +20,14 @@ namespace FlashCard.Services
                 return await userManager.FindByIdAsync(claim.Value);
             }
             return null;
+        }
+
+        public async static Task<ApplicationUser> GetAdmin(ApplicationDbContext dbContext)
+        {
+            var adminRoleId = (await dbContext.UserRoles.FirstAsync(ur => 
+                                    ur.RoleId == dbContext.Roles.First(r => r.Name == Roles.Administrator).Id)).UserId;
+
+            return await dbContext.Users.FindAsync(adminRoleId);
         }
     }
 }

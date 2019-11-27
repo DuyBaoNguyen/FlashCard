@@ -4,14 +4,16 @@ using FlashCard.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace FlashCard.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20191126092415_EditTestedCard")]
+    partial class EditTestedCard
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -115,9 +117,6 @@ namespace FlashCard.Migrations
                     b.Property<string>("Example")
                         .HasColumnType("nvarchar(400)")
                         .HasMaxLength(400);
-
-                    b.Property<bool>("FromAdmin")
-                        .HasColumnType("bit");
 
                     b.Property<byte[]>("Image")
                         .HasColumnType("varbinary(max)");
@@ -255,9 +254,6 @@ namespace FlashCard.Migrations
                         .HasColumnType("nvarchar(400)")
                         .HasMaxLength(400);
 
-                    b.Property<bool>("FromAdmin")
-                        .HasColumnType("bit");
-
                     b.Property<DateTime>("LastModified")
                         .HasColumnType("datetime2");
 
@@ -372,7 +368,7 @@ namespace FlashCard.Migrations
 
                     b.HasIndex("TestId");
 
-                    b.ToTable("TestedCard");
+                    b.ToTable("TestedCards");
                 });
 
             modelBuilder.Entity("IdentityServer4.EntityFramework.Entities.DeviceFlowCodes", b =>
