@@ -40,33 +40,17 @@ namespace FlashCard.Controllers
                             .Where(t => t.Deck.OwnerId == user.Id)
                             .ToListAsync();
 
-            int totalCards = 0;
-            int totalCardsToday = 0;
-            int failedCards = 0;
-            int failedCardsToday = 0;
             var now = DateTime.Now;
-
-            foreach (var test in tests)
-            {
-                totalCards += test.TestedCards.Count;
-                failedCards += test.TestedCards.Where(t => t.Failed).Count();
-
-                if (test.DateTime.Date == now.Date)
-                {
-                    totalCardsToday += test.TestedCards.Count;
-                    failedCardsToday += test.TestedCards.Where(t => t.Failed).Count();
-                }
-            }
+            var testsToday = tests.Where(t => t.DateTime.Date == now.Date);
 
             return new
             {
-                TotalCards = totalCards,
-                FailedCards = failedCards,
+                TotalCards = tests.Sum(t => t.TestedCards.Count),
+                FailedCards = tests.Sum(t => t.TestedCards.Where(tc => tc.Failed).Count()),
                 GradePointAverage = tests.Count == 0 ? 0 : tests.Average(t => t.Score),
-                TotalCardsToday = totalCardsToday,
-                FailedCardsToday = failedCardsToday,
-                gradePointAverageToday = tests.Count == 0 ? 0 : 
-                    tests.Where(t => t.DateTime.Date == now.Date).Average(t => t.Score)
+                TotalCardsToday = testsToday.Sum(t => t.TestedCards.Count),
+                FailedCardsToday = testsToday.Sum(t => t.TestedCards.Where(tc => tc.Failed).Count()),
+                gradePointAverageToday = testsToday.Count() == 0 ? 0 : testsToday.Average(t => t.Score)
             };
         }
 
@@ -96,33 +80,17 @@ namespace FlashCard.Controllers
                             .Where(t => t.DeckId == deckId)
                             .ToListAsync();
 
-            int totalCards = 0;
-            int totalCardsToday = 0;
-            int failedCards = 0;
-            int failedCardsToday = 0;
             var now = DateTime.Now;
-
-            foreach (var test in tests)
-            {
-                totalCards += test.TestedCards.Count;
-                failedCards += test.TestedCards.Where(t => t.Failed).Count();
-
-                if (test.DateTime.Date == now.Date)
-                {
-                    totalCardsToday += test.TestedCards.Count;
-                    failedCardsToday += test.TestedCards.Where(t => t.Failed).Count();
-                }
-            }
+            var testsToday = tests.Where(t => t.DateTime.Date == now.Date);
 
             return new
             {
-                TotalCards = totalCards,
-                FailedCards = failedCards,
+                TotalCards = tests.Sum(t => t.TestedCards.Count),
+                FailedCards = tests.Sum(t => t.TestedCards.Where(tc => tc.Failed).Count()),
                 GradePointAverage = tests.Count == 0 ? 0 : tests.Average(t => t.Score),
-                TotalCardsToday = totalCardsToday,
-                FailedCardsToday = failedCardsToday,
-                gradePointAverageToday = tests.Count == 0 ? 0 : 
-                    tests.Where(t => t.DateTime.Date == now.Date).Average(t => t.Score)
+                TotalCardsToday = testsToday.Sum(t => t.TestedCards.Count),
+                FailedCardsToday = testsToday.Sum(t => t.TestedCards.Where(tc => tc.Failed).Count()),
+                gradePointAverageToday = testsToday.Count() == 0 ? 0 : testsToday.Average(t => t.Score)
             };
         }
     }

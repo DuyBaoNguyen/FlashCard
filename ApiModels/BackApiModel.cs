@@ -11,6 +11,7 @@ namespace FlashCard.ApiModels
         public string Meaning { get; set; }
         public string Example { get; set; }
         public string Image { get; set; }
+        public bool FromAdmin { get; set; }
         public object Author { get; set; }
 
         public BackApiModel()
@@ -25,6 +26,7 @@ namespace FlashCard.ApiModels
             Meaning = back.Meaning;
             Example = back.Example;
             Image = ImageService.GetBase64(back.Image, back.ImageType);
+            FromAdmin = back.FromAdmin;
             Author = back.Author == null ? null : new { Id = back.AuthorId, DisplayName = back.Author.Name };
         }
     }

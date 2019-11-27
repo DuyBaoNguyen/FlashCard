@@ -46,7 +46,7 @@ namespace FlashCard.Controllers
                             .Include(d => d.Owner)
                             .Include(d => d.Author)
                             .Include(d => d.CardAssignments)
-                                .ThenInclude(ca => ca.Card)
+                                // .ThenInclude(ca => ca.Card)
                             .Include(d => d.Proposals)
                                 .ThenInclude(p => p.User)
                             .Where(d => d.OwnerId == user.Id)
@@ -174,35 +174,17 @@ namespace FlashCard.Controllers
             }
 
             // Get statistics of the deck
-            object statistics = null;
-
-            int totalCards = 0;
-            int totalCardsToday = 0;
-            int failedCards = 0;
-            int failedCardsToday = 0;
             var now = DateTime.Now;
+            var testsToday = deck.Tests.Where(t => t.DateTime.Date == now.Date);
 
-            foreach (var test in deck.Tests)
+            object statistics = new
             {
-                totalCards += test.TestedCards.Count;
-                failedCards += test.TestedCards.Where(t => t.Failed).Count();
-
-                if (test.DateTime.Date == now.Date)
-                {
-                    totalCardsToday += test.TestedCards.Count;
-                    failedCardsToday += test.TestedCards.Where(t => t.Failed).Count();
-                }
-            }
-
-            statistics = new
-            {
-                TotalCards = totalCards,
-                FailedCards = failedCards,
+                TotalCards = deck.Tests.Sum(t => t.TestedCards.Count),
+                FailedCards = deck.Tests.Sum(t => t.TestedCards.Where(tc => tc.Failed).Count()),
                 GradePointAverage = deck.Tests.Count == 0 ? 0 : deck.Tests.Average(t => t.Score),
-                TotalCardsToday = totalCardsToday,
-                FailedCardsToday = failedCardsToday,
-                gradePointAverageToday = deck.Tests.Count == 0 ? 0 :
-                    deck.Tests.Where(t => t.DateTime.Date == DateTime.Now.Date).Average(t => t.Score)
+                TotalCardsToday = testsToday.Sum(t => t.TestedCards.Count),
+                FailedCardsToday = testsToday.Sum(t => t.TestedCards.Where(tc => tc.Failed).Count()),
+                gradePointAverageToday = testsToday.Count() == 0 ? 0 : testsToday.Average(t => t.Score)
             };
 
             var deckmodel = new DeckApiModel(deck);

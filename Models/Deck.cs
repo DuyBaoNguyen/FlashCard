@@ -27,6 +27,8 @@ namespace FlashCard.Models
 
         public int Version { get; set; }
 
+        public bool FromAdmin { get; set; }
+
         public int CategoryId { get; set; }
 
         public int? SourceId { get; set; }
