@@ -1,127 +1,131 @@
 import React, { Component } from 'react';
-
-import { makeStyles } from '@material-ui/core/styles';
-import Paper from '@material-ui/core/Paper';
-import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
-import TableCell from '@material-ui/core/TableCell';
-import TableHead from '@material-ui/core/TableHead';
-import TablePagination from '@material-ui/core/TablePagination';
-import TableRow from '@material-ui/core/TableRow';
-
+import authService from '../../api-authorization/AuthorizeService';
 import './CardManagement.css';
-import Navbar from '../../modules/NavBar/Navbar';
-import Info from '../../modules/Info/Info';
-import DeckList from '../../modules/DeckList/DeckList';
+import MaterialTable from 'material-table';
 
-const columns = [
-	{ id: 'front', label: 'Front', minWidth: 170 },
-	{ id: 'back', label: 'Back', minWidth: 100 },
-	{
-		id: 'population',
-		label: 'Population',
-		minWidth: 170,
-		align: 'right',
-		format: value => value.toLocaleString()
+class CardManagement extends Component {
+	constructor(props) {
+		super(props);
+		this.state = {
+			id: '',
+			deckData: {}
+		};
 	}
-];
 
-function createData(front, back, population) {
-	return { front, back, population };
-}
-
-const rows = [
-	createData('India', 'IN', 1324171354),
-	createData('China', 'CN', 1403500365)
-];
-
-const useStyles = makeStyles({
-	root: {
-		width: '100%'
-	},
-	tableWrapper: {
-		maxHeight: 440,
-		overflow: 'auto'
+	componentWillMount() {
+		var deckID = this.getDeckIDFromPath(window.location.pathname);
+		console.log(deckID);
+		this.setState({
+			id: deckID
+		});
 	}
-});
 
-export default function CardManagement() {
-	const classes = useStyles();
-	const [page, setPage] = React.useState(0);
-	const [rowsPerPage, setRowsPerPage] = React.useState(10);
+	componentDidMount() {
+		this.getDeckData();
+	}
 
-	const handleChangePage = (event, newPage) => {
-		setPage(newPage);
+	getDeckIDFromPath = url => {
+		return url.substr(7);
 	};
 
-	const handleChangeRowsPerPage = event => {
-		setRowsPerPage(+event.target.value);
-		setPage(0);
+	getDeckData = async () => {
+		var url = '/api/decks/' + this.state.id;
+		const token = await authService.getAccessToken();
+		const response = await fetch(url, {
+			headers: !token ? {} : { Authorization: `Bearer ${token}` }
+		});
+
+		const data = await response.json();
+
+		this.setState({ deckData: data, loading: false });
 	};
-	return (
-		<div>
-			<Navbar navTitle="Card Management" />
-			<div className="field">
-				<Paper className={classes.root}>
-					<div className={classes.tableWrapper}>
-						<Table stickyHeader aria-label="sticky table">
-							<TableHead>
-								<TableRow>
-									{columns.map(column => (
-										<TableCell
-											key={column.id}
-											align={column.align}
-											style={{ minWidth: column.minWidth }}
-										>
-											{column.label}
-										</TableCell>
-									))}
-								</TableRow>
-							</TableHead>
-							<TableBody>
-								{rows
-									.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-									.map(row => {
-										return (
-											<TableRow
-												hover
-												role="checkbox"
-												tabIndex={-1}
-												key={row.code}
-											>
-												{columns.map(column => {
-													const value = row[column.id];
-													return (
-														<TableCell key={column.id} align={column.align}>
-															{column.format && typeof value === 'number'
-																? column.format(value)
-																: value}
-														</TableCell>
-													);
-												})}
-											</TableRow>
-										);
-									})}
-							</TableBody>
-						</Table>
-					</div>
-					<TablePagination
-						rowsPerPageOptions={[10, 25, 100]}
-						component="div"
-						count={rows.length}
-						rowsPerPage={rowsPerPage}
-						page={page}
-						backIconButtonProps={{
-							'aria-label': 'previous page'
-						}}
-						nextIconButtonProps={{
-							'aria-label': 'next page'
-						}}
-						onChangePage={handleChangePage}
-						onChangeRowsPerPage={handleChangeRowsPerPage}
-					/>
-				</Paper>
+
+	transData = () => {
+		var mockData = [];
+		var oldVocab = Object.create(null);
+		var data = this.state.deckData.cards;
+		if (data != undefined) {
+			data.map((vocab, index) => {
+				oldVocab = {
+					id: vocab.id,
+					front: vocab.front,
+					backs: vocab.backs.map((back, index2) => {
+						return back.meaning;
+					})
+				};
+				mockData.push(oldVocab);
+			});
+			console.log(mockData);
+			return mockData;
+		}
+	};
+
+	deleteCard = async param => {
+		var url = '/api/decks/' + this.state.id + '/cards';
+		const token = await authService.getAccessToken();
+		const data = '[' + param.toString() + ']';
+		// eslint-disable-next-line no-restricted-globals
+		var r = confirm('Are you sure to delete this card?');
+		if (r == true) {
+			try {
+				const response = await fetch(url, {
+					method: 'DELETE',
+					body: data, // data can be `string` or {object}!
+					headers: {
+						Authorization: `Bearer ${token}`,
+						'Content-Type': 'application/json'
+					}
+				});
+				const json = await response;
+				console.log('Success:', JSON.stringify(json));
+			} catch (error) {
+				console.error('Error:', error);
+			}
+			// eslint-disable-next-line no-undef
+			// eslint-disable-next-line no-restricted-globals
+			location.reload();
+		}
+
+		
+	};
+
+	table = () => {
+		var data = this.transData();
+		var title = 'Card in deck: ' + this.state.deckData.name;
+		return (
+			<MaterialTable
+				title={title}
+				columns={[
+					{ title: 'ID', field: 'id' },
+					{ title: 'Front', field: 'front' },
+					{ title: 'Backs', field: 'backs' }
+				]}
+				data={data}
+				actions={[
+					{
+						icon: 'edit',
+						tooltip: 'Edit card',
+						onClick: (event, rowData) => alert(typeof rowData.id)
+					},
+					{
+						icon: 'delete',
+						tooltip: 'Delete card',
+						// eslint-disable-next-line no-restricted-globals
+						onClick: (event, rowData) => this.deleteCard(rowData.id)
+					}
+				]}
+			/>
+		);
+	};
+
+	render() {
+		var table = this.table();
+		return (
+			<div>
+				<div className="field">{table}</div>
 			</div>
-		</div>
-	);
+		);
+	}
 }
+
+export default CardManagement;

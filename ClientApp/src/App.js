@@ -19,6 +19,7 @@ import './custom.css';
 import Dashboard from './components/Users/Dashboard/Dashboard';
 import DeckDetail from './components/Users/DeckDetail/DeckDetail';
 import Testing from './components/Users/Testing/Testing';
+import CardManagement from './components/Users/CardManagement/CardManagement';
 
 export default class App extends Component {
 	static displayName = App.name;
@@ -31,7 +32,7 @@ export default class App extends Component {
 					<AuthorizeRoute exact path="/decks/:deckId" component={DeckDetail} />
 					<AuthorizeRoute exact path="/testing/:deckId" component={Testing} />
 
-					{/* <AuthorizeRoute exact path='/DB' component={CardManegement} /> */}
+					<AuthorizeRoute exact path='/cards/:deckId' component={CardManagement} />
 					<AuthorizeRoute path="/counter" component={Counter} />
 					<AuthorizeRoute path="/fetch-data" component={FetchData} />
 					<Route

@@ -3,10 +3,9 @@ body {
 }
 
 .field {
-  padding: 35px 72px 35px 72px;
   width: 100%;
   min-height: 100vh;
   height: auto;
-  background-color: #eeeeee;
+  background-color: white;
 }
 /*# sourceMappingURL=CardManagement.css.map */
