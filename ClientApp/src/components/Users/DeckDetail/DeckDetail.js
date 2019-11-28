@@ -68,20 +68,58 @@ class DeckDetail extends Component {
 		}
 	};
 
+	deleteCard = async param => {
+		var url = '/api/decks/' + this.state.id + '/cards';
+		const token = await authService.getAccessToken();
+		const data = '[' + param.toString() + ']';
+		// eslint-disable-next-line no-restricted-globals
+		var r = confirm('Are you sure to delete this card?');
+		if (r == true) {
+			try {
+				const response = await fetch(url, {
+					method: 'DELETE',
+					body: data,
+					headers: {
+						Authorization: `Bearer ${token}`,
+						'Content-Type': 'application/json'
+					}
+				});
+				const json = await response;
+				console.log('Success:', JSON.stringify(json));
+			} catch (error) {
+				console.error('Error:', error);
+			}
+			// eslint-disable-next-line no-undef
+			// eslint-disable-next-line no-restricted-globals
+			location.reload();
+		}
+	};
+
 	table = () => {
-		var newData = this.transData();
+		var data = this.transData();
+		var title = 'Card in deck: ' + this.state.deckData.name;
 		return (
 			<MaterialTable
-				title="Cards in deck"
+				title={title}
 				columns={[
+					{ title: 'ID', field: 'id' },
 					{ title: 'Front', field: 'front' },
-					{ title: 'Back', field: 'backs' }
+					{ title: 'Backs', field: 'backs' }
 				]}
-				data={newData}
-				options={{
-					search: true,
-					minBodyHeight: 100
-				}}
+				data={data}
+				actions={[
+					{
+						icon: 'edit',
+						tooltip: 'Edit card',
+						onClick: (event, rowData) => alert(typeof rowData.id)
+					},
+					{
+						icon: 'delete',
+						tooltip: 'Delete card',
+						// eslint-disable-next-line no-restricted-globals
+						onClick: (event, rowData) => this.deleteCard(rowData.id)
+					}
+				]}
 			/>
 		);
 	};
@@ -121,6 +159,9 @@ class DeckDetail extends Component {
 							</div>
 							<div class="deck-content-advanced-features-items">
 								<a href="#">Delete deck</a>
+								<div class="deck-button" onClick={this.redirectTesting}>
+									<p>Review</p>
+								</div>
 							</div>
 							{/* <div class="deck-content-advanced-share">
 								<div class="deck-title">Share deck</div>
@@ -135,9 +176,9 @@ class DeckDetail extends Component {
 							</div> */}
 						</div>
 					</div>
-					<div className="table">{table}</div>
-					<div class="deck-button" onClick={this.redirectTesting}>
-						<p>Review</p>
+					<div className="table">
+						<p onClick={this.redirectAddCards}>Add</p>
+						{table}
 					</div>
 				</div>
 			</div>

@@ -2,13 +2,22 @@ import React, { Component } from 'react';
 import authService from '../../api-authorization/AuthorizeService';
 import './CardManagement.css';
 import MaterialTable from 'material-table';
+import Dashboard from '../Dashboard/Dashboard';
+import {
+	BrowserRouter as Router,
+	Switch,
+	Link,
+	Redirect,
+	withRouter
+} from 'react-router-dom';
 
 class CardManagement extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
 			id: '',
-			deckData: {}
+			deckData: {},
+			redirectAddCards : false,
 		};
 	}
 
@@ -25,7 +34,7 @@ class CardManagement extends Component {
 	}
 
 	getDeckIDFromPath = url => {
-		return url.substr(7);
+		return url.substr(16);
 	};
 
 	getDeckData = async () => {
@@ -118,11 +127,23 @@ class CardManagement extends Component {
 		);
 	};
 
+	redirectAddCards = () => {
+		this.setState({
+			redirectAddCards : true,
+		});
+	}
+
 	render() {
 		var table = this.table();
+		if (this.state.redirectAddCards === true) {
+			return <Redirect to='/' Component={Dashboard}/>
+		}
 		return (
 			<div>
-				<div className="field">{table}</div>
+				<div className="field">
+					<p onClick={this.redirectAddCards}>Add</p>
+					{table}
+					</div>
 			</div>
 		);
 	}

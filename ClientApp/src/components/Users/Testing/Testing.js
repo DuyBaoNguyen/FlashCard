@@ -23,7 +23,7 @@ class Testing extends Component {
 			nextButton: true,
 			removeCard: false,
 			deckData: [],
-			firstDisplay: false
+			firstDisplay: false,
 		};
 	}
 
@@ -77,7 +77,7 @@ class Testing extends Component {
 	onNext = () => {
 		array = this.state.deckData.cards;
 		next = array[Math.floor(Math.random() * array.length)];
-		console.log(next.backs);
+		// console.log(next.backs);
 		if (this.state.removeCard === true) {
 			array.splice(array.indexOf(next), 1);
 		}
@@ -87,14 +87,24 @@ class Testing extends Component {
 			removeCard: false,
 			firstDisplay: true
 		});
-		console.log(array);
+		// console.log(array);
 	};
 
 	render() {
 		var data = this.state.deckData.cards;
 		// console.log(data);
-		console.log(this.state.firstDisplay);
+		// console.log(this.state.firstDisplay);
 		// var backSize = next.backs
+		if (next != undefined) {
+			var backSide = next.backs.map(back => {
+				return(
+					<div className="content-back-side">
+						<p>{back.meaning}</p>
+					</div>	
+				);
+			})
+		}
+
 		return (
 			<div>
 				<div className="field">
@@ -123,7 +133,7 @@ class Testing extends Component {
 									this.state.nextButton === false ? 'none-display' : ''
 								)}
 							>
-								{/* {backSide} */}
+								{backSide}
 							</div>
 						</div>
 					</div>
@@ -162,9 +172,8 @@ class Testing extends Component {
 								className="test-button-next"
 								onClick={this.onNext}
 								type="button"
-								color="primary"
 							>
-								<p>Next</p>
+								<p>{this.state.firstDisplay === true ? 'Next' : 'Start'}</p>
 							</Button>
 						</div>
 					</div>

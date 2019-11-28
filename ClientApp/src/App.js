@@ -32,7 +32,7 @@ export default class App extends Component {
 					<AuthorizeRoute exact path="/decks/:deckId" component={DeckDetail} />
 					<AuthorizeRoute exact path="/testing/:deckId" component={Testing} />
 
-					<AuthorizeRoute exact path='/cards/:deckId' component={CardManagement} />
+					<AuthorizeRoute exact path='/cardmanagement/:deckId' component={CardManagement} />
 					<AuthorizeRoute path="/counter" component={Counter} />
 					<AuthorizeRoute path="/fetch-data" component={FetchData} />
 					<Route

@@ -10,6 +10,7 @@ body {
 }
 
 .test-button {
+  width: 1110px;
   position: fixed;
   bottom: 30px;
   display: -webkit-box;
@@ -20,13 +21,34 @@ body {
           justify-content: space-between;
 }
 
+.test-button .test-button-next {
+  background-color: #007bff;
+  -ms-flex-item-align: center;
+      -ms-grid-row-align: center;
+      align-self: center;
+  border-radius: 4px;
+  -webkit-box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.2), 0 2px 1px -1px rgba(0, 0, 0, 0.12), 0 1px 1px 0 rgba(0, 0, 0, 0.14);
+          box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.2), 0 2px 1px -1px rgba(0, 0, 0, 0.12), 0 1px 1px 0 rgba(0, 0, 0, 0.14);
+  width: 1110px;
+  height: 36px;
+}
+
+.test-button .test-button-next p {
+  text-transform: uppercase;
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: 1.25px;
+  text-align: center;
+  color: white;
+}
+
 .test-button .test-button-grey {
   border-radius: 4px;
   -webkit-box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.2), 0 2px 1px -1px rgba(0, 0, 0, 0.12), 0 1px 1px 0 rgba(0, 0, 0, 0.14);
           box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.2), 0 2px 1px -1px rgba(0, 0, 0, 0.12), 0 1px 1px 0 rgba(0, 0, 0, 0.14);
   width: 45%;
   height: 36px;
-  background-color: #71706c;
+  background-color: #dc3545;
 }
 
 .test-button .test-button-orange {
@@ -35,43 +57,16 @@ body {
           box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.2), 0 2px 1px -1px rgba(0, 0, 0, 0.12), 0 1px 1px 0 rgba(0, 0, 0, 0.14);
   width: 45%;
   height: 36px;
-  background-color: #ff6f28;
+  background-color: #28a745;
 }
 
 .test-button p {
   text-transform: uppercase;
   font-size: 14px;
   font-weight: 500;
-  font-stretch: normal;
-  font-style: normal;
-  line-height: 1.14;
   letter-spacing: 1.25px;
   text-align: center;
   color: #ffffff;
-}
-
-.test-button-next {
-  -ms-flex-item-align: center;
-      -ms-grid-row-align: center;
-      align-self: center;
-  border-radius: 4px;
-  -webkit-box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.2), 0 2px 1px -1px rgba(0, 0, 0, 0.12), 0 1px 1px 0 rgba(0, 0, 0, 0.14);
-          box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.2), 0 2px 1px -1px rgba(0, 0, 0, 0.12), 0 1px 1px 0 rgba(0, 0, 0, 0.14);
-  width: 620px;
-  height: 36px;
-  background-color: #ff6f28;
-}
-
-.test-button-next p {
-  text-transform: uppercase;
-  font-size: 14px;
-  font-weight: 500;
-  font-stretch: normal;
-  font-style: normal;
-  line-height: 1.14;
-  letter-spacing: 1.25px;
-  text-align: center;
-  color: black;
 }
 
 .display {
@@ -113,15 +108,29 @@ body {
           align-items: center;
   width: 645px;
   height: 230px;
-  border-radius: 2px;
-  -webkit-box-shadow: 0 2px 4px -1px rgba(0, 0, 0, 0.2), 0 1px 10px 0 rgba(0, 0, 0, 0.12), 0 4px 5px 0 rgba(0, 0, 0, 0.14);
-          box-shadow: 0 2px 4px -1px rgba(0, 0, 0, 0.2), 0 1px 10px 0 rgba(0, 0, 0, 0.12), 0 4px 5px 0 rgba(0, 0, 0, 0.14);
+  border-radius: 10px;
+  border: solid 1px #007bff;
+  color: #007bff;
+  font-weight: bold;
+  background-color: #ffffff;
+  -webkit-transition: 0.3s;
+  transition: 0.3s;
+}
+
+.content .content-front:hover {
+  -webkit-transition: 0.3s;
+  transition: 0.3s;
+  -webkit-transform: translateY(-10px);
+          transform: translateY(-10px);
+  border: solid 1px #007bff;
 }
 
 .content .content-back {
-  -webkit-box-pack: start;
-      -ms-flex-pack: start;
-          justify-content: flex-start;
+  display: -ms-grid;
+  display: grid;
+  -ms-grid-columns: auto auto auto;
+      grid-template-columns: auto auto auto;
+  margin-top: 10px;
 }
 
 .content .content-back .content-back-side {
@@ -135,10 +144,22 @@ body {
   -webkit-box-align: center;
       -ms-flex-align: center;
           align-items: center;
-  width: 645px;
+  width: 400px;
   height: 230px;
-  border-radius: 2px;
-  -webkit-box-shadow: 0 2px 4px -1px rgba(0, 0, 0, 0.2), 0 1px 10px 0 rgba(0, 0, 0, 0.12), 0 4px 5px 0 rgba(0, 0, 0, 0.14);
-          box-shadow: 0 2px 4px -1px rgba(0, 0, 0, 0.2), 0 1px 10px 0 rgba(0, 0, 0, 0.12), 0 4px 5px 0 rgba(0, 0, 0, 0.14);
+  border-radius: 10px;
+  border: solid 1px #dbdbdb;
+  background-color: #ffffff;
+  display: flex;
+  -webkit-transition: 0.3s;
+  transition: 0.3s;
+  padding: 15px;
+}
+
+.content .content-back .content-back-side:hover {
+  -webkit-transition: 0.3s;
+  transition: 0.3s;
+  -webkit-transform: translateY(-10px);
+          transform: translateY(-10px);
+  border: solid 1px #007bff;
 }
 /*# sourceMappingURL=Testing.css.map */
