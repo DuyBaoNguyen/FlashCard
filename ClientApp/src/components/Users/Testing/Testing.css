@@ -141,9 +141,13 @@ body {
   -webkit-box-pack: center;
       -ms-flex-pack: center;
           justify-content: center;
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
+  -webkit-box-align: start;
+      -ms-flex-align: start;
+          align-items: flex-start;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
   width: 400px;
   height: 230px;
   border-radius: 10px;
@@ -161,5 +165,15 @@ body {
   -webkit-transform: translateY(-10px);
           transform: translateY(-10px);
   border: solid 1px #007bff;
+}
+
+.meaning {
+  font-weight: 900;
+  color: #007bff;
+}
+
+.type {
+  font-style: italic;
+  font-size: 14px;
 }
 /*# sourceMappingURL=Testing.css.map */

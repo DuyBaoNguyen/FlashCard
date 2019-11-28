@@ -97,9 +97,13 @@ class Testing extends Component {
 		// var backSize = next.backs
 		if (next != undefined) {
 			var backSide = next.backs.map(back => {
-				return(
+				console.log(back);
+				return(			
 					<div className="content-back-side">
-						<p>{back.meaning}</p>
+						<p className="meaning">{back.meaning}</p>
+						<p className="type">{back.type}</p>
+						<p className="example">{back.example}</p>
+						<p className="image">{back.image}</p>
 					</div>	
 				);
 			})

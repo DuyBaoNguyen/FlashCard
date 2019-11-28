@@ -20,8 +20,8 @@ body {
 		background-color: #007bff;
 		align-self: center;
 		border-radius: 4px;
-		box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.2), 0 2px 1px -1px rgba(0, 0, 0, 0.12),
-			0 1px 1px 0 rgba(0, 0, 0, 0.14);
+		box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.2),
+			0 2px 1px -1px rgba(0, 0, 0, 0.12), 0 1px 1px 0 rgba(0, 0, 0, 0.14);
 		width: 1110px;
 		height: 36px;
 		p {
@@ -33,7 +33,7 @@ body {
 			color: white;
 		}
 	}
-	
+
 	.test-button-grey {
 		border-radius: 4px;
 		box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.2),
@@ -59,7 +59,6 @@ body {
 		color: #ffffff;
 	}
 }
-
 
 .display {
 	display: flex;
@@ -91,7 +90,6 @@ body {
 			transition: 0.3s;
 			transform: translateY(-10px);
 			border: solid 1px #007bff;
-
 		}
 	}
 	.content-back {
@@ -105,7 +103,8 @@ body {
 			margin: 15px;
 			display: flex;
 			justify-content: center;
-			align-items: center;
+			align-items: flex-start;
+			flex-direction: column;
 			width: 400px;
 			height: 230px;
 			border-radius: 10px;
@@ -118,8 +117,17 @@ body {
 				transition: 0.3s;
 				transform: translateY(-10px);
 				border: solid 1px #007bff;
-
 			}
 		}
 	}
+}
+
+.meaning {
+	font-weight: 900;
+	color: #007bff;
+}
+
+.type {
+	font-style: italic;
+	font-size: 14px;
 }
