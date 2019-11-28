@@ -46,7 +46,7 @@ namespace FlashCard.Controllers
                             .Include(d => d.Owner)
                             .Include(d => d.Author)
                             .Include(d => d.CardAssignments)
-                                // .ThenInclude(ca => ca.Card)
+                            // .ThenInclude(ca => ca.Card)
                             .Include(d => d.Proposals)
                                 .ThenInclude(p => p.User)
                             .Where(d => d.OwnerId == user.Id)
@@ -270,6 +270,51 @@ namespace FlashCard.Controllers
             await dbContext.SaveChangesAsync();
 
             return NoContent();
+        }
+
+        [HttpGet("{id}/remainingcards")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<ActionResult<IEnumerable<CardApiModel>>> GetRemainingCards(int id)
+        {
+            var deck = await dbContext.Decks
+                            .Include(d => d.CardAssignments)
+                                .ThenInclude(ca => ca.Card)
+                            .FirstOrDefaultAsync(d => d.Id == id);
+
+            if (deck == null)
+            {
+                return NotFound();
+            }
+
+            var user = await UserService.GetUser(userManager, User);
+            bool userIsInUserRole = await userManager.IsInRoleAsync(user, Roles.User);
+
+            // Check the deck belongs with the current user
+            if (userIsInUserRole && deck.OwnerId != user.Id)
+            {
+                return Forbid();
+            }
+
+            var cardIds = dbContext.CardAssignments
+                            .Where(ca => ca.DeckId == deck.Id)
+                            .Select(ca => ca.CardId);
+            var remainingCards = dbContext.Cards
+                                    .Include(c => c.Backs)
+                                        .ThenInclude(b => b.Author)
+                                    .Include(c => c.CardOwners)
+                                    .Where(c => c.CardOwners.FirstOrDefault(co => co.UserId == user.Id) != null &&
+                                        !cardIds.Contains(c.Id));
+
+            var cardmodels = new List<CardApiModel>();
+
+            foreach (var card in remainingCards)
+            {
+                cardmodels.Add(new CardApiModel(card, user));
+            }
+
+            return cardmodels;
         }
 
         [HttpPut("{id}/cards")]
