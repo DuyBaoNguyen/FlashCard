@@ -6,6 +6,7 @@ import Info from '../../modules/Info/Info';
 import Testing from '../Testing/Testing';
 import AddCards from '../AddCards/AddCards';
 import MaterialTable from 'material-table';
+import Dashboard from '../Dashboard/Dashboard';
 
 class DeckDetail extends Component {
 	constructor(props) {
@@ -15,7 +16,8 @@ class DeckDetail extends Component {
 			deckData: {},
 			statisticsData: {},
 			redirectTesting: false,
-			redirectAddCards : false,
+			redirectAddCards: false,
+			redirectDashboard: false,
 		};
 	}
 
@@ -116,6 +118,33 @@ class DeckDetail extends Component {
 		}
 	};
 
+	deleteDeck = async param => {
+		var url = '/api/decks/' + this.state.id;
+		const token = await authService.getAccessToken();
+		// eslint-disable-next-line no-restricted-globals
+		var r = confirm('Are you sure to delete this deck?');
+		if (r == true) {
+			try {
+				const response = await fetch(url, {
+					method: 'DELETE',
+					headers: {
+						Authorization: `Bearer ${token}`,
+						'Content-Type': 'application/json'
+					}
+				});
+				const json = await response;
+				console.log('Success:', JSON.stringify(json));
+			} catch (error) {
+				console.error('Error:', error);
+			}
+			// eslint-disable-next-line no-undef
+			// eslint-disable-next-line no-restricted-globals
+			this.setState({
+				redirectDashboard: true,
+			});
+		}
+	};
+
 	table = () => {
 		var data = this.transData();
 		var title = 'Card in deck: ' + this.state.deckData.name;
@@ -141,11 +170,11 @@ class DeckDetail extends Component {
 						onClick: (event, rowData) => this.deleteCard(rowData.id)
 					},
 					{
-            icon: 'add',
-            tooltip: 'Add Cards',
-            isFreeAction: true,
-            onClick: (event) => this.redirectAddCards()
-          }
+						icon: 'add',
+						tooltip: 'Add Cards',
+						isFreeAction: true,
+						onClick: event => this.redirectAddCards()
+					}
 				]}
 			/>
 		);
@@ -162,8 +191,13 @@ class DeckDetail extends Component {
 		}
 
 		if (this.state.redirectAddCards === true) {
-			return <Redirect to={addCardsURL} Component={addCardsURL} />;
+			return <Redirect to={addCardsURL} Component={AddCards} />;
 		}
+
+		if (this.state.redirectDashboard === true) {
+			return <Redirect to='/' Component={Dashboard} />;
+		}
+
 		var table = this.table();
 		return (
 			<div>
@@ -183,21 +217,18 @@ class DeckDetail extends Component {
 							</div>
 						</div>
 						<Info
-						data={
-							this.state.statisticsData != undefined
-								? this.state.statisticsData
-								: null
-						}
-					/>
+							data={
+								this.state.statisticsData != undefined
+									? this.state.statisticsData
+									: null
+							}
+						/>
 						<div className="deck-content-advanced">
 							<div class="deck-content-advanced-features">
 								<div class="deck-title">Features</div>
 							</div>
 							<div class="deck-content-advanced-features-items">
-								<a href="#">Manage card </a>
-							</div>
-							<div class="deck-content-advanced-features-items">
-								<a href="#">Delete deck</a>
+								<p onClick={this.deleteDeck} style={{color: 'red'}}>Delete deck</p>
 								<div class="deck-button" onClick={this.redirectTesting}>
 									<p>Review</p>
 								</div>
@@ -215,9 +246,7 @@ class DeckDetail extends Component {
 							</div> */}
 						</div>
 					</div>
-					<div className="table">
-						{table}
-					</div>
+					<div className="table">{table}</div>
 				</div>
 			</div>
 		);

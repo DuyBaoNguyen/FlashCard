@@ -99,11 +99,11 @@
   text-align: right;
 }
 
-.deck-fields .deck-content .deck-content-advanced .deck-content-advanced-features .deck-content-advanced-features-items a {
+.deck-fields .deck-content .deck-content-advanced .deck-content-advanced-features .deck-content-advanced-features-items p {
   margin-top: 15px;
   font-size: 14px;
   letter-spacing: 0.25px;
-  color: #007bff;
+  color: red;
 }
 
 .deck-fields .deck-content .deck-content-info {
