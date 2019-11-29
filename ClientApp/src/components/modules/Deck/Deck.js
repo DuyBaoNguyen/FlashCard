@@ -35,7 +35,7 @@ class Deck extends Component {
 			<div className="menu-deck" onClick={this.redirectDeckDetails}>
 				<div className="menu-deck-info">
 					<h6>{ this.props.deck.name }</h6>
-
+					<hr/>
 					<div className="menu-deck-info-line">
 						<img src="../../../images/icons/card.svg" width="21px" height="16px" />
 						<p>{ this.props.deck.totalCards }</p>

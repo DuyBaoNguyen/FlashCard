@@ -13,6 +13,7 @@ class DeckDetail extends Component {
 		this.state = {
 			id: '',
 			deckData: {},
+			statisticsData: {},
 			redirectTesting: false,
 			redirectAddCards : false,
 		};
@@ -28,6 +29,7 @@ class DeckDetail extends Component {
 
 	componentDidMount() {
 		this.getDeckData();
+		this.getStatistics();
 	}
 
 	getDeckIDFromPath = () => {
@@ -42,6 +44,17 @@ class DeckDetail extends Component {
 		});
 		const data = await response.json();
 		this.setState({ deckData: data, loading: false });
+	};
+
+	getStatistics = async () => {
+		var url = '/api/statistics/' + this.state.id;
+		const token = await authService.getAccessToken();
+		const response = await fetch(url, {
+			headers: !token ? {} : { Authorization: `Bearer ${token}` }
+		});
+		const data = await response.json();
+		this.setState({ statisticsData: data, loading: false });
+		console.log(data);
 	};
 
 	redirectTesting = () => {
@@ -169,7 +182,13 @@ class DeckDetail extends Component {
 								Date created: {date.toLocaleDateString()}
 							</div>
 						</div>
-						<Info data={this.state.deckData.statistics}></Info>
+						<Info
+						data={
+							this.state.statisticsData != undefined
+								? this.state.statisticsData
+								: null
+						}
+					/>
 						<div className="deck-content-advanced">
 							<div class="deck-content-advanced-features">
 								<div class="deck-title">Features</div>

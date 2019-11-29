@@ -18,20 +18,43 @@ class Info extends Component {
 				</div>
 				<div className="info-field">
 					<div className="info-field-item">
-						<div className="info-field-item-white">Reviews:</div>
-						<div className="info-field-item-orange">13424</div>
+						<div className="info-field-item-white">Total cards:</div>
+						<div className="info-field-item-orange">
+							{this.props.data.totalCards}
+						</div>
 					</div>
 					<div className="info-field-item">
-						<div className="info-field-item-white">Reviews:</div>
-						<div className="info-field-item-orange">13424</div>
+						<div className="info-field-item-white">Failed cards:</div>
+						<div className="info-field-item-orange">
+							{this.props.data.failedCards}
+						</div>
 					</div>
 					<div className="info-field-item">
-						<div className="info-field-item-white">Reviews:</div>
-						<div className="info-field-item-orange">13424</div>
+						<div className="info-field-item-white">Avarage grade point:</div>
+						<div className="info-field-item-orange">
+							{this.props.data.gradePointAverage}
+						</div>
+					</div>
+					<hr/>
+					<div className="info-field-item">
+						<div className="info-field-item-white">Total cards today:</div>
+						<div className="info-field-item-orange">
+							{this.props.data.totalCardsToday}
+						</div>
 					</div>
 					<div className="info-field-item">
-						<div className="info-field-item-white">Reviews:</div>
-						<div className="info-field-item-orange">13424</div>
+						<div className="info-field-item-white">Failed cards todays:</div>
+						<div className="info-field-item-orange">
+							{this.props.data.failedCardsToday}
+						</div>
+					</div>
+					<div className="info-field-item">
+						<div className="info-field-item-white">
+							Avarage grade point today:
+						</div>
+						<div className="info-field-item-orange">
+							{this.props.data.gradePointAverageToday}
+						</div>
 					</div>
 				</div>
 			</div>
