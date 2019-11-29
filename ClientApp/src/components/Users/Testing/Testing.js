@@ -28,7 +28,7 @@ class Testing extends Component {
 	}
 
 	componentWillMount() {
-		var deckID = this.getDeckIDFromPath(window.location.pathname);
+		var deckID = this.getDeckIDFromPath();
 		console.log(deckID);
 		this.setState({
 			id: deckID
@@ -46,8 +46,8 @@ class Testing extends Component {
 		}
 	};
 
-	getDeckIDFromPath = url => {
-		return url.substr(9);
+	getDeckIDFromPath = () => {
+		return this.props.match.params.deckId;
 	};
 
 	getDeckData = async () => {
@@ -77,7 +77,6 @@ class Testing extends Component {
 	onNext = () => {
 		array = this.state.deckData.cards;
 		next = array[Math.floor(Math.random() * array.length)];
-		// console.log(next.backs);
 		if (this.state.removeCard === true) {
 			array.splice(array.indexOf(next), 1);
 		}
@@ -87,14 +86,9 @@ class Testing extends Component {
 			removeCard: false,
 			firstDisplay: true
 		});
-		// console.log(array);
 	};
 
 	render() {
-		var data = this.state.deckData.cards;
-		// console.log(data);
-		// console.log(this.state.firstDisplay);
-		// var backSize = next.backs
 		if (next != undefined) {
 			var backSide = next.backs.map(back => {
 				console.log(back);
@@ -134,7 +128,7 @@ class Testing extends Component {
 							<div
 								className={classnames(
 									'content-back',
-									this.state.nextButton === false ? 'none-display' : ''
+									this.state.nextButton === false ? 'none-display' : 'display-grid'
 								)}
 							>
 								{backSide}

@@ -64,6 +64,10 @@ body {
 	display: flex;
 }
 
+.display-grid {
+	display: grid;
+}
+
 .none-display {
 	display: none;
 }
@@ -93,11 +97,8 @@ body {
 		}
 	}
 	.content-back {
-		// width: 100%;
-		display: grid;
-		// grid-column-gap: 50px;
+		// display: flex;
 		grid-template-columns: auto auto auto;
-		// justify-content: flex-start;
 		margin-top: 10px;
 		.content-back-side {
 			margin: 15px;

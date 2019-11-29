@@ -75,6 +75,11 @@ body {
   display: flex;
 }
 
+.display-grid {
+  display: -ms-grid;
+  display: grid;
+}
+
 .none-display {
   display: none;
 }
@@ -126,8 +131,6 @@ body {
 }
 
 .content .content-back {
-  display: -ms-grid;
-  display: grid;
   -ms-grid-columns: auto auto auto;
       grid-template-columns: auto auto auto;
   margin-top: 10px;
