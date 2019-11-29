@@ -9,6 +9,8 @@ namespace FlashCard.ApiModels
         public int Id { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
+        public bool Had { get; set; }
+        public bool FromAdmin { get; set; }
         public CategoryApiModel Category { get; set; }
         public object Author { get; set; }
         public ICollection<object> Contributors { get; set; }
@@ -25,6 +27,7 @@ namespace FlashCard.ApiModels
             Id = deck.Id;
             Name = deck.Name;
             Description = deck.Description;
+            FromAdmin = deck.FromAdmin;
             Category = new CategoryApiModel() { Id = deck.CategoryId, Name = deck.Category.Name };
             Author = deck.Author == null ? null : new { Id = deck.AuthorId, DisplayName = deck.Author.Name };
             TotalCards = deck.CardAssignments.Count;

@@ -38,6 +38,8 @@ namespace FlashCard.Controllers
             var decks = dbContext.Decks
                             .Include(d => d.Category)
                             .Include(d => d.Source)
+                                .ThenInclude(s => s.Category)
+                            .Include(d => d.Source)
                                 .ThenInclude(s => s.CardAssignments)
                             .Include(d => d.Source)
                                 .ThenInclude(s => s.Owner)
@@ -46,7 +48,6 @@ namespace FlashCard.Controllers
                             .Include(d => d.Owner)
                             .Include(d => d.Author)
                             .Include(d => d.CardAssignments)
-                            // .ThenInclude(ca => ca.Card)
                             .Include(d => d.Proposals)
                                 .ThenInclude(p => p.User)
                             .Where(d => d.OwnerId == user.Id)
@@ -106,6 +107,8 @@ namespace FlashCard.Controllers
         {
             var deck = await dbContext.Decks
                             .Include(d => d.Category)
+                            .Include(d => d.Source)
+                                .ThenInclude(s => s.Category)
                             .Include(d => d.Source)
                                 .ThenInclude(s => s.CardAssignments)
                             .Include(d => d.Source)

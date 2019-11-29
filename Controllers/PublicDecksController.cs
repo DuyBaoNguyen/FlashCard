@@ -31,22 +31,29 @@ namespace FlashCard.Controllers
 
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public IEnumerable<PublicDeckApiModel> GetAll()
+        public async Task<IEnumerable<PublicDeckApiModel>> GetAll()
         {
-            var decks = dbContext.Decks
-                            .Include(d => d.Category)
-                            .Include(d => d.Author)
-                            .Include(d => d.CardAssignments)
-                            .Include(d => d.Proposals)
-                                .ThenInclude(p => p.User)
-                            .Where(d => d.Public && d.Approved)
-                            .AsNoTracking();
+            var publicDecks = dbContext.Decks
+                                .Include(d => d.Category)
+                                .Include(d => d.Author)
+                                .Include(d => d.CardAssignments)
+                                .Include(d => d.Proposals)
+                                    .ThenInclude(p => p.User)
+                                .Where(d => d.Public && d.Approved)
+                                .AsNoTracking();
 
+            var user = await UserService.GetUser(userManager, User);
+            var privateDeckIds = dbContext.Decks
+                                    .Where(d => d.OwnerId == user.Id && d.FromAdmin && d.SourceId != null)
+                                    .Select(d => d.SourceId)
+                                    .ToArray();
             var deckmodels = new List<PublicDeckApiModel>();
 
-            foreach (var deck in decks)
+            foreach (var deck in publicDecks)
             {
-                deckmodels.Add(new PublicDeckApiModel(deck));
+                var deckmodel = new PublicDeckApiModel(deck);
+                deckmodel.Had = privateDeckIds.Contains(deck.Id);
+                deckmodels.Add(deckmodel);
             }
 
             return deckmodels;
@@ -57,25 +64,25 @@ namespace FlashCard.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult<PublicDeckApiModel>> GetById(int id, int? pageSize, int pageIndex = 1)
         {
-            var deck = await dbContext.Decks
-                            .Include(d => d.Category)
-                            .Include(d => d.Author)
-                            .Include(d => d.CardAssignments)
-                                .ThenInclude(ca => ca.Card)
-                                    .ThenInclude(c => c.Backs)
-                                        .ThenInclude(b => b.Author)
-                            .Include(d => d.Proposals)
-                                .ThenInclude(p => p.User)
-                            .AsNoTracking()
-                            .FirstOrDefaultAsync(d => d.Id == id && d.Public && d.Approved);
+            var publicDeck = await dbContext.Decks
+                                .Include(d => d.Category)
+                                .Include(d => d.Author)
+                                .Include(d => d.CardAssignments)
+                                    .ThenInclude(ca => ca.Card)
+                                        .ThenInclude(c => c.Backs)
+                                            .ThenInclude(b => b.Author)
+                                .Include(d => d.Proposals)
+                                    .ThenInclude(p => p.User)
+                                .AsNoTracking()
+                                .FirstOrDefaultAsync(d => d.Id == id && d.Public && d.Approved);
 
-            if (deck == null)
+            if (publicDeck == null)
             {
                 return NotFound();
             }
 
             // Paginate cards of deck if pageSize parameter is specified
-            var cardAssignments = deck.CardAssignments;
+            var cardAssignments = publicDeck.CardAssignments;
 
             if (pageSize != null)
             {
@@ -101,16 +108,55 @@ namespace FlashCard.Controllers
             // Get list of cards of the deck
             var cardmodels = new List<CardApiModel>();
             var admin = await UserService.GetAdmin(dbContext);
+            var user = await UserService.GetUser(userManager, User);
+            var privateDeck = await dbContext.Decks
+                                .FirstOrDefaultAsync(d => d.OwnerId == user.Id && d.SourceId == publicDeck.Id);
 
             foreach (var cardAssignment in cardAssignments)
             {
                 cardmodels.Add(new CardApiModel(cardAssignment.Card, admin));
             }
 
-            var deckmodel = new PublicDeckApiModel(deck);
+            var deckmodel = new PublicDeckApiModel(publicDeck);
             deckmodel.Cards = cardmodels;
+            deckmodel.Had = privateDeck != null;
 
             return deckmodel;
+        }
+
+        [HttpGet("{id}/remainingcards")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<ActionResult<IEnumerable<CardApiModel>>> GetRemainingCards(int id)
+        {
+            var deck = await dbContext.Decks
+                            .Include(d => d.CardAssignments)
+                                .ThenInclude(ca => ca.Card)
+                            .FirstOrDefaultAsync(d => d.Id == id && d.Public && d.Approved);
+
+            if (deck == null)
+            {
+                return NotFound();
+            }
+
+            var admin = await UserService.GetAdmin(dbContext);
+            var cardIds = dbContext.CardAssignments
+                            .Where(ca => ca.DeckId == deck.Id)
+                            .Select(ca => ca.CardId);
+            var remainingCards = dbContext.Cards
+                                    .Include(c => c.Backs)
+                                        .ThenInclude(b => b.Author)
+                                    .Include(c => c.CardOwners)
+                                    .Where(c => c.CardOwners.FirstOrDefault(co => co.UserId == admin.Id) != null &&
+                                        !cardIds.Contains(c.Id));
+            var cardmodels = new List<CardApiModel>();
+
+            foreach (var card in remainingCards)
+            {
+                cardmodels.Add(new CardApiModel(card, admin));
+            }
+
+            return cardmodels;
         }
 
         [HttpGet("{id}/pages")]

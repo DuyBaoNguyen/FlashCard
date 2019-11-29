@@ -4,6 +4,7 @@ namespace FlashCard.Models
     {
         public int DeckId { get; set; }
         public int CardId { get; set; }
+        public bool FromAdmin { get; set; }
         public Deck Deck { get; set; }
         public Card Card { get; set; }
     }

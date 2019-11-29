@@ -22,6 +22,11 @@ namespace FlashCard.Services
             return null;
         }
 
+        public static string GetUserId(ClaimsPrincipal principal)
+        {
+            return principal.FindFirst(ClaimTypes.NameIdentifier).Value;
+        }
+
         public async static Task<ApplicationUser> GetAdmin(ApplicationDbContext dbContext)
         {
             var adminRoleId = (await dbContext.UserRoles.FirstAsync(ur => 
