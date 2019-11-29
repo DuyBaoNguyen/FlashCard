@@ -7,6 +7,7 @@ import Testing from '../Testing/Testing';
 import AddCards from '../AddCards/AddCards';
 import MaterialTable from 'material-table';
 import Dashboard from '../Dashboard/Dashboard';
+import EditCard from '../EditCard/EditCard';
 
 class DeckDetail extends Component {
 	constructor(props) {
@@ -14,10 +15,12 @@ class DeckDetail extends Component {
 		this.state = {
 			id: '',
 			deckData: {},
+			front : '',
 			statisticsData: {},
 			redirectTesting: false,
 			redirectAddCards: false,
 			redirectDashboard: false,
+			redirectEditCard: false,
 		};
 	}
 
@@ -140,10 +143,17 @@ class DeckDetail extends Component {
 			// eslint-disable-next-line no-undef
 			// eslint-disable-next-line no-restricted-globals
 			this.setState({
-				redirectDashboard: true,
+				redirectDashboard: true
 			});
 		}
 	};
+
+	editCard = (front) => {
+		this.setState({
+			front : front,
+			redirectEditCard : true
+		});
+	}
 
 	table = () => {
 		var data = this.transData();
@@ -161,7 +171,7 @@ class DeckDetail extends Component {
 					{
 						icon: 'edit',
 						tooltip: 'Edit card',
-						onClick: (event, rowData) => alert(typeof rowData.id)
+						onClick: (event, rowData) => this.editCard(rowData.front)
 					},
 					{
 						icon: 'delete',
@@ -185,6 +195,8 @@ class DeckDetail extends Component {
 		var date = new Date(this.state.deckData.createdDate);
 		var testURL = '/testing/' + this.state.id.toString();
 		var addCardsURL = '/addcards/' + this.state.id.toString();
+		var editCardURL = '/editcard/' + this.state.front;
+
 
 		if (this.state.redirectTesting === true) {
 			return <Redirect to={testURL} Component={Testing} />;
@@ -195,7 +207,11 @@ class DeckDetail extends Component {
 		}
 
 		if (this.state.redirectDashboard === true) {
-			return <Redirect to='/' Component={Dashboard} />;
+			return <Redirect to="/" Component={Dashboard} />;
+		}
+
+		if (this.state.redirectEditCard === true) {
+			return <Redirect to={editCardURL} Component={EditCard} />;
 		}
 
 		var table = this.table();
@@ -228,7 +244,10 @@ class DeckDetail extends Component {
 								<div class="deck-title">Features</div>
 							</div>
 							<div class="deck-content-advanced-features-items">
-								<p onClick={this.deleteDeck} style={{color: 'red'}}>Delete deck</p>
+								
+								<p onClick={this.deleteDeck} style={{ color: 'red' }}>
+								<i class="far fa-trash-alt"></i>  Delete deck
+								</p>
 								<div class="deck-button" onClick={this.redirectTesting}>
 									<p>Review</p>
 								</div>

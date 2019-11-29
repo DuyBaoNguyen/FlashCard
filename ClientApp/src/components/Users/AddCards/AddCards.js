@@ -3,6 +3,8 @@ import authService from '../../api-authorization/AuthorizeService';
 import MaterialTable from 'material-table';
 import Dashboard from '../Dashboard/Dashboard';
 import { BrowserRouter as Router, Redirect } from 'react-router-dom';
+import EditCard from '../EditCard/EditCard';
+
 
 import './AddCards.css';
 
@@ -13,7 +15,8 @@ class AddCards extends Component {
 			id: '',
 			deckData: {},
 			cardSource: {},
-			redirectAddCards: false
+			redirectAddCards: false,
+			redirectEditCard: false,
 		};
 	}
 
@@ -104,6 +107,13 @@ class AddCards extends Component {
 		}
 	};
 
+	editCard = (front) => {
+		this.setState({
+			front : front,
+			redirectEditCard : true
+		});
+	}
+
 	addCard = async param => {
 		var url = '/api/decks/' + this.state.id + '/cards';
 		const token = await authService.getAccessToken();
@@ -147,7 +157,7 @@ class AddCards extends Component {
 					{
 						icon: 'edit',
 						tooltip: 'Edit card',
-						onClick: (event, rowData) => alert(typeof rowData.id)
+						onClick: (event, rowData) => this.editCard(rowData.front)
 					},
 					{
 						icon: 'delete',
@@ -206,10 +216,14 @@ class AddCards extends Component {
 	};
 
 	render() {
+		var editCardURL = '/editcard/' + this.state.front;
 		var cardSource = this.cardSource();
 		var table = this.table();
 		if (this.state.redirectAddCards === true) {
-			return <Redirect to="/" Component={Dashboard} />;
+			return <Redirect to="/createcard" Component={Dashboard} />;
+		}
+		if (this.state.redirectEditCard === true) {
+			return <Redirect to={editCardURL} Component={EditCard} />;
 		}
 		return (
 			<div>

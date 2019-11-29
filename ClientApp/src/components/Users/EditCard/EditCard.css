@@ -1,0 +1,28 @@
+body {
+  font-family: 'Roboto';
+}
+
+.add-field {
+  max-width: 100%;
+  display: -ms-grid;
+  display: grid;
+  grid-row-gap: 20px;
+  -webkit-column-gap: 20px;
+          column-gap: 20px;
+  -ms-grid-columns: auto auto auto;
+      grid-template-columns: auto auto auto;
+  padding-top: 30px;
+  width: 100%;
+  min-height: 100vh;
+  height: auto;
+  background-color: white;
+}
+
+.add-field .deck-table {
+  width: 100%;
+}
+
+.add-field .deck-cards {
+  width: 100%;
+}
+/*# sourceMappingURL=EditCard.css.map */

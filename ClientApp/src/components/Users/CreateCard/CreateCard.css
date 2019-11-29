@@ -1,0 +1,43 @@
+body {
+  font-family: 'Roboto';
+}
+
+.create-cards {
+  padding-top: 30px;
+  width: 100%;
+  min-height: 100vh;
+  height: auto;
+  background-color: white;
+}
+
+.create-cards .create-cards-front {
+  max-width: 30%;
+}
+
+.create-cards .create-cards-front input[type='text'],
+.create-cards .create-cards-front select {
+  width: 100%;
+  padding: 12px 20px;
+  margin: 8px 0;
+  display: inline-block;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+}
+
+.create-cards .create-cards-front input[type='submit'] {
+  width: 100%;
+  background-color: #4caf50;
+  color: white;
+  padding: 14px 20px;
+  margin: 8px 0;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.create-cards .create-cards-front input[type='submit']:hover {
+  background-color: #45a049;
+}
+/*# sourceMappingURL=CreateCard.css.map */
