@@ -4,6 +4,7 @@ import { BrowserRouter as Router, Redirect } from 'react-router-dom';
 import './DeckDetail.css';
 import Info from '../../modules/Info/Info';
 import Testing from '../Testing/Testing';
+import AddCards from '../AddCards/AddCards';
 import MaterialTable from 'material-table';
 
 class DeckDetail extends Component {
@@ -12,12 +13,13 @@ class DeckDetail extends Component {
 		this.state = {
 			id: '',
 			deckData: {},
-			redirectTesting: false
+			redirectTesting: false,
+			redirectAddCards : false,
 		};
 	}
 
 	componentWillMount() {
-		var deckID = this.getDeckIDFromPath(window.location.pathname);
+		var deckID = this.getDeckIDFromPath();
 		console.log(deckID);
 		this.setState({
 			id: deckID
@@ -28,8 +30,8 @@ class DeckDetail extends Component {
 		this.getDeckData();
 	}
 
-	getDeckIDFromPath = url => {
-		return url.substr(7);
+	getDeckIDFromPath = () => {
+		return this.props.match.params.deckId;
 	};
 
 	getDeckData = async () => {
@@ -45,6 +47,12 @@ class DeckDetail extends Component {
 	redirectTesting = () => {
 		this.setState({
 			redirectTesting: true
+		});
+	};
+
+	redirectAddCards = () => {
+		this.setState({
+			redirectAddCards: true
 		});
 	};
 
@@ -118,18 +126,30 @@ class DeckDetail extends Component {
 						tooltip: 'Delete card',
 						// eslint-disable-next-line no-restricted-globals
 						onClick: (event, rowData) => this.deleteCard(rowData.id)
-					}
+					},
+					{
+            icon: 'add',
+            tooltip: 'Add Cards',
+            isFreeAction: true,
+            onClick: (event) => this.redirectAddCards()
+          }
 				]}
 			/>
 		);
 	};
 
 	render() {
+		console.log(this.props.match.params.deckId);
 		var date = new Date(this.state.deckData.createdDate);
-		console.log('/api/decks/' + this.state.id.toString());
 		var testURL = '/testing/' + this.state.id.toString();
+		var addCardsURL = '/addcards/' + this.state.id.toString();
+
 		if (this.state.redirectTesting === true) {
 			return <Redirect to={testURL} Component={Testing} />;
+		}
+
+		if (this.state.redirectAddCards === true) {
+			return <Redirect to={addCardsURL} Component={addCardsURL} />;
 		}
 		var table = this.table();
 		return (
@@ -177,7 +197,6 @@ class DeckDetail extends Component {
 						</div>
 					</div>
 					<div className="table">
-						<p onClick={this.redirectAddCards}>Add</p>
 						{table}
 					</div>
 				</div>
