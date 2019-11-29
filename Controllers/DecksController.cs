@@ -173,7 +173,15 @@ namespace FlashCard.Controllers
 
             foreach (var cardAssignment in cardAssignments)
             {
-                cardmodels.Add(new CardApiModel(cardAssignment.Card, user));
+                var cardmodel = new CardApiModel(cardAssignment.Card);
+                var backs = cardAssignment.Card.Backs.Where(b => b.OwnerId == user.Id && !b.Public);
+
+                foreach (var back in backs)
+                {
+                    cardmodel.Backs.Add(new BackApiModel(back));
+                }
+
+                cardmodels.Add(cardmodel);
             }
 
             // Get statistics of the deck
@@ -284,6 +292,7 @@ namespace FlashCard.Controllers
             var deck = await dbContext.Decks
                             .Include(d => d.CardAssignments)
                                 .ThenInclude(ca => ca.Card)
+                            .AsNoTracking()
                             .FirstOrDefaultAsync(d => d.Id == id);
 
             if (deck == null)
@@ -302,19 +311,29 @@ namespace FlashCard.Controllers
 
             var cardIds = dbContext.CardAssignments
                             .Where(ca => ca.DeckId == deck.Id)
+                            .AsNoTracking()
                             .Select(ca => ca.CardId);
             var remainingCards = dbContext.Cards
                                     .Include(c => c.Backs)
                                         .ThenInclude(b => b.Author)
                                     .Include(c => c.CardOwners)
                                     .Where(c => c.CardOwners.FirstOrDefault(co => co.UserId == user.Id) != null &&
-                                        !cardIds.Contains(c.Id));
+                                        !cardIds.Contains(c.Id))
+                                    .AsNoTracking();
 
             var cardmodels = new List<CardApiModel>();
 
             foreach (var card in remainingCards)
             {
-                cardmodels.Add(new CardApiModel(card, user));
+                var cardmodel = new CardApiModel(card);
+                var backs = card.Backs.Where(b => b.OwnerId == user.Id && !b.Public);
+
+                foreach (var back in backs)
+                {
+                    cardmodel.Backs.Add(new BackApiModel(back));
+                }
+
+                cardmodels.Add(cardmodel);
             }
 
             return cardmodels;

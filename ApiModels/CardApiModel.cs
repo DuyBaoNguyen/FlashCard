@@ -15,20 +15,11 @@ namespace FlashCard.ApiModels
 
         }
 
-        public CardApiModel(Card card, ApplicationUser user)
+        public CardApiModel(Card card)
         {
             Id = card.Id;
             Front = card.Front;
-
-            var backs = card.Backs.Where(b => b.OwnerId == user.Id);
-            var backmodels = new List<BackApiModel>();
-
-            foreach (var back in backs)
-            {
-                backmodels.Add(new BackApiModel(back));
-            }
-            
-            Backs = backmodels;
+            Backs = new List<BackApiModel>();
         }
     }
 }

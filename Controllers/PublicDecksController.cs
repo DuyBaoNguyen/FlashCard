@@ -45,6 +45,7 @@ namespace FlashCard.Controllers
             var user = await UserService.GetUser(userManager, User);
             var privateDeckIds = dbContext.Decks
                                     .Where(d => d.OwnerId == user.Id && d.FromAdmin && d.SourceId != null)
+                                    .AsNoTracking()
                                     .Select(d => d.SourceId)
                                     .ToArray();
             var deckmodels = new List<PublicDeckApiModel>();
@@ -114,7 +115,15 @@ namespace FlashCard.Controllers
 
             foreach (var cardAssignment in cardAssignments)
             {
-                cardmodels.Add(new CardApiModel(cardAssignment.Card, admin));
+                var cardmodel = new CardApiModel(cardAssignment.Card);
+                var backs = cardAssignment.Card.Backs.Where(b => b.OwnerId == admin.Id && b.Approved);
+
+                foreach (var back in backs)
+                {
+                    cardmodel.Backs.Add(new BackApiModel(back));
+                }
+
+                cardmodels.Add(cardmodel);
             }
 
             var deckmodel = new PublicDeckApiModel(publicDeck);
@@ -132,6 +141,7 @@ namespace FlashCard.Controllers
             var deck = await dbContext.Decks
                             .Include(d => d.CardAssignments)
                                 .ThenInclude(ca => ca.Card)
+                            .AsNoTracking()
                             .FirstOrDefaultAsync(d => d.Id == id && d.Public && d.Approved);
 
             if (deck == null)
@@ -142,18 +152,28 @@ namespace FlashCard.Controllers
             var admin = await UserService.GetAdmin(dbContext);
             var cardIds = dbContext.CardAssignments
                             .Where(ca => ca.DeckId == deck.Id)
+                            .AsNoTracking()
                             .Select(ca => ca.CardId);
             var remainingCards = dbContext.Cards
                                     .Include(c => c.Backs)
                                         .ThenInclude(b => b.Author)
                                     .Include(c => c.CardOwners)
                                     .Where(c => c.CardOwners.FirstOrDefault(co => co.UserId == admin.Id) != null &&
-                                        !cardIds.Contains(c.Id));
+                                        !cardIds.Contains(c.Id))
+                                    .AsNoTracking();
             var cardmodels = new List<CardApiModel>();
 
             foreach (var card in remainingCards)
             {
-                cardmodels.Add(new CardApiModel(card, admin));
+                var cardmodel = new CardApiModel(card);
+                var backs = card.Backs.Where(b => b.OwnerId == admin.Id && b.Approved);
+
+                foreach (var back in backs)
+                {
+                    cardmodel.Backs.Add(new BackApiModel(back));
+                }
+
+                cardmodels.Add(cardmodel);
             }
 
             return cardmodels;

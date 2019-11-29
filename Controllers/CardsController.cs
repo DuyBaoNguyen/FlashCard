@@ -66,7 +66,15 @@ namespace FlashCard.Controllers
 
             foreach (var card in cards)
             {
-                cardmodels.Add(new CardApiModel(card, user));
+                var cardmodel = new CardApiModel(card);
+                var backs = card.Backs.Where(b => b.OwnerId == user.Id && !b.Public);
+
+                foreach (var back in backs)
+                {
+                    cardmodel.Backs.Add(new BackApiModel(back));
+                }
+
+                cardmodels.Add(cardmodel);
             }
 
             return cardmodels;
@@ -90,7 +98,6 @@ namespace FlashCard.Controllers
                             .Include(c => c.CardOwners)
                             .Include(c => c.Backs)
                             .FirstOrDefaultAsync(c => c.Front == cardmodel.Front);
-            bool createNewCard = false;
             var image = ImageService.GetImage(cardmodel.Back.Image);
 
             if (card == null)
@@ -102,7 +109,7 @@ namespace FlashCard.Controllers
                     CardOwners = new List<CardOwner>(),
                     Backs = new List<Back>()
                 };
-                createNewCard = true;
+                dbContext.Cards.Add(card);
             }
 
             if (card.CardOwners.FirstOrDefault(co => co.UserId == user.Id) == null)
@@ -124,19 +131,23 @@ namespace FlashCard.Controllers
                 AuthorId = user.Id
             });
 
-            if (createNewCard)
-            {
-                dbContext.Cards.Add(card);
-            }
             await dbContext.SaveChangesAsync();
 
-            return CreatedAtAction(nameof(GetById), new { Id = card.Id }, new CardApiModel(card, user));
+            var returnedCard = new CardApiModel(card);
+            var backs = card.Backs.Where(b => b.OwnerId == user.Id && !b.Public);
+
+            foreach (var back in backs)
+            {
+                returnedCard.Backs.Add(new BackApiModel(back));
+            }
+
+            return CreatedAtAction(nameof(GetByFront), new { Id = card.Id }, returnedCard);
         }
 
         [HttpGet("{front}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<CardApiModel>> GetById(string front)
+        public async Task<ActionResult<CardApiModel>> GetByFront(string front)
         {
             var user = await UserService.GetUser(userManager, User);
             var card = await dbContext.Cards
@@ -153,7 +164,15 @@ namespace FlashCard.Controllers
                 return NotFound();
             }
 
-            return new CardApiModel(card, user);
+            var cardmodel = new CardApiModel(card);
+            var backs = card.Backs.Where(b => b.OwnerId == user.Id && !b.Public);
+
+            foreach (var back in backs)
+            {
+                cardmodel.Backs.Add(new BackApiModel(back));
+            }
+
+            return cardmodel;
         }
 
         [HttpPut("{front}")]

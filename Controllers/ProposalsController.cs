@@ -45,14 +45,23 @@ namespace FlashCard.Controllers
 
             var admin = await UserService.GetAdmin(dbContext);
             var proposedCards = dbContext.Cards
-                            .Include(c => c.Backs)
-                                .ThenInclude(b => b.Author)
-                            .Where(c => c.Backs.FirstOrDefault(b => b.Public && !b.Approved) != null);
+                                    .Include(c => c.Backs)
+                                        .ThenInclude(b => b.Author)
+                                    .Where(c => c.Backs.FirstOrDefault(b => b.Public && !b.Approved) != null)
+                                    .AsNoTracking();
             var cardModels = new List<CardApiModel>();
             
             foreach (var proposedCard in proposedCards)
             {
-                cardModels.Add(new CardApiModel(proposedCard, admin));
+                var cardModel = new CardApiModel(proposedCard);
+                var backs = proposedCard.Backs.Where(b => b.OwnerId == admin.Id && b.Public && !b.Approved);
+
+                foreach (var back in backs)
+                {
+                    cardModel.Backs.Add(new BackApiModel(back));
+                }
+
+                cardModels.Add(cardModel);
             }
 
             return cardModels;
