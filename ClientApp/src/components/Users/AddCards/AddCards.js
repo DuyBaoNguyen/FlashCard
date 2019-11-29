@@ -213,7 +213,7 @@ class AddCards extends Component {
 		}
 		return (
 			<div>
-				<a href={ '/decks/' + this.props.match.params.deckId }>Back</a>
+				<a href={ '/decks/' + this.props.match.params.deckId }>Done</a>
 				<div className="add-field">
 					<div className="deck-table">{table}</div>
 					<div className="deck-cards">{cardSource}</div>

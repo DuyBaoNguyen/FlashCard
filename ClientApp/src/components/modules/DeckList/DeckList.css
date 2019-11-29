@@ -22,13 +22,21 @@
   font-style: normal;
   line-height: 1.43;
   letter-spacing: 0.25px;
-  color: #ff6f28;
+  color: #007bff;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
   -webkit-box-align: baseline;
       -ms-flex-align: baseline;
           align-items: baseline;
+  -webkit-transition: 0.3s;
+  transition: 0.3s;
+}
+
+.menu .menu-title .menu-button:hover {
+  -webkit-transition: 0.3s;
+  transition: 0.3s;
+  opacity: 0.7;
 }
 
 .menu .menu-decks {

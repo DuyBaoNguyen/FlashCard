@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import authService from '../../api-authorization/AuthorizeService';
+import { BrowserRouter as Router, Redirect } from 'react-router-dom';
+import CreateDeck from '../../Users/CreateDeck/CreateDeck';
 
 import './DeckList.css';
 import Deck from '../Deck/Deck';
@@ -10,6 +12,7 @@ class DeckList extends Component {
 		this.state = {
 			redirect: false,
 			deckData : [],
+			redirectCreateDeck : false,
 		};
 	}
 
@@ -26,16 +29,25 @@ class DeckList extends Component {
     this.setState({ deckData: data, loading: false });
 	}
 
+	redirectCreateDeck = () => {
+		this.setState({
+			redirectCreateDeck : true,
+		});
+	}
+
 	render() {
 		var {deckData} = this.state;
 		var element = deckData.map((deck, index) => {
 			return <Deck deck={deck}/>;
 		});
+		if (this.state.redirectCreateDeck === true) {
+			return <Redirect to='/createdeck' Component={CreateDeck} />
+		}
 		return (
 			<div className="menu">
 				<div className="menu-title">
 					<h6>{this.props.menuName}</h6>
-					<div className="menu-button">
+					<div className="menu-button" onClick={this.redirectCreateDeck}>
 						{ this.props.addButton === "true" ? <p>Add</p> : "" }
 					</div>
 				</div>

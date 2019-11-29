@@ -12,9 +12,14 @@
 			font-style: normal;
 			line-height: 1.43;
 			letter-spacing: 0.25px;
-			color: #ff6f28;
+			color: #007bff;
 			display: flex;
 			align-items: baseline;
+			transition: 0.3s;
+			&:hover {
+				transition: 0.3s;
+				opacity: 0.7;
+			}
 		}
 	}
 	.menu-decks {
@@ -36,7 +41,6 @@
 				transition: 0.3s;
 				transform: translateY(-10px);
 				border: solid 1px #007bff;
-
 			}
 
 			.menu-deck-info {

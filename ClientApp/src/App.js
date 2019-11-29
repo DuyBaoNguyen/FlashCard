@@ -21,6 +21,8 @@ import DeckDetail from './components/Users/DeckDetail/DeckDetail';
 import Testing from './components/Users/Testing/Testing';
 import CardManagement from './components/Users/CardManagement/CardManagement';
 import AddCards from './components/Users/AddCards/AddCards';
+import CreateDeck from './components/Users/CreateDeck/CreateDeck';
+
 
 export default class App extends Component {
 	static displayName = App.name;
@@ -33,6 +35,8 @@ export default class App extends Component {
 					<AuthorizeRoute exact path="/decks/:deckId" component={DeckDetail} />
 					<AuthorizeRoute exact path="/testing/:deckId" component={Testing} />
 					<AuthorizeRoute exact path="/addcards/:deckId" component={AddCards} />
+					<AuthorizeRoute exact path="/createdeck" component={CreateDeck} />
+
 
 
 					<AuthorizeRoute exact path='/cardmanagement/:deckId' component={CardManagement} />
