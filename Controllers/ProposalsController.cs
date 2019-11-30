@@ -66,10 +66,46 @@ namespace FlashCard.Controllers
             return cardModels;
         }
 
+        [HttpGet("cards/{front}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<ActionResult<CardApiModel>> GetProposedCardByFront(string front)
+        {
+            var user = await UserService.GetUser(userManager, User);
+            var userIsInAdminRole = await userManager.IsInRoleAsync(user, Roles.Administrator);
+
+            if (!userIsInAdminRole)
+            {
+                return Forbid();
+            }
+
+            var card = await dbContext.Cards
+                            .Include(c => c.Backs)
+                                .ThenInclude(b => b.Author)
+                            .Where(c => c.Backs.Where(b => b.Public && !b.Approved).Count() > 0)
+                            .AsNoTracking()
+                            .FirstOrDefaultAsync(c => c.Front == front);
+            if (card == null)
+            {
+                return NotFound();
+            }
+
+            var cardModel = new CardApiModel(card);
+            var backs = card.Backs.Where(b => b.Public && !b.Approved);
+
+            foreach (var back in backs)
+            {
+                cardModel.Backs.Add(new BackApiModel(back));
+            }
+
+            return cardModel;
+        }
+
         [HttpPost("cards")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> ProposedCard([FromBody] CardRequestModel cardModel)
+        public async Task<IActionResult> ProposeCard([FromBody] CardRequestModel cardModel)
         {
             if (!ModelState.IsValid)
             {
