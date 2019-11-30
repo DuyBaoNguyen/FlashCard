@@ -84,7 +84,7 @@ namespace FlashCard.Controllers
             {
                 return Forbid();
             }
-            
+
             var derivedBacks = dbContext.Backs.Where(b => b.SourceId == back.Id);
 
             foreach (var derivedBack in derivedBacks)
@@ -94,6 +94,23 @@ namespace FlashCard.Controllers
 
             dbContext.Backs.Remove(back);
             await dbContext.SaveChangesAsync();
+
+            // Remove card if card has no back and no one owns it
+            var card = await dbContext.Cards
+                            .Include(c => c.Backs)
+                            .FirstOrDefaultAsync(c => c.Id == back.CardId);
+
+            if (card != null && card.Backs.Where(b => b.OwnerId == user.Id).Count() == 0)
+            {
+                dbContext.CardOwners.Remove(dbContext.CardOwners.FirstOrDefault(co =>
+                    co.CardId == card.Id && co.UserId == user.Id));
+
+                if (card.Backs.Count == 0)
+                {
+                    dbContext.Cards.Remove(card);
+                }
+                await dbContext.SaveChangesAsync();
+            }
 
             return NoContent();
         }

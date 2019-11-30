@@ -43,18 +43,17 @@ namespace FlashCard.Controllers
                 return Forbid();
             }
 
-            var admin = await UserService.GetAdmin(dbContext);
             var proposedCards = dbContext.Cards
                                     .Include(c => c.Backs)
                                         .ThenInclude(b => b.Author)
                                     .Where(c => c.Backs.FirstOrDefault(b => b.Public && !b.Approved) != null)
                                     .AsNoTracking();
             var cardModels = new List<CardApiModel>();
-            
+
             foreach (var proposedCard in proposedCards)
             {
                 var cardModel = new CardApiModel(proposedCard);
-                var backs = proposedCard.Backs.Where(b => b.OwnerId == admin.Id && b.Public && !b.Approved);
+                var backs = proposedCard.Backs.Where(b => b.OwnerId == user.Id && b.Public && !b.Approved);
 
                 foreach (var back in backs)
                 {
@@ -66,7 +65,7 @@ namespace FlashCard.Controllers
 
             return cardModels;
         }
-        
+
         [HttpPost("cards")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -79,6 +78,7 @@ namespace FlashCard.Controllers
 
             var card = await dbContext.Cards
                             .Include(c => c.Backs)
+                            .Include(c => c.CardOwners)
                             .FirstOrDefaultAsync(c => c.Front == cardModel.Front);
 
             if (card == null)
@@ -86,7 +86,8 @@ namespace FlashCard.Controllers
                 card = new Card()
                 {
                     Front = cardModel.Front,
-                    Backs = new List<Back>()
+                    Backs = new List<Back>(),
+                    CardOwners = new List<CardOwner>()
                 };
                 dbContext.Cards.Add(card);
             }
@@ -94,6 +95,11 @@ namespace FlashCard.Controllers
             var image = ImageService.GetImage(cardModel.Back.Image);
             var admin = await UserService.GetAdmin(dbContext);
             var userId = UserService.GetUserId(User);
+
+            if (card.CardOwners.Where(co => co.CardId == card.Id && co.UserId == admin.Id).Count() == 0)
+            {
+                card.CardOwners.Add(new CardOwner() { UserId = admin.Id });
+            }
 
             card.Backs.Add(new Back()
             {
@@ -111,6 +117,54 @@ namespace FlashCard.Controllers
             await dbContext.SaveChangesAsync();
 
             return Ok();
+        }
+
+        [HttpDelete("backs/{id}")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> DeleteBack(int id)
+        {
+            var user = await UserService.GetUser(userManager, User);
+            var userIsInAdminRole = await userManager.IsInRoleAsync(user, Roles.Administrator);
+
+            if (!userIsInAdminRole)
+            {
+                return Forbid();
+            }
+
+            var back = await dbContext.Backs.FirstOrDefaultAsync(b => b.Id == id);
+
+            if (back == null)
+            {
+                return NotFound();
+            }
+            if (back.OwnerId != user.Id || !back.Public || back.Approved)
+            {
+                return Forbid();
+            }
+
+            dbContext.Backs.Remove(back);
+            await dbContext.SaveChangesAsync();
+
+            // Remove card if card has no back and no one owns it
+            var card = await dbContext.Cards
+                            .Include(c => c.Backs)
+                            .FirstOrDefaultAsync(c => c.Id == back.CardId);
+
+            if (card != null && card.Backs.Where(b => b.OwnerId == user.Id).Count() == 0)
+            {
+                dbContext.CardOwners.Remove(dbContext.CardOwners.FirstOrDefault(co =>
+                    co.CardId == card.Id && co.UserId == user.Id));
+
+                if (card.Backs.Count == 0)
+                {
+                    dbContext.Cards.Remove(card);
+                }
+                await dbContext.SaveChangesAsync();
+            }
+
+            return NoContent();
         }
     }
 }

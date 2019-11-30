@@ -67,7 +67,7 @@ namespace FlashCard.Controllers
             foreach (var card in cards)
             {
                 var cardmodel = new CardApiModel(card);
-                var backs = card.Backs.Where(b => b.OwnerId == user.Id && !b.Public);
+                var backs = card.Backs.Where(b => b.OwnerId == user.Id && (!b.Public || b.Approved));
 
                 foreach (var back in backs)
                 {
@@ -134,7 +134,7 @@ namespace FlashCard.Controllers
             await dbContext.SaveChangesAsync();
 
             var returnedCard = new CardApiModel(card);
-            var backs = card.Backs.Where(b => b.OwnerId == user.Id && !b.Public);
+            var backs = card.Backs.Where(b => b.OwnerId == user.Id && (!b.Public || b.Approved));
 
             foreach (var back in backs)
             {
@@ -165,7 +165,7 @@ namespace FlashCard.Controllers
             }
 
             var cardmodel = new CardApiModel(card);
-            var backs = card.Backs.Where(b => b.OwnerId == user.Id && !b.Public);
+            var backs = card.Backs.Where(b => b.OwnerId == user.Id && (!b.Public || b.Approved));
 
             foreach (var back in backs)
             {
