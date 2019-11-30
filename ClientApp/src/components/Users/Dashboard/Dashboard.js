@@ -10,12 +10,14 @@ class Dashboard extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			statisticsData: {}
+			statisticsData: {},
+			currentUser: {}
 		};
 	}
-	
+
 	componentDidMount() {
 		this.getStatistics();
+		this.getCurrentUser();
 	}
 
 	getStatistics = async () => {
@@ -24,22 +26,33 @@ class Dashboard extends Component {
 		const response = await fetch(url, {
 			headers: !token ? {} : { Authorization: `Bearer ${token}` }
 		});
-		const data = await response.json();
-		this.setState({ statisticsData: data, loading: false });
-		console.log(data);
+		if (response.status === 200) {
+			const data = await response.json();
+			this.setState({ statisticsData: data, loading: false });
+		}
 	};
 
+	getCurrentUser = async () => {
+		const token = await authService.getAccessToken();
+		const response = await fetch('/api/currentuser', {
+			headers: !token ? {} : { Authorization: `Bearer ${token}` }
+		});
+		if (response.status === 200) {
+			this.setState({ currentUser: await response.json() })
+		}
+	}
+
 	render() {
+		let info;
+		const userRole = this.state.currentUser.role;
+		if (userRole != undefined && userRole === 'user') {
+			info = <Info data={this.state.statisticsData != undefined ? this.state.statisticsData : null} />
+		}
+
 		return (
 			<div>
 				<div className="dashboard-field">
-					<Info
-						data={
-							this.state.statisticsData != undefined
-								? this.state.statisticsData
-								: null
-						}
-					/>
+					{info}
 
 					<DeckList menuName="Your decks" addButton="true" />
 				</div>

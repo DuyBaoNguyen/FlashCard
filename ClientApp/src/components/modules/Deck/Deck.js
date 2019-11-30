@@ -28,21 +28,30 @@ class Deck extends Component {
 	render() {
 		var deckURL = '/decks/' + this.props.deck.id;
 		var date = new Date(this.props.deck.createdDate);
+		let fromAdminLabel;
+
+		if (this.props.deck.fromAdmin) {
+			fromAdminLabel = <h6 class="w-auto"><span class="badge badge-success">From Admin</span></h6>
+		}
+
 		if (this.state.redirect === true) {
 			return <Redirect to={deckURL} Component={DeckDetail} />;
 		}
 		return (
 			<div className="menu-deck" onClick={this.redirectDeckDetails}>
 				<div className="menu-deck-info">
-					<h6>{ this.props.deck.name }</h6>
-					<hr/>
+					<div class="d-flex justify-content-between align-content-center">
+						<h6 class="w-auto">{this.props.deck.name}</h6>
+						{fromAdminLabel}
+					</div>
+					<hr />
 					<div className="menu-deck-info-line">
 						<img src="../../../images/icons/card.svg" width="21px" height="16px" />
-						<p>{ this.props.deck.totalCards }</p>
+						<p>{this.props.deck.totalCards}</p>
 					</div>
 					<div className="menu-deck-info-line">
 						<img src="../../../images/icons/calendar.svg" width="21px" height="16px" />
-						<p>{ date.toLocaleDateString() }</p>
+						<p>{date.toLocaleDateString()}</p>
 					</div>
 				</div>
 			</div>

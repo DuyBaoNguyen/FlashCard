@@ -84,8 +84,11 @@ class DeckDetail extends Component {
 					id: vocab.id,
 					front: vocab.front,
 					backs: vocab.backs.map((back, index2) => {
-						return back.meaning;
-					})
+						if (!back.fromAdmin) {
+							return back.meaning;
+						}
+						return back.meaning + 'From admin';
+					}).join(' - ')
 				};
 				mockData.push(oldVocab);
 			});
@@ -117,7 +120,9 @@ class DeckDetail extends Component {
 			}
 			// eslint-disable-next-line no-undef
 			// eslint-disable-next-line no-restricted-globals
-			location.reload();
+			// location.reload();
+			this.getDeckData();
+			this.getStatistics();
 		}
 	};
 
