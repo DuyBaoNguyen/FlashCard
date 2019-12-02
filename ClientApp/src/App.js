@@ -42,12 +42,7 @@ export default class App extends Component {
 					<AuthorizeRoute exact path="/createdeck" component={CreateDeck} />
 					<AuthorizeRoute exact path="/createcard" component={CreateCard} />
 					<AuthorizeRoute exact path="/editcard/:front" component={EditCard} />
-
-
-
-
-
-					<AuthorizeRoute exact path='/cardmanagement/:deckId' component={CardManagement} />
+					<AuthorizeRoute exact path='/cardmanagement' component={CardManagement} />
 					<AuthorizeRoute path="/counter" component={Counter} />
 					<AuthorizeRoute path="/fetch-data" component={FetchData} />
 					<Route

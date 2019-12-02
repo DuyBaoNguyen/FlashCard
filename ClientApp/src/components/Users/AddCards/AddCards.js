@@ -4,7 +4,7 @@ import MaterialTable from 'material-table';
 import Dashboard from '../Dashboard/Dashboard';
 import { BrowserRouter as Router, Redirect } from 'react-router-dom';
 import EditCard from '../EditCard/EditCard';
-
+import { hashHistory } from 'react-router';
 
 import './AddCards.css';
 
@@ -16,7 +16,7 @@ class AddCards extends Component {
 			deckData: {},
 			cardSource: {},
 			redirectAddCards: false,
-			redirectEditCard: false,
+			redirectEditCard: false
 		};
 	}
 
@@ -70,9 +70,14 @@ class AddCards extends Component {
 				oldVocab = {
 					id: vocab.id,
 					front: vocab.front,
-					backs: vocab.backs.map((back, index2) => {
-						return back.meaning;
-					})
+					backs: vocab.backs
+						.map((back, index2) => {
+							if (!back.fromAdmin) {
+								return back.meaning;
+							}
+							return back.meaning + 'From admin';
+						})
+						.join(' - ')
 				};
 				mockData.push(oldVocab);
 			});
@@ -80,8 +85,34 @@ class AddCards extends Component {
 		}
 	};
 
-	deleteCard = async param => {
+	removeCard = async param => {
 		var url = '/api/decks/' + this.state.id + '/cards';
+		const token = await authService.getAccessToken();
+		const data = '[' + param.toString() + ']';
+		// eslint-disable-next-line no-restricted-globals
+		var r = confirm('Are you sure to remove this card from deck?');
+		if (r == true) {
+			try {
+				const response = await fetch(url, {
+					method: 'DELETE',
+					body: data, // data can be `string` or {object}!
+					headers: {
+						Authorization: `Bearer ${token}`,
+						'Content-Type': 'application/json'
+					}
+				});
+				const json = await response;
+				console.log('Success:', JSON.stringify(json));
+			} catch (error) {
+				console.error('Error:', error);
+			}
+			this.getCardSource();
+			this.getDeckData();
+		}
+	};
+
+	deleteCard = async param => {
+		var url = '/api/cards/' + param;
 		const token = await authService.getAccessToken();
 		const data = '[' + param.toString() + ']';
 		// eslint-disable-next-line no-restricted-globals
@@ -101,25 +132,26 @@ class AddCards extends Component {
 			} catch (error) {
 				console.error('Error:', error);
 			}
-			// eslint-disable-next-line no-undef
-			// eslint-disable-next-line no-restricted-globals
-			location.reload();
+			this.getCardSource();
+			this.getDeckData();
 		}
 	};
 
-	editCard = (front) => {
+	editCard = front => {
 		this.setState({
-			front : front,
-			redirectEditCard : true
+			front: front,
+			redirectEditCard: true
 		});
-	}
+	};
 
 	addCard = async param => {
 		var url = '/api/decks/' + this.state.id + '/cards';
 		const token = await authService.getAccessToken();
 		const data = '[' + param.toString() + ']';
+
 		// eslint-disable-next-line no-restricted-globals
 		var r = confirm('Are you sure to add this card?');
+
 		if (r == true) {
 			try {
 				const response = await fetch(url, {
@@ -135,9 +167,8 @@ class AddCards extends Component {
 			} catch (error) {
 				console.error('Error:', error);
 			}
-			// eslint-disable-next-line no-undef
-			// eslint-disable-next-line no-restricted-globals
-			location.reload();
+			this.getCardSource();
+			this.getDeckData();
 		}
 	};
 
@@ -163,7 +194,7 @@ class AddCards extends Component {
 						icon: 'delete',
 						tooltip: 'Delete card',
 						// eslint-disable-next-line no-restricted-globals
-						onClick: (event, rowData) => this.deleteCard(rowData.id)
+						onClick: (event, rowData) => this.removeCard(rowData.id)
 					}
 				]}
 				options={{
@@ -190,16 +221,27 @@ class AddCards extends Component {
 				data={data}
 				actions={[
 					{
-            icon: 'add',
-            tooltip: 'Add Cards',
-            isFreeAction: true,
-            onClick: (event) => this.redirectAddCards()
-          },
+						icon: 'add',
+						tooltip: 'Add Cards',
+						isFreeAction: true,
+						onClick: event => this.redirectAddCards()
+					},
 					{
 						icon: 'add',
 						tooltip: 'Add card',
 						// eslint-disable-next-line no-restricted-globals
 						onClick: (event, rowData) => this.addCard(rowData.id)
+					},
+					{
+						icon: 'edit',
+						tooltip: 'Edit card',
+						onClick: (event, rowData) => this.editCard(rowData.front)
+					},
+					{
+						icon: 'delete',
+						tooltip: 'Delete card',
+						// eslint-disable-next-line no-restricted-globals
+						onClick: (event, rowData) => this.deleteCard(rowData.front)
 					}
 				]}
 				options={{
@@ -227,7 +269,7 @@ class AddCards extends Component {
 		}
 		return (
 			<div>
-				<a href={ '/decks/' + this.props.match.params.deckId }>Done</a>
+				<a href={'/decks/' + this.props.match.params.deckId}>Done</a>
 				<div className="add-field">
 					<div className="deck-table">{table}</div>
 					<div className="deck-cards">{cardSource}</div>

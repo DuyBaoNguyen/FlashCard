@@ -106,7 +106,7 @@ body {
   transition: 0.3s;
   -webkit-transform: translateY(-10px);
           transform: translateY(-10px);
-  border: solid 1px red;
+  border: solid 2px red;
 }
 
 .meaning {

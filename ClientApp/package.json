@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "react-router-hash-history": "git+https://github.com/ymzuiku/react-router-hash-history.git",
     "@material-ui/core": "^4.7.0",
     "babel-eslint": "10.0.1",
     "bootstrap": "^4.1.3",

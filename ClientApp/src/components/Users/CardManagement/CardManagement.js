@@ -1,15 +1,12 @@
 import React, { Component } from 'react';
 import authService from '../../api-authorization/AuthorizeService';
-import './CardManagement.css';
 import MaterialTable from 'material-table';
 import Dashboard from '../Dashboard/Dashboard';
-import {
-	BrowserRouter as Router,
-	Switch,
-	Link,
-	Redirect,
-	withRouter
-} from 'react-router-dom';
+import { BrowserRouter as Router, Redirect } from 'react-router-dom';
+import EditCard from '../EditCard/EditCard';
+import { hashHistory } from 'react-router';
+
+import './CardManagement.css';
 
 class CardManagement extends Component {
 	constructor(props) {
@@ -17,28 +14,22 @@ class CardManagement extends Component {
 		this.state = {
 			id: '',
 			deckData: {},
-			redirectAddCards : false,
+			cardSource: {},
+			redirectAddCards: false,
+			redirectEditCard: false
 		};
 	}
 
 	componentWillMount() {
-		var deckID = this.getDeckIDFromPath(window.location.pathname);
-		console.log(deckID);
-		this.setState({
-			id: deckID
-		});
+
 	}
 
 	componentDidMount() {
-		this.getDeckData();
+		this.getCardSource();
 	}
 
-	getDeckIDFromPath = url => {
-		return url.substr(16);
-	};
-
-	getDeckData = async () => {
-		var url = '/api/decks/' + this.state.id;
+	getCardSource = async () => {
+		var url = '/api/cards';
 		const token = await authService.getAccessToken();
 		const response = await fetch(url, {
 			headers: !token ? {} : { Authorization: `Bearer ${token}` }
@@ -46,31 +37,61 @@ class CardManagement extends Component {
 
 		const data = await response.json();
 
-		this.setState({ deckData: data, loading: false });
+		this.setState({ cardSource: data, loading: false });
 	};
 
-	transData = () => {
+	transData = param => {
 		var mockData = [];
 		var oldVocab = Object.create(null);
-		var data = this.state.deckData.cards;
+		var data = param;
 		if (data != undefined) {
 			data.map((vocab, index) => {
 				oldVocab = {
 					id: vocab.id,
 					front: vocab.front,
-					backs: vocab.backs.map((back, index2) => {
-						return back.meaning;
-					})
+					backs: vocab.backs
+						.map((back, index2) => {
+							if (!back.fromAdmin) {
+								return back.meaning;
+							}
+							return back.meaning + 'From admin';
+						})
+						.join(' - ')
 				};
 				mockData.push(oldVocab);
 			});
-			console.log(mockData);
 			return mockData;
 		}
 	};
 
-	deleteCard = async param => {
+	removeCard = async param => {
 		var url = '/api/decks/' + this.state.id + '/cards';
+		const token = await authService.getAccessToken();
+		const data = '[' + param.toString() + ']';
+		// eslint-disable-next-line no-restricted-globals
+		var r = confirm('Are you sure to remove this card from deck?');
+		if (r == true) {
+			try {
+				const response = await fetch(url, {
+					method: 'DELETE',
+					body: data, // data can be `string` or {object}!
+					headers: {
+						Authorization: `Bearer ${token}`,
+						'Content-Type': 'application/json'
+					}
+				});
+				const json = await response;
+				console.log('Success:', JSON.stringify(json));
+			} catch (error) {
+				console.error('Error:', error);
+			}
+			this.getCardSource();
+			this.getDeckData();
+		}
+	};
+
+	deleteCard = async param => {
+		var url = '/api/cards/' + param;
 		const token = await authService.getAccessToken();
 		const data = '[' + param.toString() + ']';
 		// eslint-disable-next-line no-restricted-globals
@@ -90,60 +111,111 @@ class CardManagement extends Component {
 			} catch (error) {
 				console.error('Error:', error);
 			}
-			// eslint-disable-next-line no-undef
-			// eslint-disable-next-line no-restricted-globals
-			location.reload();
+			this.getCardSource();
 		}
-
-		
 	};
 
-	table = () => {
-		var data = this.transData();
-		var title = 'Card in deck: ' + this.state.deckData.name;
+	editCard = front => {
+		this.setState({
+			front: front,
+			redirectEditCard: true
+		});
+	};
+
+	addCard = async param => {
+		var url = '/api/decks/' + this.state.id + '/cards';
+		const token = await authService.getAccessToken();
+		const data = '[' + param.toString() + ']';
+
+		// eslint-disable-next-line no-restricted-globals
+		var r = confirm('Are you sure to add this card?');
+
+		if (r == true) {
+			try {
+				const response = await fetch(url, {
+					method: 'PUT',
+					body: data, // data can be `string` or {object}!
+					headers: {
+						Authorization: `Bearer ${token}`,
+						'Content-Type': 'application/json'
+					}
+				});
+				const json = await response;
+				console.log('Success:', JSON.stringify(json));
+			} catch (error) {
+				console.error('Error:', error);
+			}
+			this.getCardSource();
+		}
+	};
+
+	cardSource = () => {
+		if (this.state.cardSource.length !== undefined) {
+			var data = this.transData(this.state.cardSource);
+			console.log(this.state.cardSource);
+		}
+		var title = 'Card source';
 		return (
 			<MaterialTable
 				title={title}
 				columns={[
-					{ title: 'ID', field: 'id' },
+					// { title: 'ID', field: 'id' },
 					{ title: 'Front', field: 'front' },
 					{ title: 'Backs', field: 'backs' }
 				]}
 				data={data}
 				actions={[
 					{
+						icon: 'add',
+						tooltip: 'Add Cards',
+						isFreeAction: true,
+						onClick: event => this.redirectAddCards()
+					},
+					{
+						icon: 'add',
+						tooltip: 'Add card',
+						// eslint-disable-next-line no-restricted-globals
+						onClick: (event, rowData) => this.addCard(rowData.id)
+					},
+					{
 						icon: 'edit',
 						tooltip: 'Edit card',
-						onClick: (event, rowData) => alert(typeof rowData.id)
+						onClick: (event, rowData) => this.editCard(rowData.front)
 					},
 					{
 						icon: 'delete',
 						tooltip: 'Delete card',
 						// eslint-disable-next-line no-restricted-globals
-						onClick: (event, rowData) => this.deleteCard(rowData.id)
+						onClick: (event, rowData) => this.deleteCard(rowData.front)
 					}
 				]}
+				options={{
+					pageSize: 10
+				}}
 			/>
 		);
 	};
 
 	redirectAddCards = () => {
 		this.setState({
-			redirectAddCards : true,
+			redirectAddCards: true
 		});
-	}
+	};
 
 	render() {
-		var table = this.table();
+		var editCardURL = '/editcard/' + this.state.front;
+		var cardSource = this.cardSource();
 		if (this.state.redirectAddCards === true) {
-			return <Redirect to='/' Component={Dashboard}/>
+			return <Redirect to="/createcard" Component={Dashboard} />;
+		}
+		if (this.state.redirectEditCard === true) {
+			return <Redirect to={editCardURL} Component={EditCard} />;
 		}
 		return (
 			<div>
-				<div className="field">
-					<p onClick={this.redirectAddCards}>Add</p>
-					{table}
-					</div>
+				<div className="card-management">
+					<div className="deck-cards">{cardSource}</div>
+				</div>
 			</div>
 		);
 	}

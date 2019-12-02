@@ -2,10 +2,13 @@ body {
 	font-family: 'Roboto';
 }
 
-.field {
+.card-management {
 	padding-top: 30px;
   width: 100%;
-  min-height: 100vh;
+  min-height: 80vh;
 	height: auto;
 	background-color:white;
+	// display: flex;
+	// justify-content: center;
+	// align-items: center;
 }

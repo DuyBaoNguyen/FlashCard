@@ -3,6 +3,7 @@ import authService from '../../api-authorization/AuthorizeService';
 import MaterialTable from 'material-table';
 import Select from 'react-select';
 import Button from '@material-ui/core/Button';
+// import {hashHistory} from 'react-router';
 
 import './CreateCard.css';
 
@@ -152,10 +153,11 @@ class CreateCard extends Component {
 		} catch (error) {
 			console.error('Error:', error);
 		}
-		if (this.state.cardData.backs.length === 1 ) {
-			alert("This is the last back side of the word. If you want to delete it, please remove this card!")
-		}
-		else {
+		if (this.state.cardData.backs.length === 1) {
+			alert(
+				'This is the last back side of the word. If you want to delete it, please remove this card!'
+			);
+		} else {
 			this.updateCard(document.getElementById('front').value);
 		}
 	};
@@ -178,37 +180,42 @@ class CreateCard extends Component {
 		}
 		const { selectedOption } = this.state;
 		return (
-			<div className="create-cards">
-				{/* <a href="#">Done</a> */}
-				<div className="create-cards-info">
-					<label for="fname">Front</label>
-					<input type="text" id="front" name="dname" />
-					<hr />
-					<label for="fname">Category</label>
-					<Select
-						className="select"
-						id="categories"
-						value={selectedOption}
-						onChange={this.handleChange}
-						options={this.state.type}
-					/>
-					<br />
-					<label for="fname">Meaning</label>
-					<input type="text" id="meaning" name="dname" />
-					<label for="fname">Example</label>
-					<input type="text" id="example" name="dname" />
-					<hr />
-					<Button
-						className="button-submit"
-						onClick={this.addCard}
-						type="button"
-						color="primary"
-					>
-						<p>Add</p>
-					</Button>
+			<div>
+				<div className="deck-back">
+					<a href='/'>Back</a>
 				</div>
-				<hr />
-				<div className="create-cards-backside">{backSide}</div>
+				<div className="create-cards">
+					{/* <a href="#">Done</a> */}
+					<div className="create-cards-info">
+						<label for="fname">Front</label>
+						<input type="text" id="front" name="dname"/>
+						<hr />
+						<label for="fname">Category</label>
+						<Select
+							className="select"
+							id="categories"
+							value={selectedOption}
+							onChange={this.handleChange}
+							options={this.state.type}
+						/>
+						<br />
+						<label for="fname">Meaning</label>
+						<input type="text" id="meaning" name="dname" />
+						<label for="fname">Example</label>
+						<input type="text" id="example" name="dname" />
+						<hr />
+						<Button
+							className="button-submit"
+							onClick={this.addCard}
+							type="button"
+							color="primary"
+						>
+							<p>Add</p>
+						</Button>
+					</div>
+					<hr />
+					<div className="create-cards-backside">{backSide}</div>
+				</div>
 			</div>
 		);
 	}
