@@ -5,17 +5,34 @@ body {
 .create-cards {
   padding-top: 30px;
   width: 100%;
-  min-height: 100vh;
+  min-height: 80vh;
   height: auto;
   background-color: white;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
 }
 
-.create-cards .create-cards-front {
+.create-cards .button-submit {
+  border-radius: 4px;
+  -webkit-box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.2), 0 2px 1px -1px rgba(0, 0, 0, 0.12), 0 1px 1px 0 rgba(0, 0, 0, 0.14);
+          box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.2), 0 2px 1px -1px rgba(0, 0, 0, 0.12), 0 1px 1px 0 rgba(0, 0, 0, 0.14);
+  width: 100%;
+  height: 36px;
+  background-color: #007bff;
+}
+
+.create-cards .button-submit p {
+  color: white;
+}
+
+.create-cards .create-cards-info {
+  position: fixed;
   max-width: 30%;
 }
 
-.create-cards .create-cards-front input[type='text'],
-.create-cards .create-cards-front select {
+.create-cards .create-cards-info input[type='text'],
+.create-cards .create-cards-info select {
   width: 100%;
   padding: 12px 20px;
   margin: 8px 0;
@@ -26,7 +43,7 @@ body {
           box-sizing: border-box;
 }
 
-.create-cards .create-cards-front input[type='submit'] {
+.create-cards .create-cards-info input[type='submit'] {
   width: 100%;
   background-color: #4caf50;
   color: white;
@@ -37,7 +54,68 @@ body {
   cursor: pointer;
 }
 
-.create-cards .create-cards-front input[type='submit']:hover {
+.create-cards .create-cards-info input[type='submit']:hover {
   background-color: #45a049;
+}
+
+.create-cards .create-cards-backside {
+  max-width: 60%;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -ms-flex-direction: column-reverse;
+      flex-direction: column-reverse;
+  margin-top: 10px;
+}
+
+.create-cards .create-cards-backside .content-back-side {
+  margin: 15px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: start;
+      -ms-flex-align: start;
+          align-items: flex-start;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  width: 600px;
+  height: 230px;
+  border-radius: 10px;
+  border: solid 1px #dbdbdb;
+  background-color: #ffffff;
+  display: flex;
+  -webkit-transition: 0.3s;
+  transition: 0.3s;
+  padding: 15px;
+}
+
+.create-cards .create-cards-backside .content-back-side:hover {
+  -webkit-transition: 0.3s;
+  transition: 0.3s;
+  -webkit-transform: translateY(-10px);
+          transform: translateY(-10px);
+  border: solid 1px red;
+}
+
+.meaning {
+  font-weight: 900;
+  color: #007bff;
+}
+
+.type {
+  font-style: italic;
+  font-size: 14px;
 }
 /*# sourceMappingURL=CreateCard.css.map */

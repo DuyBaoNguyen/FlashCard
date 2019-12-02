@@ -1,11 +1,10 @@
 import React, { Component } from 'react';
 import authService from '../../api-authorization/AuthorizeService';
 import MaterialTable from 'material-table';
-import Dashboard from '../Dashboard/Dashboard';
-import { BrowserRouter as Router, Redirect } from 'react-router-dom';
+import Select from 'react-select';
+import Button from '@material-ui/core/Button';
 
 import './CreateCard.css';
-
 
 var array = [];
 class CreateCard extends Component {
@@ -14,66 +13,30 @@ class CreateCard extends Component {
 		this.state = {
 			id: '',
 			cardData: [],
-			cardSource: {},
 			redirectAddCards: false,
-			columns: [
-				{
-					title: 'Type',
-					field: 'type',
-					lookup: {
-						noun: 'noun',
-						verb: 'verb',
-						adjective: 'adjective',
-						adverb: 'adverb',
-						preposition: 'preposition'
-					}
-				},
-				{ title: 'Meaning', field: 'meaning' },
-				{
-					title: 'Example',
-					field: 'example',
-					initialEditValue: 'initial edit value'
-				}
-			],
-			data: [
-				{ "meaning": 'Mehmet', "type": 'Baran', "example": '1987' },
-				{ "meaning": 'Mehmet', "type": 'Baran', "example": '1987' }
-
+			selectedOption: null,
+			type: [
+				{ value: 'noun', label: 'Noun' },
+				{ value: 'verb', label: 'Verb' },
+				{ value: 'adjective', label: 'Adjective' },
+				{ value: 'adverb', label: 'Adverb' },
+				{ value: 'preposition', label: 'Prepositionn' }
 			]
 		};
 	}
 
 	// componentWillMount() {
-	// 	var deckID = this.getDeckIDFromPath();
-	// 	console.log(deckID);
-	// 	this.setState({
-	// 		id: deckID
-	// 	});
+
 	// }
 
-	// componentDidMount() {
-	// 	this.getDeckData();
-	// 	this.getCardSource();
-	// }
-
-	// getDeckIDFromPath = url => {
-	// 	return this.props.match.params.deckId;
-	// };
-
-	// getDeckData = async () => {
-	// 	var url = '/api/decks/' + this.state.id;
-	// 	const token = await authService.getAccessToken();
-	// 	const response = await fetch(url, {
-	// 		headers: !token ? {} : { Authorization: `Bearer ${token}` }
-	// 	});
-
-	// 	const data = await response.json();
-
-	// 	this.setState({ deckData: data, loading: false });
-	// };
+	componentDidMount() {
+		// this.getCategories();
+		// this.getDeckData();
+		// this.getCardSource();
+	}
 
 	getCard = async () => {
-		var url = '/api/decks/' + document.getElementById("front").value;
+		var url = '/api/cards/' + document.getElementById('front').value;
 		const token = await authService.getAccessToken();
 		const response = await fetch(url, {
 			headers: !token ? {} : { Authorization: `Bearer ${token}` }
@@ -112,18 +75,32 @@ class CreateCard extends Component {
 	// 	}
 	// };
 
+	updateCard = async front => {
+		var url = '/api/cards/' + front;
+		const token = await authService.getAccessToken();
+		const response = await fetch(url, {
+			headers: !token ? {} : { Authorization: `Bearer ${token}` }
+		});
+		const data = await response.json();
+
+		this.setState({ cardData: data, loading: false });
+		console.log(this.state.cardData);
+		// console.log(this.state.categories);
+		console.log(url);
+	};
+
 	addCard = async param => {
 		var url = '/api/cards';
 		const token = await authService.getAccessToken();
 		const data = {
-			front : document.getElementById('frontSide').value,
+			front: document.getElementById('front').value,
 			back: {
-				type: param.type,
-				meaning: param.meaning,
-				example: param.example
+				type: this.state.selectedOption.value,
+				meaning: document.getElementById('meaning').value,
+				example: document.getElementById('example').value
 			}
 		};
-		console.log(JSON.stringify(data));
+		// console.log(JSON.stringify(data));
 		try {
 			const response = await fetch(url, {
 				method: 'POST',
@@ -137,89 +114,101 @@ class CreateCard extends Component {
 			console.log('Success:', JSON.stringify(json));
 			array.push(data.back);
 			this.setState({
-				cardData : array,
-			})
-			console.log(this.state.cardData);
+				cardData: array
+			});
+			// console.log(this.state.cardData);
+			this.updateCard(document.getElementById('front').value);
 		} catch (error) {
 			console.error('Error:', error);
 		}
 	};
 
-	table = () => {
-		// var data = this.transData(this.state.deckData.cards);
-		// var title = 'Card in deck: ' + this.state.deckData.name;
-		if (this.state.cardData.length != undefined) {
-			console.log(this.state.cardData);
-		}
-		return (
-			<MaterialTable
-				title="Backs"
-				columns={this.state.columns}
-				data={this.state.cardData}
-				editable={{
-					onRowAdd: newData =>
-						new Promise((resolve, reject) => {
-							setTimeout(() => {
-								{
-									const data = this.state.data;
-									data.push(newData);
-									console.log(newData);
-									this.addCard(newData);
-									this.setState({ data }, () => resolve());
-								}
-								resolve();
-							}, 1000);
-						}),
-					onRowUpdate: (newData, oldData) =>
-						new Promise((resolve, reject) => {
-							setTimeout(() => {
-								{
-									const data = this.state.data;
-									const index = data.indexOf(oldData);
-									data[index] = newData;
-									this.setState({ data }, () => resolve());
-								}
-								resolve();
-							}, 1000);
-						}),
-					onRowDelete: oldData =>
-						new Promise((resolve, reject) => {
-							setTimeout(() => {
-								{
-									let data = this.state.data;
-									const index = data.indexOf(oldData);
-									data.splice(index, 1);
-									this.setState({ data }, () => resolve());
-								}
-								resolve();
-							}, 1000);
-						})
-				}}
-			/>
+	handleChange = selectedOption => {
+		this.setState({ selectedOption }, () =>
+			console.log(`Option selected:`, this.state.selectedOption)
 		);
 	};
 
-	// redirectAddCards = () => {
-	// 	this.setState({
-	// 		redirectAddCards: true
-	// 	});
-	// };
-
-	onChange = (param) => {
+	onChange = param => {
 		console.log(param);
-	}
+	};
+
+	deleteBack = async param => {
+		var url = '/api/backs/' + param;
+		console.log(url);
+		const token = await authService.getAccessToken();
+
+		try {
+			const response = await fetch(url, {
+				method: 'DELETE',
+				headers: {
+					Authorization: `Bearer ${token}`,
+					'Content-Type': 'application/json'
+				}
+			});
+			const json = await response;
+			console.log('Success:', JSON.stringify(json));
+			// console.log(this.state.cardData);
+		} catch (error) {
+			console.error('Error:', error);
+		}
+		if (this.state.cardData.backs.length === 1 ) {
+			alert("This is the last back side of the word. If you want to delete it, please remove this card!")
+		}
+		else {
+			this.updateCard(document.getElementById('front').value);
+		}
+	};
 
 	render() {
-		var table = this.table();
+		if (this.state.cardData.backs !== undefined) {
+			var backSide = this.state.cardData.backs.map(back => {
+				return (
+					<div
+						className="content-back-side"
+						onClick={() => this.deleteBack(back.id)}
+					>
+						<p className="meaning">{back.meaning}</p>
+						<p className="type">{back.type}</p>
+						<p className="example">{back.example}</p>
+						<p className="image">{back.image}</p>
+					</div>
+				);
+			});
+		}
+		const { selectedOption } = this.state;
 		return (
 			<div className="create-cards">
 				{/* <a href="#">Done</a> */}
-				<div className="create-cards-front">
+				<div className="create-cards-info">
 					<label for="fname">Front</label>
-					<input type="text" id="frontSide" name="dname" />
+					<input type="text" id="front" name="dname" />
+					<hr />
+					<label for="fname">Category</label>
+					<Select
+						className="select"
+						id="categories"
+						value={selectedOption}
+						onChange={this.handleChange}
+						options={this.state.type}
+					/>
+					<br />
+					<label for="fname">Meaning</label>
+					<input type="text" id="meaning" name="dname" />
+					<label for="fname">Example</label>
+					<input type="text" id="example" name="dname" />
+					<hr />
+					<Button
+						className="button-submit"
+						onClick={this.addCard}
+						type="button"
+						color="primary"
+					>
+						<p>Add</p>
+					</Button>
 				</div>
-				<br />
-				<div className="create-cards-back">{table}</div>
+				<hr />
+				<div className="create-cards-backside">{backSide}</div>
 			</div>
 		);
 	}

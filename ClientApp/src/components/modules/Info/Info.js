@@ -30,7 +30,7 @@ class Info extends Component {
 						</div>
 					</div>
 					<div className="info-field-item">
-						<div className="info-field-item-white">Avarage grade point:</div>
+						<div className="info-field-item-white">Average grade point:</div>
 						<div className="info-field-item-orange">
 							{this.props.data.gradePointAverage}
 						</div>
@@ -50,7 +50,7 @@ class Info extends Component {
 					</div>
 					<div className="info-field-item">
 						<div className="info-field-item-white">
-							Avarage grade point today:
+							Average grade point today:
 						</div>
 						<div className="info-field-item-orange">
 							{this.props.data.gradePointAverageToday}

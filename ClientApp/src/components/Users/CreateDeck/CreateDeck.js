@@ -10,12 +10,6 @@ import { BrowserRouter as Router, Redirect } from 'react-router-dom';
 
 import './CreateDeck.css';
 
-const options = [
-	{ value: 'chocolate', label: 'Chocolate' },
-	{ value: 'strawberry', label: 'Strawberry' },
-	{ value: 'vanilla', label: 'Vanilla' }
-];
-
 class CreateDeck extends Component {
 	constructor(props) {
 		super(props);
