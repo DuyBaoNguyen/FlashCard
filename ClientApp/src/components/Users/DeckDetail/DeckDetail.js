@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import authService from '../../api-authorization/AuthorizeService';
-import { BrowserRouter as Router, Redirect } from 'react-router-dom';
+import { BrowserRouter as Router, Redirect, Link } from 'react-router-dom';
 import './DeckDetail.css';
 import Info from '../../modules/Info/Info';
 import Testing from '../Testing/Testing';
@@ -84,10 +84,11 @@ class DeckDetail extends Component {
 					id: vocab.id,
 					front: vocab.front,
 					backs: vocab.backs.map((back, index2) => {
-						if (!back.fromAdmin) {
-							return back.meaning;
-						}
-						return back.meaning + 'From admin';
+						// if (!back.fromAdmin) {
+						// 	return back.meaning;
+						// }
+						// return back.meaning + 'From admin';
+						return back.meaning;
 					}).join(' - ')
 				};
 				mockData.push(oldVocab);
@@ -120,7 +121,6 @@ class DeckDetail extends Component {
 			}
 			// eslint-disable-next-line no-undef
 			// eslint-disable-next-line no-restricted-globals
-			// location.reload();
 			this.getDeckData();
 			this.getStatistics();
 		}
@@ -224,7 +224,7 @@ class DeckDetail extends Component {
 			<div>
 				<div className="deck-fields">
 					<div className="deck-back">
-						<a href="/">Back</a>
+						<Link to="/">Back</Link>
 					</div>
 					<div className="deck-content">
 						<div class="deck-content-info">
