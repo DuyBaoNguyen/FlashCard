@@ -8,6 +8,8 @@ import {
 	withRouter
 } from 'react-router-dom';
 import DeckDetail from '../../Users/DeckDetail/DeckDetail';
+import CardIcon from '../../../images/icons/card.svg';
+import DateIcon from '../../../images/icons/calendar.svg';
 
 import './Deck.css';
 
@@ -46,11 +48,12 @@ class Deck extends Component {
 					</div>
 					<hr />
 					<div className="menu-deck-info-line">
-						<img src="../../../images/icons/card.svg" width="21px" height="16px" />
+						<img className="icons"
+						src={CardIcon} width="21px" height="16px" />
 						<p>{this.props.deck.totalCards}</p>
 					</div>
 					<div className="menu-deck-info-line">
-						<img src="../../../images/icons/calendar.svg" width="21px" height="16px" />
+						<img className="icons" src={DateIcon} width="21px" height="16px" />
 						<p>{date.toLocaleDateString()}</p>
 					</div>
 				</div>
