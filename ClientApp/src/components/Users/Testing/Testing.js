@@ -13,6 +13,7 @@ import {
 import classnames from 'classnames';
 import './Testing.css';
 import Swal from 'sweetalert2';
+import Dashboard from '../Dashboard/Dashboard';
 
 // // CommonJS
 // const Swal = require('sweetalert2')
@@ -27,11 +28,11 @@ class Testing extends Component {
 		this.state = {
 			id: '',
 			nextButton: true,
-			removeCard: undefined,
 			deckData: [],
 			firstDisplay: false,
 			dontremember: [],
-			remember: []
+			remember: [],
+			redirect: false,
 		};
 	}
 
@@ -54,7 +55,7 @@ class Testing extends Component {
 	isFinish = (array, totalCards, dontRememberCards) => {
 		let uniqueTotal = this.unique(totalCards);
 		let uniqueDontRemember = this.unique(dontRememberCards)
-		let uniqueRemember = this.unique(totalCards.filter(x => !dontRememberCards.includes(x)));
+		let uniqueRemember = this.unique(uniqueTotal.filter(x => !dontRememberCards.includes(x)));
 
 		var text =
 			'Remember: ' +
@@ -107,6 +108,9 @@ class Testing extends Component {
 		} catch (error) {
 			console.error('Error:', error);
 		}
+		this.setState({
+			redirect : true
+		});
 	};
 
 	getDeckIDFromPath = () => {
@@ -128,14 +132,14 @@ class Testing extends Component {
 		rememberCards.push(next.id);
 		this.setState({
 			nextButton: true,
-			removeCard: true
 		});
+			array.splice(array.indexOf(next), 1);
 	};
 
 	onDontRemember = next => {
 		dontRememberCards.push(next.id);
 		this.setState({
-			nextButton: true
+			nextButton: true,
 		});
 	};
 
@@ -148,12 +152,9 @@ class Testing extends Component {
 
 		this.setState({
 			nextButton: false,
-			removeCard: false,
 			firstDisplay: true
 		});
-		if (this.state.removeCard === true) {
-			array.splice(array.indexOf(next), 1);
-		}
+		
 	};
 
 	render() {
@@ -172,6 +173,9 @@ class Testing extends Component {
 			});
 		}
 
+		if (this.state.redirect === true) {
+			return <Redirect to='/' Component={Dashboard} />;
+		}
 		return (
 			<div>
 				<div className="field">
@@ -187,7 +191,7 @@ class Testing extends Component {
 							<div className="content-front">
 								{next === undefined ? (
 									<p>
-										There's no card left but still dont know how to deal with it
+										There's no card left
 									</p>
 								) : (
 									<p>{next.front}</p>
@@ -199,14 +203,13 @@ class Testing extends Component {
 									'content-back',
 									this.state.nextButton === false
 										? 'none-display'
-										: 'displ`ay-grid'
+										: 'display-grid'
 								)}
 							>
 								{backSide}
 							</div>
 						</div>
 					</div>
-
 					<div className="buttons">
 						<div
 							className={classnames(
@@ -251,5 +254,4 @@ class Testing extends Component {
 		);
 	}
 }
-
 export default withRouter(Testing);
