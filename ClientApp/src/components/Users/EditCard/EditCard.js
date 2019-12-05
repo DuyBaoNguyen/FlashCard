@@ -3,6 +3,7 @@ import authService from '../../api-authorization/AuthorizeService';
 import MaterialTable from 'material-table';
 import Select from 'react-select';
 import Button from '@material-ui/core/Button';
+import Swal from 'sweetalert2';
 
 import './EditCard.css';
 
@@ -139,9 +140,11 @@ class EditCard extends Component {
 		const token = await authService.getAccessToken();
 
 		if (this.state.cardData.backs.length === 1) {
-			alert(
-				'This is the last back side of the word. If you want to delete it, please remove this card!'
-			);
+			Swal.fire(
+				'Oops!',
+				'You cannot remove the last back side of the card!',
+				'error'
+			)
 			return null;
 		} else {
 			this.updateCard(document.getElementById('front').value);

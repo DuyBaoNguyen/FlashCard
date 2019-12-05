@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import authService from '../../api-authorization/AuthorizeService';
 import { BrowserRouter as Router, Redirect, Link } from 'react-router-dom';
+import Swal from 'sweetalert2';
 import './DeckDetail.css';
 import Info from '../../modules/Info/Info';
 import Testing from '../Testing/Testing';
@@ -15,12 +16,12 @@ class DeckDetail extends Component {
 		this.state = {
 			id: '',
 			deckData: {},
-			front : '',
+			front: '',
 			statisticsData: {},
 			redirectTesting: false,
 			redirectAddCards: false,
 			redirectDashboard: false,
-			redirectEditCard: false,
+			redirectEditCard: false
 		};
 	}
 
@@ -83,13 +84,15 @@ class DeckDetail extends Component {
 				oldVocab = {
 					id: vocab.id,
 					front: vocab.front,
-					backs: vocab.backs.map((back, index2) => {
-						// if (!back.fromAdmin) {
-						// 	return back.meaning;
-						// }
-						// return back.meaning + 'From admin';
-						return back.meaning;
-					}).join(' - ')
+					backs: vocab.backs
+						.map((back, index2) => {
+							// if (!back.fromAdmin) {
+							// 	return back.meaning;
+							// }
+							// return back.meaning + 'From admin';
+							return back.meaning;
+						})
+						.join(' - ')
 				};
 				mockData.push(oldVocab);
 			});
@@ -98,67 +101,74 @@ class DeckDetail extends Component {
 		}
 	};
 
+	onClickDeleteDeck = async param => {
+		Swal.fire({
+			title: 'Are you sure to deelte this deck?',
+			text: "You won't be able to revert this!",
+			icon: 'warning',
+			showCancelButton: true,
+			cancelButtonColor: '#b3b3b3',
+			confirmButtonColor: '#DD3333',
+			confirmButtonText: 'Yes, delete it!'
+		}).then(result => {
+			if (result.value) {
+				this.deleteDeck(param);
+			}
+		});
+	};
+
 	deleteCard = async param => {
 		var url = '/api/decks/' + this.state.id + '/cards';
 		const token = await authService.getAccessToken();
 		const data = '[' + param.toString() + ']';
-		// eslint-disable-next-line no-restricted-globals
-		var r = confirm('Are you sure to delete this card?');
-		if (r == true) {
-			try {
-				const response = await fetch(url, {
-					method: 'DELETE',
-					body: data,
-					headers: {
-						Authorization: `Bearer ${token}`,
-						'Content-Type': 'application/json'
-					}
-				});
-				const json = await response;
-				console.log('Success:', JSON.stringify(json));
-			} catch (error) {
-				console.error('Error:', error);
-			}
-			// eslint-disable-next-line no-undef
-			// eslint-disable-next-line no-restricted-globals
-			this.getDeckData();
-			this.getStatistics();
+		try {
+			const response = await fetch(url, {
+				method: 'DELETE',
+				body: data,
+				headers: {
+					Authorization: `Bearer ${token}`,
+					'Content-Type': 'application/json'
+				}
+			});
+			const json = await response;
+			console.log('Success:', JSON.stringify(json));
+		} catch (error) {
+			console.error('Error:', error);
 		}
+		this.getDeckData();
+		this.getStatistics();
 	};
 
 	deleteDeck = async param => {
 		var url = '/api/decks/' + this.state.id;
 		const token = await authService.getAccessToken();
 		// eslint-disable-next-line no-restricted-globals
-		var r = confirm('Are you sure to delete this deck?');
-		if (r == true) {
-			try {
-				const response = await fetch(url, {
-					method: 'DELETE',
-					headers: {
-						Authorization: `Bearer ${token}`,
-						'Content-Type': 'application/json'
-					}
-				});
-				const json = await response;
-				console.log('Success:', JSON.stringify(json));
-			} catch (error) {
-				console.error('Error:', error);
-			}
-			// eslint-disable-next-line no-undef
-			// eslint-disable-next-line no-restricted-globals
-			this.setState({
-				redirectDashboard: true
+		try {
+			const response = await fetch(url, {
+				method: 'DELETE',
+				headers: {
+					Authorization: `Bearer ${token}`,
+					'Content-Type': 'application/json'
+				}
 			});
+			const json = await response;
+			console.log('Success:', JSON.stringify(json));
+		} catch (error) {
+			console.error('Error:', error);
 		}
+		// eslint-disable-next-line no-undef
+		// eslint-disable-next-line no-restricted-globals
+		this.setState({
+			redirectDashboard: true
+		});
 	};
 
-	editCard = (front) => {
+	editCard = front => {
 		this.setState({
-			front : front,
-			redirectEditCard : true
+			front: front,
+			redirectEditCard: true
 		});
-	}
+	};
 
 	table = () => {
 		var data = this.transData();
@@ -201,7 +211,6 @@ class DeckDetail extends Component {
 		var testURL = '/testing/' + this.state.id.toString();
 		var addCardsURL = '/addcards/' + this.state.id.toString();
 		var editCardURL = '/editcard/' + this.state.front;
-
 
 		if (this.state.redirectTesting === true) {
 			return <Redirect to={testURL} Component={Testing} />;
@@ -249,9 +258,8 @@ class DeckDetail extends Component {
 								<div class="deck-title">Features</div>
 							</div>
 							<div class="deck-content-advanced-features-items">
-								
-								<p onClick={this.deleteDeck} style={{ color: 'red' }}>
-								<i class="far fa-trash-alt"></i>  Delete deck
+								<p onClick={this.onClickDeleteDeck} style={{ color: 'red' }}>
+									<i class="far fa-trash-alt"></i> Delete deck
 								</p>
 								<div class="deck-button" onClick={this.redirectTesting}>
 									<p>Review</p>

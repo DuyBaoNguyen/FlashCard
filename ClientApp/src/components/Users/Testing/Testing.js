@@ -56,7 +56,7 @@ class Testing extends Component {
 		let uniqueTotal = this.unique(totalCards);
 		let uniqueDontRemember = this.unique(dontRememberCards)
 		let uniqueRemember = this.unique(uniqueTotal.filter(x => !dontRememberCards.includes(x)));
-
+		console.log(uniqueRemember.length, uniqueDontRemember.length);
 		var text =
 			'Remember: ' +
 			uniqueRemember.length +
@@ -70,7 +70,9 @@ class Testing extends Component {
 		});
 		if (array.length === 0) {
 			Swal.fire({
+				allowOutsideClick: false,
 				title: 'Your result',
+				backdrop : true,
 				text: text,
 				icon: 'success',
 				confirmButtonColor: '#3085d6',
