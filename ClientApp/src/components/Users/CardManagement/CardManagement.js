@@ -172,12 +172,6 @@ class CardManagement extends Component {
 						onClick: event => this.redirectAddCards()
 					},
 					{
-						icon: 'add',
-						tooltip: 'Add card',
-						// eslint-disable-next-line no-restricted-globals
-						onClick: (event, rowData) => this.addCard(rowData.id)
-					},
-					{
 						icon: 'edit',
 						tooltip: 'Edit card',
 						onClick: (event, rowData) => this.editCard(rowData.front)

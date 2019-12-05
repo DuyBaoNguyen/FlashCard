@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import authService from '../../api-authorization/AuthorizeService';
 import { Route } from 'react-router';
+// import Dashboard from '../Dashboard/Dashboard';
 import Button from '@material-ui/core/Button';
 import {
 	BrowserRouter as Router,
@@ -9,21 +10,28 @@ import {
 	Redirect,
 	withRouter
 } from 'react-router-dom';
-import Navbar from '../../modules/NavBar/Navbar';
 import classnames from 'classnames';
 import './Testing.css';
+import Swal from 'sweetalert2';
+
+// // CommonJS
+// const Swal = require('sweetalert2')
 
 var next = undefined;
 var array = [];
+var rememberCards = [];
+var dontRememberCards = [];
 class Testing extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
 			id: '',
 			nextButton: true,
-			removeCard: false,
+			removeCard: undefined,
 			deckData: [],
 			firstDisplay: false,
+			dontremember: [],
+			remember: []
 		};
 	}
 
@@ -39,10 +47,65 @@ class Testing extends Component {
 		this.getDeckData();
 	}
 
-	isFinish = () => {
-		if (array === null) {
-			alert('Done');
-			// return <Redirect to="/" Component={Dashboard} />;
+	unique = array => {
+		return Array.from(new Set(array));
+	};
+
+	isFinish = (array, totalCards, dontRememberCards) => {
+		let uniqueTotal = this.unique(totalCards);
+		let uniqueDontRemember = this.unique(dontRememberCards)
+		let uniqueRemember = this.unique(totalCards.filter(x => !dontRememberCards.includes(x)));
+
+		var text =
+			'Remember: ' +
+			uniqueRemember.length +
+			' cards -  Dont remember: ' +
+			uniqueDontRemember.length +
+			' cards';
+
+		this.setState({
+			remember: uniqueRemember,
+			dontremember: uniqueDontRemember
+		});
+		if (array.length === 0) {
+			Swal.fire({
+				title: 'Your result',
+				text: text,
+				icon: 'success',
+				confirmButtonColor: '#3085d6',
+				confirmButtonText: 'OK'
+			}).then(result => {
+				this.sendResult(this.state.remember, this.state.dontremember);
+			});
+		}
+	};
+
+	sendResult = async (r, dr) => {
+		let url = '/api/decks/' + this.state.id + '/test';
+		console.log(url);
+		const token = await authService.getAccessToken();
+		// console.log(token);
+		let data = {
+			failedCardIds: dr,
+			successCardIds: r
+		};
+
+		console.log(data);
+
+		try {
+			const response = await fetch(url, {
+				method: 'POST',
+				body: JSON.stringify(data),
+				headers: {
+					Authorization: `Bearer ${token}`,
+					'Content-Type': 'application/json'
+				}
+			});
+			const json = await response;
+			console.log('Success:', JSON.stringify(json));
+			// console.log(this.state.cardData);
+		} catch (error) {
+			console.error('Error:', error);
 		}
 	};
 
@@ -61,14 +124,16 @@ class Testing extends Component {
 		this.setState({ deckData: data, loading: false });
 	};
 
-	onRemember = () => {
+	onRemember = next => {
+		rememberCards.push(next.id);
 		this.setState({
 			nextButton: true,
 			removeCard: true
 		});
 	};
 
-	onDontRemember = () => {
+	onDontRemember = next => {
+		dontRememberCards.push(next.id);
 		this.setState({
 			nextButton: true
 		});
@@ -76,31 +141,35 @@ class Testing extends Component {
 
 	onNext = () => {
 		array = this.state.deckData.cards;
+		// array.splice(0, 1);
+		console.log(this.state.deckData.cards);
+		this.isFinish(array, rememberCards, dontRememberCards);
 		next = array[Math.floor(Math.random() * array.length)];
-		if (this.state.removeCard === true) {
-			array.splice(array.indexOf(next), 1);
-		}
-		this.isFinish();
+
 		this.setState({
 			nextButton: false,
 			removeCard: false,
 			firstDisplay: true
 		});
+		if (this.state.removeCard === true) {
+			array.splice(array.indexOf(next), 1);
+		}
 	};
 
 	render() {
-		if (next != undefined) {
+		if (next !== undefined) {
+			console.log(next);
+
 			var backSide = next.backs.map(back => {
-				console.log(back);
-				return(			
+				return (
 					<div className="content-back-side">
 						<p className="meaning">{back.meaning}</p>
 						<p className="type">{back.type}</p>
 						<p className="example">{back.example}</p>
 						<p className="image">{back.image}</p>
-					</div>	
+					</div>
 				);
-			})
+			});
 		}
 
 		return (
@@ -128,7 +197,9 @@ class Testing extends Component {
 							<div
 								className={classnames(
 									'content-back',
-									this.state.nextButton === false ? 'none-display' : 'display-grid'
+									this.state.nextButton === false
+										? 'none-display'
+										: 'displ`ay-grid'
 								)}
 							>
 								{backSide}
@@ -145,7 +216,7 @@ class Testing extends Component {
 						>
 							<Button
 								className="test-button-grey"
-								onClick={this.onDontRemember}
+								onClick={() => this.onDontRemember(next)}
 								type="button"
 								color="primary"
 							>
@@ -153,7 +224,7 @@ class Testing extends Component {
 							</Button>
 							<Button
 								className="test-button-orange"
-								onClick={this.onRemember}
+								onClick={() => this.onRemember(next)}
 								type="button"
 								color="primary"
 							>

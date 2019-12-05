@@ -194,6 +194,7 @@ class EditCard extends Component {
 					<div className="create-cards-info">
 						<label for="fname">Front</label>
 						<input
+							disabled
 							type="text"
 							id="front"
 							name="dname"
