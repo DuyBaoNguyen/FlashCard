@@ -75,7 +75,7 @@ class Testing extends Component {
 				backdrop : true,
 				text: text,
 				icon: 'success',
-				confirmButtonColor: '#3085d6',
+				confirmButtonColor: '#007bff',
 				confirmButtonText: 'OK'
 			}).then(result => {
 				this.sendResult(this.state.remember, this.state.dontremember);
