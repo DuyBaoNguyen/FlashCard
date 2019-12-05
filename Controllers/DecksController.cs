@@ -503,13 +503,11 @@ namespace FlashCard.Controllers
                 return BadRequest(ModelState);
             }
 
-            float score = (float)testmodel.SuccessCardIds.Length / (testmodel.FailedCardIds.Length + testmodel.SuccessCardIds.Length);
-
             var test = new Test()
             {
                 DateTime = DateTime.Now,
                 DeckId = deck.Id,
-                Score = (float)Math.Round(score * 1000) / 100,
+                Score = (float)testmodel.SuccessCardIds.Length / (testmodel.FailedCardIds.Length + testmodel.SuccessCardIds.Length),
                 TestedCards = new List<TestedCard>()
             };
 
