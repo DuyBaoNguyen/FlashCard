@@ -83,5 +83,19 @@ namespace FlashCard.Controllers
 
             return cardModel;
         }
+
+        // [HttpGet("download")]
+        // public async Task<IActionResult> DownloadAll()
+        // {
+        //     var userId = UserService.GetUserId(User);
+        //     var admin = await UserService.GetAdmin(dbContext);
+
+        //     if (admin.Id == userId)
+        //     {
+        //         return Ok();
+        //     }
+
+            
+        // }
     }
 }
