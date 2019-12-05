@@ -84,18 +84,71 @@ namespace FlashCard.Controllers
             return cardModel;
         }
 
-        // [HttpGet("download")]
-        // public async Task<IActionResult> DownloadAll()
-        // {
-        //     var userId = UserService.GetUserId(User);
-        //     var admin = await UserService.GetAdmin(dbContext);
+        [HttpGet("download")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public async Task<IActionResult> DownloadAll()
+        {
+            var userId = UserService.GetUserId(User);
+            var admin = await UserService.GetAdmin(dbContext);
 
-        //     if (admin.Id == userId)
-        //     {
-        //         return Ok();
-        //     }
+            if (admin.Id == userId)
+            {
+                return Ok();
+            }
 
-            
-        // }
+            var publicCards = dbContext.Cards
+                                .Include(c => c.Backs)
+                                .Where(c => c.Backs.Where(b => b.Approved).Count() > 0);
+            var OwnedCardIds = dbContext.CardOwners
+                                    .Where(co => co.UserId == userId)
+                                    .Select(co => co.CardId)
+                                    .ToHashSet<int>();
+            var OwnedBackIds = dbContext.Backs
+                                    .Where(b => b.OwnerId == userId && b.SourceId != null)
+                                    .Select(b => b.SourceId)
+                                    .ToHashSet<int?>();
+            var newBacks = new List<Back>();
+
+            foreach (var publicCard in publicCards)
+            {
+                // Add card to user if user does not own it
+                if (!OwnedCardIds.Contains(publicCard.Id))
+                {
+                    dbContext.CardOwners.Add(new CardOwner()
+                    {
+                        CardId = publicCard.Id,
+                        UserId = userId
+                    });
+                }
+
+                // Add back to user if user does not have any back deriving from public back
+                foreach (var back in publicCard.Backs)
+                {
+                    if (back.Approved && !OwnedBackIds.Contains(back.Id))
+                    {
+                        newBacks.Add(new Back()
+                        {
+                            Type = back.Type,
+                            Meaning = back.Meaning,
+                            Example = back.Example,
+                            Image = back.Image,
+                            ImageType = back.ImageType,
+                            LastModified = back.LastModified,
+                            Version = back.Version,
+                            FromAdmin = true,
+                            CardId = publicCard.Id,
+                            SourceId = back.Id,
+                            OwnerId = userId,
+                            AuthorId = back.AuthorId
+                        });
+                    }
+                }
+            }
+
+            dbContext.Backs.AddRange(newBacks);
+            await dbContext.SaveChangesAsync();
+
+            return Ok();
+        }
     }
 }

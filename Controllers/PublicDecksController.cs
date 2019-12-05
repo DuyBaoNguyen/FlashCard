@@ -249,7 +249,11 @@ namespace FlashCard.Controllers
                 }
 
                 // Add card for new deck of user
-                newDeck.CardAssignments.Add(new CardAssignment() { CardId = cardAssignment.CardId });
+                newDeck.CardAssignments.Add(new CardAssignment()
+                {
+                    CardId = cardAssignment.CardId,
+                    FromAdmin = true
+                });
 
                 // Add back for card if user does not own it
                 foreach (var back in cardAssignment.Card.Backs)
