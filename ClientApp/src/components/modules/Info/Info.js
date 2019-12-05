@@ -11,6 +11,9 @@ class Info extends Component {
 	}
 
 	render() {
+		let average = (this.props.data.gradePointAverage * 100).toFixed(2) + '%';
+		let averageToday = (this.props.data.gradePointAverageToday * 100).toFixed(2) + '%';
+
 		return (
 			<div className="info">
 				<div className="info-title">
@@ -30,9 +33,9 @@ class Info extends Component {
 						</div>
 					</div>
 					<div className="info-field-item">
-						<div className="info-field-item-white">Average grade point:</div>
+						<div className="info-field-item-white">Average grade percent:</div>
 						<div className="info-field-item-orange">
-							{this.props.data.gradePointAverage}
+							{average}
 						</div>
 					</div>
 					<hr/>
@@ -50,10 +53,10 @@ class Info extends Component {
 					</div>
 					<div className="info-field-item">
 						<div className="info-field-item-white">
-							Average grade point today:
+							Average grade today percent:
 						</div>
 						<div className="info-field-item-orange">
-							{this.props.data.gradePointAverageToday}
+							{averageToday}
 						</div>
 					</div>
 				</div>
