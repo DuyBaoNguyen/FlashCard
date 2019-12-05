@@ -59,13 +59,14 @@ namespace FlashCard.Controllers
 
             var privateDeck = await dbContext.Decks.FirstOrDefaultAsync(d =>
                                 d.OwnerId == user.Id && d.SourceId == publicDeck.Id);
-            var privateBacks = await dbContext.Backs.Where(b => b.OwnerId == user.Id).ToArrayAsync();
 
             if (privateDeck != null)
             {
                 ModelState.AddModelError("", "You already have this deck.");
                 return BadRequest(ModelState);
             }
+
+            var privateBacks = await dbContext.Backs.Where(b => b.OwnerId == user.Id).ToArrayAsync();
 
             var newBacks = new List<Back>();
             var newDeck = new Deck()

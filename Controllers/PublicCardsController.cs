@@ -32,7 +32,6 @@ namespace FlashCard.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         public IEnumerable<CardApiModel> GetAll()
         {
-            var adminId = UserService.GetUserId(User);
             var cards = dbContext.Cards
                             .Include(c => c.Backs)
                                 .ThenInclude(b => b.Author)
@@ -44,15 +43,15 @@ namespace FlashCard.Controllers
 
             foreach (var card in cards)
             {
-                var cardmodel = new CardApiModel(card);
+                var cardModel = new CardApiModel(card);
                 var backs = card.Backs.Where(b => b.Approved);
 
                 foreach (var back in backs)
                 {
-                    cardmodel.Backs.Add(new BackApiModel(back));
+                    cardModel.Backs.Add(new BackApiModel(back));
                 }
 
-                cardModels.Add(cardmodel);
+                cardModels.Add(cardModel);
             }
 
             return cardModels;
@@ -63,7 +62,6 @@ namespace FlashCard.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult<CardApiModel>> GetByFront(string front)
         {
-            var adminId = UserService.GetUserId(User);
             var card = await dbContext.Cards
                             .Include(c => c.Backs)
                                 .ThenInclude(b => b.Author)

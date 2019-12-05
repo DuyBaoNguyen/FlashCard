@@ -51,6 +51,7 @@ namespace FlashCard.Controllers
                             .Include(d => d.Proposals)
                                 .ThenInclude(p => p.User)
                             .Where(d => d.OwnerId == user.Id)
+                            .OrderBy(d => d.Name)
                             .AsNoTracking();
 
             var deckmodels = new List<DeckApiModel>();
@@ -183,6 +184,7 @@ namespace FlashCard.Controllers
 
                 cardmodels.Add(cardmodel);
             }
+            cardmodels.Sort(CardComparison.CompareByFront);
 
             // Get statistics of the deck
             var now = DateTime.Now;
@@ -319,6 +321,7 @@ namespace FlashCard.Controllers
                                     .Include(c => c.CardOwners)
                                     .Where(c => c.CardOwners.FirstOrDefault(co => co.UserId == user.Id) != null &&
                                         !cardIds.Contains(c.Id))
+                                    .OrderBy(c => c.Front)
                                     .AsNoTracking();
 
             var cardmodels = new List<CardApiModel>();

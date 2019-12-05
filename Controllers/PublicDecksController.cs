@@ -39,15 +39,15 @@ namespace FlashCard.Controllers
                                 .Include(d => d.CardAssignments)
                                 .Include(d => d.Proposals)
                                     .ThenInclude(p => p.User)
-                                .Where(d => d.Public && d.Approved)
+                                .Where(d => d.Approved)
                                 .AsNoTracking();
 
             var user = await UserService.GetUser(userManager, User);
-            var privateDeckIds = dbContext.Decks
-                                    .Where(d => d.OwnerId == user.Id && d.FromAdmin && d.SourceId != null)
+            var privateDeckIds = await dbContext.Decks
+                                    .Where(d => d.OwnerId == user.Id && d.SourceId != null)
                                     .AsNoTracking()
                                     .Select(d => d.SourceId)
-                                    .ToArray();
+                                    .ToArrayAsync();
             var deckmodels = new List<PublicDeckApiModel>();
 
             foreach (var deck in publicDecks)
@@ -75,7 +75,7 @@ namespace FlashCard.Controllers
                                 .Include(d => d.Proposals)
                                     .ThenInclude(p => p.User)
                                 .AsNoTracking()
-                                .FirstOrDefaultAsync(d => d.Id == id && d.Public && d.Approved);
+                                .FirstOrDefaultAsync(d => d.Id == id && d.Approved);
 
             if (publicDeck == null)
             {
@@ -110,6 +110,7 @@ namespace FlashCard.Controllers
             var cardmodels = new List<CardApiModel>();
             var admin = await UserService.GetAdmin(dbContext);
             var user = await UserService.GetUser(userManager, User);
+            // Get private deck to check if the user has this public deck
             var privateDeck = await dbContext.Decks
                                 .FirstOrDefaultAsync(d => d.OwnerId == user.Id && d.SourceId == publicDeck.Id);
 
@@ -125,6 +126,7 @@ namespace FlashCard.Controllers
 
                 cardmodels.Add(cardmodel);
             }
+            cardmodels.Sort(CardComparison.CompareByFront);
 
             var deckmodel = new PublicDeckApiModel(publicDeck);
             deckmodel.Cards = cardmodels;
@@ -139,10 +141,8 @@ namespace FlashCard.Controllers
         public async Task<ActionResult<IEnumerable<CardApiModel>>> GetRemainingCards(int id)
         {
             var deck = await dbContext.Decks
-                            .Include(d => d.CardAssignments)
-                                .ThenInclude(ca => ca.Card)
                             .AsNoTracking()
-                            .FirstOrDefaultAsync(d => d.Id == id && d.Public && d.Approved);
+                            .FirstOrDefaultAsync(d => d.Id == id && d.Approved);
 
             if (deck == null)
             {
@@ -158,8 +158,9 @@ namespace FlashCard.Controllers
                                     .Include(c => c.Backs)
                                         .ThenInclude(b => b.Author)
                                     .Include(c => c.CardOwners)
-                                    .Where(c => c.CardOwners.FirstOrDefault(co => co.UserId == admin.Id) != null &&
-                                        !cardIds.Contains(c.Id))
+                                    .Where(c => c.CardOwners.Where(co => co.UserId == admin.Id).Count() > 0 &&
+                                        !cardIds.Contains(c.Id) && c.Backs.Where(b => b.Approved).Count() > 0)
+                                    .OrderBy(c => c.Front)
                                     .AsNoTracking();
             var cardmodels = new List<CardApiModel>();
 
