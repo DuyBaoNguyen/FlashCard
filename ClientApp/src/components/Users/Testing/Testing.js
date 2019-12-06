@@ -18,74 +18,103 @@ import Dashboard from '../Dashboard/Dashboard';
 // // CommonJS
 // const Swal = require('sweetalert2')
 
-var next = undefined;
-var array = [];
-var rememberCards = [];
-var dontRememberCards = [];
 class Testing extends Component {
 	constructor(props) {
 		super(props);
+		this.array = [];
+		// eslint-disable-next-line no-unused-expressions
+		this.vocab;
+		this.arrayTotal = [];
+		this.arrayDontRemember = [];
 		this.state = {
+			currentVocab: null,
+			displayNextButton: true,
+			deckData: null,
+			firstDisplay: true,
 			id: '',
-			nextButton: true,
-			deckData: [],
-			firstDisplay: false,
-			dontremember: [],
-			remember: [],
-			redirect: false,
+			redirect: false
 		};
-	}
-
-	componentWillMount() {
-		var deckID = this.getDeckIDFromPath();
-		console.log(deckID);
-		this.setState({
-			id: deckID
-		});
 	}
 
 	componentDidMount() {
 		this.getDeckData();
 	}
 
-	unique = array => {
-		return Array.from(new Set(array));
+	getDeckData = async () => {
+		let url = '/api/decks/' + this.props.match.params.deckId;
+		const token = await authService.getAccessToken();
+		const response = await fetch(url, {
+			headers: !token ? {} : { Authorization: `Bearer ${token}` }
+		});
+		const data = await response.json();
+		this.setState({ deckData: data.cards, loading: false });
+		localStorage.setItem('deckData', JSON.stringify(this.state.deckData));
+
+		// Retrieve the object from storage
+		let deckData = localStorage.getItem('deckData');
+		this.array = this.state.deckData;
 	};
 
-	isFinish = (array, totalCards, dontRememberCards) => {
-		let uniqueTotal = this.unique(totalCards);
-		let uniqueDontRemember = this.unique(dontRememberCards)
-		let uniqueRemember = this.unique(uniqueTotal.filter(x => !dontRememberCards.includes(x)));
-		console.log(uniqueRemember.length, uniqueDontRemember.length);
+	isFinish = (array, arrayTotal, arrayDontRemember) => {
+		let uniqueArrayTotal = this.unique(arrayTotal);
+		let uniqueArrayDontRemember = this.unique(arrayDontRemember);
+		let uniqueArrayRemember = this.unique(
+			uniqueArrayTotal.filter(x => !uniqueArrayDontRemember.includes(x))
+		);
+
 		var text =
 			'Remember: ' +
-			uniqueRemember.length +
+			uniqueArrayRemember.length +
 			' cards -  Dont remember: ' +
-			uniqueDontRemember.length +
+			uniqueArrayDontRemember.length +
 			' cards';
 
-		this.setState({
-			remember: uniqueRemember,
-			dontremember: uniqueDontRemember
-		});
 		if (array.length === 0) {
 			Swal.fire({
 				allowOutsideClick: false,
 				title: 'Your result',
-				backdrop : true,
+				backdrop: true,
 				text: text,
 				icon: 'success',
 				confirmButtonColor: '#007bff',
 				confirmButtonText: 'OK'
 			}).then(result => {
-				this.sendResult(this.state.remember, this.state.dontremember);
+				this.sendResult(uniqueArrayRemember, uniqueArrayDontRemember);
 			});
 		}
 	};
 
+	onRemember = vocab => {
+		this.setState({
+			displayNextButton: true
+		});
+		if (vocab != null) {
+			this.array.splice(this.array.indexOf(vocab), 1);
+		}
+		this.arrayTotal.push(vocab.id);
+	};
+
+	onDontRemember = vocab => {
+		this.setState({
+			displayNextButton: true
+		});
+		this.arrayDontRemember.push(vocab.id);
+	};
+
+	onNext = () => {
+		this.vocab = this.array[Math.floor(Math.random() * this.array.length)];
+		this.setState({
+			displayNextButton: false,
+			firstDisplay: false
+		});
+		if (this.vocab === undefined) {
+			this.isFinish(this.array, this.arrayTotal, this.arrayDontRemember);
+		}
+		console.log(this.arrayTotal, this.arrayDontRemember);
+	};
+
 	sendResult = async (r, dr) => {
-		let url = '/api/decks/' + this.state.id + '/test';
-		console.log(url);
+		let url = '/api/decks/' + this.props.match.params.deckId + '/test';
 		const token = await authService.getAccessToken();
 		// console.log(token);
 		let data = {
@@ -111,59 +140,22 @@ class Testing extends Component {
 			console.error('Error:', error);
 		}
 		this.setState({
-			redirect : true
+			redirect: true
 		});
 	};
 
-	getDeckIDFromPath = () => {
-		return this.props.match.params.deckId;
-	};
-
-	getDeckData = async () => {
-		var url = '/api/decks/' + this.state.id;
-		const token = await authService.getAccessToken();
-		const response = await fetch(url, {
-			headers: !token ? {} : { Authorization: `Bearer ${token}` }
-		});
-		const data = await response.json();
-		// console.log(data);
-		this.setState({ deckData: data, loading: false });
-	};
-
-	onRemember = next => {
-		rememberCards.push(next.id);
-		this.setState({
-			nextButton: true,
-		});
-			array.splice(array.indexOf(next), 1);
-	};
-
-	onDontRemember = next => {
-		dontRememberCards.push(next.id);
-		this.setState({
-			nextButton: true,
-		});
-	};
-
-	onNext = () => {
-		array = this.state.deckData.cards;
-		// array.splice(0, 1);
-		console.log(this.state.deckData.cards);
-		this.isFinish(array, rememberCards, dontRememberCards);
-		next = array[Math.floor(Math.random() * array.length)];
-
-		this.setState({
-			nextButton: false,
-			firstDisplay: true
-		});
-		
+	unique = array => {
+		return Array.from(new Set(array));
 	};
 
 	render() {
-		if (next !== undefined) {
-			console.log(next);
+		if (this.state.redirect === true) {
+			return <Redirect to="/" Component={Dashboard} />;
+		}
+		if (this.vocab !== undefined) {
+			console.log(this.vocab);
 
-			var backSide = next.backs.map(back => {
+			var backSide = this.vocab.backs.map(back => {
 				return (
 					<div className="content-back-side">
 						<p className="meaning">{back.meaning}</p>
@@ -175,81 +167,75 @@ class Testing extends Component {
 			});
 		}
 
-		if (this.state.redirect === true) {
-			return <Redirect to='/' Component={Dashboard} />;
-		}
+		// if (this.state.redirect === true) {
+		// 	return <Redirect to='/' Component={Dashboard} />;
+		// }
+		let deckData = localStorage.getItem('deckData');
+
+		console.log('retrievedObject: ', JSON.parse(deckData));
 		return (
-			<div>
-				<div className="field">
-					<div className="back-button">
-						<a href="#">Back</a>
+			<div className="field">
+				<div className="back-button">
+					<a href="#">Back</a>
+				</div>
+				<div
+					className={classnames(
+						this.state.firstDisplay === true ? 'none-display' : ''
+					)}
+				>
+					<div className="content">
+						<div className="content-front">
+							<p>{this.vocab !== undefined ? this.vocab.front : 'No card left'}</p>
+						</div>
+						<div
+							className={classnames(
+								'content-back',
+								this.state.displayNextButton === false
+									? 'none-display'
+									: 'display-grid'
+							)}
+						>
+							{backSide}
+						</div>
+					</div>
+				</div>
+				<div className="buttons">
+					<div
+						className={classnames(
+							'test-button',
+							this.state.displayNextButton === true ? 'none-display' : ''
+						)}
+					>
+						<Button
+							className="test-button-grey"
+							onClick={() => this.onDontRemember(this.vocab)}
+							type="button"
+							color="primary"
+						>
+							<p>Don't Remember</p>
+						</Button>
+						<Button
+							className="test-button-orange"
+							onClick={() => this.onRemember(this.vocab)}
+							type="button"
+							color="primary"
+						>
+							<p>Remember</p>
+						</Button>
 					</div>
 					<div
 						className={classnames(
-							this.state.firstDisplay === false ? 'none-display' : ''
+							'test-button',
+							this.state.displayNextButton === false ? 'none-display' : ''
 						)}
 					>
-						<div className="content">
-							<div className="content-front">
-								{next === undefined ? (
-									<p>
-										There's no card left
-									</p>
-								) : (
-									<p>{next.front}</p>
-								)}
-								{/* {array === undefined ? 'loading...' : array[0]._id} */}
-							</div>
-							<div
-								className={classnames(
-									'content-back',
-									this.state.nextButton === false
-										? 'none-display'
-										: 'display-grid'
-								)}
-							>
-								{backSide}
-							</div>
-						</div>
-					</div>
-					<div className="buttons">
-						<div
-							className={classnames(
-								'test-button',
-								this.state.nextButton === true ? 'none-display' : ''
-							)}
+						<Button
+							className="test-button-next"
+							onClick={this.onNext}
+							type="button"
 						>
-							<Button
-								className="test-button-grey"
-								onClick={() => this.onDontRemember(next)}
-								type="button"
-								color="primary"
-							>
-								<p>Don't Remember</p>
-							</Button>
-							<Button
-								className="test-button-orange"
-								onClick={() => this.onRemember(next)}
-								type="button"
-								color="primary"
-							>
-								<p>Remember</p>
-							</Button>
-						</div>
-						<div
-							className={classnames(
-								'test-button',
-								this.state.nextButton === false ? 'none-display' : ''
-							)}
-						>
-							<Button
-								className="test-button-next"
-								onClick={this.onNext}
-								type="button"
-							>
-								<p>{this.state.firstDisplay === true ? 'Next' : 'Start'}</p>
-							</Button>
-						</div>
+							<p>Start</p>
+						</Button>
 					</div>
 				</div>
 			</div>

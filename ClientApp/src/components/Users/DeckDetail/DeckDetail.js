@@ -177,7 +177,7 @@ class DeckDetail extends Component {
 			<MaterialTable
 				title={title}
 				columns={[
-					{ title: 'ID', field: 'id' },
+					// { title: 'ID', field: 'id' },
 					{ title: 'Front', field: 'front' },
 					{ title: 'Backs', field: 'backs' }
 				]}

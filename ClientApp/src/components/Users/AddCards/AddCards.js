@@ -237,12 +237,12 @@ class AddCards extends Component {
 						tooltip: 'Edit card',
 						onClick: (event, rowData) => this.editCard(rowData.front)
 					},
-					{
-						icon: 'delete',
-						tooltip: 'Delete card',
-						// eslint-disable-next-line no-restricted-globals
-						onClick: (event, rowData) => this.deleteCard(rowData.front)
-					}
+					// {
+					// 	icon: 'delete',
+					// 	tooltip: 'Delete card',
+					// 	// eslint-disable-next-line no-restricted-globals
+					// 	onClick: (event, rowData) => this.deleteCard(rowData.front)
+					// }
 				]}
 				options={{
 					pageSize: 7
