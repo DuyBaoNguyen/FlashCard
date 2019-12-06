@@ -10,7 +10,8 @@ export class LoginMenu extends Component {
 
         this.state = {
             isAuthenticated: false,
-            userName: null
+            userName: null,
+            role: 'user'
         };
     }
 
@@ -25,14 +26,16 @@ export class LoginMenu extends Component {
 
     async populateState() {
         const [isAuthenticated, user] = await Promise.all([authService.isAuthenticated(), authService.getUser()])
+        console.log(user);
         this.setState({
             isAuthenticated,
-            userName: user && user.displayName
+            userName: user && user.displayName,
+            role: user && user.role,
         });
     }
 
     render() {
-        const { isAuthenticated, userName } = this.state;
+        const { isAuthenticated, userName, role } = this.state;
         if (!isAuthenticated) {
             const registerPath = `${ApplicationPaths.Register}`;
             const loginPath = `${ApplicationPaths.Login}`;
@@ -40,12 +43,20 @@ export class LoginMenu extends Component {
         } else {
             const profilePath = `${ApplicationPaths.Profile}`;
             const logoutPath = { pathname: `${ApplicationPaths.LogOut}`, state: { local: true } };
-            return this.authenticatedView(userName, profilePath, logoutPath);
+            return this.authenticatedView(userName, profilePath, logoutPath, role);
         }
     }
 
-    authenticatedView(userName, profilePath, logoutPath) {
+    authenticatedView(userName, profilePath, logoutPath, role) {
+        let adminView;
+        if (role === 'administrator') {
+            adminView = <NavItem>
+                            <NavLink tag={Link} className="text-dark" to="/users">Users</NavLink>
+                        </NavItem>;
+        }
+
         return (<Fragment>
+            {adminView}
             <NavItem>
                 <span className="nav-link text-dark">Hello {userName}</span>
             </NavItem>
