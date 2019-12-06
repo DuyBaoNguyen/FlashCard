@@ -40,7 +40,8 @@ namespace FlashCard.Controllers
                                 .ThenInclude(b => b.Author)
                             .Include(c => c.CardOwners)
                                 .ThenInclude(co => co.User)
-                            .Where(c => c.CardOwners.FirstOrDefault(co => co.UserId == user.Id) != null)
+                            .Where(c => c.CardOwners.FirstOrDefault(co => co.UserId == user.Id) != null &&
+                                c.Backs.Where(b => !b.Public || b.Approved).Count() > 0)
                             .OrderBy(c => c.Front)
                             .AsNoTracking();
 
@@ -155,7 +156,8 @@ namespace FlashCard.Controllers
                                 .ThenInclude(b => b.Author)
                             .Include(c => c.CardOwners)
                                 .ThenInclude(co => co.User)
-                            .Where(c => c.CardOwners.FirstOrDefault(co => co.UserId == user.Id) != null)
+                            .Where(c => c.CardOwners.FirstOrDefault(co => co.UserId == user.Id) != null &&
+                                c.Backs.Where(b => !b.Public || b.Approved).Count() > 0)
                             .AsNoTracking()
                             .FirstOrDefaultAsync(c => c.Front == front);
 

@@ -175,7 +175,7 @@ namespace FlashCard.Controllers
             foreach (var cardAssignment in cardAssignments)
             {
                 var cardmodel = new CardApiModel(cardAssignment.Card);
-                var backs = cardAssignment.Card.Backs.Where(b => b.OwnerId == user.Id && !b.Public);
+                var backs = cardAssignment.Card.Backs.Where(b => b.OwnerId == user.Id && (!b.Public || b.Approved));
 
                 foreach (var back in backs)
                 {
@@ -320,7 +320,7 @@ namespace FlashCard.Controllers
                                         .ThenInclude(b => b.Author)
                                     .Include(c => c.CardOwners)
                                     .Where(c => c.CardOwners.FirstOrDefault(co => co.UserId == user.Id) != null &&
-                                        !cardIds.Contains(c.Id))
+                                        !cardIds.Contains(c.Id) && c.Backs.Where(b => !b.Public || b.Approved).Count() > 0)
                                     .OrderBy(c => c.Front)
                                     .AsNoTracking();
 
@@ -329,7 +329,7 @@ namespace FlashCard.Controllers
             foreach (var card in remainingCards)
             {
                 var cardmodel = new CardApiModel(card);
-                var backs = card.Backs.Where(b => b.OwnerId == user.Id && !b.Public);
+                var backs = card.Backs.Where(b => b.OwnerId == user.Id && (!b.Public || b.Approved));
 
                 foreach (var back in backs)
                 {

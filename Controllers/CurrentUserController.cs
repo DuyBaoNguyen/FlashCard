@@ -1,6 +1,5 @@
 using System;
 using System.Net.Mime;
-using System.Security.Claims;
 using System.Threading.Tasks;
 using FlashCard.ApiModels;
 using FlashCard.Models;
@@ -22,8 +21,8 @@ namespace FlashCard.Controllers
             this.userManager = userManager;
         }
 
-        [HttpGet("{getAvatar?}")]
-        public async Task<UserApiModel> Get(bool getAvatar)
+        [HttpGet]
+        public async Task<CurrentUserApiModel> Get()
         {
             var user = await UserService.GetUser(userManager, User);
 
@@ -33,19 +32,14 @@ namespace FlashCard.Controllers
             }
 
             var roles = await userManager.GetRolesAsync(user);
-            string image = null;
-            if (getAvatar && user.Avatar != null)
-            {
-                image = Convert.ToBase64String(user.Avatar);
-            }
 
-            return new UserApiModel()
+            return new CurrentUserApiModel()
             {
                 Id = user.Id,
                 DisplayName = user.Name,
                 Email = user.Email,
                 Role = roles[0],
-                Image = image
+                Image = ImageService.GetBase64(user.Avatar, user.ImageType)
             };
         }
     }

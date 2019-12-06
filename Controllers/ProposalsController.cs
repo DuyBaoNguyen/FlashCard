@@ -155,6 +155,37 @@ namespace FlashCard.Controllers
             return Ok();
         }
 
+        [HttpPut("backs/{id}")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> ApproveBack(int id)
+        {
+            var userId = UserService.GetUserId(User);
+            var admin = await UserService.GetAdmin(dbContext);
+
+            if (admin.Id != userId)
+            {
+                return Forbid();
+            }
+
+            var back = await dbContext.Backs.FirstOrDefaultAsync(b => b.Id == id);
+
+            if (back == null)
+            {
+                return NotFound();
+            }
+            if (!back.Public || back.Approved)
+            {
+                return Forbid();
+            }
+
+            back.Approved = true;
+            await dbContext.SaveChangesAsync();
+
+            return NoContent();
+        }
+
         [HttpDelete("backs/{id}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
