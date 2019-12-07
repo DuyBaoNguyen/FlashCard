@@ -30,6 +30,47 @@ namespace FlashCard.Controllers
             this.dbContext = dbContext;
         }
 
+        [HttpPost]
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<ActionResult<DeckApiModel>> ProposeDeck([FromBody] DeckRequestModel deckModel)
+        {
+            var category = await dbContext.Categories.FirstOrDefaultAsync(c => c.Id == deckModel.Category.Id);
+
+            if (category == null)
+            {
+                ModelState.AddModelError("Category.Id", "The Category Id is not provided or does not exist.");
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var user = await UserService.GetUser(userManager, User);
+            var admin = await UserService.GetAdmin(dbContext);
+            var userIsInAdminRole = await userManager.IsInRoleAsync(user, Roles.Administrator);
+
+            var deck = new Deck()
+            {
+                Name = deckModel.Name,
+                Description = deckModel.Description,
+                Public = true,
+                Approved = userIsInAdminRole,
+                CreatedDate = DateTime.Now,
+                LastModified = DateTime.Now,
+                Category = category,
+                Owner = user,
+                Author = user
+            };
+
+            dbContext.Decks.Add(deck);
+            await dbContext.SaveChangesAsync();
+
+            // return CreatedAtAction(nameof(GetById), new { id = deck.Id }, new DeckApiModel(deck));
+            return Ok();
+        }
+
         [HttpGet("cards")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
@@ -130,7 +171,8 @@ namespace FlashCard.Controllers
 
             var image = ImageService.GetImage(cardModel.Back.Image);
             var admin = await UserService.GetAdmin(dbContext);
-            var userId = UserService.GetUserId(User);
+            var user = await UserService.GetUser(userManager, User);
+            var userIsInAdminRole = await userManager.IsInRoleAsync(user, Roles.Administrator);
 
             if (card.CardOwners.Where(co => co.CardId == card.Id && co.UserId == admin.Id).Count() == 0)
             {
@@ -145,9 +187,10 @@ namespace FlashCard.Controllers
                 Image = image?.Data,
                 ImageType = image?.Type,
                 Public = true,
+                Approved = userIsInAdminRole,
                 LastModified = DateTime.Now,
                 OwnerId = admin.Id,
-                AuthorId = userId
+                AuthorId = user.Id
             });
 
             await dbContext.SaveChangesAsync();
