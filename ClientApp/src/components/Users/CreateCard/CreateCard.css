@@ -43,19 +43,12 @@ body {
           box-sizing: border-box;
 }
 
-.create-cards .create-cards-info input[type='submit'] {
+.create-cards .create-cards-info input[type='file'] {
   width: 100%;
-  background-color: #4caf50;
-  color: white;
-  padding: 14px 20px;
+  color: black;
   margin: 8px 0;
-  border: none;
   border-radius: 4px;
   cursor: pointer;
-}
-
-.create-cards .create-cards-info input[type='submit']:hover {
-  background-color: #45a049;
 }
 
 .create-cards-backside {
