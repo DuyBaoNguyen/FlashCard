@@ -137,10 +137,15 @@ namespace FlashCard.Controllers
             var user = await UserService.GetUser(userManager, User);
 
             bool userIsInUserRole = await userManager.IsInRoleAsync(user, Roles.User);
-            bool ownerIsInUserRole = await userManager.IsInRoleAsync(deck.Owner, Roles.User);
+            // bool ownerIsInUserRole = await userManager.IsInRoleAsync(deck.Owner, Roles.User);
 
             // Check the deck belongs with current user or is pucblic, if user is in administrator, it will be ignored
-            if (userIsInUserRole && deck.OwnerId != user.Id && (ownerIsInUserRole || !deck.Public || !deck.Approved))
+            // if (userIsInUserRole && deck.OwnerId != user.Id && (ownerIsInUserRole || !deck.Public || !deck.Approved))
+            // {
+            //     return Forbid();
+            // }
+
+            if (userIsInUserRole && deck.OwnerId != user.Id)
             {
                 return Forbid();
             }
