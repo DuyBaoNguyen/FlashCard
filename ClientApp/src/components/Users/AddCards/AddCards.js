@@ -150,9 +150,6 @@ class AddCards extends Component {
 		const data = '[' + param.toString() + ']';
 
 		// eslint-disable-next-line no-restricted-globals
-		var r = confirm('Are you sure to add this card?');
-
-		if (r == true) {
 			try {
 				const response = await fetch(url, {
 					method: 'PUT',
@@ -169,7 +166,6 @@ class AddCards extends Component {
 			}
 			this.getCardSource();
 			this.getDeckData();
-		}
 	};
 
 	table = () => {

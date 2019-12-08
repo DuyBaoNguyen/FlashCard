@@ -9,6 +9,7 @@ import AddCards from '../AddCards/AddCards';
 import MaterialTable from 'material-table';
 import Dashboard from '../Dashboard/Dashboard';
 import EditCard from '../EditCard/EditCard';
+import classnames from 'classnames';
 
 class DeckDetail extends Component {
 	constructor(props) {
@@ -265,7 +266,7 @@ class DeckDetail extends Component {
 								<p onClick={this.onClickDeleteDeck} style={{ color: 'red' }}>
 									<i class="far fa-trash-alt"></i> Delete deck
 								</p>
-								<div class="deck-button" onClick={this.redirectTesting}>
+								<div className={classnames('deck-button', this.state.deckData.totalCards !== 0 ? '' : 'none-display')} onClick={this.redirectTesting}>
 									<p>Review</p>
 								</div>
 							</div>
