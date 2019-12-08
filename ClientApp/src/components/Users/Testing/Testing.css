@@ -144,13 +144,13 @@ body {
   -webkit-box-pack: center;
       -ms-flex-pack: center;
           justify-content: center;
-  -webkit-box-align: start;
-      -ms-flex-align: start;
-          align-items: flex-start;
-  -webkit-box-orient: vertical;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-orient: horizontal;
   -webkit-box-direction: normal;
-      -ms-flex-direction: column;
-          flex-direction: column;
+      -ms-flex-direction: row;
+          flex-direction: row;
   width: 400px;
   height: 230px;
   border-radius: 10px;
@@ -170,6 +170,10 @@ body {
   border: solid 1px #007bff;
 }
 
+.content .content-back .content-back-side .info {
+  width: 100%;
+}
+
 .meaning {
   font-weight: 900;
   color: #007bff;
@@ -178,5 +182,9 @@ body {
 .type {
   font-style: italic;
   font-size: 14px;
+}
+
+.image {
+  height: 150px;
 }
 /*# sourceMappingURL=Testing.css.map */

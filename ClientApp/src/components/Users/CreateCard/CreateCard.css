@@ -58,8 +58,7 @@ body {
   background-color: #45a049;
 }
 
-.create-cards .create-cards-backside {
-  max-width: 60%;
+.create-cards-backside {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -67,15 +66,9 @@ body {
   -webkit-box-direction: normal;
       -ms-flex-direction: column;
           flex-direction: column;
-  -webkit-box-pack: center;
-      -ms-flex-pack: center;
-          justify-content: center;
-  -ms-flex-direction: column-reverse;
-      flex-direction: column-reverse;
-  margin-top: 10px;
 }
 
-.create-cards .create-cards-backside .content-back-side {
+.create-cards-backside .content-back-side {
   margin: 15px;
   display: -webkit-box;
   display: -ms-flexbox;
@@ -83,13 +76,13 @@ body {
   -webkit-box-pack: center;
       -ms-flex-pack: center;
           justify-content: center;
-  -webkit-box-align: start;
-      -ms-flex-align: start;
-          align-items: flex-start;
-  -webkit-box-orient: vertical;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-orient: horizontal;
   -webkit-box-direction: normal;
-      -ms-flex-direction: column;
-          flex-direction: column;
+      -ms-flex-direction: row;
+          flex-direction: row;
   width: 600px;
   height: 230px;
   border-radius: 10px;
@@ -101,7 +94,7 @@ body {
   padding: 15px;
 }
 
-.create-cards .create-cards-backside .content-back-side:hover {
+.create-cards-backside .content-back-side:hover {
   -webkit-transition: 0.3s;
   transition: 0.3s;
   -webkit-transform: translateY(-10px);
@@ -109,13 +102,21 @@ body {
   border: solid 2px red;
 }
 
-.meaning {
+.create-cards-backside .content-back-side .info {
+  width: 100%;
+}
+
+.create-cards-backside .content-back-side .info .meaning {
   font-weight: 900;
   color: #007bff;
 }
 
-.type {
+.create-cards-backside .content-back-side .info .type {
   font-style: italic;
   font-size: 14px;
+}
+
+.create-cards-backside .content-back-side .info .image {
+  height: 150px;
 }
 /*# sourceMappingURL=CreateCard.css.map */

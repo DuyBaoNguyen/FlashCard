@@ -55,45 +55,46 @@ body {
 			background-color: #45a049;
 		}
 	}
-	.create-cards-backside {
-		max-width: 60%;
+}
+
+.create-cards-backside {
+	display: flex;
+	// align-items: flex-start;
+	flex-direction: column;
+	.content-back-side {
+		margin: 15px;
 		display: flex;
-		flex-direction: column;
 		justify-content: center;
-		flex-direction: column-reverse;
-		// grid-template-columns: auto auto auto;
-		margin-top: 10px;
-		.content-back-side {
-			margin: 15px;
-			display: flex;
-			justify-content: center;
-			align-items: flex-start;
-			flex-direction: column;
-			width: 600px;
-			height: 230px;
-			border-radius: 10px;
-			border: solid 1px #dbdbdb;
-			background-color: #ffffff;
-			display: flex;
+		align-items: center;
+		flex-direction: row;
+		width: 600px;
+		height: 230px;
+		border-radius: 10px;
+		border: solid 1px #dbdbdb;
+		background-color: #ffffff;
+		display: flex;
+		transition: 0.3s;
+		padding: 15px;
+		&:hover {
 			transition: 0.3s;
-			padding: 15px;
-			&:hover {
-				transition: 0.3s;
-				transform: translateY(-10px);
-				border: solid 2px red;
+			transform: translateY(-10px);
+			border: solid 2px red;
+		}
+		.info {
+			width: 100%;
+			.meaning {
+				font-weight: 900;
+				color: #007bff;
 			}
+			
+			.type {
+				font-style: italic;
+				font-size: 14px;
+			}
+			.image {
+				// width: 60%;
+				height: 150px;
+			}			
 		}
 	}
 }
-
-
-.meaning {
-	font-weight: 900;
-	color: #007bff;
-}
-
-.type {
-	font-style: italic;
-	font-size: 14px;
-}
-

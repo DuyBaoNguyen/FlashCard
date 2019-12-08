@@ -1,8 +1,11 @@
+/* eslint-disable jsx-a11y/alt-text */
 import React, { Component } from 'react';
 import authService from '../../api-authorization/AuthorizeService';
 import MaterialTable from 'material-table';
 import Select from 'react-select';
 import Button from '@material-ui/core/Button';
+import classnames from 'classnames';
+
 // import {hashHistory} from 'react-router';
 
 import './CreateCard.css';
@@ -16,6 +19,8 @@ class CreateCard extends Component {
 			cardData: [],
 			redirectAddCards: false,
 			selectedOption: null,
+			file: null,
+			base64: null,
 			type: [
 				{ value: 'noun', label: 'Noun' },
 				{ value: 'verb', label: 'Verb' },
@@ -48,6 +53,21 @@ class CreateCard extends Component {
 		this.setState({ cardSource: data, loading: false });
 		console.log(this.state.cardSource);
 	};
+
+	handleImageChange = (e) => {
+    e.preventDefault();
+    let file = e.target.files[0];
+    let reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onloadend = () => {
+      this.setState({
+        file: file,
+        base64: reader.result
+      });
+			// this.handleSubmit()
+			console.log(this.state.base64);
+    };
+  }
 
 	// deleteBack = async param => {
 	// 	var url = '/api/decks/' + this.state.id + '/cards';
@@ -99,7 +119,7 @@ class CreateCard extends Component {
 				type: this.state.selectedOption.value,
 				meaning: document.getElementById('meaning').value,
 				example: document.getElementById('example').value,
-				image: document.getElementById('image').files[0]
+				image: this.state.base64
 			}
 		};
 		// console.log(JSON.stringify(data));
@@ -173,10 +193,18 @@ class CreateCard extends Component {
 						className="content-back-side"
 						onClick={() => this.deleteBack(back.id)}
 					>
-						<p className="meaning">{back.meaning}</p>
-						<p className="type">{back.type}</p>
-						<p className="example">{back.example}</p>
-						<img src={image} className={image === null ? 'none-display' : ''} />
+						<div className="info">
+							<p className="meaning">{back.meaning}</p>
+							<p className="type">{back.type}</p>
+							<p className="example">{back.example}</p>
+						</div>
+						<img
+							src={back.image}
+							className={classnames(
+								'image',
+								back.image === null ? 'none-display' : ''
+							)}
+						/>
 					</div>
 				);
 			});
@@ -207,7 +235,7 @@ class CreateCard extends Component {
 						<label for="fname">Example</label>
 						<input type="text" id="example" name="dname" />
 						<label for="fname">Image</label>
-						<input type="file" id="image" />
+						<input type="file" id="image" onChange={this.handleImageChange}/>
 						<hr />
 						<Button
 							className="button-submit"

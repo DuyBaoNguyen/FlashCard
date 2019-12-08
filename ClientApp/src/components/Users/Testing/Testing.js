@@ -161,10 +161,18 @@ class Testing extends Component {
 				// console.log(back.image);
 				return (
 					<div className="content-back-side">
-						<p className="meaning">{back.meaning}</p>
-						<p className="type">{back.type}</p>
-						<p className="example">{back.example}</p>
-						<img src={back.image} className={back.image === null ? 'none-display' : ''}/> 
+						<div className="info">
+							<p className="meaning">{back.meaning}</p>
+							<p className="type">{back.type}</p>
+							<p className="example">{back.example}</p>
+						</div>
+						<img
+							src={back.image}
+							className={classnames(
+								'image',
+								back.image === null ? 'none-display' : ''
+							)}
+						/>
 					</div>
 				);
 			});
@@ -188,7 +196,9 @@ class Testing extends Component {
 				>
 					<div className="content">
 						<div className="content-front">
-							<p>{this.vocab !== undefined ? this.vocab.front : 'No card left'}</p>
+							<p>
+								{this.vocab !== undefined ? this.vocab.front : 'No card left'}
+							</p>
 						</div>
 						<div
 							className={classnames(
