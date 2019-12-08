@@ -156,12 +156,15 @@ class Testing extends Component {
 			console.log(this.vocab);
 
 			var backSide = this.vocab.backs.map(back => {
+				let image = new Image();
+				image.src = back.image;
+				// console.log(back.image);
 				return (
 					<div className="content-back-side">
 						<p className="meaning">{back.meaning}</p>
 						<p className="type">{back.type}</p>
 						<p className="example">{back.example}</p>
-						<p className="image">{back.image}</p>
+						<img src={back.image} className={back.image === null ? 'none-display' : ''}/> 
 					</div>
 				);
 			});

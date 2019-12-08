@@ -49,6 +49,7 @@ class DeckDetail extends Component {
 			headers: !token ? {} : { Authorization: `Bearer ${token}` }
 		});
 		const data = await response.json();
+		console.log(token);
 		this.setState({ deckData: data, loading: false });
 	};
 
@@ -206,7 +207,8 @@ class DeckDetail extends Component {
 	};
 
 	render() {
-		console.log(this.props.match.params.deckId);
+		// console.log(this.props.match.params.deckId);
+		// console.log();
 		var date = new Date(this.state.deckData.createdDate);
 		var testURL = '/testing/' + this.state.id.toString();
 		var addCardsURL = '/addcards/' + this.state.id.toString();
@@ -241,7 +243,9 @@ class DeckDetail extends Component {
 							<div class="deck-content-info-line">
 								Deck name: {this.state.deckData.name}
 							</div>
-							<div class="deck-content-info-line">Number of cards:</div>
+							<div class="deck-content-info-line">Number of cards: {this.state.deckData.totalCards}</div>
+							<div class="deck-content-info-line">Description: {this.state.deckData.description}</div>
+
 							<div class="deck-content-info-line">
 								Date created: {date.toLocaleDateString()}
 							</div>

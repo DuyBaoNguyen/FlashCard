@@ -98,7 +98,8 @@ class CreateCard extends Component {
 			back: {
 				type: this.state.selectedOption.value,
 				meaning: document.getElementById('meaning').value,
-				example: document.getElementById('example').value
+				example: document.getElementById('example').value,
+				image: document.getElementById('image').files[0]
 			}
 		};
 		// console.log(JSON.stringify(data));
@@ -165,6 +166,8 @@ class CreateCard extends Component {
 	render() {
 		if (this.state.cardData.backs !== undefined) {
 			var backSide = this.state.cardData.backs.map(back => {
+				let image = new Image();
+				image.src = back.image;
 				return (
 					<div
 						className="content-back-side"
@@ -173,7 +176,7 @@ class CreateCard extends Component {
 						<p className="meaning">{back.meaning}</p>
 						<p className="type">{back.type}</p>
 						<p className="example">{back.example}</p>
-						<p className="image">{back.image}</p>
+						<img src={image} className={image === null ? 'none-display' : ''} />
 					</div>
 				);
 			});
@@ -182,13 +185,13 @@ class CreateCard extends Component {
 		return (
 			<div>
 				<div className="deck-back">
-					<a href='/'>Back</a>
+					<a href="/">Back</a>
 				</div>
 				<div className="create-cards">
 					{/* <a href="#">Done</a> */}
 					<div className="create-cards-info">
 						<label for="fname">Front</label>
-						<input type="text" id="front" name="dname"/>
+						<input type="text" id="front" name="dname" />
 						<hr />
 						<label for="fname">Category</label>
 						<Select
@@ -203,6 +206,8 @@ class CreateCard extends Component {
 						<input type="text" id="meaning" name="dname" />
 						<label for="fname">Example</label>
 						<input type="text" id="example" name="dname" />
+						<label for="fname">Image</label>
+						<input type="file" id="image" />
 						<hr />
 						<Button
 							className="button-submit"
