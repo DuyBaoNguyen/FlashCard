@@ -50,7 +50,7 @@ namespace FlashCard.Controllers
                             .Include(d => d.CardAssignments)
                             .Include(d => d.Proposals)
                                 .ThenInclude(p => p.User)
-                            .Where(d => d.OwnerId == user.Id)
+                            .Where(d => d.OwnerId == user.Id && (!d.Public || d.Approved))
                             .OrderBy(d => d.Name)
                             .AsNoTracking();
 
@@ -127,7 +127,7 @@ namespace FlashCard.Controllers
                             .Include(d => d.Tests)
                                 .ThenInclude(t => t.TestedCards)
                             .AsNoTracking()
-                            .FirstOrDefaultAsync(d => d.Id == id);
+                            .FirstOrDefaultAsync(d => d.Id == id && (!d.Public || d.Approved));
 
             if (deck == null)
             {
