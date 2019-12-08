@@ -30,6 +30,138 @@ namespace FlashCard.Controllers
             this.dbContext = dbContext;
         }
 
+        [HttpGet("decks")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        public async Task<ActionResult<IEnumerable<DeckApiModel>>> GetAllProposedDecks()
+        {
+            var userId = UserService.GetUserId(User);
+            var admin = await UserService.GetAdmin(dbContext);
+
+            if (admin.Id != userId)
+            {
+                return Forbid();
+            }
+
+            var decks = dbContext.Decks
+                            .Include(d => d.Category)
+                            .Include(d => d.Owner)
+                            .Include(d => d.Author)
+                            .Include(d => d.CardAssignments)
+                            .Include(d => d.Proposals)
+                                .ThenInclude(p => p.User)
+                            .Where(d => d.OwnerId == admin.Id && d.Public && !d.Approved)
+                            .OrderBy(d => d.Name)
+                            .AsNoTracking();
+
+            var deckmodels = new List<DeckApiModel>();
+
+            foreach (var deck in decks)
+            {
+                deckmodels.Add(new DeckApiModel(deck));
+            }
+
+            return deckmodels;
+        }
+
+        [HttpGet("decks/{id}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        public async Task<ActionResult<DeckApiModel>> GetProposedDeck(int id)
+        {
+            var proposalsCount = await dbContext.Proposals
+                                    .Where(p => p.DeckId == id && !p.Approved)
+                                    .CountAsync();
+            var deck = await dbContext.Decks
+                         .Include(d => d.Category)
+                         .Include(d => d.Owner)
+                         .Include(d => d.Author)
+                         .Include(d => d.CardAssignments)
+                             .ThenInclude(ca => ca.Card)
+                                 .ThenInclude(c => c.Backs)
+                                     .ThenInclude(b => b.Author)
+                         .Include(d => d.Proposals)
+                             .ThenInclude(p => p.User)
+                         .AsNoTracking()
+                         .FirstOrDefaultAsync(d => d.Id == id);
+
+            if (deck == null || proposalsCount == 0 && (!deck.Public || deck.Approved))
+            {
+                return NotFound();
+            }
+
+            var user = await UserService.GetUser(userManager, User);
+            var admin = await UserService.GetAdmin(dbContext);
+            var userIsInUserRole = await userManager.IsInRoleAsync(user, Roles.User);
+
+            if (userIsInUserRole && deck.AuthorId != user.Id)
+            {
+                return Forbid();
+            }
+
+            // Get list of cards of the deck
+            var cardmodels = new List<CardApiModel>();
+
+            foreach (var cardAssignment in deck.CardAssignments)
+            {
+                var cardmodel = new CardApiModel(cardAssignment.Card);
+                var backs = cardAssignment.Card.Backs.Where(b => b.OwnerId == admin.Id && b.Approved);
+
+                foreach (var back in backs)
+                {
+                    cardmodel.Backs.Add(new BackApiModel(back));
+                }
+
+                cardmodels.Add(cardmodel);
+            }
+            cardmodels.Sort(CardComparison.CompareByFront);
+
+            var deckmodel = new DeckApiModel(deck);
+            deckmodel.Cards = cardmodels;
+
+            return deckmodel;
+        }
+
+        [HttpPost("decks")]
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<ActionResult<DeckApiModel>> ProposeDeck([FromBody] DeckRequestModel deckModel)
+        {
+            var category = await dbContext.Categories.FirstOrDefaultAsync(c => c.Id == deckModel.Category.Id);
+
+            if (category == null)
+            {
+                ModelState.AddModelError("Category.Id", "The Category Id is not provided or does not exist.");
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var user = await UserService.GetUser(userManager, User);
+            var admin = await UserService.GetAdmin(dbContext);
+            var userIsInAdminRole = await userManager.IsInRoleAsync(user, Roles.Administrator);
+
+            var deck = new Deck()
+            {
+                Name = deckModel.Name,
+                Description = deckModel.Description,
+                Public = true,
+                Approved = userIsInAdminRole,
+                CreatedDate = DateTime.Now,
+                LastModified = DateTime.Now,
+                Category = category,
+                OwnerId = admin.Id,
+                AuthorId = user.Id
+            };
+
+            dbContext.Decks.Add(deck);
+            await dbContext.SaveChangesAsync();
+
+            return CreatedAtAction(nameof(GetProposedDeck), new { id = deck.Id }, new DeckApiModel(deck));
+        }
+
         [HttpGet("cards")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
@@ -130,7 +262,8 @@ namespace FlashCard.Controllers
 
             var image = ImageService.GetImage(cardModel.Back.Image);
             var admin = await UserService.GetAdmin(dbContext);
-            var userId = UserService.GetUserId(User);
+            var user = await UserService.GetUser(userManager, User);
+            var userIsInAdminRole = await userManager.IsInRoleAsync(user, Roles.Administrator);
 
             if (card.CardOwners.Where(co => co.CardId == card.Id && co.UserId == admin.Id).Count() == 0)
             {
@@ -145,9 +278,10 @@ namespace FlashCard.Controllers
                 Image = image?.Data,
                 ImageType = image?.Type,
                 Public = true,
+                Approved = userIsInAdminRole,
                 LastModified = DateTime.Now,
                 OwnerId = admin.Id,
-                AuthorId = userId
+                AuthorId = user.Id
             });
 
             await dbContext.SaveChangesAsync();
