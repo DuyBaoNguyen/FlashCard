@@ -46,14 +46,14 @@ class Info extends Component {
 						</div>
 					</div>
 					<div className="info-field-item">
-						<div className="info-field-item-white">Failed cards todays:</div>
+						<div className="info-field-item-white">Failed cards today:</div>
 						<div className="info-field-item-orange">
 							{this.props.data.failedCardsToday}
 						</div>
 					</div>
 					<div className="info-field-item">
 						<div className="info-field-item-white">
-							Average grade today percent:
+							Average grade percent today:
 						</div>
 						<div className="info-field-item-orange">
 							{averageToday}
