@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import authService from '../../api-authorization/AuthorizeService';
 import MaterialTable from 'material-table';
 import Dashboard from '../Dashboard/Dashboard';
-import { BrowserRouter as Router, Redirect } from 'react-router-dom';
+import { BrowserRouter as Router, Redirect, Link } from 'react-router-dom';
 import EditCard from '../EditCard/EditCard';
 import { hashHistory } from 'react-router';
 
@@ -260,7 +260,7 @@ class AddCards extends Component {
 		}
 		return (
 			<div>
-				<a href={'/decks/' + this.props.match.params.deckId}>Done</a>
+				<Link to={'/decks/' + this.props.match.params.deckId}>Done</Link>
 				<div className="add-field">
 					<div className="deck-table">{table}</div>
 					<div className="deck-cards">{cardSource}</div>

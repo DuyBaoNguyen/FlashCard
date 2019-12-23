@@ -5,6 +5,9 @@
 		display: flex;
 		justify-content: flex-start;
 		align-items: baseline;
+		h6 {
+			width: auto;
+		}
 		.menu-button {
 			margin-left: 15px;
 			font-size: 14px;
@@ -20,6 +23,9 @@
 			&:hover {
 				transition: 0.3s;
 				opacity: 0.7;
+			}
+			p {
+				cursor: pointer;
 			}
 		}
 	}

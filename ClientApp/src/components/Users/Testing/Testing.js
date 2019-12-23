@@ -187,7 +187,7 @@ class Testing extends Component {
 		return (
 			<div className="field">
 				<div className="back-button">
-					<a href="#">Back</a>
+					<Link to={'/decks/' + this.props.match.params.deckId}>Back</Link>
 				</div>
 				<div
 					className={classnames(

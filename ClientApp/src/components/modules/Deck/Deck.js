@@ -16,16 +16,16 @@ import './Deck.css';
 class Deck extends Component {
 	constructor(props) {
 		super(props);
-		this.state = {
-			redirect: false
-		};
+		// this.state = {
+		// 	redirect: false
+		// };
 	}
 
-	redirectDeckDetails = () => {
-		this.setState({
-			redirect: true
-		});
-	};
+	// redirectDeckDetails = () => {
+	// 	this.setState({
+	// 		redirect: true
+	// 	});
+	// };
 
 	render() {
 		var deckURL = '/decks/' + this.props.deck.id;
@@ -36,28 +36,30 @@ class Deck extends Component {
 			fromAdminLabel = <h6 class="w-auto"><span class="badge badge-success">From Admin</span></h6>
 		}
 
-		if (this.state.redirect === true) {
-			return <Redirect to={deckURL} Component={DeckDetail} />;
-		}
+		// if (this.state.redirect === true) {
+		// 	return <Redirect to={deckURL} Component={DeckDetail} />;
+		// }
 		return (
-			<div className="menu-deck" onClick={this.redirectDeckDetails}>
-				<div className="menu-deck-info">
-					<div class="d-flex justify-content-between align-content-center">
-						<h6 class="w-auto">{this.props.deck.name}</h6>
-						{fromAdminLabel}
-					</div>
-					<hr />
-					<div className="menu-deck-info-line">
-						<img className="icons"
-						src={CardIcon} width="21px" height="16px" />
-						<p>{this.props.deck.totalCards}</p>
-					</div>
-					<div className="menu-deck-info-line">
-						<img className="icons" src={DateIcon} width="21px" height="16px" />
-						<p>{date.toLocaleDateString()}</p>
+			<Link to={deckURL} className="text-decoration-none">
+				<div className="menu-deck">
+					<div className="menu-deck-info">
+						<div class="d-flex justify-content-between align-content-center">
+							<h6 class="w-auto">{this.props.deck.name}</h6>
+							{fromAdminLabel}
+						</div>
+						<hr />
+						<div className="menu-deck-info-line">
+							<img className="icons"
+								src={CardIcon} width="21px" height="16px" />
+							<p>{this.props.deck.totalCards}</p>
+						</div>
+						<div className="menu-deck-info-line">
+							<img className="icons" src={DateIcon} width="21px" height="16px" />
+							<p>{date.toLocaleDateString()}</p>
+						</div>
 					</div>
 				</div>
-			</div>
+			</Link>
 		);
 	}
 }

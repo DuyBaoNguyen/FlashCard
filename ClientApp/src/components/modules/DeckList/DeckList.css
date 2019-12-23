@@ -15,6 +15,10 @@
           align-items: baseline;
 }
 
+.menu .menu-title h6 {
+  width: auto;
+}
+
 .menu .menu-title .menu-button {
   margin-left: 15px;
   font-size: 14px;
@@ -38,6 +42,10 @@
   -webkit-transition: 0.3s;
   transition: 0.3s;
   opacity: 0.7;
+}
+
+.menu .menu-title .menu-button p {
+  cursor: pointer;
 }
 
 .menu .menu-decks {

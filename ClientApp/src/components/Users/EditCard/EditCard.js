@@ -5,6 +5,7 @@ import MaterialTable from 'material-table';
 import Select from 'react-select';
 import Button from '@material-ui/core/Button';
 import Swal from 'sweetalert2';
+import { Link } from 'react-router-dom';
 import classnames from 'classnames';
 
 import './EditCard.css';
@@ -219,7 +220,7 @@ class EditCard extends Component {
 		return (
 			<div>
 				<div className="deck-back">
-					<a href="/">Back</a>
+					<Link to="/">Back</Link>
 				</div>
 				<div className="create-cards">
 					{/* <a href="#">Done</a> */}
