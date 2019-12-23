@@ -22,4 +22,9 @@ body {
 .user-detail .user-detail-info .user-detail-info-data {
   width: 90%;
 }
+
+.user-management {
+  padding-top: 30px;
+  padding-bottom: 30px;
+}
 /*# sourceMappingURL=AdminUsers.css.map */

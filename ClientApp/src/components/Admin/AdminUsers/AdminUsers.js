@@ -70,7 +70,10 @@ class AdminUsers extends Component {
 							</div>
 						</div>
           )
-        }}
+				}}
+				options={{
+					pageSize: 10
+				}}
       />
     )
 	};
@@ -80,7 +83,7 @@ class AdminUsers extends Component {
 		// console.log();
 	let table = this.table();
 		return (
-			<div>
+			<div className="user-management">
 				{/* <h5>User management</h5>
 				<hr /> */}
 				{table}
