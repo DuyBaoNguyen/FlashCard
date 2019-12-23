@@ -23,6 +23,7 @@ class AdminUsers extends Component {
 	}
 
 	getUsers = async () => {
+		console.log("hihi");
 		var url = '/api/users';
 		const token = await authService.getAccessToken();
 		const response = await fetch(url, {

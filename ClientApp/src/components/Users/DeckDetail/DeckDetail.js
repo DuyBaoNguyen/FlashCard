@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import authService from '../../api-authorization/AuthorizeService';
 import { BrowserRouter as Router, Redirect, Link } from 'react-router-dom';
 import Swal from 'sweetalert2';
+import Switch from 'react-switch';
 import './DeckDetail.css';
 import Info from '../../modules/Info/Info';
 import Testing from '../Testing/Testing';
@@ -15,6 +16,7 @@ class DeckDetail extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
+			checked: false,
 			role: '',
 			id: '',
 			deckData: {},
@@ -186,6 +188,10 @@ class DeckDetail extends Component {
 		});
 	};
 
+	handleChange = checked => {
+		this.setState({ checked });
+	};
+
 	table = () => {
 		var data = this.transData();
 		var title = 'Cards';
@@ -269,9 +275,10 @@ class DeckDetail extends Component {
 								Date created: {date.toLocaleDateString()}
 							</div>
 						</div>
-						<Info className={classnames(
-										this.state.role === 'administrator' ? 'none-display' : ''
-									)}
+						<Info
+							className={classnames(
+								this.state.role === 'administrator' ? 'none-display' : ''
+							)}
 							data={
 								this.state.statisticsData != undefined
 									? this.state.statisticsData
@@ -288,8 +295,19 @@ class DeckDetail extends Component {
 								</p>
 								<div
 									className={classnames(
+										this.state.role === 'administrator' ? '' : 'none-display'
+									)}
+								ß>
+									<Switch
+										onChange={this.handleChange}
+										checked={this.state.checked}
+									/>{' '}
+									Public deck
+								</div>
+								<div
+									className={classnames(
 										'deck-button',
-										this.state.role === 'administrator' ? 'none-display' : '', 
+										this.state.role === 'administrator' ? 'none-display' : '',
 										this.state.deckData.totalCards !== 0 ? '' : 'none-display'
 									)}
 									onClick={this.redirectTesting}
