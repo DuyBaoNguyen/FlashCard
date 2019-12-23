@@ -65,6 +65,14 @@
 		}
 		.deck-content-advanced {
 			width: 30%;
+			.public {
+				display: flex;
+				align-items: center;
+				.switch {
+					margin-right: 15px;
+				}
+			}
+			
 			.deck-content-advanced-share {
 				margin-top: 100px;
 			}

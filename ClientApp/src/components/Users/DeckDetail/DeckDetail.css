@@ -86,6 +86,19 @@
   width: 30%;
 }
 
+.deck-fields .deck-content .deck-content-advanced .public {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+.deck-fields .deck-content .deck-content-advanced .public .switch {
+  margin-right: 15px;
+}
+
 .deck-fields .deck-content .deck-content-advanced .deck-content-advanced-share {
   margin-top: 100px;
 }

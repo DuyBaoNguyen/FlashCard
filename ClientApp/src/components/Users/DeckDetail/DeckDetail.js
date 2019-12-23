@@ -16,7 +16,7 @@ class DeckDetail extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			checked: false,
+			checked: null,
 			role: '',
 			id: '',
 			deckData: {},
@@ -55,7 +55,7 @@ class DeckDetail extends Component {
 		});
 		const data = await response.json();
 		console.log(token);
-		this.setState({ deckData: data, loading: false });
+		this.setState({ deckData: data, loading: false, checked: data.public });
 	};
 
 	getCurrentUser = async () => {
@@ -114,7 +114,7 @@ class DeckDetail extends Component {
 				};
 				mockData.push(oldVocab);
 			});
-			console.log(mockData);
+			// console.log(mockData);
 			return mockData;
 		}
 	};
@@ -190,8 +190,36 @@ class DeckDetail extends Component {
 
 	handleChange = checked => {
 		this.setState({ checked });
+		this.updatePublic(checked);
 	};
 
+	updatePublic = async(checked) => {
+		var url = '/api/decks/' + this.state.id;
+		const token = await authService.getAccessToken();
+		const data = {
+			name: this.state.deckData.name,
+			description: this.state.deckData.description,
+			category: {
+				id: this.state.deckData.category.id
+			},
+			public: checked
+		}
+		
+		try {
+			const response = await fetch(url, {
+				method: 'PUT',
+				body: JSON.stringify(data),
+				headers: {
+					Authorization: `Bearer ${token}`,
+					'Content-Type': 'application/json'
+				}
+			});
+			const json = await response;
+			console.log('Success:', JSON.stringify(json));
+		} catch (error) {
+			console.error('Error:', error);
+		}
+	}
 	table = () => {
 		var data = this.transData();
 		var title = 'Cards';
@@ -294,11 +322,12 @@ class DeckDetail extends Component {
 									<i class="far fa-trash-alt"></i> Delete deck
 								</p>
 								<div
-									className={classnames(
+									className={classnames('public',
 										this.state.role === 'administrator' ? '' : 'none-display'
 									)}
-								ß>
+								>
 									<Switch
+									className='switch'
 										onChange={this.handleChange}
 										checked={this.state.checked}
 									/>{' '}
