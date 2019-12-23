@@ -50,12 +50,7 @@ class CardManagement extends Component {
 					id: vocab.id,
 					front: vocab.front,
 					backs: vocab.backs
-						.map((back, index2) => {
-							if (!back.fromAdmin) {
-								return back.meaning;
-							}
-							return back.meaning + 'From admin';
-						})
+						.map((back, index2) => back.meaning)
 						.join(' - ')
 				};
 				mockData.push(oldVocab);
