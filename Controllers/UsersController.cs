@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net.Mime;
 using System.Threading.Tasks;
 using FlashCard.ApiModels;
@@ -92,6 +94,53 @@ namespace FlashCard.Controllers
                 Role = roles[0],
                 Image = ImageService.GetBase64(user.Avatar, user.ImageType)
             };
+        }
+
+
+        [HttpDelete("{id}")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<ActionResult<UserApiModel>> DeleteById(string id)
+        {
+            var currentUser = await UserService.GetUser(userManager, User);
+
+            // Return Forbidden if user is in User role
+            if (await userManager.IsInRoleAsync(currentUser, Roles.User))
+            {
+                return Forbid();
+            }
+
+            var deletedUser = await dbContext.Users.FirstOrDefaultAsync(u => u.Id == id);
+
+            if (deletedUser == null)
+            {
+                return NotFound();
+            }
+            // Return Forbidden if deleted user is admin
+            if (await userManager.IsInRoleAsync(deletedUser, Roles.Administrator))
+            {
+                return Forbid();
+            }
+
+            var decks = dbContext.Decks.Where(d => d.OwnerId == deletedUser.Id);
+            var backs = dbContext.Backs.Where(b => b.OwnerId == deletedUser.Id);
+            var cardIds = await backs.Select(b => b.CardId)
+                              .Distinct()
+                              .ToArrayAsync<int>();
+
+            dbContext.Users.RemoveRange(deletedUser);
+            dbContext.Decks.RemoveRange(decks);
+            dbContext.Backs.RemoveRange(backs);
+
+            await dbContext.SaveChangesAsync();
+
+            dbContext.Cards.RemoveRange(dbContext.Cards
+                                            .Include(c => c.Backs)
+                                            .Where(c => cardIds.Contains(c.Id) && c.Backs.Count == 0));
+
+            await dbContext.SaveChangesAsync();
+            return NoContent();
         }
     }
 }
