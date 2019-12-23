@@ -153,6 +153,7 @@ namespace FlashCard.Controllers
 
         [HttpGet("{front}/download")]
         [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> DownloadByFront(string front)
         {
             var userId = UserService.GetUserId(User);
