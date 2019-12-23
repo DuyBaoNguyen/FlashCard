@@ -3,6 +3,7 @@ using System.Net.Mime;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using FlashCard.ApiModels;
+using FlashCard.Data;
 using FlashCard.Models;
 using FlashCard.RequestModels;
 using FlashCard.Services;
@@ -20,11 +21,14 @@ namespace FlashCard.Controllers
     {
         private UserManager<ApplicationUser> userManager;
         private SignInManager<ApplicationUser> signInManager;
+        private ApplicationDbContext dbContext;
 
-        public CurrentUserController(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager)
+        public CurrentUserController(UserManager<ApplicationUser> userManager,
+            SignInManager<ApplicationUser> signInManager, ApplicationDbContext dbContext)
         {
             this.userManager = userManager;
             this.signInManager = signInManager;
+            this.dbContext = dbContext;
         }
 
         [HttpGet]
@@ -50,6 +54,23 @@ namespace FlashCard.Controllers
             };
         }
 
+        [HttpPut]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> Update([FromBody] UserRequestModel userModel)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var user = await UserService.GetUser(userManager, User);
+            user.Name = userModel.DisplayName;
+
+            await dbContext.SaveChangesAsync();
+            return NoContent();
+        }
+
         [HttpPut("changepassword")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -62,7 +83,7 @@ namespace FlashCard.Controllers
 
             var user = await UserService.GetUser(userManager, User);
             var result = await userManager.ChangePasswordAsync(user, passwordModel.OldPassword, passwordModel.NewPassword);
-            
+
             if (!result.Succeeded)
             {
                 foreach (var error in result.Errors)
@@ -73,7 +94,7 @@ namespace FlashCard.Controllers
             }
 
             await signInManager.RefreshSignInAsync(user);
-            
+
             return NoContent();
         }
     }
