@@ -29,28 +29,29 @@
 			}
 		}
 	}
-	.menu-decks {
-		max-width: 100%;
-		display: grid;
-		grid-row-gap: 20px;
-		column-gap: 20px;
-		grid-template-columns: auto auto auto;
-		.menu-deck {
-			padding: 17px;
-			// width: 350px;
-			height: 136px;
-			border-radius: 10px;
-			border: solid 1px #dbdbdb;
-			background-color: #ffffff;
-			display: flex;
-			transition: 0.3s;
-			&:hover {
-				transition: 0.3s;
-				transform: translateY(-10px);
-				border: solid 1px #007bff;
-			}
 
-			
+	.menu-decks {
+		display: flex;
+		flex-wrap: wrap;
+		margin-right: -20px;
+		.flex-item {
+			width: 33.33%;
+			padding-right: 20px;
+			margin-bottom: 20px;
+			.menu-deck {
+				padding: 17px;
+				height: 136px;
+				border-radius: 10px;
+				border: solid 1px #dbdbdb;
+				background-color: #ffffff;
+				display: flex;
+				transition: 0.3s;
+				&:hover {
+					transition: 0.3s;
+					transform: translateY(-10px);
+					border: solid 1px #007bff;
+				}
+			}
 		}
 	}
 }

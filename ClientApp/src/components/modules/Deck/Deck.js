@@ -40,7 +40,7 @@ class Deck extends Component {
 		// 	return <Redirect to={deckURL} Component={DeckDetail} />;
 		// }
 		return (
-			<Link to={deckURL} className="text-decoration-none">
+			<Link to={deckURL} className="text-decoration-none flex-item">
 				<div className="menu-deck">
 					<div className="menu-deck-info">
 						<div class="d-flex justify-content-between align-content-center">
