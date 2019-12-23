@@ -105,6 +105,9 @@
 
 .table {
 	margin-top: 20px;
+	td {
+		border-top: none;
+	}
 }
 
 .deck-button {
@@ -142,4 +145,9 @@
 
 .MuiTableCell-footer {
 	border-bottom: none !important;
+}
+
+.MuiTableCell-head {
+	border-top: none !important;
+	border-bottom: 1px solid #dee2e6 !important;
 }
