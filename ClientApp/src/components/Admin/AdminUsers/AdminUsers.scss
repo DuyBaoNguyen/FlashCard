@@ -1,3 +1,21 @@
 body {
 	font-family: 'Roboto';
 }
+
+.user-detail {
+	padding: 20px;
+	.user-detail-info {
+		display: flex;
+		margin-bottom: 10px;
+		// grid-template-columns: auto auto auto;
+		.user-detail-info-title {
+			width: 15%;
+			font-weight: 600;
+			color: #007bff;
+		}
+		.user-detail-info-data {
+			width: 90%;
+			// text-align: end;
+		}
+	}
+}

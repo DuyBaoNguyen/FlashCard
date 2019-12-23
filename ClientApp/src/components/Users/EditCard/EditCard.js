@@ -247,7 +247,7 @@ class EditCard extends Component {
 						<label for="fname">Example</label>
 						<input type="text" id="example" name="dname" />
 						<label for="fname">Image</label>
-						<input type="file" id="image" onChange={this.handleImageChange}/>
+						<input type="file" id="image" accept='image/*' onChange={this.handleImageChange}/>
 						<hr />
 						<Button
 							className="button-submit"

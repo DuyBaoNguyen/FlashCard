@@ -105,7 +105,7 @@ class DeckDetail extends Component {
 
 	onClickDeleteDeck = async param => {
 		Swal.fire({
-			title: 'Are you sure to deelte this deck?',
+			title: 'Are you sure to delete this deck?',
 			text: "You won't be able to revert this!",
 			icon: 'warning',
 			showCancelButton: true,
@@ -174,7 +174,7 @@ class DeckDetail extends Component {
 
 	table = () => {
 		var data = this.transData();
-		var title = 'Card in deck: ' + this.state.deckData.name;
+		var title = 'Cards';
 		return (
 			<MaterialTable
 				title={title}

@@ -22,9 +22,7 @@ import AddCards from './components/Users/AddCards/AddCards';
 import CreateDeck from './components/Users/CreateDeck/CreateDeck';
 import CreateCard from './components/Users/CreateCard/CreateCard';
 import EditCard from './components/Users/EditCard/EditCard';
-
-
-
+import AdminUsers from './components/Admin/AdminUsers/AdminUsers';
 
 export default class App extends Component {
 	static displayName = App.name;
@@ -41,6 +39,9 @@ export default class App extends Component {
 					<AuthorizeRoute exact path="/createcard" component={CreateCard} />
 					<AuthorizeRoute exact path="/editcard/:front" component={EditCard} />
 					<AuthorizeRoute exact path='/cards' component={CardManagement} />
+
+					{/* Admin */}
+					<AuthorizeRoute exact path='/users' component={AdminUsers} />
 					<Route
 						path={ApplicationPaths.ApiAuthorizationPrefix}
 						component={ApiAuthorizationRoutes}
