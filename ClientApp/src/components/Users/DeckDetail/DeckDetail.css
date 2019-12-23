@@ -165,4 +165,8 @@
   text-align: center;
   color: #ffffff;
 }
+
+.MuiTableCell-footer {
+  border-bottom: none !important;
+}
 /*# sourceMappingURL=DeckDetail.css.map */

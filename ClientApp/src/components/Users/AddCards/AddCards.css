@@ -3,26 +3,30 @@ body {
 }
 
 .add-field {
-  max-width: 100%;
-  display: -ms-grid;
-  display: grid;
-  grid-row-gap: 20px;
-  -webkit-column-gap: 20px;
-          column-gap: 20px;
-  -ms-grid-columns: auto auto auto;
-      grid-template-columns: auto auto auto;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
   padding-top: 30px;
-  width: 100%;
-  min-height: 100vh;
+  padding-bottom: 30px;
+  min-height: none;
   height: auto;
   background-color: white;
+  margin-right: -20px;
+  width: auto;
+  max-width: none;
 }
 
 .add-field .deck-table {
-  width: 100%;
+  width: 50%;
+  padding-right: 20px;
 }
 
 .add-field .deck-cards {
-  width: 100%;
+  width: 50%;
+  padding-right: 20px;
+}
+
+.add-field .MuiTableCell-footer {
+  border-bottom: none;
 }
 /*# sourceMappingURL=AddCards.css.map */
