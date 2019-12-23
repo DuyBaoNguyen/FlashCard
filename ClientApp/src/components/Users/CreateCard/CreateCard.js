@@ -4,6 +4,7 @@ import authService from '../../api-authorization/AuthorizeService';
 import MaterialTable from 'material-table';
 import Select from 'react-select';
 import Button from '@material-ui/core/Button';
+import { Link } from 'react-router-dom';
 import classnames from 'classnames';
 
 // import {hashHistory} from 'react-router';
@@ -213,7 +214,7 @@ class CreateCard extends Component {
 		return (
 			<div>
 				<div className="deck-back">
-					<a href="/">Back</a>
+					<Link to="/">Back</Link>
 				</div>
 				<div className="create-cards">
 					{/* <a href="#">Done</a> */}

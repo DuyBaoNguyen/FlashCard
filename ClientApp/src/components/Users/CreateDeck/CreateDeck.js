@@ -6,7 +6,7 @@ import AddCards from '../AddCards/AddCards';
 
 import Button from '@material-ui/core/Button';
 import Select from 'react-select';
-import { BrowserRouter as Router, Redirect } from 'react-router-dom';
+import { BrowserRouter as Router, Redirect, Link } from 'react-router-dom';
 
 import './CreateDeck.css';
 
@@ -121,7 +121,7 @@ class CreateDeck extends Component {
 		}
 		return (
 			<div>
-				<a href="/">Back</a>
+				<Link to="/">Back</Link>
 				<div className="add-deck-field">
 					<div className="field-content">
 						<form action="/action_page.php">

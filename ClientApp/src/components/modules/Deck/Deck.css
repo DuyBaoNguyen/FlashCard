@@ -15,6 +15,10 @@
   color: #007bff;
 }
 
+.menu-deck-info .badge {
+  font-weight: 500;
+}
+
 .menu-deck-info .menu-deck-info-line {
   height: 16px;
   margin-top: 10px;
