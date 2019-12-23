@@ -228,6 +228,10 @@ class DeckDetail extends Component {
 		var testURL = '/testing/' + this.state.id.toString();
 		var addCardsURL = '/addcards/' + this.state.id.toString();
 		var editCardURL = '/editcard/' + this.state.front;
+		let info;
+		if (!!this.state.role && this.state.role === 'user') {
+			info = <Info data={this.state.statisticsData != undefined ? this.state.statisticsData : null} />
+		}
 
 		if (this.state.redirectTesting === true) {
 			return <Redirect to={testURL} Component={Testing} />;
@@ -269,7 +273,7 @@ class DeckDetail extends Component {
 								Date created: {date.toLocaleDateString()}
 							</div>
 						</div>
-						<Info className={classnames(
+						{/* <Info className={classnames(
 										this.state.role === 'administrator' ? 'none-display' : ''
 									)}
 							data={
@@ -277,7 +281,8 @@ class DeckDetail extends Component {
 									? this.state.statisticsData
 									: null
 							}
-						/>
+						/> */}
+						{info}
 						<div className="deck-content-advanced">
 							<div class="deck-content-advanced-features">
 								<div class="deck-title">Features</div>
