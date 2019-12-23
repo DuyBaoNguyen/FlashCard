@@ -206,7 +206,7 @@ class DeckDetail extends Component {
 					},
 					{
 						icon: 'delete',
-						tooltip: 'Delete card',
+						tooltip: 'Remove card from deck',
 						// eslint-disable-next-line no-restricted-globals
 						onClick: (event, rowData) => this.deleteCard(rowData.id)
 					},

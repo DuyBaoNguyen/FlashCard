@@ -1,27 +1,34 @@
 using System;
 using System.Net.Mime;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using FlashCard.ApiModels;
 using FlashCard.Models;
+using FlashCard.RequestModels;
 using FlashCard.Services;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FlashCard.Controllers
 {
-    [ApiController]
+    [Authorize]
     [Route("api/[controller]")]
     [Produces(MediaTypeNames.Application.Json)]
     public class CurrentUserController : ControllerBase
     {
         private UserManager<ApplicationUser> userManager;
+        private SignInManager<ApplicationUser> signInManager;
 
-        public CurrentUserController(UserManager<ApplicationUser> userManager)
+        public CurrentUserController(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager)
         {
             this.userManager = userManager;
+            this.signInManager = signInManager;
         }
 
         [HttpGet]
+        [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<CurrentUserApiModel> Get()
         {
             var user = await UserService.GetUser(userManager, User);
@@ -41,6 +48,33 @@ namespace FlashCard.Controllers
                 Role = roles[0],
                 Image = ImageService.GetBase64(user.Avatar, user.ImageType)
             };
+        }
+
+        [HttpPut("changepassword")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> ChangePassword([FromBody] PasswordRequestModel passwordModel)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var user = await UserService.GetUser(userManager, User);
+            var result = await userManager.ChangePasswordAsync(user, passwordModel.OldPassword, passwordModel.NewPassword);
+            
+            if (!result.Succeeded)
+            {
+                foreach (var error in result.Errors)
+                {
+                    ModelState.AddModelError("", error.Description);
+                }
+                return BadRequest(ModelState);
+            }
+
+            await signInManager.RefreshSignInAsync(user);
+            
+            return NoContent();
         }
     }
 }

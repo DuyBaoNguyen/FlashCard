@@ -26,7 +26,7 @@ class EditCard extends Component {
 				{ value: 'verb', label: 'Verb' },
 				{ value: 'adjective', label: 'Adjective' },
 				{ value: 'adverb', label: 'Adverb' },
-				{ value: 'preposition', label: 'Prepositionn' }
+				{ value: 'preposition', label: 'Preposition' }
 			]
 		};
 	}
