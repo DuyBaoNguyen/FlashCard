@@ -15,6 +15,7 @@ class DeckDetail extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
+			role: '',
 			id: '',
 			deckData: {},
 			front: '',
@@ -37,6 +38,7 @@ class DeckDetail extends Component {
 	componentDidMount() {
 		this.getDeckData();
 		this.getStatistics();
+		this.getCurrentUser();
 	}
 
 	getDeckIDFromPath = () => {
@@ -52,6 +54,18 @@ class DeckDetail extends Component {
 		const data = await response.json();
 		console.log(token);
 		this.setState({ deckData: data, loading: false });
+	};
+
+	getCurrentUser = async () => {
+		var url = '/api/currentuser';
+		const token = await authService.getAccessToken();
+		const response = await fetch(url, {
+			headers: !token ? {} : { Authorization: `Bearer ${token}` }
+		});
+		const data = await response.json();
+
+		this.setState({ role: data.role });
+		console.log(this.state.role);
 	};
 
 	getStatistics = async () => {
@@ -244,14 +258,20 @@ class DeckDetail extends Component {
 							<div class="deck-content-info-line">
 								Deck name: {this.state.deckData.name}
 							</div>
-							<div class="deck-content-info-line">Number of cards: {this.state.deckData.totalCards}</div>
-							<div class="deck-content-info-line">Description: {this.state.deckData.description}</div>
+							<div class="deck-content-info-line">
+								Number of cards: {this.state.deckData.totalCards}
+							</div>
+							<div class="deck-content-info-line">
+								Description: {this.state.deckData.description}
+							</div>
 
 							<div class="deck-content-info-line">
 								Date created: {date.toLocaleDateString()}
 							</div>
 						</div>
-						<Info
+						<Info className={classnames(
+										this.state.role === 'administrator' ? 'none-display' : ''
+									)}
 							data={
 								this.state.statisticsData != undefined
 									? this.state.statisticsData
@@ -266,7 +286,14 @@ class DeckDetail extends Component {
 								<p onClick={this.onClickDeleteDeck} style={{ color: 'red' }}>
 									<i class="far fa-trash-alt"></i> Delete deck
 								</p>
-								<div className={classnames('deck-button', this.state.deckData.totalCards !== 0 ? '' : 'none-display')} onClick={this.redirectTesting}>
+								<div
+									className={classnames(
+										'deck-button',
+										this.state.role === 'administrator' ? 'none-display' : '', 
+										this.state.deckData.totalCards !== 0 ? '' : 'none-display'
+									)}
+									onClick={this.redirectTesting}
+								>
 									<p>Review</p>
 								</div>
 							</div>

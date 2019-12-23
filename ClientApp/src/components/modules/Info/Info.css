@@ -6,7 +6,7 @@
   height: auto;
   border-radius: 6px;
   background-color: white;
-  border: solid 1px #EEEEEE;
+  border: solid 1px #eeeeee;
 }
 
 .info .info-field .info-field-item {
@@ -54,5 +54,9 @@ h6 {
   letter-spacing: 0.25px;
   color: #007bff;
   margin-bottom: 23px;
+}
+
+.none-display {
+  display: none;
 }
 /*# sourceMappingURL=Info.css.map */
