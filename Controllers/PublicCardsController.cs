@@ -150,5 +150,76 @@ namespace FlashCard.Controllers
 
             return Ok();
         }
+
+        [HttpGet("{front}/download")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public async Task<IActionResult> DownloadByFront(string front)
+        {
+            var userId = UserService.GetUserId(User);
+            var admin = await UserService.GetAdmin(dbContext);
+
+            if (admin.Id == userId)
+            {
+                return Ok();
+            }
+
+            var publicCard = await dbContext.Cards
+                                 .Include(c => c.Backs)
+                                 .FirstOrDefaultAsync(c => c.Front == front &&
+                                     c.Backs.FirstOrDefault(b => b.Approved) != null);
+
+            if (publicCard == null)
+            {
+                return NotFound();
+            }
+
+            var OwnedCardIds = dbContext.CardOwners
+                                    .Where(co => co.UserId == userId)
+                                    .Select(co => co.CardId)
+                                    .ToHashSet<int>();
+            var OwnedBackIds = dbContext.Backs
+                                    .Where(b => b.OwnerId == userId && b.SourceId != null)
+                                    .Select(b => b.SourceId)
+                                    .ToHashSet<int?>();
+            var newBacks = new List<Back>();
+
+            // Add card to user if user does not own it
+            if (!OwnedCardIds.Contains(publicCard.Id))
+            {
+                dbContext.CardOwners.Add(new CardOwner()
+                {
+                    CardId = publicCard.Id,
+                    UserId = userId
+                });
+            }
+
+            // Add back to user if user does not have any back deriving from public back
+            foreach (var back in publicCard.Backs)
+            {
+                if (back.Approved && !OwnedBackIds.Contains(back.Id))
+                {
+                    newBacks.Add(new Back()
+                    {
+                        Type = back.Type,
+                        Meaning = back.Meaning,
+                        Example = back.Example,
+                        Image = back.Image,
+                        ImageType = back.ImageType,
+                        LastModified = back.LastModified,
+                        Version = back.Version,
+                        FromAdmin = true,
+                        CardId = publicCard.Id,
+                        SourceId = back.Id,
+                        OwnerId = userId,
+                        AuthorId = back.AuthorId
+                    });
+                }
+            }
+
+            dbContext.Backs.AddRange(newBacks);
+            await dbContext.SaveChangesAsync();
+
+            return Ok();
+        }
     }
 }
