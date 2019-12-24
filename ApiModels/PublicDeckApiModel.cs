@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using FlashCard.Models;
 
@@ -13,7 +12,7 @@ namespace FlashCard.ApiModels
         public bool FromAdmin { get; set; }
         public CategoryApiModel Category { get; set; }
         public object Author { get; set; }
-        public ICollection<object> Contributors { get; set; }
+        public ICollection<SimpleUserApiModel> Contributors { get; set; }
         public int TotalCards { get; set; }
         public ICollection<CardApiModel> Cards { get; set; }
 
@@ -34,18 +33,34 @@ namespace FlashCard.ApiModels
 
             if (deck.Proposals != null)
             {
-                var contributors = new List<object>();
+                var contributors = new List<SimpleUserApiModel>();
 
                 foreach (var proposal in deck.Proposals)
                 {
-                    if (proposal.Approved)
+                    if (proposal.Approved && !Contains(contributors, proposal.UserId))
                     {
-                        contributors.Add(new { Id = proposal.UserId, DisplayName = proposal.User.Name });
+                        contributors.Add(new SimpleUserApiModel()
+                        {
+                            Id = proposal.UserId,
+                            DisplayName = proposal.User.Name
+                        });
                     }
                 }
 
                 Contributors = contributors;
             }
+        }
+
+        private bool Contains(List<SimpleUserApiModel> contributors, string userId)
+        {
+            foreach (var cont in contributors)
+            {
+                if (cont.Id == userId)
+                {
+                    return true;
+                }
+            }
+            return false;
         }
     }
 }

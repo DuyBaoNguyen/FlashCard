@@ -69,24 +69,36 @@ namespace FlashCard.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<DeckApiModel>> Create([FromBody] DeckRequestModel deckModel)
         {
-            var category = await dbContext.Categories.FirstOrDefaultAsync(c => c.Id == deckModel.Category.Id);
-
-            if (category == null)
-            {
-                ModelState.AddModelError("Category.Id", "The Category Id is not provided or does not exist.");
-            }
-
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
+            var category = await dbContext.Categories.FirstOrDefaultAsync(c => c.Id == deckModel.Category.Id);
             var user = await UserService.GetUser(userManager, User);
+            var deckNames = dbContext.Decks
+                                .Where(d => d.OwnerId == user.Id)
+                                .Select(d => d.Name.ToLower())
+                                .ToHashSet<string>();
+            var newDeckName = deckModel.Name.Trim().ToLower();
+
+            if (category == null)
+            {
+                ModelState.AddModelError("Category.Id", "The Category Id is not provided or does not exist.");
+            }
+            if (deckNames.Contains(newDeckName))
+            {
+                ModelState.AddModelError("Name", "The deck name is taken.");
+            }
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
 
             var deck = new Deck()
             {
-                Name = deckModel.Name,
-                Description = deckModel.Description,
+                Name = deckModel.Name.Trim(),
+                Description = deckModel.Description?.Trim(),
                 CreatedDate = DateTime.Now,
                 LastModified = DateTime.Now,
                 Category = category,
@@ -234,10 +246,19 @@ namespace FlashCard.Controllers
             }
 
             var category = await dbContext.Categories.FindAsync(deckmodel.Category.Id);
+            var deckNames = dbContext.Decks
+                                .Where(d => d.OwnerId == user.Id && d.Id != deck.Id)
+                                .Select(d => d.Name.ToLower())
+                                .ToHashSet<string>();
+            var newDeckName = deckmodel.Name.Trim().ToLower();
 
             if (category == null)
             {
                 ModelState.AddModelError("Category.Id", "The Category Id is not provided or does not exist.");
+            }
+            if (deckNames.Contains(newDeckName))
+            {
+                ModelState.AddModelError("Name", "The deck name is taken.");
             }
             if (!ModelState.IsValid)
             {
@@ -246,8 +267,8 @@ namespace FlashCard.Controllers
 
             var userIsInAdminRole = await userManager.IsInRoleAsync(user, Roles.Administrator);
 
-            deck.Name = deckmodel.Name;
-            deck.Description = deckmodel.Description;
+            deck.Name = deckmodel.Name.Trim();
+            deck.Description = deckmodel.Description?.Trim();
             deck.Category = category;
             deck.Public = userIsInAdminRole && deckmodel.Public != null ? deckmodel.Public.Value : deck.Public;
             deck.Approved = deck.Public;

@@ -49,17 +49,21 @@
 }
 
 .menu .menu-decks {
-  max-width: 100%;
-  display: -ms-grid;
-  display: grid;
-  grid-row-gap: 20px;
-  -webkit-column-gap: 20px;
-          column-gap: 20px;
-  -ms-grid-columns: auto auto auto;
-      grid-template-columns: auto auto auto;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-wrap: wrap;
+      flex-wrap: wrap;
+  margin-right: -20px;
 }
 
-.menu .menu-decks .menu-deck {
+.menu .menu-decks .flex-item {
+  width: 33.33%;
+  padding-right: 20px;
+  margin-bottom: 20px;
+}
+
+.menu .menu-decks .flex-item .menu-deck {
   padding: 17px;
   height: 136px;
   border-radius: 10px;
@@ -72,7 +76,7 @@
   transition: 0.3s;
 }
 
-.menu .menu-decks .menu-deck:hover {
+.menu .menu-decks .flex-item .menu-deck:hover {
   -webkit-transition: 0.3s;
   transition: 0.3s;
   -webkit-transform: translateY(-10px);

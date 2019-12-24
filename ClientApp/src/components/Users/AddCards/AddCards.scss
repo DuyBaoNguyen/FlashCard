@@ -3,20 +3,24 @@ body {
 }
 
 .add-field {
-	max-width: 100%;
-	display: grid;
-	grid-row-gap: 20px;
-	column-gap: 20px;
-	grid-template-columns: auto auto auto;
+	display: flex;
 	padding-top: 30px;
-	width: 100%;
-	min-height: 100vh;
+	padding-bottom: 30px;
+	min-height: none;
 	height: auto;
 	background-color: white;
+	margin-right: -20px;
+	width: auto;
+	max-width: none;
 	.deck-table {
-		width: 100%;
+		width: 50%;
+		padding-right: 20px;
 	}
 	.deck-cards {
-		width: 100%;
+		width: 50%;
+		padding-right: 20px;
+	}
+	.MuiTableCell-footer {
+		border-bottom: none;
 	}
 }

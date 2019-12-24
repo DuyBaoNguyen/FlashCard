@@ -217,11 +217,21 @@ namespace FlashCard.Controllers
             }
 
             var privateBacks = await dbContext.Backs.Where(b => b.OwnerId == user.Id).ToArrayAsync();
-
             var newBacks = new List<Back>();
+            var deckNames = dbContext.Decks
+                                .Where(d => d.OwnerId == user.Id)
+                                .Select(d => d.Name.ToLower())
+                                .ToHashSet<string>();
+            var newDeckName = publicDeck.Name;
+            var i = 1;
+            while (deckNames.Contains(newDeckName.ToLower()))
+            {   
+                newDeckName = $"{publicDeck.Name} ({i++})";
+            }
+
             var newDeck = new Deck()
             {
-                Name = publicDeck.Name,
+                Name = newDeckName,
                 Description = publicDeck.Description,
                 CreatedDate = publicDeck.CreatedDate,
                 LastModified = publicDeck.LastModified,

@@ -134,8 +134,18 @@
   color: #2f2e2a;
 }
 
+.none-display {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+}
+
 .table {
   margin-top: 20px;
+}
+
+.table td {
+  border-top: none;
 }
 
 .deck-button {
@@ -179,7 +189,20 @@
   color: #ffffff;
 }
 
-.none-display {
-  display: none;
+.table .MuiTableCell-alignLeft {
+  padding-top: 16px !important;
+}
+
+.table .MuiTableCell-paddingNone {
+  padding-top: 2px !important;
+}
+
+.MuiTableCell-footer {
+  border-bottom: none !important;
+}
+
+.MuiTableCell-head {
+  border-top: none !important;
+  border-bottom: 1px solid #dee2e6 !important;
 }
 /*# sourceMappingURL=DeckDetail.css.map */

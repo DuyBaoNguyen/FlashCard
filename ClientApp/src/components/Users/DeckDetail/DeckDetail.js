@@ -262,6 +262,10 @@ class DeckDetail extends Component {
 		var testURL = '/testing/' + this.state.id.toString();
 		var addCardsURL = '/addcards/' + this.state.id.toString();
 		var editCardURL = '/editcard/' + this.state.front;
+		let info;
+		if (!!this.state.role && this.state.role === 'user') {
+			info = <Info data={this.state.statisticsData != undefined ? this.state.statisticsData : null} />
+		}
 
 		if (this.state.redirectTesting === true) {
 			return <Redirect to={testURL} Component={Testing} />;
@@ -298,21 +302,31 @@ class DeckDetail extends Component {
 							<div class="deck-content-info-line">
 								Description: {this.state.deckData.description}
 							</div>
-
 							<div class="deck-content-info-line">
 								Date created: {date.toLocaleDateString()}
 							</div>
+							<div class="deck-content-info-line">
+								Category: {this.state.deckData.category && this.state.deckData.category.name}
+							</div>
+							<div class="deck-content-info-line">
+								Author: {this.state.deckData.author && this.state.deckData.author.displayName}
+							</div>
+							<div class="deck-content-info-line">
+								Contributors: { this.state.deckData.contributors ? 
+									this.state.deckData.contributors.map((cont) => cont.displayName).join(', ') : ''
+								}
+							</div>
 						</div>
-						<Info
-							className={classnames(
-								this.state.role === 'administrator' ? 'none-display' : ''
-							)}
+						{/* <Info className={classnames(
+										this.state.role === 'administrator' ? 'none-display' : ''
+									)}
 							data={
 								this.state.statisticsData != undefined
 									? this.state.statisticsData
 									: null
 							}
-						/>
+						/> */}
+						{info}
 						<div className="deck-content-advanced">
 							<div class="deck-content-advanced-features">
 								<div class="deck-title">Features</div>
@@ -320,6 +334,10 @@ class DeckDetail extends Component {
 							<div class="deck-content-advanced-features-items">
 								<p onClick={this.onClickDeleteDeck} style={{ color: 'red' }}>
 									<i class="far fa-trash-alt"></i> Delete deck
+								</p>
+								<p onClick={this.onClickEditDeck} style={{ color: '#007bff' }}>
+									<i class="far fa-edit"></i> 
+									<Link to={'/editdeck/' + this.state.id} style={{ color: '#007bff' }}> Edit deck</Link>
 								</p>
 								<div
 									className={classnames(
