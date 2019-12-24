@@ -50,7 +50,8 @@ namespace FlashCard.Controllers
                             .Include(d => d.CardAssignments)
                             .Include(d => d.Proposals)
                                 .ThenInclude(p => p.User)
-                            .Where(d => d.OwnerId == admin.Id && d.Public && !d.Approved)
+                            .Where(d => d.OwnerId == admin.Id && d.Public && 
+                                (!d.Approved || d.Proposals.FirstOrDefault(p => !p.Approved) != null))
                             .OrderBy(d => d.Name)
                             .AsNoTracking();
 

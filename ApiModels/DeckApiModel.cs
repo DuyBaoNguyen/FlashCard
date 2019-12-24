@@ -18,7 +18,7 @@ namespace FlashCard.ApiModels
         public DeckApiModel Source { get; set; }
         public object Owner { get; set; }
         public object Author { get; set; }
-        public ICollection<object> Contributors { get; set; }
+        public ICollection<SimpleUserApiModel> Contributors { get; set; }
         public object Statistics { get; set; }
         public int TotalCards { get; set; }
         public ICollection<CardApiModel> Cards { get; set; }
@@ -42,22 +42,38 @@ namespace FlashCard.ApiModels
             Owner = deck.Owner == null ? null : new { Id = deck.OwnerId, DisplayName = deck.Owner.Name };
             Author = deck.Author == null ? null : new { Id = deck.AuthorId, DisplayName = deck.Author.Name };
             TotalCards = deck.CardAssignments == null ? 0 : deck.CardAssignments.Count;
-            Source = deck.Source == null ? null : new DeckApiModel(deck.Source);    
+            Source = deck.Source == null ? null : new DeckApiModel(deck.Source);
 
             if (deck.Proposals != null)
             {
-                var contributors = new List<object>();
+                var contributors = new List<SimpleUserApiModel>();
 
                 foreach (var proposal in deck.Proposals)
                 {
-                    if (proposal.Approved)
+                    if (proposal.Approved && !Contains(contributors, proposal.UserId))
                     {
-                        contributors.Add(new { Id = proposal.UserId, DisplayName = proposal.User.Name });
+                        contributors.Add(new SimpleUserApiModel()
+                        {
+                            Id = proposal.UserId,
+                            DisplayName = proposal.User.Name
+                        });
                     }
                 }
 
                 Contributors = contributors;
             }
+        }
+
+        private bool Contains(List<SimpleUserApiModel> contributors, string userId)
+        {
+            foreach (var cont in contributors)
+            {
+                if (cont.Id == userId)
+                {
+                    return true;
+                }
+            }
+            return false;
         }
     }
 }
