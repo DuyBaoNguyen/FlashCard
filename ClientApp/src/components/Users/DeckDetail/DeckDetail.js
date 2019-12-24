@@ -268,9 +268,19 @@ class DeckDetail extends Component {
 							<div class="deck-content-info-line">
 								Description: {this.state.deckData.description}
 							</div>
-
 							<div class="deck-content-info-line">
 								Date created: {date.toLocaleDateString()}
+							</div>
+							<div class="deck-content-info-line">
+								Category: {this.state.deckData.category && this.state.deckData.category.name}
+							</div>
+							<div class="deck-content-info-line">
+								Author: {this.state.deckData.author && this.state.deckData.author.displayName}
+							</div>
+							<div class="deck-content-info-line">
+								Contributors: { this.state.deckData.contributors ? 
+									this.state.deckData.contributors.map((cont) => cont.displayName).join(', ') : ''
+								}
 							</div>
 						</div>
 						{/* <Info className={classnames(
@@ -290,6 +300,10 @@ class DeckDetail extends Component {
 							<div class="deck-content-advanced-features-items">
 								<p onClick={this.onClickDeleteDeck} style={{ color: 'red' }}>
 									<i class="far fa-trash-alt"></i> Delete deck
+								</p>
+								<p onClick={this.onClickEditDeck} style={{ color: '#007bff' }}>
+									<i class="far fa-edit"></i> 
+									<Link to={'/editdeck/' + this.state.id} style={{ color: '#007bff' }}> Edit deck</Link>
 								</p>
 								<div
 									className={classnames(

@@ -20,6 +20,7 @@ import Testing from './components/Users/Testing/Testing';
 import CardManagement from './components/Users/CardManagement/CardManagement';
 import AddCards from './components/Users/AddCards/AddCards';
 import CreateDeck from './components/Users/CreateDeck/CreateDeck';
+import EditDeck from './components/Users/EditDeck/EditDeck';
 import CreateCard from './components/Users/CreateCard/CreateCard';
 import EditCard from './components/Users/EditCard/EditCard';
 import AdminUsers from './components/Admin/AdminUsers/AdminUsers';
@@ -36,6 +37,7 @@ export default class App extends Component {
 					<AuthorizeRoute exact path="/testing/:deckId" component={Testing} />
 					<AuthorizeRoute exact path="/addcards/:deckId" component={AddCards} />
 					<AuthorizeRoute exact path="/createdeck" component={CreateDeck} />
+					<AuthorizeRoute exact path="/editdeck/:deckId" component={EditDeck} />
 					<AuthorizeRoute exact path="/createcard" component={CreateCard} />
 					<AuthorizeRoute exact path="/editcard/:front" component={EditCard} />
 					<AuthorizeRoute exact path='/cards' component={CardManagement} />
