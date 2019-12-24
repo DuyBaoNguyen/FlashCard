@@ -28,9 +28,6 @@
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
-  -webkit-box-pack: justify;
-      -ms-flex-pack: justify;
-          justify-content: space-between;
 }
 
 .deck-fields .deck-content .deck-content-statistics {
@@ -83,7 +80,7 @@
 }
 
 .deck-fields .deck-content .deck-content-advanced {
-  width: 30%;
+  width: 33.33%;
 }
 
 .deck-fields .deck-content .deck-content-advanced .deck-content-advanced-share {
@@ -107,7 +104,7 @@
 }
 
 .deck-fields .deck-content .deck-content-info {
-  width: 25%;
+  width: 33.33%;
 }
 
 .deck-fields .deck-content .deck-content-info .deck-content-info-line {
