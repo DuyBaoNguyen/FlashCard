@@ -322,8 +322,8 @@ class DeckDetail extends Component {
 									<i class="far fa-trash-alt"></i> Delete deck
 								</p>
 								<div
-									className={classnames('public',
-										this.state.role === 'administrator' ? '' : 'none-display'
+									className={classnames(
+									this.state.role === 'user' ? 'none-display' : 'public',
 									)}
 								>
 									<Switch
