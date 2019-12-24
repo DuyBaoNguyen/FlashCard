@@ -7,4 +7,7 @@ body {
   min-height: 100vh;
 	height: auto;
 	background-color: white;
+	.dashboard-container {
+		display: flex;
+	}
 }

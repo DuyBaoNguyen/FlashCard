@@ -22,7 +22,7 @@
 	}
 	.deck-content {
 		display: flex;
-		justify-content: space-between;
+		// justify-content: space-between;
 		// align-items: betweenn;
 		.deck-content-statistics {
 			width: 30%;
@@ -64,7 +64,7 @@
 			}
 		}
 		.deck-content-advanced {
-			width: 30%;
+			width: 33.33%;
 			.public {
 				display: flex;
 				align-items: center;
@@ -72,7 +72,6 @@
 					margin-right: 15px;
 				}
 			}
-			
 			.deck-content-advanced-share {
 				margin-top: 100px;
 			}
@@ -93,7 +92,7 @@
 			}
 		}
 		.deck-content-info {
-			width: 25%;
+			width: 33.33%;
 			.deck-content-info-line {
 				margin-bottom: 10px;
 				// width: 213px;
