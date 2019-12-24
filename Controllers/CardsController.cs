@@ -98,14 +98,14 @@ namespace FlashCard.Controllers
                             .Include(c => c.CardAssignments)
                             .Include(c => c.CardOwners)
                             .Include(c => c.Backs)
-                            .FirstOrDefaultAsync(c => c.Front == cardmodel.Front);
+                            .FirstOrDefaultAsync(c => c.Front == cardmodel.Front.Trim().ToLower());
             var image = ImageService.GetImage(cardmodel.Back.Image);
 
             if (card == null)
             {
                 card = new Card()
                 {
-                    Front = cardmodel.Front.ToLower(),
+                    Front = cardmodel.Front.Trim().ToLower(),
                     CardAssignments = new List<CardAssignment>(),
                     CardOwners = new List<CardOwner>(),
                     Backs = new List<Back>()
@@ -121,8 +121,8 @@ namespace FlashCard.Controllers
             card.Backs.Add(new Back
             {
                 Type = cardmodel.Back.Type,
-                Meaning = cardmodel.Back.Meaning,
-                Example = cardmodel.Back.Example,
+                Meaning = cardmodel.Back.Meaning.Trim(),
+                Example = cardmodel.Back.Example?.Trim(),
                 Image = image?.Data,
                 ImageType = image?.Type,
                 Public = userIsInAdminRole,
@@ -196,19 +196,19 @@ namespace FlashCard.Controllers
             }
 
             // Check if the new front equals the old front
-            if (front == cardmodel.Front)
+            if (front.Trim().ToLower() == cardmodel.Front.Trim().ToLower())
             {
                 return NoContent();
             }
 
             var newCard = await dbContext.Cards
                                 .Include(c => c.CardOwners)
-                                .FirstOrDefaultAsync(c => c.Front == cardmodel.Front &&
+                                .FirstOrDefaultAsync(c => c.Front == cardmodel.Front.Trim().ToLower() &&
                                     c.CardOwners.FirstOrDefault(co => co.UserId == user.Id) != null);
 
             if (newCard != null)
             {
-                ModelState.AddModelError("Front", "The Front is already taken");
+                ModelState.AddModelError("Front", "The Front is taken");
             }
             if (!ModelState.IsValid)
             {
@@ -245,7 +245,7 @@ namespace FlashCard.Controllers
             {
                 updatedCard = new Card()
                 {
-                    Front = cardmodel.Front.ToLower(),
+                    Front = cardmodel.Front.Trim().ToLower(),
                     CardAssignments = new List<CardAssignment>(),
                     CardOwners = new List<CardOwner>(),
                     TestedCards = new List<TestedCard>()

@@ -24,9 +24,11 @@ class DeckList extends Component {
 		const token = await authService.getAccessToken();
     const response = await fetch('/api/decks/', {
       headers: !token ? {} : { 'Authorization': `Bearer ${token}` }
-    });
-		const data = await response.json();
-    this.setState({ deckData: data, loading: false });
+		});
+		if (response.status === 200) {
+			const data = await response.json();
+			this.setState({ deckData: data, loading: false });
+		}
 	}
 
 	redirectCreateDeck = () => {

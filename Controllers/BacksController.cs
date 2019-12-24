@@ -55,8 +55,8 @@ namespace FlashCard.Controllers
             ImageService.Image image = ImageService.GetImage(backmodel.Image);
 
             back.Type = backmodel.Type;
-            back.Meaning = backmodel.Meaning;
-            back.Example = backmodel.Example;
+            back.Meaning = backmodel.Meaning.Trim();
+            back.Example = backmodel.Example?.Trim();
             back.Image = image?.Data;
             back.ImageType = image?.Type;
 

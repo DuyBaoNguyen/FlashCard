@@ -75,25 +75,33 @@ namespace FlashCard.Controllers
             }
 
             var category = await dbContext.Categories.FirstOrDefaultAsync(c => c.Id == deckModel.Category.Id);
+            var user = await UserService.GetUser(userManager, User);
+            var admin = await UserService.GetAdmin(dbContext);
+            var deckNames = dbContext.Decks
+                                .Where(d => d.OwnerId == admin.Id)
+                                .Select(d => d.Name.ToLower())
+                                .ToHashSet<string>();
+            var newDeckName = deckModel.Name.Trim().ToLower();
 
             if (category == null)
             {
                 ModelState.AddModelError("Category.Id", "The Category Id is not provided or does not exist.");
             }
-
+            if (deckNames.Contains(newDeckName))
+            {
+                ModelState.AddModelError("Name", "The deck name is taken.");
+            }
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            var user = await UserService.GetUser(userManager, User);
-            var admin = await UserService.GetAdmin(dbContext);
             var userIsInAdminRole = await userManager.IsInRoleAsync(user, Roles.Administrator);
 
             var deck = new Deck()
             {
-                Name = deckModel.Name,
-                Description = deckModel.Description,
+                Name = deckModel.Name.Trim(),
+                Description = deckModel.Description?.Trim(),
                 Public = true,
                 Approved = userIsInAdminRole,
                 CreatedDate = DateTime.Now,
