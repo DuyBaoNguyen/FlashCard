@@ -1,0 +1,19 @@
+body {
+	font-family: 'Roboto';
+}
+
+.card-management {
+	padding-top: 30px;
+	padding-bottom: 30px;
+  width: 100%;
+  min-height: 80vh;
+	height: auto;
+	background-color:white;
+	// display: flex;
+	// justify-content: center;
+	// align-items: center;
+}
+
+.MuiTableRow-root:not(:last-child) {
+	height: 53px !important;
+}
