@@ -10,7 +10,7 @@ class AdminUsers extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			userData : []
+			userData: []
 		};
 	}
 
@@ -34,62 +34,103 @@ class AdminUsers extends Component {
 		this.setState({ userData: data, loading: false });
 	}
 
-	
+	onClickDeleteUser = async userId => {
+		Swal.fire({
+			title: 'Are you sure to delete this user?',
+			text: "You won't be able to revert this!",
+			icon: 'warning',
+			showCancelButton: true,
+			cancelButtonColor: '#b3b3b3',
+			confirmButtonColor: '#DD3333',
+			confirmButtonText: 'Yes, delete it!'
+		}).then(result => {
+			if (result.value) {
+				this.deleteUser(userId);
+			}
+		});
+	};
+
+	deleteUser = async userId => {
+		var url = '/api/users/' + userId;
+		const token = await authService.getAccessToken();
+		const response = await fetch(url, {
+			method: 'DELETE',
+			headers: {
+				Authorization: `Bearer ${token}`,
+				'Content-Type': 'application/json'
+			}
+		});
+
+		if (response.status === 204) {
+			this.getUsers();
+		}
+	};
+
 	table = () => {
 		return (
-      <MaterialTable
-        title="User management"
-        columns={[
+			<MaterialTable
+				title="User management"
+				columns={[
+					{ title: 'Id', field: 'id' },
 					{ title: 'Email', field: 'email' },
-          { title: 'Name', field: 'displayName' },
-        ]}
-        data={this.state.userData}
-        detailPanel={rowData => {
-          return (
-            <div className="user-detail">
-							<div className="user-detail-info">
-								<div className="user-detail-info-title">Id :</div>
-								<div className="user-detail-info-data">{rowData.id}</div>
-							</div>
-							<div className="user-detail-info">
-								<div className="user-detail-info-title">Username :</div>
-								<div className="user-detail-info-data">{rowData.userName}</div>
-							</div>
+					{ title: 'Name', field: 'displayName' },
+					{ title: 'Role', field: 'role' }
+				]}
+				data={this.state.userData}
+				// detailPanel={rowData => {
+				//   return (
+				//     <div className="user-detail">
+				// 			<div className="user-detail-info">
+				// 				<div className="user-detail-info-title">Id :</div>
+				// 				<div className="user-detail-info-data">{rowData.id}</div>
+				// 			</div>
+				// 			<div className="user-detail-info">
+				// 				<div className="user-detail-info-title">Username :</div>
+				// 				<div className="user-detail-info-data">{rowData.userName}</div>
+				// 			</div>
 
-							<div className="user-detail-info">
-								<div className="user-detail-info-title">Display Name :</div>
-								<div className="user-detail-info-data">{rowData.displayName}</div>
-							</div>
-							<div className="user-detail-info">
-								<div className="user-detail-info-title">Email :</div>
-								<div className="user-detail-info-data">{rowData.email}</div>
-							</div>
+				// 			<div className="user-detail-info">
+				// 				<div className="user-detail-info-title">Display Name :</div>
+				// 				<div className="user-detail-info-data">{rowData.displayName}</div>
+				// 			</div>
+				// 			<div className="user-detail-info">
+				// 				<div className="user-detail-info-title">Email :</div>
+				// 				<div className="user-detail-info-data">{rowData.email}</div>
+				// 			</div>
 
-							<div className="user-detail-info">
-								<div className="user-detail-info-title">Role :</div>
-								<div className="user-detail-info-data">{rowData.role}</div>
-							</div>
-						</div>
-          )
-				}}
+				// 			<div className="user-detail-info">
+				// 				<div className="user-detail-info-title">Role :</div>
+				// 				<div className="user-detail-info-data">{rowData.role}</div>
+				// 			</div>
+				// 		</div>
+				//   )
+				// }}
+				actions={[
+					{
+						icon: 'delete',
+						tooltip: 'Delete user',
+						// eslint-disable-next-line no-restricted-globals
+						onClick: (event, rowData) => this.onClickDeleteUser(rowData.id)
+					}
+				]}
 				options={{
 					pageSize: 10
 				}}
-      />
-    )
+			/>
+		)
 	};
 
 	render() {
 		// console.log(this.props.match.params.deckId);
 		// console.log();
-	let table = this.table();
+		let table = this.table();
 		return (
 			<div className="user-management">
 				{/* <h5>User management</h5>
 				<hr /> */}
 				{table}
 			</div>
-				
+
 		);
 	}
 }
