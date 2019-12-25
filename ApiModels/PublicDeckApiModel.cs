@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using FlashCard.Models;
 
@@ -10,6 +11,7 @@ namespace FlashCard.ApiModels
         public string Description { get; set; }
         public bool Had { get; set; }
         public bool FromAdmin { get; set; }
+        public DateTime CreatedDate { get; set; }
         public CategoryApiModel Category { get; set; }
         public object Author { get; set; }
         public ICollection<SimpleUserApiModel> Contributors { get; set; }
@@ -27,6 +29,7 @@ namespace FlashCard.ApiModels
             Name = deck.Name;
             Description = deck.Description;
             FromAdmin = deck.FromAdmin;
+            CreatedDate = deck.CreatedDate;
             Category = new CategoryApiModel() { Id = deck.CategoryId, Name = deck.Category.Name };
             Author = deck.Author == null ? null : new { Id = deck.AuthorId, DisplayName = deck.Author.Name };
             TotalCards = deck.CardAssignments.Count;
