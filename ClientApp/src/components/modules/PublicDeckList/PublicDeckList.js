@@ -1,9 +1,6 @@
 import React, { Component } from 'react';
 import authService from '../../api-authorization/AuthorizeService';
-import { BrowserRouter as Router, Redirect } from 'react-router-dom';
-import CreateDeck from '../../Users/CreateDeck/CreateDeck';
-
-// import './DeckList.css';
+import { Link } from 'react-router-dom';
 import PublicDeck from '../PublicDeck/PublicDeck';
 
 class DeckList extends Component {
@@ -12,8 +9,9 @@ class DeckList extends Component {
 		this.state = {
 			redirect: false,
 			deckData : [],
-			redirectCreateDeck : false,
-		};
+      redirectCreateDeck : false
+    };
+    this.getPublicDeckData = this.getPublicDeckData.bind(this);
 	}
 
 	componentDidMount() {
@@ -27,7 +25,6 @@ class DeckList extends Component {
 		});
 		if (response.status === 200) {
       const data = await response.json();
-      console.log(data);
 			this.setState({ deckData: data, loading: false });
 		}
 	}
@@ -41,18 +38,13 @@ class DeckList extends Component {
 	render() {
 		var {deckData} = this.state;
 		var element = deckData.map((deck, index) => {
-			return <PublicDeck deck={deck}/>;
+			return <PublicDeck deck={deck} getPublicDeckData={this.getPublicDeckData}/>;
 		});
-		// if (this.state.redirectCreateDeck === true) {
-		// 	return <Redirect to='/createdeck' Component={CreateDeck} />
-		// }
 		return (
 			<div className="menu">
 				<div className="menu-title">
 					<h6>{this.props.menuName}</h6>
-					<div className="menu-button" onClick={this.redirectCreateDeck}>
-						{ this.props.addButton === "true" ? <p>Add</p> : "" }
-					</div>
+					<Link to="/proposedeck" className="menu-button">Propose Deck</Link>
 				</div>
 				<div className="menu-decks">{element}</div>
 			</div>

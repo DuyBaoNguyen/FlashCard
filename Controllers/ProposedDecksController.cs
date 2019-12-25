@@ -124,9 +124,6 @@ namespace FlashCard.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult<DeckApiModel>> GetProposedDeck(int id)
         {
-            var proposalsCount = await dbContext.Proposals
-                                    .Where(p => p.DeckId == id && !p.Approved)
-                                    .CountAsync();
             var deck = await dbContext.Decks
                          .Include(d => d.Category)
                          .Include(d => d.Owner)
@@ -136,17 +133,15 @@ namespace FlashCard.Controllers
                              .ThenInclude(p => p.User)
                          .AsNoTracking()
                          .FirstOrDefaultAsync(d => d.Id == id);
-
-            if (deck == null || proposalsCount == 0 && (!deck.Public || deck.Approved))
-            {
-                return NotFound();
-            }
-
             var user = await UserService.GetUser(userManager, User);
             var admin = await UserService.GetAdmin(dbContext);
             var userIsInUserRole = await userManager.IsInRoleAsync(user, Roles.User);
 
-            if (userIsInUserRole && deck.AuthorId != user.Id)
+            if (deck == null || (userIsInUserRole && !deck.Public))
+            {
+                return NotFound();
+            }
+            if (userIsInUserRole && !deck.Approved && deck.AuthorId != user.Id)
             {
                 return Forbid();
             }
