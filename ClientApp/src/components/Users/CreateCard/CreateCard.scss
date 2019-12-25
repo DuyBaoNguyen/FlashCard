@@ -99,9 +99,20 @@ body {
 }
 
 .create-cards-backside {
+	position: relative;
 	display: flex;
 	// align-items: flex-start;
 	flex-direction: column;
+	h6 {
+		position: absolute;
+		top: 12px;
+		left: 15px;
+		height: 16px;
+		font-size: 16px;
+		.badge {
+			font-weight: 500;
+		}
+	}
 	.content-back-side {
 		position: relative;
 		margin: 15px;

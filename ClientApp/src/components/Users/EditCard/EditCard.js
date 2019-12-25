@@ -221,6 +221,7 @@ class EditCard extends Component {
 			var backSide = this.state.cardData.backs.map(back => {
 				return (
 					<div className="content-back-side">
+						{ back.fromAdmin ? <h6 class="w-auto"><span class="badge badge-success">From Admin</span></h6> : '' }
 						<div className="info">
 							<p className="meaning">{back.meaning}</p>
 							<p className="type">{back.type}</p>
