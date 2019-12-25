@@ -4,6 +4,8 @@ import MaterialTable from 'material-table';
 import Dashboard from '../Dashboard/Dashboard';
 import Swal from 'sweetalert2';
 import { BrowserRouter as Router, Redirect } from 'react-router-dom';
+import { forwardRef } from 'react';
+import AddBox from '@material-ui/icons/AddBox';
 import EditCard from '../EditCard/EditCard';
 import { hashHistory } from 'react-router';
 
@@ -17,7 +19,7 @@ class PublicCard extends Component {
 			id: '',
 			deckData: {},
 			cardSource: {},
-			redirectProposeCard: false,
+			redirectProposeCard: false
 		};
 	}
 
@@ -56,7 +58,7 @@ class PublicCard extends Component {
 		}
 	};
 
-	onClickDownloadCard = async (front) => {
+	onClickDownloadCard = async front => {
 		Swal.fire({
 			title: 'Are you sure to download this card?',
 			showCancelButton: true,
@@ -73,9 +75,9 @@ class PublicCard extends Component {
 	downloadCard = async front => {
 		var url = '/api/publiccards/' + front + '/download';
 		const token = await authService.getAccessToken();
-			const response = await fetch(url, {
-				headers: !token ? {} : { Authorization: `Bearer ${token}` }
-			});
+		const response = await fetch(url, {
+			headers: !token ? {} : { Authorization: `Bearer ${token}` }
+		});
 	};
 
 	downloadAllCards = async () => {
@@ -125,6 +127,7 @@ class PublicCard extends Component {
 		var title = 'Public cards';
 		return (
 			<MaterialTable
+				
 				title={title}
 				columns={[
 					// { title: 'ID', field: 'id' },
@@ -134,13 +137,13 @@ class PublicCard extends Component {
 				data={data}
 				actions={[
 					{
-						icon: 'clear',
+						icon: 'Propose',
 						tooltip: 'Propose Card',
 						isFreeAction: true,
 						onClick: event => this.redirectProposeCard()
 					},
 					{
-						icon: 'export',
+						icon: 'Download',
 						tooltip: 'Download All Cards',
 						isFreeAction: true,
 						onClick: event => this.downloadAllCards()

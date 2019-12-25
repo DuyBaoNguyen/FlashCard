@@ -124,7 +124,6 @@ class ProposeCard extends Component {
 			this.setState({
 				cardData: array
 			});
-			alert("Done");
 			// console.log(this.state.cardData);
 			// this.updateCard(document.getElementById('front').value);
 		} catch (error) {
@@ -142,38 +141,18 @@ class ProposeCard extends Component {
 		console.log(param);
 	};
 
-	deleteBack = async param => {
-		console.log("vai loz");
-		var url = '/api/backs/' + param;
-		console.log(url);
-		const token = await authService.getAccessToken();
-
-		if (this.state.cardData.backs.length === 1) {
-			Swal.fire(
-				'Oops!',
-				'You cannot remove the last back side of the card!',
-				'error'
-			)
-			return null;
-		} else {
-			this.updateCard(document.getElementById('front').value);
-		}
-
-		try {
-			const response = await fetch(url, {
-				method: 'DELETE',
-				headers: {
-					Authorization: `Bearer ${token}`,
-					'Content-Type': 'application/json'
-				}
-			});
-			const json = await response;
-			console.log('Success:', JSON.stringify(json));
-			// console.log(this.state.cardData);
-		} catch (error) {
-			console.error('Error:', error);
-		}
-	
+	onClickPropose = async () => {
+		Swal.fire({
+			title: 'Are you sure to propse this card?',
+			showCancelButton: true,
+			cancelButtonColor: '#b3b3b3',
+			// confirmButtonColor: '#DD3333',
+			confirmButtonText: 'Yes!'
+		}).then(result => {
+			if (result.value) {
+				this.addCard();
+			}
+		});
 	};
 
 	render() {
@@ -238,11 +217,11 @@ class ProposeCard extends Component {
 						<hr />
 						<Button
 							className="button-submit"
-							onClick={this.addCard}
+							onClick={this.onClickPropose}
 							type="button"
 							color="primary"
 						>
-							<p>Add</p>
+							<p>Propose</p>
 						</Button>
 					</div>
 					<hr />

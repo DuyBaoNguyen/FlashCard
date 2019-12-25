@@ -27,6 +27,7 @@ import PublicCard from './components/Users/PublicCard/PublicCard';
 
 import AdminUsers from './components/Admin/AdminUsers/AdminUsers';
 import ProposeCard from './components/Users/ProposeCard/ProposeCard';
+import AdminPropose from './components/Admin/AdminPropose/AdminPropose';
 
 export default class App extends Component {
 	static displayName = App.name;
@@ -51,6 +52,8 @@ export default class App extends Component {
 
 					{/* Admin */}
 					<AuthorizeRoute exact path='/users' component={AdminUsers} />
+					<AuthorizeRoute exact path='/adminpropose' component={AdminPropose} />
+
 					<Route
 						path={ApplicationPaths.ApiAuthorizationPrefix}
 						component={ApiAuthorizationRoutes}
