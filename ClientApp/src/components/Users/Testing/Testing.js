@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import authService from '../../api-authorization/AuthorizeService';
 import { Route } from 'react-router';
+import { Progress } from 'react-sweet-progress';
+import 'react-sweet-progress/lib/style.css';
 // import Dashboard from '../Dashboard/Dashboard';
 import Button from '@material-ui/core/Button';
 import {
@@ -15,7 +17,7 @@ import './Testing.css';
 import Swal from 'sweetalert2';
 import Dashboard from '../Dashboard/Dashboard';
 
-// // CommonJS
+// // CommonJSt
 // const Swal = require('sweetalert2')
 
 class Testing extends Component {
@@ -27,6 +29,9 @@ class Testing extends Component {
 		this.arrayTotal = [];
 		this.arrayDontRemember = [];
 		this.state = {
+			passCard: 0,
+			length: 0,
+			process: 0,
 			currentVocab: null,
 			displayNextButton: true,
 			deckData: null,
@@ -37,8 +42,29 @@ class Testing extends Component {
 	}
 
 	componentDidMount() {
+		this.instruction();
 		this.getDeckData();
 	}
+
+	instruction = () => {
+		let timerInterval;
+		Swal.fire({
+			allowOutsideClick: false,
+			allowEscapeKey: false,
+			allowEnterKey: false,
+			heightAuto: false,
+			title: 'Hold on!',
+			html: 'We are processing the test!',
+			timer: 5000,
+			// timerProgressBar: true,
+			onBeforeOpen: () => {
+				Swal.showLoading();
+			},
+			onClose: () => {
+				clearInterval(timerInterval);
+			}
+		}).then(result => {});
+	};
 
 	getDeckData = async () => {
 		let url = '/api/decks/' + this.props.match.params.deckId;
@@ -47,12 +73,24 @@ class Testing extends Component {
 			headers: !token ? {} : { Authorization: `Bearer ${token}` }
 		});
 		const data = await response.json();
-		this.setState({ deckData: data.cards, loading: false });
+		this.setState({
+			deckData: data.cards,
+			length: data.cards.length,
+			loading: false
+		});
 		localStorage.setItem('deckData', JSON.stringify(this.state.deckData));
 
 		// Retrieve the object from storage
 		let deckData = localStorage.getItem('deckData');
 		this.array = this.state.deckData;
+	};
+
+	process = () => {
+		this.setState({
+			process: (((this.state.passCard + 1) / this.state.length) * 100).toFixed(
+				2
+			)
+		});
 	};
 
 	isFinish = (array, arrayTotal, arrayDontRemember) => {
@@ -86,18 +124,22 @@ class Testing extends Component {
 
 	onRemember = vocab => {
 		this.setState({
+			passCard: this.state.passCard + 1,
 			displayNextButton: true
 		});
 		if (vocab != null) {
 			this.array.splice(this.array.indexOf(vocab), 1);
 		}
+		this.process();
 		this.arrayTotal.push(vocab.id);
 	};
 
 	onDontRemember = vocab => {
 		this.setState({
+			// passCard: this.state.passCard + 1,
 			displayNextButton: true
 		});
+		// this.process();
 		this.arrayDontRemember.push(vocab.id);
 	};
 
@@ -110,6 +152,7 @@ class Testing extends Component {
 		if (this.vocab === undefined) {
 			this.isFinish(this.array, this.arrayTotal, this.arrayDontRemember);
 		}
+
 		console.log(this.arrayTotal, this.arrayDontRemember);
 	};
 
@@ -189,6 +232,11 @@ class Testing extends Component {
 				<div className="back-button">
 					<Link to={'/decks/' + this.props.match.params.deckId}>Back</Link>
 				</div>
+				<Progress
+					className="process-bar"
+					percent={this.state.process}
+					// status="success"
+				/>
 				<div
 					className={classnames(
 						this.state.firstDisplay === true ? 'none-display' : ''
@@ -247,7 +295,7 @@ class Testing extends Component {
 							onClick={this.onNext}
 							type="button"
 						>
-							<p>Start</p>
+							<p>{this.state.firstDisplay === true ? 'Start' : 'Next'}</p>
 						</Button>
 					</div>
 				</div>

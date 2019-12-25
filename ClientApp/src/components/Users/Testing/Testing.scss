@@ -77,7 +77,7 @@ body {
 	align-items: center;
 	flex-direction: column;
 	.content-front {
-		margin-bottom: 50px;
+		margin-bottom: 30px;
 		display: flex;
 		justify-content: center;
 		align-items: center;
@@ -99,7 +99,6 @@ body {
 	.content-back {
 		// display: flex;
 		grid-template-columns: auto auto auto;
-		margin-top: 10px;
 		.content-back-side {
 			margin: 15px;
 			display: flex;
@@ -140,4 +139,9 @@ body {
 .image {
 	// width: 40%;
 	height: 150px;
+}
+
+.process-bar {
+	margin-top: 20px;
+	margin-bottom: 20px;
 }

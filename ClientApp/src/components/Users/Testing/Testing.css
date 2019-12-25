@@ -100,7 +100,7 @@ body {
 }
 
 .content .content-front {
-  margin-bottom: 50px;
+  margin-bottom: 30px;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -133,7 +133,6 @@ body {
 .content .content-back {
   -ms-grid-columns: auto auto auto;
       grid-template-columns: auto auto auto;
-  margin-top: 10px;
 }
 
 .content .content-back .content-back-side {
@@ -186,5 +185,10 @@ body {
 
 .image {
   height: 150px;
+}
+
+.process-bar {
+  margin-top: 20px;
+  margin-bottom: 20px;
 }
 /*# sourceMappingURL=Testing.css.map */

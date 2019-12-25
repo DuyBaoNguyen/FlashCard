@@ -17,6 +17,7 @@
     "react-router-hash-history": "git+https://github.com/ymzuiku/react-router-hash-history.git",
     "react-scripts": "^3.3.0",
     "react-select": "^3.0.8",
+    "react-sweet-progress": "^1.1.2",
     "react-switch": "^5.0.1",
     "react-tabs": "^3.1.0",
     "reactstrap": "^6.3.0",
