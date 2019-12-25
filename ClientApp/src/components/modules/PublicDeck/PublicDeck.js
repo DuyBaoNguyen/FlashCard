@@ -1,56 +1,71 @@
 /* eslint-disable jsx-a11y/alt-text */
 import React, { Component } from 'react';
-import {
-	BrowserRouter as Router,
-	Switch,
-	Link,
-	Redirect,
-	withRouter
-} from 'react-router-dom';
-import DeckDetail from '../../Users/DeckDetail/DeckDetail';
+import { Link } from 'react-router-dom';
 import CardIcon from '../../../images/icons/card.svg';
 import DateIcon from '../../../images/icons/calendar.svg';
+import './PublicDeck.css';
+import authService from '../../api-authorization/AuthorizeService';
 
-class Deck extends Component {
-	constructor(props) {
-		super(props);
-	}
+class PublicDeck extends Component {
+  constructor(props) {
+    super(props);
+  }
 
-	render() {
-		var deckURL = '/publicdecks/' + this.props.deck.id;
-		var date = new Date(this.props.deck.createdDate);
-		let fromAdminLabel;
+  onClickDownload = async (e, deckId) => {
+    e.preventDefault();
+    const url = `/api/publicdecks/${deckId}/download`;
+    const token = await authService.getAccessToken();
+    const response = await fetch(url, {
+      headers: !token ? {} : { 'Authorization': `Bearer ${token}` }
+    });
+    if (response.status === 200) {
+      this.props.getPublicDeckData();
+    }
+  }
 
-		if (this.props.deck.fromAdmin) {
-			fromAdminLabel = <h6 class="w-auto"><span class="badge badge-success">From Admin</span></h6>
-		}
+  onClickDownloaded = e => {
+    e.preventDefault();
+  }
 
-		// if (this.state.redirect === true) {
-		// 	return <Redirect to={deckURL} Component={DeckDetail} />;
-		// }
-		return (
-			<Link to={deckURL} className="text-decoration-none flex-item">
-				<div className="menu-deck">
-					<div className="menu-deck-info">
-						<div class="d-flex justify-content-between align-content-center">
-							<h6 class="w-auto">{this.props.deck.name}</h6>
-							{fromAdminLabel}
-						</div>
-						<hr />
-						<div className="menu-deck-info-line">
-							<img className="icons"
-								src={CardIcon} width="21px" height="16px" />
-							<p>{this.props.deck.totalCards}</p>
-						</div>
-						<div className="menu-deck-info-line">
-							<img className="icons" src={DateIcon} width="21px" height="16px" />
-							<p>{date.toLocaleDateString()}</p>
-						</div>
-					</div>
-				</div>
-			</Link>
-		);
-	}
+  render() {
+    // if (this.state.redirect === true) {
+    // 	return <Redirect to={deckURL} Component={DeckDetail} />;
+    // }
+    return (
+      <Link to={'/publicdecks/' + this.props.deck.id} className="text-decoration-none flex-item">
+        <div className="menu-deck">
+          <div className="menu-deck-info">
+            <div class="d-flex justify-content-between align-items-center">
+              <h6 class="w-auto">{this.props.deck.name}</h6>
+              {this.props.deck.had === true ?
+                <button
+                  className="downloaded"
+                  onClick={(event) => this.onClickDownloaded(event)}
+                >
+                  Downloaded
+                </button> :
+                <button
+                  className="download"
+                  onClick={(event) => this.onClickDownload(event, this.props.deck.id)}
+                >
+                  Download
+                </button>}
+            </div>
+            <hr />
+            <div className="menu-deck-info-line">
+              <img className="icons"
+                src={CardIcon} width="21px" height="16px" />
+              <p>{this.props.deck.totalCards}</p>
+            </div>
+            <div className="menu-deck-info-line">
+              <img className="icons" src={DateIcon} width="21px" height="16px" />
+              <p>{new Date(this.props.deck.createdDate).toLocaleDateString()}</p>
+            </div>
+          </div>
+        </div>
+      </Link>
+    );
+  }
 }
 
-export default Deck;
+export default PublicDeck;

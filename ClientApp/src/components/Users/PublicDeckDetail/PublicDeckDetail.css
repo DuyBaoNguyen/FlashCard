@@ -1,0 +1,21 @@
+.deck-feature i {
+  width: 20px;
+  margin-right: 10px;
+}
+
+.deck-feature .download, .deck-feature .downloaded {
+  display: inline;
+  border: none;
+  background-color: inherit;
+  margin: 0;
+  padding: 0;
+}
+
+.deck-feature .download {
+  color: #007bff;
+}
+
+.deck-feature .downloaded {
+  color: #666;
+}
+/*# sourceMappingURL=PublicDeckDetail.css.map */

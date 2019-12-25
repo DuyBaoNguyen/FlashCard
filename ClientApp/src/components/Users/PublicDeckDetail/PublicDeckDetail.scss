@@ -1,0 +1,19 @@
+.deck-feature {
+  i {
+    width: 20px;
+    margin-right: 10px;
+  }
+  .download, .downloaded {
+    display: inline;
+    border: none;
+    background-color: inherit;
+    margin: 0;
+    padding: 0;
+  }
+  .download {
+    color: #007bff;
+  }
+  .downloaded {
+    color: #666;
+  }
+}
