@@ -27,17 +27,21 @@ body {
 	}
 	.create-cards-info {
 		position: fixed;
-		max-width: 30%;
+		width: 30%;
 
 		input[type='text'],
 		select {
 			width: 100%;
 			padding: 12px 20px;
-			margin: 8px 0;
+			margin: 7px 0;
 			display: inline-block;
 			border: 1px solid #ccc;
 			border-radius: 4px;
 			box-sizing: border-box;
+		}
+
+		#meaning, #example {
+			margin: 0;
 		}
 
 		input[type='file'] {
@@ -45,9 +49,51 @@ body {
 			// border: solid 1px #ccc;
 			color: black;
 			// padding: 14px 20px;
-			margin: 8px 0;
+			// margin: 8px 0;
 			border-radius: 4px;
 			cursor: pointer;
+			display: none;
+		}
+		.image-container {
+			text-align: center;
+			label {
+				margin: 8px auto 0;
+			}
+			.image-input {
+				position: relative;
+				display: inline-block;
+				border-radius: 4px;
+				border: 1px solid #ccc;
+				width: 100px;
+				height: 100px;
+				overflow: hidden;
+				color: #f1f1f1;
+				i.fa-image {
+					position: absolute;
+					top: 25px;
+					left: 25px;
+					z-index: -1;
+				}
+				span {
+					position: absolute;
+					right: 3px;
+					top: 3px;
+					width: 20px;
+					height: 20px;
+					z-index: 1;
+					display: none;
+					text-align: center;
+					border: none;
+					border-radius: 50%;
+					background-color: #f1f1f1dd;
+					color: #7c7c7c;
+					justify-content: center;
+					align-items: center;
+					&:hover {
+						background-color: #dddd;
+					}
+				}
+			}
 		}
 	}
 }
@@ -57,9 +103,10 @@ body {
 	// align-items: flex-start;
 	flex-direction: column;
 	.content-back-side {
+		position: relative;
 		margin: 15px;
 		display: flex;
-		justify-content: center;
+		justify-content: flex-start;
 		align-items: center;
 		flex-direction: row;
 		width: 600px;
@@ -70,13 +117,13 @@ body {
 		display: flex;
 		transition: 0.3s;
 		padding: 15px;
-		&:hover {
-			transition: 0.3s;
-			transform: translateY(-10px);
-			border: solid 2px red;
-		}
+		// &:hover {
+		// 	transition: 0.3s;
+		// 	transform: translateY(-10px);
+		// 	border: solid 2px red;
+		// }
 		.info {
-			width: 100%;
+			width: 400px;
 			.meaning {
 				font-weight: 900;
 				color: #007bff;
@@ -89,7 +136,25 @@ body {
 			.image {
 				// width: 60%;
 				height: 150px;
+				border-radius: 10px;
 			}			
+		}
+		button {
+			position: absolute;
+			right: 10px;
+			top: 10px;
+			padding-top: 3px;
+			display: block;
+			width: 30px;
+			height: 30px;
+			text-align: center;
+			border: none;
+			border-radius: 50%;
+			background-color: #f1f1f1dd;
+			color: #7c7c7c;
+			&:hover {
+				background-color: #dddd;
+			}
 		}
 	}
 }
