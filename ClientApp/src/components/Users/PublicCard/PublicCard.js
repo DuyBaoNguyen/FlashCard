@@ -83,7 +83,7 @@ class PublicCard extends Component {
 	downloadAllCards = async () => {
 		var url = '/api/publiccards/download';
 		const token = await authService.getAccessToken();
-		var r = confirm('Are you sure to delete this card?');
+		var r = window.confirm('Are you sure to delete this card?');
 		if (r == true) {
 			const response = await fetch(url, {
 				headers: !token ? {} : { Authorization: `Bearer ${token}` }

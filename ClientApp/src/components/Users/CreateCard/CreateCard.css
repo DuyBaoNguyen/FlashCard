@@ -107,6 +107,7 @@ body {
 }
 
 .create-cards-backside {
+  position: relative;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -114,6 +115,18 @@ body {
   -webkit-box-direction: normal;
       -ms-flex-direction: column;
           flex-direction: column;
+}
+
+.create-cards-backside h6 {
+  position: absolute;
+  top: 12px;
+  left: 15px;
+  height: 16px;
+  font-size: 16px;
+}
+
+.create-cards-backside h6 .badge {
+  font-weight: 500;
 }
 
 .create-cards-backside .content-back-side {

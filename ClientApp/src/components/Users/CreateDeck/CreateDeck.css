@@ -32,6 +32,10 @@ body {
   color: white;
 }
 
+.add-deck-field .field-content label {
+  margin-bottom: 0px;
+}
+
 .add-deck-field .field-content .select {
   margin-top: 10px;
 }
@@ -40,12 +44,16 @@ body {
 .add-deck-field .field-content select {
   width: 100%;
   padding: 12px 20px;
-  margin: 8px 0;
+  margin: 7px 0;
   display: inline-block;
   border: 1px solid #ccc;
   border-radius: 4px;
   -webkit-box-sizing: border-box;
           box-sizing: border-box;
+}
+
+.add-deck-field .field-content #dname, .add-deck-field .field-content #des {
+  margin: 8px 0 16px;
 }
 
 .add-deck-field .field-content input[type='submit'] {

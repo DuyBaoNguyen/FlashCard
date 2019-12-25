@@ -23,4 +23,58 @@ body {
 	.MuiTableCell-footer {
 		border-bottom: none;
 	}
+	.MuiTableCell-paddingNone {
+		padding-left: 2px !important;
+	}
+	.back-container {
+		padding: 10px 10px 0;
+		margin-left: -2px;
+		.backs-list {
+			display: flex;
+			flex-wrap: wrap;
+			margin-right: -10px;
+			.back-item {
+				width: 100%;
+				margin-bottom: 10px;
+				padding-right: 10px;
+				.back-content {
+					position: relative;
+					display: flex;
+					height: 180px;
+					// border: 1px solid #dee2e6;
+					border-radius: 10px;
+					justify-content: space-between;
+					padding: 10px;
+					box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08), 0 3px 4px rgba(0, 0, 0, 0.05);
+					h6 {
+						position: absolute;
+						top: 7px;
+						left: 10px;
+						height: 16px;
+						font-size: 16px;
+						.badge {
+							font-weight: 500;
+						}
+					}
+					.back-info {
+						text-align: left;
+						.back-meaning {
+							font-weight: 900;
+							color: #007bff;
+							margin-top: 7px;
+						}
+						.back-type {
+							font-style: italic;
+							font-size: 14px;
+						}
+					}
+					img {
+						margin-top: 20px;
+						width: 120px;
+						height: 120px;
+					}
+				}
+			}
+		}
+	}
 }

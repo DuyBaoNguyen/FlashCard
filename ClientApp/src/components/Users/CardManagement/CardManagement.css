@@ -11,6 +11,78 @@ body {
   background-color: white;
 }
 
+.card-management .MuiTableCell-paddingNone {
+  padding-left: 2px !important;
+}
+
+.card-management .back-container {
+  padding: 10px 10px 0;
+  margin-left: -2px;
+}
+
+.card-management .back-container .backs-list {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-wrap: wrap;
+      flex-wrap: wrap;
+  margin-right: -10px;
+}
+
+.card-management .back-container .backs-list .back-item {
+  width: 33.33%;
+  margin-bottom: 10px;
+  padding-right: 10px;
+}
+
+.card-management .back-container .backs-list .back-item .back-content {
+  position: relative;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  height: 180px;
+  border-radius: 10px;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  padding: 10px;
+  -webkit-box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08), 0 3px 4px rgba(0, 0, 0, 0.05);
+          box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08), 0 3px 4px rgba(0, 0, 0, 0.05);
+}
+
+.card-management .back-container .backs-list .back-item .back-content h6 {
+  position: absolute;
+  top: 7px;
+  left: 10px;
+  height: 16px;
+  font-size: 16px;
+}
+
+.card-management .back-container .backs-list .back-item .back-content h6 .badge {
+  font-weight: 500;
+}
+
+.card-management .back-container .backs-list .back-item .back-content .back-info {
+  text-align: left;
+}
+
+.card-management .back-container .backs-list .back-item .back-content .back-info .back-meaning {
+  font-weight: 900;
+  color: #007bff;
+  margin-top: 7px;
+}
+
+.card-management .back-container .backs-list .back-item .back-content .back-info .back-type {
+  font-style: italic;
+  font-size: 14px;
+}
+
+.card-management .back-container .backs-list .back-item .back-content img {
+  margin-top: 20px;
+  width: 120px;
+  height: 120px;
+}
+
 .MuiTableRow-root:not(:last-child) {
   height: 53px !important;
 }

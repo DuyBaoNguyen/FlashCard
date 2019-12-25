@@ -24,6 +24,7 @@ import EditDeck from './components/Users/EditDeck/EditDeck';
 import CreateCard from './components/Users/CreateCard/CreateCard';
 import EditCard from './components/Users/EditCard/EditCard';
 import PublicCard from './components/Users/PublicCard/PublicCard';
+import PublicDeck from './components/Users/PublicDeck/PublicDeck';
 
 import AdminUsers from './components/Admin/AdminUsers/AdminUsers';
 import ProposeCard from './components/Users/ProposeCard/ProposeCard';
@@ -47,7 +48,7 @@ export default class App extends Component {
 					<AuthorizeRoute exact path='/cards' component={CardManagement} />
 					<AuthorizeRoute exact path='/publiccards' component={PublicCard} />
 					<AuthorizeRoute exact path='/proposecard' component={ProposeCard} />
-
+					<AuthorizeRoute exact path='/publicdecks' component={PublicDeck} />
 
 
 					{/* Admin */}
