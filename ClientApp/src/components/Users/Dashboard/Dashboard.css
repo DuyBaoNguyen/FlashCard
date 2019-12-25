@@ -8,4 +8,10 @@ body {
   height: auto;
   background-color: white;
 }
+
+.dashboard-field .dashboard-container {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+}
 /*# sourceMappingURL=Dashboard.css.map */

@@ -1,0 +1,32 @@
+body {
+	font-family: 'Roboto';
+}
+
+.history {
+  width: 66.66%;
+  .history-table {
+    margin-top: 15px;
+		padding: 3px 10px 10px;
+		min-height: 168px;
+		height: 236px;
+		border-radius: 6px;
+		background-color: white;
+    border: solid 1px #eeeeee;
+    table {
+      width: 100%;
+      font-size: 14px;
+      margin: 0;
+      th, td {
+        padding: 8px;
+      }
+      th {
+        border-top: none;
+        border-bottom: 2px solid #dee2e6;
+        font-weight: 500;
+      }
+      td {
+        border-top: 1px solid #eeeeee;
+      }
+    }
+  }
+}

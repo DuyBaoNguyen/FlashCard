@@ -28,14 +28,14 @@ body {
 
 .create-cards .create-cards-info {
   position: fixed;
-  max-width: 30%;
+  width: 30%;
 }
 
 .create-cards .create-cards-info input[type='text'],
 .create-cards .create-cards-info select {
   width: 100%;
   padding: 12px 20px;
-  margin: 8px 0;
+  margin: 7px 0;
   display: inline-block;
   border: 1px solid #ccc;
   border-radius: 4px;
@@ -43,12 +43,67 @@ body {
           box-sizing: border-box;
 }
 
+.create-cards .create-cards-info #meaning, .create-cards .create-cards-info #example {
+  margin: 0;
+}
+
 .create-cards .create-cards-info input[type='file'] {
   width: 100%;
   color: black;
-  margin: 8px 0;
   border-radius: 4px;
   cursor: pointer;
+  display: none;
+}
+
+.create-cards .create-cards-info .image-container {
+  text-align: center;
+}
+
+.create-cards .create-cards-info .image-container label {
+  margin: 8px auto 0;
+}
+
+.create-cards .create-cards-info .image-container .image-input {
+  position: relative;
+  display: inline-block;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+  width: 100px;
+  height: 100px;
+  overflow: hidden;
+  color: #f1f1f1;
+}
+
+.create-cards .create-cards-info .image-container .image-input i.fa-image {
+  position: absolute;
+  top: 25px;
+  left: 25px;
+  z-index: -1;
+}
+
+.create-cards .create-cards-info .image-container .image-input span {
+  position: absolute;
+  right: 3px;
+  top: 3px;
+  width: 20px;
+  height: 20px;
+  z-index: 1;
+  display: none;
+  text-align: center;
+  border: none;
+  border-radius: 50%;
+  background-color: #f1f1f1dd;
+  color: #7c7c7c;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+.create-cards .create-cards-info .image-container .image-input span:hover {
+  background-color: #dddd;
 }
 
 .create-cards-backside {
@@ -62,13 +117,14 @@ body {
 }
 
 .create-cards-backside .content-back-side {
+  position: relative;
   margin: 15px;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
-  -webkit-box-pack: center;
-      -ms-flex-pack: center;
-          justify-content: center;
+  -webkit-box-pack: start;
+      -ms-flex-pack: start;
+          justify-content: flex-start;
   -webkit-box-align: center;
       -ms-flex-align: center;
           align-items: center;
@@ -87,16 +143,8 @@ body {
   padding: 15px;
 }
 
-.create-cards-backside .content-back-side:hover {
-  -webkit-transition: 0.3s;
-  transition: 0.3s;
-  -webkit-transform: translateY(-10px);
-          transform: translateY(-10px);
-  border: solid 2px red;
-}
-
 .create-cards-backside .content-back-side .info {
-  width: 100%;
+  width: 400px;
 }
 
 .create-cards-backside .content-back-side .info .meaning {
@@ -111,5 +159,25 @@ body {
 
 .create-cards-backside .content-back-side .info .image {
   height: 150px;
+  border-radius: 10px;
+}
+
+.create-cards-backside .content-back-side button {
+  position: absolute;
+  right: 10px;
+  top: 10px;
+  padding-top: 3px;
+  display: block;
+  width: 30px;
+  height: 30px;
+  text-align: center;
+  border: none;
+  border-radius: 50%;
+  background-color: #f1f1f1dd;
+  color: #7c7c7c;
+}
+
+.create-cards-backside .content-back-side button:hover {
+  background-color: #dddd;
 }
 /*# sourceMappingURL=CreateCard.css.map */
