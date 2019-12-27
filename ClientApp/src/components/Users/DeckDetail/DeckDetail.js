@@ -358,23 +358,25 @@ class DeckDetail extends Component {
 							</div>
 							<div class="deck-content-advanced-features-items">
 								<p onClick={this.onClickDeleteDeck} style={{ color: 'red' }}>
-									<i class="far fa-trash-alt"></i> Delete deck
+									<i class="far fa-trash-alt"></i>Delete deck
 								</p>
 								<p onClick={this.onClickEditDeck} style={{ color: '#007bff' }}>
 									<i class="far fa-edit"></i> 
-									<Link to={'/editdeck/' + this.state.id} style={{ color: '#007bff' }}> Edit deck</Link>
+									<Link to={'/editdeck/' + this.state.id} style={{ color: '#007bff' }}>Edit deck</Link>
 								</p>
 								<div
 									className={classnames(
 									this.state.role === 'user' ? 'none-display' : 'public',
 									)}
+									style={{ color: "#007bff" }}
 								>
+									<i class="fas fa-upload"></i>
+									Public deck 
 									<Switch
 									className='switch'
 										onChange={this.handleChange}
 										checked={this.state.checked}
-									/>{' '}
-									Public deck
+									/>
 								</div>
 								<div
 									className={classnames(

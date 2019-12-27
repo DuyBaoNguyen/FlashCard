@@ -1,9 +1,9 @@
-.deck-feature i {
+.deck-content-advanced-features-items i {
   width: 20px;
   margin-right: 10px;
 }
 
-.deck-feature .download, .deck-feature .downloaded {
+.deck-content-advanced-features-items .download, .deck-content-advanced-features-items .downloaded {
   display: inline;
   border: none;
   background-color: inherit;
@@ -11,11 +11,11 @@
   padding: 0;
 }
 
-.deck-feature .download {
+.deck-content-advanced-features-items .download {
   color: #007bff;
 }
 
-.deck-feature .downloaded {
+.deck-content-advanced-features-items .downloaded {
   color: #666;
 }
 /*# sourceMappingURL=PublicDeckDetail.css.map */

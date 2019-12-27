@@ -68,8 +68,9 @@
 			.public {
 				display: flex;
 				align-items: center;
+				margin-top: -2px;
 				.switch {
-					margin-right: 15px;
+					margin-left: 30px;
 				}
 			}
 			.deck-content-advanced-share {
