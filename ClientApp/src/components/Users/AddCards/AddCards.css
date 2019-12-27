@@ -8,11 +8,8 @@ body {
   display: flex !important;
   padding-top: 30px;
   padding-bottom: 30px;
-  height: auto !important;
   background-color: white;
   margin-right: -20px;
-  width: auto !important;
-  max-width: none !important;
 }
 
 .add-field .deck-table {

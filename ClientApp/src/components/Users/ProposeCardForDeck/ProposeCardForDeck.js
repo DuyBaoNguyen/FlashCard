@@ -3,6 +3,8 @@ import authService from '../../api-authorization/AuthorizeService';
 import MaterialTable from 'material-table';
 import { Link } from 'react-router-dom';
 
+import './ProposeCardForDeck.css';
+
 class ProposeCardForDeck extends Component {
   constructor(props) {
     super(props);
