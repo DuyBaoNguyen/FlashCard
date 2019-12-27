@@ -177,6 +177,7 @@ class EditCard extends Component {
 		image.style.width = '0';
 		image.style.height = '0';
 		document.getElementById('deleteImage').style.display = 'none';
+		document.getElementById('image').value = '';
 		this.setState({ base64: null });
 	}
 

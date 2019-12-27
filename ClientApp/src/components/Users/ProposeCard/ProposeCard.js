@@ -46,7 +46,12 @@ class ProposeCard extends Component {
     let file = e.target.files[0];
     let reader = new FileReader();
     reader.readAsDataURL(file);
-    reader.onloadend = () => {
+    reader.onloadend = (e) => {
+			let image = document.getElementById('newImage');
+			image.src = e.target.result;
+			image.style.width = '100px';
+			image.style.height = '100px';
+			document.getElementById('deleteImage').style.display = 'flex';
       this.setState({
         file: file,
         base64: reader.result
@@ -122,10 +127,20 @@ class ProposeCard extends Component {
 			console.log('Success:', JSON.stringify(json));
 			array.push(data.back);
 			this.setState({
-				cardData: array
+				cardData: array,
+				selectedOption: null,
+				base64: null
 			});
 			// console.log(this.state.cardData);
 			// this.updateCard(document.getElementById('front').value);
+			document.getElementById('meaning').value = '';
+			document.getElementById('example').value = '';
+			document.getElementById('image').value = '';
+			let image = document.getElementById('newImage');
+			image.src = '';
+			image.style.width = '0';
+			image.style.height = '0';
+			document.getElementById('deleteImage').style.display = 'none';
 		} catch (error) {
 			console.error('Error:', error);
 		}
@@ -154,6 +169,17 @@ class ProposeCard extends Component {
 			}
 		});
 	};
+
+	deleteImage = (e) => {
+		e.preventDefault();
+		let image = document.getElementById('newImage');
+		image.src = '';
+		image.style.width = '0';
+		image.style.height = '0';
+		document.getElementById('deleteImage').style.display = 'none';
+		document.getElementById('image').value = '';
+		this.setState({ base64: null });
+	}
 
 	render() {
 		let front;
@@ -210,10 +236,23 @@ class ProposeCard extends Component {
 						<br />
 						<label for="fname">Meaning</label>
 						<input type="text" id="meaning" name="dname" />
+						<br /><br />
 						<label for="fname">Example</label>
 						<input type="text" id="example" name="dname" />
-						<label for="fname">Image</label>
-						<input type="file" id="image" accept='image/*' onChange={this.handleImageChange}/>
+						<br /><br />
+						Image
+						<div className="image-container">
+							<label>
+								<div className="image-input">
+									<i class="far fa-image" style={{ fontSize: 50 }}></i>
+									<img id="newImage" />
+									<span id="deleteImage" onClick={(event) => this.deleteImage(event)}>
+										<i class="fas fa-times" style={{ fontSize: 12 }}></i>
+									</span>
+								</div>
+								<input type="file" id="image" accept='image/*' onChange={this.handleImageChange} />
+							</label>
+						</div>
 						<hr />
 						<Button
 							className="button-submit"

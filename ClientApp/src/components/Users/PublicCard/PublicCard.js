@@ -50,7 +50,8 @@ class PublicCard extends Component {
 				oldVocab = {
 					id: vocab.id,
 					front: vocab.front,
-					backs: vocab.backs.map((back, index2) => back.meaning).join(' - ')
+					backs: vocab.backs.map((back, index2) => back.meaning).join(' - '),
+					originBacks: vocab.backs
 				};
 				mockData.push(oldVocab);
 			});
@@ -135,6 +136,30 @@ class PublicCard extends Component {
 					{ title: 'Backs', field: 'backs' }
 				]}
 				data={data}
+				detailPanel={rowData => {
+					return (
+						<div className="back-container">
+							<div className="backs-list">
+								{ rowData.originBacks.map((back, index) => {
+									return (
+										<div className="back-item">
+											<div className="back-content">
+												{ back.fromAdmin ? <h6 class="w-auto"><span class="badge badge-success">From Admin</span></h6> : '' }
+												<div className="back-info">
+													<br />
+													<p className="back-meaning">{back.meaning}</p>
+													<p className="back-type">{back.type}</p>
+													<p className="back-example">{back.example}</p>
+												</div>
+												<img src={back.image ? back.image : ''} className={back.image ? '' : 'd-none'} />
+											</div>
+										</div>
+									);
+								})}
+							</div>
+						</div>
+					)
+				}}
 				actions={[
 					{
 						icon: 'Propose',
@@ -155,7 +180,7 @@ class PublicCard extends Component {
 					}
 				]}
 				options={{
-					pageSize: 5
+					pageSize: 10
 				}}
 			/>
 		);
