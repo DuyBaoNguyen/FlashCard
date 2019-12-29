@@ -1,0 +1,22 @@
+.deck-content-advanced-features-items {
+  i {
+    width: 20px;
+    margin-right: 10px;
+  }
+  .download, .downloaded {
+    display: inline;
+    border: none;
+    background-color: inherit;
+    margin: 0;
+    padding: 0;
+  }
+  .download {
+    color: #007bff;
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+  .downloaded {
+    color: #666;
+  }
+}

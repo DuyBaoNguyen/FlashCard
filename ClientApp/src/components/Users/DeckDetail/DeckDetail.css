@@ -90,10 +90,11 @@
   -webkit-box-align: center;
       -ms-flex-align: center;
           align-items: center;
+  margin-top: -2px;
 }
 
 .deck-fields .deck-content .deck-content-advanced .public .switch {
-  margin-right: 15px;
+  margin-left: 30px;
 }
 
 .deck-fields .deck-content .deck-content-advanced .deck-content-advanced-share {
@@ -101,7 +102,7 @@
 }
 
 .deck-fields .deck-content .deck-content-advanced .deck-content-advanced-features {
-  margin-bottom: 30px;
+  margin-bottom: 23px;
 }
 
 .deck-fields .deck-content .deck-content-advanced .deck-content-advanced-features .deck-content-advanced-features-items i {
@@ -269,9 +270,5 @@
 .MuiTableCell-head {
   border-top: none !important;
   border-bottom: 1px solid #dee2e6 !important;
-}
-
-.MuiTableCell-head:first-child {
-  padding-left: 18px;
 }
 /*# sourceMappingURL=DeckDetail.css.map */

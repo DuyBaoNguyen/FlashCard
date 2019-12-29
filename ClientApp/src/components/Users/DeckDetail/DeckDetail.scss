@@ -68,15 +68,16 @@
 			.public {
 				display: flex;
 				align-items: center;
+				margin-top: -2px;
 				.switch {
-					margin-right: 15px;
+					margin-left: 30px;
 				}
 			}
 			.deck-content-advanced-share {
 				margin-top: 100px;
 			}
 			.deck-content-advanced-features {
-				margin-bottom: 30px;
+				margin-bottom: 23px;
 				.deck-content-advanced-features-items {
 					i {
 						margin-left: 10px;
@@ -222,6 +223,6 @@
 	border-bottom: 1px solid #dee2e6 !important;
 }
 
-.MuiTableCell-head:first-child {
-	padding-left: 18px;
-}
+// .MuiTableCell-head:first-child {
+// 	padding-left: 18px;
+// }

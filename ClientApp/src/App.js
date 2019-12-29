@@ -24,7 +24,10 @@ import EditDeck from './components/Users/EditDeck/EditDeck';
 import CreateCard from './components/Users/CreateCard/CreateCard';
 import EditCard from './components/Users/EditCard/EditCard';
 import PublicCard from './components/Users/PublicCard/PublicCard';
-import PublicDeck from './components/Users/PublicDeck/PublicDeck';
+import PublicDecks from './components/Users/PublicDecks/PublicDecks';
+import PublicDeckDetail from './components/Users/PublicDeckDetail/PublicDeckDetail';
+import ProposeCardForDeck from './components/Users/ProposeCardForDeck/ProposeCardForDeck';
+import ProposeDeck from './components/Users/ProposeDeck/ProposeDeck';
 
 import AdminUsers from './components/Admin/AdminUsers/AdminUsers';
 import ProposeCard from './components/Users/ProposeCard/ProposeCard';
@@ -48,7 +51,10 @@ export default class App extends Component {
 					<AuthorizeRoute exact path='/cards' component={CardManagement} />
 					<AuthorizeRoute exact path='/publiccards' component={PublicCard} />
 					<AuthorizeRoute exact path='/proposecard' component={ProposeCard} />
-					<AuthorizeRoute exact path='/publicdecks' component={PublicDeck} />
+					<AuthorizeRoute exact path='/publicdecks' component={PublicDecks} />
+					<AuthorizeRoute exact path='/publicdecks/:deckId' component={PublicDeckDetail} />
+					<AuthorizeRoute exact path='/proposal/:deckId' component={ProposeCardForDeck} />
+					<AuthorizeRoute exact path='/proposedeck' component={ProposeDeck} />
 
 
 					{/* Admin */}

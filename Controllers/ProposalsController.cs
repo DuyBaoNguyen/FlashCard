@@ -32,7 +32,9 @@ namespace FlashCard.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> ApproveProposalForDeck(int id)
         {
-            var proposal = await dbContext.Proposals.FirstOrDefaultAsync(p => p.Id == id);
+            var proposal = await dbContext.Proposals
+                               .Include(p => p.Deck)
+                               .FirstOrDefaultAsync(p => p.Id == id);
 
             if (proposal == null)
             {
@@ -64,6 +66,7 @@ namespace FlashCard.Controllers
             }
 
             proposal.Approved = true;
+            proposal.Deck.Approved = true;
             var backs = dbContext.Backs.Where(b => b.CardId == proposal.CardId && b.OwnerId == user.Id && 
                             b.AuthorId == proposal.UserId && !b.Approved);
                                 

@@ -2,30 +2,8 @@ body {
 	font-family: 'Roboto';
 }
 
-.add-field {
-	max-width: 100%;
-	display: grid;
-	grid-row-gap: 20px;
-	column-gap: 20px;
-	grid-template-columns: auto auto auto;
-	padding-top: 30px;
-	width: 100%;
-	min-height: 100vh;
-	height: auto;
-	background-color: white;
-	.deck-table {
-		width: 100%;
-	}
-	.deck-cards {
-		width: 100%;
-	}
-}
-
 .propose-field {
 	display: flex;
 	justify-content: center;
 	align-items: center;
 }
-
-
-

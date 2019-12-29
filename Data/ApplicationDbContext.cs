@@ -78,9 +78,8 @@ namespace FlashCard.Data
 
             builder.Entity<Deck>()
                 .HasOne(d => d.Source)
-                .WithOne()
-                .HasForeignKey<Deck>(d => d.SourceId)
-                .OnDelete(DeleteBehavior.NoAction);
+                .WithMany()
+                .HasForeignKey(d => d.SourceId);
 
             builder.Entity<Deck>()
                 .HasOne(d => d.Category)
@@ -118,9 +117,8 @@ namespace FlashCard.Data
 
             builder.Entity<Back>()
                 .HasOne(b => b.Source)
-                .WithOne()
-                .HasForeignKey<Back>(b => b.SourceId)
-                .OnDelete(DeleteBehavior.NoAction);
+                .WithMany()
+                .HasForeignKey(b => b.SourceId);
 
             builder.Entity<Back>()
                 .Property(b => b.Version)

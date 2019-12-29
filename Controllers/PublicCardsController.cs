@@ -174,18 +174,15 @@ namespace FlashCard.Controllers
                 return NotFound();
             }
 
-            var OwnedCardIds = dbContext.CardOwners
-                                    .Where(co => co.UserId == userId)
-                                    .Select(co => co.CardId)
-                                    .ToHashSet<int>();
             var OwnedBackIds = dbContext.Backs
-                                    .Where(b => b.OwnerId == userId && b.SourceId != null)
-                                    .Select(b => b.SourceId)
-                                    .ToHashSet<int?>();
+                                   .Where(b => b.OwnerId == userId && b.SourceId != null)
+                                   .Select(b => b.SourceId)
+                                   .Distinct()
+                                   .ToHashSet<int?>();
             var newBacks = new List<Back>();
 
             // Add card to user if user does not own it
-            if (!OwnedCardIds.Contains(publicCard.Id))
+            if (await dbContext.CardOwners.FirstOrDefaultAsync(c => c.CardId == publicCard.Id && c.UserId == userId) == null)
             {
                 dbContext.CardOwners.Add(new CardOwner()
                 {

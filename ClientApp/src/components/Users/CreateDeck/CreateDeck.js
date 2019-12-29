@@ -125,7 +125,7 @@ class CreateDeck extends Component {
 				<div className="add-deck-field">
 					<div className="field-content">
 						<form action="/action_page.php">
-							<label for="fname">Categories</label>
+							<label for="fname">Category</label>
 							<Select
 								className="select"
 								value={selectedOption}

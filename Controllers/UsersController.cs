@@ -43,7 +43,9 @@ namespace FlashCard.Controllers
             }
 
             var userModels = new List<UserApiModel>();
-            var users = await dbContext.Users.ToArrayAsync();
+            var users = await dbContext.Users
+                            .Where(u => u.UserName != "admin@admin.com")
+                            .ToArrayAsync();
 
             foreach (var user in users)
             {

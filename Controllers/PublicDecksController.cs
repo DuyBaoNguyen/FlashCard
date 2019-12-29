@@ -216,7 +216,12 @@ namespace FlashCard.Controllers
                 return BadRequest(ModelState);
             }
 
-            var privateBacks = await dbContext.Backs.Where(b => b.OwnerId == user.Id).ToArrayAsync();
+            // var privateBacks = await dbContext.Backs.Where(b => b.OwnerId == user.Id).ToArrayAsync();
+            var privateBackIds = dbContext.Backs
+                                   .Where(b => b.OwnerId == user.Id && b.SourceId != null)
+                                   .Select(b => b.SourceId)
+                                   .Distinct()
+                                   .ToHashSet<int?>();
             var newBacks = new List<Back>();
             var deckNames = dbContext.Decks
                                 .Where(d => d.OwnerId == user.Id)
@@ -268,7 +273,7 @@ namespace FlashCard.Controllers
                 // Add back for card if user does not own it
                 foreach (var back in cardAssignment.Card.Backs)
                 {
-                    if (back.Approved && privateBacks.FirstOrDefault(b => b.SourceId == back.Id) == null)
+                    if (back.Approved && !privateBackIds.Contains(back.Id))
                     {
                         newBacks.Add(new Back()
                         {
@@ -280,7 +285,7 @@ namespace FlashCard.Controllers
                             LastModified = back.LastModified,
                             Version = back.Version,
                             FromAdmin = true,
-                            CardId = cardAssignment.CardId,
+                            CardId = back.CardId,
                             SourceId = back.Id,
                             OwnerId = user.Id,
                             AuthorId = back.AuthorId

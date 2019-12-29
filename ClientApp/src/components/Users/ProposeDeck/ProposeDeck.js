@@ -1,38 +1,23 @@
 import React, { Component } from 'react';
 import authService from '../../api-authorization/AuthorizeService';
-import MaterialTable from 'material-table';
-import Dashboard from '../Dashboard/Dashboard';
-import AddCards from '../AddCards/AddCards';
-
+import ProposeCardForDeck from '../ProposeCardForDeck/ProposeCardForDeck';
 import Button from '@material-ui/core/Button';
 import Select from 'react-select';
 import { BrowserRouter as Router, Redirect, Link } from 'react-router-dom';
 
-import '../CreateDeck/CreateDeck.css';
-import DeckDetail from '../DeckDetail/DeckDetail';
-
-class EditDeck extends Component {
+class ProposeDeck extends Component {
   constructor(props) {
     super(props);
     this.state = {
       id: '',
+      redirectProposeCards: false,
       selectedOption: null,
       categories: {},
-      deckData: {},
-      redirectToDeck: false,
     };
-  }
-
-  componentWillMount() {
-    var deckID = this.getDeckIDFromPath();
-    this.setState({
-      id: deckID
-    });
   }
 
   componentDidMount() {
     this.getCategories();
-    this.getDeckData();
   }
 
   getDeckIDFromPath = url => {
@@ -45,36 +30,19 @@ class EditDeck extends Component {
     const response = await fetch(url, {
       headers: !token ? {} : { Authorization: `Bearer ${token}` }
     });
-    const data = await response.json();
-    this.setState({ categories: data, loading: false });
-  };
 
-  getDeckData = async () => {
-    var url = '/api/decks/' + this.state.id;
-    const token = await authService.getAccessToken();
-    const response = await fetch(url, {
-      headers: !token ? {} : { Authorization: `Bearer ${token}` }
-    });
     if (response.status === 200) {
       const data = await response.json();
-      console.log(data);
-      this.setState({
-        deckData: data,
-        selectedOption: {
-          value: data.category.id,
-          label: data.category.name
-        },
-        loading: false
-      });
+      this.setState({ categories: data, loading: false });
     }
   };
 
-  editDeck = async () => {
+  proposeDeck = async () => {
     var deckName = document.getElementById('dname').value;
     var description = document.getElementById('des').value;
     var categories = this.state.selectedOption.value;
 
-    const url = '/api/decks/' + this.state.id;
+    const url = '/api/proposeddecks/';
     const token = await authService.getAccessToken();
     const data = {
       name: deckName,
@@ -83,17 +51,21 @@ class EditDeck extends Component {
         id: categories
       }
     };
-    
+
     const response = await fetch(url, {
-      method: 'PUT', // or 'PUT'
-      body: JSON.stringify(data), // data can be `string` or {object}!
+      method: 'POST',
+      body: JSON.stringify(data),
       headers: {
         Authorization: `Bearer ${token}`,
         'Content-Type': 'application/json'
       }
     });
-    if (response.status === 204) {
-      this.setState({ redirectToDeck: true });
+    if (response.status === 201) {
+      const json = await response.json();
+      this.setState({
+        id: JSON.stringify(json.id),
+        redirectProposeCards: true,
+      });
     }
   };
 
@@ -123,17 +95,16 @@ class EditDeck extends Component {
     var categories;
     var url;
     const { selectedOption } = this.state;
-
-    if (this.state.redirectToDeck === true) {
-      return <Redirect to={'/decks/' + this.state.id} Component={DeckDetail} />;
+    if (this.state.redirectProposeCards === true) {
+      url = "/proposal/" + this.state.id;
+      return <Redirect to={url} Component={ProposeCardForDeck} />;
     }
-
     if (this.state.categories.length !== undefined) {
       categories = this.transData();
     }
     return (
       <div>
-        <Link to={'/decks/' + this.state.id}>Back</Link>
+        <Link to="/publicdecks">Back</Link>
         <div className="add-deck-field">
           <div className="field-content">
             <form action="/action_page.php">
@@ -146,17 +117,17 @@ class EditDeck extends Component {
               />
               <hr />
               <label for="fname">Deck name</label>
-              <input type="text" id="dname" name="dname" defaultValue={this.state.deckData && this.state.deckData.name} />
+              <input type="text" id="dname" name="dname" />
               <label for="lname">Description</label>
-              <input type="text" id="des" name="des" defaultValue={this.state.deckData && this.state.deckData.description} />
+              <input type="text" id="des" name="des" />
 
               <Button
                 className="button-submit"
-                onClick={this.editDeck}
+                onClick={this.proposeDeck}
                 type="button"
                 color="primary"
               >
-                <p>Done</p>
+                <p>Propose</p>
               </Button>
             </form>
           </div>
@@ -166,4 +137,4 @@ class EditDeck extends Component {
   }
 }
 
-export default EditDeck;
+export default ProposeDeck;
