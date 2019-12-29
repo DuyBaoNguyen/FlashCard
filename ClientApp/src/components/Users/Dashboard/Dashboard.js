@@ -6,6 +6,7 @@ import Navbar from '../../modules/NavBar/Navbar';
 import Info from '../../modules/Info/Info';
 import History from '../../modules/History/History';
 import DeckList from '../../modules/DeckList/DeckList';
+import Deck from '../../modules/Deck/Deck';
 
 class Dashboard extends Component {
 	constructor(props) {

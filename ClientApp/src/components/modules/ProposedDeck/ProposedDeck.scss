@@ -1,0 +1,49 @@
+.menu-deck-info {
+	width: 100%;
+	display: block;
+	h6 {
+		margin: 0;
+		height: 16px;
+		font-size: 16px;
+		font-weight: normal;
+		font-stretch: normal;
+		font-style: normal;
+		line-height: 1.5;
+		letter-spacing: 0.15px;
+		color: #007bff;
+	}
+	.badge {
+		font-weight: 500;
+	}
+	.menu-deck-info-line {
+		height: 16px;
+		margin-top: 10px;
+		align-self: flex-end;
+		display: flex;
+		justify-content: flex-start;
+		align-items: baseline;
+		img {
+			margin-right: 15px;
+		}
+		p {
+			width: 150px;
+			height: 16px;
+			font-size: 12px;
+			font-weight: normal;
+			font-stretch: normal;
+			font-style: normal;
+			line-height: 1.33;
+			letter-spacing: 0.4px;
+			color: rgba(0, 0, 0, 0.6);
+		}
+	}
+}
+.menu-deck-next {
+	width: 10%;
+	align-self: center;
+	text-align: right;
+}
+
+.icon {
+	fill: #007bff;
+}

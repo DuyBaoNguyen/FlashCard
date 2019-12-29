@@ -6,6 +6,7 @@ import './AdminPropose.css';
 import Navbar from '../../modules/NavBar/Navbar';
 import AdminUsers from '../AdminUsers/AdminUsers';
 import AdminProposeCards from '../AdminProposeCards/AdminProposeCards';
+import AdminProposeDecks from '../AdminProposeDecks/AdminProposeDecks';
 
 class AdminPropose extends Component {
 	render() {
@@ -13,7 +14,6 @@ class AdminPropose extends Component {
 			<TabList>
 				<Tab>Cards</Tab>
 				<Tab>Decks</Tab>
-				<Tab>Cards in public decks</Tab>
 
 			</TabList>
 	
@@ -21,10 +21,7 @@ class AdminPropose extends Component {
 				<h2><AdminProposeCards/></h2>
 			</TabPanel>
 			<TabPanel>
-				<h2>Any content 2</h2>
-			</TabPanel>
-			<TabPanel>
-				<h2>Any content 3</h2>
+				<h2><AdminProposeDecks/></h2>
 			</TabPanel>
 		</Tabs>);
 		return (

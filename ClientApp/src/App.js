@@ -32,6 +32,8 @@ import ProposeDeck from './components/Users/ProposeDeck/ProposeDeck';
 import AdminUsers from './components/Admin/AdminUsers/AdminUsers';
 import ProposeCard from './components/Users/ProposeCard/ProposeCard';
 import AdminPropose from './components/Admin/AdminPropose/AdminPropose';
+import AdminProposeDeckDetail from './components/Admin/AdminProposeDeckDetail/AdminProposeDeckDetail';
+
 
 export default class App extends Component {
 	static displayName = App.name;
@@ -59,7 +61,9 @@ export default class App extends Component {
 
 					{/* Admin */}
 					<AuthorizeRoute exact path='/users' component={AdminUsers} />
-					<AuthorizeRoute exact path='/adminpropose' component={AdminPropose} />
+					<AuthorizeRoute exact path='/admin/propose' component={AdminPropose} />
+					<AuthorizeRoute exact path='/admin/propose/:deckId' component={AdminProposeDeckDetail} />
+
 
 					<Route
 						path={ApplicationPaths.ApiAuthorizationPrefix}
