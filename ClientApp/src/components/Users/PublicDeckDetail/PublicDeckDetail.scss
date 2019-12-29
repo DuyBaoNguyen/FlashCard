@@ -12,6 +12,9 @@
   }
   .download {
     color: #007bff;
+    &:hover {
+      text-decoration: underline;
+    }
   }
   .downloaded {
     color: #666;
