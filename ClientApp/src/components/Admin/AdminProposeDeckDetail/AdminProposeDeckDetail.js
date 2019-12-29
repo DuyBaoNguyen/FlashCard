@@ -9,19 +9,20 @@ import Navbar from '../../modules/NavBar/Navbar';
 import AdminUsers from '../AdminUsers/AdminUsers';
 import Deck from '../../modules/Deck/Deck';
 
-class AdminProposeDecks extends Component {
+class AdminProposeDeckDetail extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
 			redirect: false,
 			deckData: [],
 			redirectCreateDeck: false,
-			cardSource: {}
+			cardSource: []
 		};
 	}
 
 	componentDidMount() {
 		this.getDeckData();
+		this.getCardFromDeck();
 	}
 
 	getDeckData = async () => {
@@ -31,8 +32,20 @@ class AdminProposeDecks extends Component {
 			headers: !token ? {} : { Authorization: `Bearer ${token}` }
 		});
 		const data = await response.json();
-		console.log(token);
-		this.setState({ deckData: data, loading: false, checked: data.public });
+		console.log(data);
+		this.setState({ deckData: data, loading: false });
+	};
+
+	getCardFromDeck = async () => {
+		var url = '/api/proposeddecks/' + this.props.match.params.deckId + '/proposals';
+		const token = await authService.getAccessToken();
+		const response = await fetch(url, {
+			headers: !token ? {} : { Authorization: `Bearer ${token}` }
+		});
+		const data = await response.json();
+		console.log(data);
+		this.setState({ cardSource: data, loading: false });
+		console.log(this.state.cardSource);
 	};
 
 	table = () => {
@@ -47,8 +60,7 @@ class AdminProposeDecks extends Component {
 				columns={[
 					// { title: 'ID', field: 'id' },
 					{ title: 'Front', field: 'front' },
-					{ title: 'Backs', field: 'back' },
-					{ title: 'Author', field: 'author' },				
+					{ title: 'Backs', field: 'back' },		
 				]}
 
 				data={data}
@@ -73,7 +85,7 @@ class AdminProposeDecks extends Component {
 	};
 
 	approveCard = async id => {
-		var url = '/api/proposedbacks/' + id;
+		var url = '/api/proposals/' + id;
 		const token = await authService.getAccessToken();
 		// eslint-disable-next-line no-restricted-globals
 		var r = confirm('Are you sure to approve this card?');
@@ -92,11 +104,11 @@ class AdminProposeDecks extends Component {
 				console.error('Error:', error);
 			}
 		}
-		this.getProposedCards();
+		this.getCardFromDeck();
 	};
 
 	rejectCard = async id => {
-		var url = '/api/proposedbacks/' + id;
+		var url = '/api/proposals/' + id;
 		const token = await authService.getAccessToken();
 		// eslint-disable-next-line no-restricted-globals
 		var r = confirm('Are you sure to reject this card?');
@@ -115,33 +127,20 @@ class AdminProposeDecks extends Component {
 				console.error('Error:', error);
 			}
 		}
-		this.getProposedCards();
-	};
-
-	getProposedCards = async () => {
-		var url = '/api/proposedcards';
-		const token = await authService.getAccessToken();
-		const response = await fetch(url, {
-			headers: !token ? {} : { Authorization: `Bearer ${token}` }
-		});
-
-		const data = await response.json();
-
-		this.setState({ cardSource: data, loading: false });
+		this.getCardFromDeck();
 	};
 
 	transData = param => {
 		var mockData = [];
 		var oldVocab = Object.create(null);
 		var data = param;
-		if (data != undefined) {
-			data.map((vocab, index) => {
-				// oldVocab = {
+		console.log(data);
 
-				// };
-				vocab.backs.map(back => {
+		if (data !== undefined) {
+			data.map((vocab, index) => {
+				vocab.card.backs.map(back => {
 					oldVocab = {
-						front: vocab.front,
+						front: vocab.card.front,
 						id: back.id,
 						back: back.meaning,
 						author: back.author.displayName
@@ -205,4 +204,4 @@ class AdminProposeDecks extends Component {
 	}
 }
 
-export default AdminProposeDecks;
+export default AdminProposeDeckDetail;
