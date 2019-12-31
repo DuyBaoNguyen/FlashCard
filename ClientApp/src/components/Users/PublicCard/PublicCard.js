@@ -8,6 +8,7 @@ import { forwardRef } from 'react';
 import AddBox from '@material-ui/icons/AddBox';
 import EditCard from '../EditCard/EditCard';
 import { hashHistory } from 'react-router';
+import Icon from '@material-ui/core/Icon';
 
 import './PublicCard.css';
 import ProposeCard from '../ProposeCard/ProposeCard';
@@ -162,13 +163,13 @@ class PublicCard extends Component {
 				}}
 				actions={[
 					{
-						icon: 'Propose',
+						icon: () => <Icon className="fas fa-hand-paper" style={{ fontSize: 18 }}/>,
 						tooltip: 'Propose Card',
 						isFreeAction: true,
 						onClick: event => this.redirectProposeCard()
 					},
 					{
-						icon: 'Download',
+						icon: () => <Icon className="fas fa-download" style={{ fontSize: 18 }}/>,
 						tooltip: 'Download All Cards',
 						isFreeAction: true,
 						onClick: event => this.downloadAllCards()

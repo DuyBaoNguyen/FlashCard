@@ -34,6 +34,7 @@ import ProposeCard from './components/Users/ProposeCard/ProposeCard';
 import AdminPropose from './components/Admin/AdminPropose/AdminPropose';
 import AdminProposeDeckDetail from './components/Admin/AdminProposeDeckDetail/AdminProposeDeckDetail';
 
+import './font-awesome/css/all.css';
 
 export default class App extends Component {
 	static displayName = App.name;

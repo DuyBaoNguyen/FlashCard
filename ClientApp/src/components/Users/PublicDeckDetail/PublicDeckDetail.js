@@ -167,7 +167,7 @@ class PublicDeckDetail extends Component {
 
                   {this.state.deckData.had === true ?
                     <p>
-                      <i class="fas fa-download" style={{ color: "#666" }}></i>
+                      <i class="far fa-download" style={{ color: "#666" }}></i>
                       <button
                         className="downloaded"
                         onClick={(event) => this.onClickDownloaded(event)}
@@ -176,7 +176,7 @@ class PublicDeckDetail extends Component {
                       </button>
                     </p> :
                     <p>
-                      <i class="fas fa-download" style={{ color: "#007bff" }}></i>
+                      <i class="far fa-download" style={{ color: "#007bff" }}></i>
                       <button
                         className="download"
                         onClick={(event) => this.onClickDownload(event, this.state.id)}
@@ -185,7 +185,7 @@ class PublicDeckDetail extends Component {
                       </button>
                     </p>}
                   <p>
-                    <i class="fas fa-hand-paper" style={{ color: "#007bff" }}></i>
+                    <i class="far fa-hand-paper" style={{ color: "#007bff" }}></i>
                     <Link to={'/proposal/' + this.state.id} className="download propose">Propose Cards</Link>
                   </p>
                 </div>
