@@ -163,13 +163,13 @@ class PublicCard extends Component {
 				}}
 				actions={[
 					{
-						icon: () => <Icon className="fas fa-hand-paper" style={{ fontSize: 18 }}/>,
+						icon: () => <Icon className="far fa-hand-paper" style={{ fontSize: 18 }}/>,
 						tooltip: 'Propose Card',
 						isFreeAction: true,
 						onClick: event => this.redirectProposeCard()
 					},
 					{
-						icon: () => <Icon className="fas fa-download" style={{ fontSize: 18 }}/>,
+						icon: () => <Icon className="far fa-arrow-to-bottom" style={{ fontSize: 18 }}/>,
 						tooltip: 'Download All Cards',
 						isFreeAction: true,
 						onClick: event => this.downloadAllCards()

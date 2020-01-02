@@ -167,7 +167,7 @@ class PublicDeckDetail extends Component {
 
                   {this.state.deckData.had === true ?
                     <p>
-                      <i class="far fa-download" style={{ color: "#666" }}></i>
+                      <i className="far fa-arrow-to-bottom" style={{ color: "#666" }}></i>
                       <button
                         className="downloaded"
                         onClick={(event) => this.onClickDownloaded(event)}
@@ -176,7 +176,7 @@ class PublicDeckDetail extends Component {
                       </button>
                     </p> :
                     <p>
-                      <i class="far fa-download" style={{ color: "#007bff" }}></i>
+                      <i className="far fa-arrow-to-bottom" style={{ color: "#007bff" }}></i>
                       <button
                         className="download"
                         onClick={(event) => this.onClickDownload(event, this.state.id)}
