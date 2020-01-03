@@ -51,7 +51,7 @@ class AdminProposeCards extends Component {
 					}
 				]}
 				options={{
-					pageSize: 5
+					pageSize: 9
 				}}
 			/>
 		);

@@ -370,7 +370,7 @@ class DeckDetail extends Component {
 									)}
 									style={{ color: "#007bff" }}
 								>
-									<i class="fas fa-upload"></i>
+									<i class="far fa-arrow-from-bottom"></i>
 									Publicize deck 
 									<Switch
 									className='switch'
