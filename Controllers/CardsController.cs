@@ -305,11 +305,22 @@ namespace FlashCard.Controllers
             dbContext.CardAssignments.RemoveRange(dbContext.CardAssignments
                                                     .Include(ca => ca.Deck)
                                                     .Where(ca => ca.CardId == card.Id && ca.Deck.OwnerId == user.Id));
-            dbContext.Backs.RemoveRange(dbContext.Backs.Where(b => b.CardId == card.Id && b.OwnerId == user.Id));
             dbContext.TestedCards.RemoveRange(dbContext.TestedCards
                                                 .Include(f => f.Test)
                                                     .ThenInclude(t => t.Deck)
                                                 .Where(f => f.Test.Deck.OwnerId == user.Id && f.CardId == card.Id));
+            var deletedBacks = await dbContext.Backs
+                                   .Where(b => b.CardId == card.Id && b.OwnerId == user.Id)
+                                   .Select(b => b.Id)
+                                   .ToArrayAsync<int>();
+            var derivedBacks = dbContext.Backs.Where(b => b.SourceId != null && deletedBacks.Contains((int)b.SourceId));
+            
+            foreach (var derivedBack in derivedBacks)
+            {
+                derivedBack.SourceId = null;
+            }
+
+            dbContext.Backs.RemoveRange(dbContext.Backs.Where(b => b.CardId == card.Id && b.OwnerId == user.Id));
 
             await dbContext.SaveChangesAsync();
 

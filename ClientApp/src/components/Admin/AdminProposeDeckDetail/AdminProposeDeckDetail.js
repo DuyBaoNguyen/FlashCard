@@ -1,13 +1,12 @@
 import React, { Component } from 'react';
 import authService from '../../api-authorization/AuthorizeService';
-import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
+import { BrowserRouter as Router, Redirect, Link } from 'react-router-dom';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import 'react-tabs/style/react-tabs.css';
 import MaterialTable from 'material-table';
 import './AdminProposeDeckDetail.css';
-import Navbar from '../../modules/NavBar/Navbar';
-import AdminUsers from '../AdminUsers/AdminUsers';
-import Deck from '../../modules/Deck/Deck';
+import Swal from 'sweetalert2';
+import AdminPropose from '../AdminPropose/AdminPropose';
 
 class AdminProposeDeckDetail extends Component {
 	constructor(props) {
@@ -16,7 +15,8 @@ class AdminProposeDeckDetail extends Component {
 			redirect: false,
 			deckData: [],
 			redirectCreateDeck: false,
-			cardSource: []
+			cardSource: [],
+			redirectProposalDashboard: false
 		};
 	}
 
@@ -153,14 +153,51 @@ class AdminProposeDeckDetail extends Component {
 		}
 	};
 
+	onClickDeleteProposedDeck = async () => {
+		Swal.fire({
+			title: 'Are you sure to delete this deck?',
+			text: "You won't be able to revert this!",
+			icon: 'warning',
+			showCancelButton: true,
+			cancelButtonColor: '#b3b3b3',
+			confirmButtonColor: '#DD3333',
+			confirmButtonText: 'Yes, delete it!'
+		}).then(result => {
+			if (result.value) {
+				this.deleteProposedDeck();
+			}
+		});
+	};
+
+	deleteProposedDeck = async () => {
+		const url = '/api/proposeddecks/' + this.state.deckData.id;
+		const token = await authService.getAccessToken();
+		const response = await fetch(url, {
+			method: 'DELETE',
+			headers: {
+				Authorization: `Bearer ${token}`,
+				'Content-Type': 'application/json'
+			}
+		});
+		if (response.status === 204) {
+			this.setState({
+				redirectProposalDashboard: true
+			});
+		}
+	};
+
 	render() {
+		if (this.state.redirectProposalDashboard) {
+			return <Redirect to="/admin/propose" Component={AdminPropose} />;
+		}
+
 		let date = new Date(this.state.deckData.createdDate);
 		let table = this.table();
 		return (
 			<div>
 				<div className="deck-fields">
 					<div className="deck-back">
-						<Link to="/">Back</Link>
+						<Link to="/admin/propose">Back</Link>
 					</div>
 					<div className="deck-content">
 						<div class="deck-content-info">
@@ -196,6 +233,23 @@ class AdminProposeDeckDetail extends Component {
 									: ''}
 							</div>
 						</div>
+
+						{ this.state.deckData.approved === false ?
+							<div className="deck-content-advanced">
+								<div class="deck-content-advanced-features">
+									<div class="deck-title">Features</div>
+								</div>
+								<div class="deck-content-advanced-features-items">
+									<div className="deck-feature">
+										<p
+											onClick={() => this.onClickDeleteProposedDeck(this.state.deckData.id)}
+											style={{ color: 'red', cursor: 'pointer'}}>
+											<i class="far fa-trash-alt"></i>Delete proposed deck
+										</p>
+									</div>
+								</div>
+							</div> : ''
+						}	
 					</div>
 					<div className="table">{table}</div>
 				</div>
