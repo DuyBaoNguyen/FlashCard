@@ -228,7 +228,7 @@ namespace FlashCard.Controllers
                             .Include(c => c.CardOwners)
                             .Where(c => c.CardAssignments.FirstOrDefault(ca => ca.DeckId == id) == null &&
                                 c.CardOwners.FirstOrDefault(co => co.UserId == admin.Id) != null &&
-                                c.Backs.FirstOrDefault(b => b.AuthorId == user.Id || b.AuthorId == admin.Id) != null)
+                                c.Backs.FirstOrDefault(b => b.AuthorId == user.Id || b.Approved) != null)
                             .AsNoTracking()
                             .OrderBy(c => c.Front);
             var addedCardIds = dbContext.Proposals
@@ -300,7 +300,7 @@ namespace FlashCard.Controllers
 
                 foreach (var back in backs)
                 {
-                    proposalModel.Card.Backs.Add(new BackApiModel(back));
+                    proposalModel.Card.Backs.Add(new ProposedBackApiModel(back));
                 }
 
                 proposalModels.Add(proposalModel);

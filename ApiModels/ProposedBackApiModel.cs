@@ -3,7 +3,7 @@ using FlashCard.Services;
 
 namespace FlashCard.ApiModels
 {
-    public class BackApiModel
+    public class ProposedBackApiModel
     {
         public int Id { get; set; }
         public string Type { get; set; }
@@ -11,14 +11,15 @@ namespace FlashCard.ApiModels
         public string Example { get; set; }
         public string Image { get; set; }
         public bool FromAdmin { get; set; }
+        public bool Approved { get; set; }
         public object Author { get; set; }
 
-        public BackApiModel()
+        public ProposedBackApiModel()
         {
 
         }
 
-        public BackApiModel(Back back)
+        public ProposedBackApiModel(Back back)
         {
             Id = back.Id;
             Type = back.Type;
@@ -26,6 +27,7 @@ namespace FlashCard.ApiModels
             Example = back.Example;
             Image = ImageService.GetBase64(back.Image, back.ImageType);
             FromAdmin = back.FromAdmin;
+            Approved = back.Approved;
             Author = back.Author == null ? null : new { Id = back.AuthorId, DisplayName = back.Author.Name };
         }
     }

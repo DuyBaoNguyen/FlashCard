@@ -3,22 +3,22 @@ using FlashCard.Models;
 
 namespace FlashCard.ApiModels
 {
-    public class CardApiModel
+    public class ProposedCardApiModel
     {
         public int Id { get; set; }
         public string Front { get; set; }
-        public ICollection<BackApiModel> Backs { get; set; }
+        public ICollection<ProposedBackApiModel> Backs { get; set; }
 
-        public CardApiModel()
+        public ProposedCardApiModel()
         {
 
         }
 
-        public CardApiModel(Card card)
+        public ProposedCardApiModel(Card card)
         {
             Id = card.Id;
             Front = card.Front;
-            Backs = new List<BackApiModel>();
+            Backs = new List<ProposedBackApiModel>();
         }
     }
 }

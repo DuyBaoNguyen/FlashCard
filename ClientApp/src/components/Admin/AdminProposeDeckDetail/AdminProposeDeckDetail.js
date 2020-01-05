@@ -1,7 +1,7 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import authService from '../../api-authorization/AuthorizeService';
 import { BrowserRouter as Router, Redirect, Link } from 'react-router-dom';
-import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
+// import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import 'react-tabs/style/react-tabs.css';
 import MaterialTable from 'material-table';
 import './AdminProposeDeckDetail.css';
@@ -32,7 +32,6 @@ class AdminProposeDeckDetail extends Component {
 			headers: !token ? {} : { Authorization: `Bearer ${token}` }
 		});
 		const data = await response.json();
-		console.log(data);
 		this.setState({ deckData: data, loading: false });
 	};
 
@@ -43,15 +42,12 @@ class AdminProposeDeckDetail extends Component {
 			headers: !token ? {} : { Authorization: `Bearer ${token}` }
 		});
 		const data = await response.json();
-		console.log(data);
 		this.setState({ cardSource: data, loading: false });
-		console.log(this.state.cardSource);
 	};
 
 	table = () => {
 		if (this.state.cardSource.length !== undefined) {
 			var data = this.transData(this.state.cardSource);
-			console.log(data);
 		}
 		var title = 'Proposed cards';
 		return (
@@ -60,10 +56,44 @@ class AdminProposeDeckDetail extends Component {
 				columns={[
 					// { title: 'ID', field: 'id' },
 					{ title: 'Front', field: 'front' },
-					{ title: 'Backs', field: 'back' },		
+					{ title: 'Backs', field: 'backs' },	
+					{ title: 'Author', field: 'author' }	
 				]}
-
 				data={data}
+				detailPanel={ rowData => {
+					return (
+						<div className="back-container">
+							<div className="backs-list">
+								{ rowData.originBacks.map((back, index) => {
+									return (
+										<div className="back-item">
+											<div className="back-content">
+												{ !back.approved ? 
+													<Fragment>
+														<h6 class="w-auto">
+															<span class="badge" style={{ backgroundColor: '#f1f1f1', color: 'rgba(0, 0, 0, 0.6)' }}>
+																Not approved
+															</span>
+														</h6> 
+														<span className="delete-back" onClick={() => this.onClickDeleteBack(event, back.id)}>
+															<i class="fas fa-times" style={{ fontSize: 12 }}></i>
+														</span>
+													</Fragment> : '' }
+												<div className="back-info">
+													<br />
+													<p className="back-meaning">{back.meaning}</p>
+													<p className="back-type">{back.type}</p>
+													<p className="back-example">{back.example}</p>
+												</div>
+												<img src={back.image ? back.image : ''} className={back.image ? '' : 'd-none'} />
+											</div>
+										</div>
+									);
+								})}
+							</div>
+						</div>
+					)
+				}}
 				actions={[
 					{
 						icon: 'check',
@@ -99,11 +129,11 @@ class AdminProposeDeckDetail extends Component {
 					}
 				});
 				const json = await response;
-				console.log('Success:', JSON.stringify(json));
 			} catch (error) {
 				console.error('Error:', error);
 			}
 		}
+		this.getDeckData();
 		this.getCardFromDeck();
 	};
 
@@ -122,7 +152,6 @@ class AdminProposeDeckDetail extends Component {
 					}
 				});
 				const json = await response;
-				console.log('Success:', JSON.stringify(json));
 			} catch (error) {
 				console.error('Error:', error);
 			}
@@ -132,23 +161,20 @@ class AdminProposeDeckDetail extends Component {
 
 	transData = param => {
 		var mockData = [];
-		var oldVocab = Object.create(null);
+		var oldProposal = Object.create(null);
 		var data = param;
-		console.log(data);
 
 		if (data !== undefined) {
-			data.map((vocab, index) => {
-				vocab.card.backs.map(back => {
-					oldVocab = {
-						front: vocab.card.front,
-						id: back.id,
-						back: back.meaning,
-						author: back.author.displayName
-					};
-					mockData.push(oldVocab);
-				});
+			data.map((proposal, index) => {
+				oldProposal = {
+					id: proposal.id,
+					front: proposal.card.front,
+					backs: proposal.card.backs.map(back => back.meaning).join(' - '),
+					author: proposal.user.name,
+					originBacks: proposal.card.backs
+				};
+				mockData.push(oldProposal);
 			});
-			console.log(mockData);
 			return mockData;
 		}
 	};
@@ -185,6 +211,49 @@ class AdminProposeDeckDetail extends Component {
 			});
 		}
 	};
+
+	onClickDeleteBack = (event, backId) => {
+		Swal.fire({
+			title: 'Are you sure you want to delete this back?',
+			text: "You won't be able to revert this!",
+			icon: 'warning',
+			showCancelButton: true,
+			cancelButtonColor: '#b3b3b3',
+			confirmButtonColor: '#DD3333',
+			confirmButtonText: 'Yes, delete it!'
+		}).then(result => {
+			if (result.value) {
+				this.deleteBack(event, backId);
+			}
+		});
+	}
+
+	deleteBack = async (event, backId) => {
+		const url = `/api/backs/${backId}`; 
+		const token = await authService.getAccessToken();
+		const response = await fetch(url, {
+			method: 'DELETE',
+			headers: {
+				Authorization: `Bearer ${token}`,
+				'Content-Type': 'application/json'
+			}
+		})
+
+		if (response.status === 204) {
+			let deleteBtn = event.target;
+			if (event.target.nodeName.toLowerCase() === 'i') {
+				deleteBtn = event.target.parentNode;
+			}
+	
+			const backItem = deleteBtn.parentNode.parentNode;
+			const backsList = backItem.parentNode;
+			backsList.removeChild(backItem);
+
+			if (backsList.childElementCount === 0) {
+				this.getCardFromDeck();
+			}
+		}
+	}
 
 	render() {
 		if (this.state.redirectProposalDashboard) {
@@ -244,7 +313,7 @@ class AdminProposeDeckDetail extends Component {
 										<p
 											onClick={() => this.onClickDeleteProposedDeck(this.state.deckData.id)}
 											style={{ color: 'red', cursor: 'pointer'}}>
-											<i class="far fa-trash-alt"></i>Delete proposed deck
+											<i class="far fa-trash-alt"></i>Delete this proposed deck
 										</p>
 									</div>
 								</div>
