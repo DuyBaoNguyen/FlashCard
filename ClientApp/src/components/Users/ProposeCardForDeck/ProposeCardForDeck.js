@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import authService from '../../api-authorization/AuthorizeService';
 import MaterialTable from 'material-table';
-import { Link } from 'react-router-dom';
+import { Link, Redirect } from 'react-router-dom';
+import Icon from '@material-ui/core/Icon';
 
 import './ProposeCardForDeck.css';
 
@@ -13,7 +14,8 @@ class ProposeCardForDeck extends Component {
       deckData: {},
       cardsSource: {},
       cardsInDeck: {},
-      proposals: {}
+      proposals: {},
+      redirectProposeCards: false
     };
   }
 
@@ -247,6 +249,12 @@ class ProposeCardForDeck extends Component {
         }}
         actions={[
           {
+						icon: () => <Icon className="far fa-hand-paper" style={{ fontSize: 18 }}/>,
+						tooltip: 'Propose Card',
+						isFreeAction: true,
+						onClick: event => this.redirectProposeCards()
+					},
+          {
             icon: 'add',
             tooltip: 'Add card',
             // eslint-disable-next-line no-restricted-globals
@@ -305,20 +313,24 @@ class ProposeCardForDeck extends Component {
             onClick: (event, rowData) => this.deleteProposal(rowData.proposalId)
           }
         ]}
-        // options={{
-        //   pageSize: 7
-        // }}
       />
     );
   };
 
-  redirectAddCards = () => {
+  redirectProposeCards = () => {
     this.setState({
-      redirectAddCards: true
+      redirectProposeCards: true
     });
   };
 
   render() {
+    if (this.state.redirectProposeCards) {
+      return <Redirect to={{
+        pathname: '/proposecard',
+        state: { returnUrl: `/proposal/${this.state.id}` } 
+      }} />;
+    }
+
     var cardsInDeck = this.cardsInDeck();
     var cardsSource = this.cardsSource();
     var proposals = this.proposals();

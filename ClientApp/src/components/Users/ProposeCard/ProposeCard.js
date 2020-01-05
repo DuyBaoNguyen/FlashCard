@@ -212,7 +212,7 @@ class ProposeCard extends Component {
 		return (
 			<div>
 				<div className="deck-back">
-					<Link to="/publiccards">Back</Link>
+					<Link to={this.props.location.state && this.props.location.state.returnUrl || '/'}>Back</Link>
 				</div>
 				<div className="create-cards">
 					{/* <a href="#">Done</a> */}

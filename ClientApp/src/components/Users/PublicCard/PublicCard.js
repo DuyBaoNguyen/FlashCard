@@ -197,7 +197,10 @@ class PublicCard extends Component {
 		var editCardURL = '/editcard/' + this.state.front;
 		var cardSource = this.cardSource();
 		if (this.state.redirectProposeCard === true) {
-			return <Redirect to="/proposecard" Component={ProposeCard} />;
+			return <Redirect to={{
+        pathname: '/proposecard',
+        state: { returnUrl: '/publiccards' } 
+      }} />;
 		}
 		return (
 			<div>
