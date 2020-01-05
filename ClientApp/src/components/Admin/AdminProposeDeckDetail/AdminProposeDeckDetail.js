@@ -98,13 +98,13 @@ class AdminProposeDeckDetail extends Component {
 					{
 						icon: 'check',
 						tooltip: 'Approve this card',
-						onClick: (event, rowData) => this.approveCard(rowData.id)
+						onClick: (event, rowData) => this.onClickApproveCard(rowData.id)
 					},
 					{
 						icon: 'clear',
 						tooltip: 'Reject this card',
 						// eslint-disable-next-line no-restricted-globals
-						onClick: (event, rowData) => this.rejectCard(rowData.id)
+						onClick: (event, rowData) => this.onClickRejectCard(rowData.id)
 					}
 				]}
 				options={{
@@ -114,49 +114,70 @@ class AdminProposeDeckDetail extends Component {
 		);
 	};
 
+	onClickApproveCard = id => {
+		Swal.fire({
+			title: 'Are you sure to approve this card?',
+			icon: 'warning',
+			showCancelButton: true,
+			cancelButtonColor: '#b3b3b3',
+			confirmButtonColor: '#007bff',
+			confirmButtonText: 'OK'
+		}).then(result => {
+			if (result.value) {
+				this.approveCard(id);
+			}
+		});
+	}
+
 	approveCard = async id => {
 		var url = '/api/proposals/' + id;
 		const token = await authService.getAccessToken();
 		// eslint-disable-next-line no-restricted-globals
-		var r = confirm('Are you sure to approve this card?');
-		if (r == true) {
-			try {
-				const response = await fetch(url, {
-					method: 'PUT',
-					headers: {
-						Authorization: `Bearer ${token}`,
-						'Content-Type': 'application/json'
-					}
-				});
-				const json = await response;
-			} catch (error) {
-				console.error('Error:', error);
+		const response = await fetch(url, {
+			method: 'PUT',
+			headers: {
+				Authorization: `Bearer ${token}`,
+				'Content-Type': 'application/json'
 			}
+		});
+		
+		if (response.status === 204) {
+			this.getDeckData();
+			this.getCardFromDeck();
 		}
-		this.getDeckData();
-		this.getCardFromDeck();
 	};
+
+	onClickRejectCard = id => {
+		Swal.fire({
+			title: 'Are you sure to reject this card?',
+			text: "You won't be able to revert this!",
+			icon: 'warning',
+			showCancelButton: true,
+			cancelButtonColor: '#b3b3b3',
+			confirmButtonColor: '#dd3333',
+			confirmButtonText: 'Yes, reject it!'
+		}).then(result => {
+			if (result.value) {
+				this.rejectCard(id);
+			}
+		});
+	}
 
 	rejectCard = async id => {
 		var url = '/api/proposals/' + id;
 		const token = await authService.getAccessToken();
 		// eslint-disable-next-line no-restricted-globals
-		var r = confirm('Are you sure to reject this card?');
-		if (r == true) {
-			try {
-				const response = await fetch(url, {
-					method: 'DELETE',
-					headers: {
-						Authorization: `Bearer ${token}`,
-						'Content-Type': 'application/json'
-					}
-				});
-				const json = await response;
-			} catch (error) {
-				console.error('Error:', error);
+		const response = await fetch(url, {
+			method: 'DELETE',
+			headers: {
+				Authorization: `Bearer ${token}`,
+				'Content-Type': 'application/json'
 			}
+		});
+
+		if (response.status === 204) {
+			this.getCardFromDeck();
 		}
-		this.getCardFromDeck();
 	};
 
 	transData = param => {
@@ -214,7 +235,7 @@ class AdminProposeDeckDetail extends Component {
 
 	onClickDeleteBack = (event, backId) => {
 		Swal.fire({
-			title: 'Are you sure you want to delete this back?',
+			title: 'Are you sure to delete this back?',
 			text: "You won't be able to revert this!",
 			icon: 'warning',
 			showCancelButton: true,

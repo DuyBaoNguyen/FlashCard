@@ -7,6 +7,7 @@ import MaterialTable from 'material-table';
 import './AdminProposeCards.css';
 import Navbar from '../../modules/NavBar/Navbar';
 import AdminUsers from '../AdminUsers/AdminUsers';
+import Swal from 'sweetalert2';
 
 class AdminProposeCards extends Component {
 	constructor(props) {
@@ -37,17 +38,37 @@ class AdminProposeCards extends Component {
 				]}
 
 				data={data}
+				detailPanel={ rowData => {
+					return (
+						<div className="back-container">
+							<div className="backs-list">
+								<div className="back-item">
+									<div className="back-content">
+										<div className="back-info">
+											<br />
+											<p className="back-meaning">{rowData.originBack.meaning}</p>
+											<p className="back-type">{rowData.originBack.type}</p>
+											<p className="back-example">{rowData.originBack.example}</p>
+										</div>
+										<img src={rowData.originBack.image ? rowData.originBack.image : ''}
+											className={rowData.originBack.image ? '' : 'd-none'} />
+									</div>
+								</div>
+							</div>
+						</div>
+					)
+				}}
 				actions={[
 					{
 						icon: 'check',
 						tooltip: 'Approve this card',
-						onClick: (event, rowData) => this.approveCard(rowData.id)
+						onClick: (event, rowData) => this.onClickApproveCard(rowData.id)
 					},
 					{
 						icon: 'clear',
 						tooltip: 'Reject this card',
 						// eslint-disable-next-line no-restricted-globals
-						onClick: (event, rowData) => this.rejectCard(rowData.id)
+						onClick: (event, rowData) => this.onClickRejectCard(rowData.id)
 					}
 				]}
 				options={{
@@ -57,50 +78,69 @@ class AdminProposeCards extends Component {
 		);
 	};
 
+	onClickApproveCard = id => {
+		Swal.fire({
+			title: 'Are you sure to approve this card?',
+			icon: 'warning',
+			showCancelButton: true,
+			cancelButtonColor: '#b3b3b3',
+			confirmButtonColor: '#007bff',
+			confirmButtonText: 'OK'
+		}).then(result => {
+			if (result.value) {
+				this.approveCard(id);
+			}
+		});
+	}
+
 	approveCard = async id => {
 		var url = '/api/proposedbacks/' + id;
 		const token = await authService.getAccessToken();
 		// eslint-disable-next-line no-restricted-globals
-		var r = confirm('Are you sure to approve this card?');
-		if (r == true) {
-			try {
-				const response = await fetch(url, {
-					method: 'PUT',
-					headers: {
-						Authorization: `Bearer ${token}`,
-						'Content-Type': 'application/json'
-					}
-				});
-				const json = await response;
-				console.log('Success:', JSON.stringify(json));
-			} catch (error) {
-				console.error('Error:', error);
+		const response = await fetch(url, {
+			method: 'PUT',
+			headers: {
+				Authorization: `Bearer ${token}`,
+				'Content-Type': 'application/json'
 			}
+		});
+
+		if (response.status === 204) {
+			this.getProposedCards();
 		}
-		this.getProposedCards();
 	};
+
+	onClickRejectCard = id => {
+		Swal.fire({
+			title: 'Are you sure to reject this card?',
+			text: "You won't be able to revert this!",
+			icon: 'warning',
+			showCancelButton: true,
+			cancelButtonColor: '#b3b3b3',
+			confirmButtonColor: '#dd3333',
+			confirmButtonText: 'Yes, reject it!'
+		}).then(result => {
+			if (result.value) {
+				this.rejectCard(id);
+			}
+		});
+	}
 
 	rejectCard = async id => {
 		var url = '/api/proposedbacks/' + id;
 		const token = await authService.getAccessToken();
 		// eslint-disable-next-line no-restricted-globals
-		var r = confirm('Are you sure to reject this card?');
-		if (r == true) {
-			try {
-				const response = await fetch(url, {
-					method: 'DELETE',
-					headers: {
-						Authorization: `Bearer ${token}`,
-						'Content-Type': 'application/json'
-					}
-				});
-				const json = await response;
-				console.log('Success:', JSON.stringify(json));
-			} catch (error) {
-				console.error('Error:', error);
+		const response = await fetch(url, {
+			method: 'DELETE',
+			headers: {
+				Authorization: `Bearer ${token}`,
+				'Content-Type': 'application/json'
 			}
+		});
+
+		if (response.status === 204) {
+			this.getProposedCards();
 		}
-		this.getProposedCards();
 	};
 
 	getProposedCards = async () => {
@@ -129,7 +169,8 @@ class AdminProposeCards extends Component {
 						front: vocab.front,
 						id: back.id,
 						back: back.meaning,
-						author: back.author.displayName
+						author: back.author.displayName,
+						originBack: back
 					};
 					mockData.push(oldVocab);
 				});
