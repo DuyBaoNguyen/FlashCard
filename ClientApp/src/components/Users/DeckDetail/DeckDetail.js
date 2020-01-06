@@ -136,6 +136,22 @@ class DeckDetail extends Component {
 		});
 	};
 
+	onClickDeleteCard = param => {
+		Swal.fire({
+			title: 'Are you sure to remove this card from deck?',
+			text: "You won't be able to revert this!",
+			icon: 'warning',
+			showCancelButton: true,
+			cancelButtonColor: '#b3b3b3',
+			confirmButtonColor: '#DD3333',
+			confirmButtonText: 'Yes, remove it!'
+		}).then(result => {
+			if (result.value) {
+				this.deleteCard(param);
+			}
+		});
+	}
+
 	deleteCard = async param => {
 		var url = '/api/decks/' + this.state.id + '/cards';
 		const token = await authService.getAccessToken();
@@ -267,7 +283,7 @@ class DeckDetail extends Component {
 						icon: 'delete',
 						tooltip: 'Remove card from deck',
 						// eslint-disable-next-line no-restricted-globals
-						onClick: (event, rowData) => this.deleteCard(rowData.id)
+						onClick: (event, rowData) => this.onClickDeleteCard(rowData.id)
 					},
 					{
 						icon: 'add',
@@ -305,7 +321,12 @@ class DeckDetail extends Component {
 		}
 
 		if (this.state.redirectEditCard === true) {
-			return <Redirect to={editCardURL} Component={EditCard} />;
+			return <Redirect 
+				to={{
+					pathname: editCardURL,
+					state: { returnUrl: `/decks/${this.state.id}` }
+				}} 
+				Component={EditCard} />;
 		}
 
 		var table = this.table();

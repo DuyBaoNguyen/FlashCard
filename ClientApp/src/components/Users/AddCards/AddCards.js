@@ -5,6 +5,7 @@ import Dashboard from '../Dashboard/Dashboard';
 import { BrowserRouter as Router, Redirect, Link } from 'react-router-dom';
 import EditCard from '../EditCard/EditCard';
 import { hashHistory } from 'react-router';
+import Swal from 'sweetalert2';
 
 import './AddCards.css';
 
@@ -81,27 +82,36 @@ class AddCards extends Component {
 		}
 	};
 
+	onClickRemoveCard = param => {
+		Swal.fire({
+			title: 'Are you sure to remove this card from deck?',
+			icon: 'warning',
+			showCancelButton: true,
+			cancelButtonColor: '#b3b3b3',
+			confirmButtonColor: '#DD3333',
+			confirmButtonText: 'Yes, remove it!'
+		}).then(result => {
+			if (result.value) {
+				this.removeCard(param);
+			}
+		});
+	}
+
 	removeCard = async param => {
 		var url = '/api/decks/' + this.state.id + '/cards';
 		const token = await authService.getAccessToken();
 		const data = '[' + param.toString() + ']';
 		// eslint-disable-next-line no-restricted-globals
-		var r = confirm('Are you sure to remove this card from deck?');
-		if (r == true) {
-			try {
-				const response = await fetch(url, {
-					method: 'DELETE',
-					body: data, // data can be `string` or {object}!
-					headers: {
-						Authorization: `Bearer ${token}`,
-						'Content-Type': 'application/json'
-					}
-				});
-				const json = await response;
-				console.log('Success:', JSON.stringify(json));
-			} catch (error) {
-				console.error('Error:', error);
+		const response = await fetch(url, {
+			method: 'DELETE',
+			body: data, // data can be `string` or {object}!
+			headers: {
+				Authorization: `Bearer ${token}`,
+				'Content-Type': 'application/json'
 			}
+		});
+
+		if (response.status === 204) {
 			this.getCardSource();
 			this.getDeckData();
 		}
@@ -210,7 +220,7 @@ class AddCards extends Component {
 						icon: 'delete',
 						tooltip: 'Delete card',
 						// eslint-disable-next-line no-restricted-globals
-						onClick: (event, rowData) => this.removeCard(rowData.id)
+						onClick: (event, rowData) => this.onClickRemoveCard(rowData.id)
 					}
 				]}
 				options={{
@@ -305,7 +315,12 @@ class AddCards extends Component {
 			return <Redirect to="/createcard" Component={Dashboard} />;
 		}
 		if (this.state.redirectEditCard === true) {
-			return <Redirect to={editCardURL} Component={EditCard} />;
+			return <Redirect 
+				to={{
+					pathname: editCardURL,
+					state: { returnUrl: `/addcards/${this.state.id}` }
+				}} 
+				Component={EditCard} />;
 		}
 		return (
 			<div>

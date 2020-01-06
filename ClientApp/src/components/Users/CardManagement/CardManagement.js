@@ -223,7 +223,12 @@ class CardManagement extends Component {
 			return <Redirect to="/createcard" Component={Dashboard} />;
 		}
 		if (this.state.redirectEditCard === true) {
-			return <Redirect to={editCardURL} Component={EditCard} />;
+			return <Redirect 
+				to={{
+					pathname: editCardURL,
+					state: { returnUrl: '/cards' }
+				}} 
+				Component={EditCard} />;
 		}
 		return (
 			<div>
