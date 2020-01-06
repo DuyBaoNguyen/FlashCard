@@ -5,6 +5,7 @@ import Dashboard from '../Dashboard/Dashboard';
 import { BrowserRouter as Router, Redirect } from 'react-router-dom';
 import EditCard from '../EditCard/EditCard';
 import { hashHistory } from 'react-router';
+import Swal from 'sweetalert2';
 
 import './CardManagement.css';
 
@@ -86,27 +87,37 @@ class CardManagement extends Component {
 		}
 	};
 
+	onClickDeleteCard = param => {
+		Swal.fire({
+			title: 'Are you sure to delete this card?',
+			text: "You won't be able to revert this!",
+			icon: 'warning',
+			showCancelButton: true,
+			cancelButtonColor: '#b3b3b3',
+			confirmButtonColor: '#DD3333',
+			confirmButtonText: 'Yes, delete it!'
+		}).then(result => {
+			if (result.value) {
+				this.deleteCard(param);
+			}
+		});
+	}
+
 	deleteCard = async param => {
 		var url = '/api/cards/' + param;
 		const token = await authService.getAccessToken();
 		const data = '[' + param.toString() + ']';
 		// eslint-disable-next-line no-restricted-globals
-		var r = confirm('Are you sure to delete this card?');
-		if (r == true) {
-			try {
-				const response = await fetch(url, {
-					method: 'DELETE',
-					body: data, // data can be `string` or {object}!
-					headers: {
-						Authorization: `Bearer ${token}`,
-						'Content-Type': 'application/json'
-					}
-				});
-				const json = await response;
-				console.log('Success:', JSON.stringify(json));
-			} catch (error) {
-				console.error('Error:', error);
+		const response = await fetch(url, {
+			method: 'DELETE',
+			body: data, // data can be `string` or {object}!
+			headers: {
+				Authorization: `Bearer ${token}`,
+				'Content-Type': 'application/json'
 			}
+		});
+
+		if (response.status === 204) {
 			this.getCardSource();
 		}
 	};
@@ -200,7 +211,7 @@ class CardManagement extends Component {
 						icon: 'delete',
 						tooltip: 'Delete card',
 						// eslint-disable-next-line no-restricted-globals
-						onClick: (event, rowData) => this.deleteCard(rowData.front)
+						onClick: (event, rowData) => this.onClickDeleteCard(rowData.front)
 					}
 				]}
 				options={{
@@ -220,7 +231,12 @@ class CardManagement extends Component {
 		var editCardURL = '/editcard/' + this.state.front;
 		var cardSource = this.cardSource();
 		if (this.state.redirectAddCards === true) {
-			return <Redirect to="/createcard" Component={Dashboard} />;
+			return <Redirect 
+				to={{
+					pathname: '/createcard',
+					state: { returnUrl: '/cards' }
+				}} 
+			/>;
 		}
 		if (this.state.redirectEditCard === true) {
 			return <Redirect 

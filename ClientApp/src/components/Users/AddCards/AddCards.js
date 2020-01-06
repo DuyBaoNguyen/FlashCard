@@ -312,7 +312,12 @@ class AddCards extends Component {
 		var cardSource = this.cardSource();
 		var table = this.table();
 		if (this.state.redirectAddCards === true) {
-			return <Redirect to="/createcard" Component={Dashboard} />;
+			return <Redirect 
+				to={{
+					pathname: '/createcard',
+					state: { returnUrl: `/addcards/${this.state.id}` }
+				}} 
+			/>;
 		}
 		if (this.state.redirectEditCard === true) {
 			return <Redirect 
