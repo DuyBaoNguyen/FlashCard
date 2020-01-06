@@ -5,14 +5,29 @@ import CardIcon from '../../../images/icons/card.svg';
 import DateIcon from '../../../images/icons/calendar.svg';
 import './PublicDeck.css';
 import authService from '../../api-authorization/AuthorizeService';
+import Swal from 'sweetalert2';
 
 class PublicDeck extends Component {
   constructor(props) {
     super(props);
   }
 
-  onClickDownload = async (e, deckId) => {
+  onClickDownload = (e, deckId) => {
     e.preventDefault();
+    Swal.fire({
+			title: 'Are you sure to download this deck?',
+			showCancelButton: true,
+			cancelButtonColor: '#b3b3b3',
+			confirmButtonColor: '#007bff',
+			confirmButtonText: 'Yes'
+		}).then(result => {
+			if (result.value) {
+				this.download(deckId);
+			}
+		});
+  }
+
+  download = async deckId => {
     const url = `/api/publicdecks/${deckId}/download`;
     const token = await authService.getAccessToken();
     const response = await fetch(url, {

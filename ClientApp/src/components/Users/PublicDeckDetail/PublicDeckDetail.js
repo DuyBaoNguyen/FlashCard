@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import authService from '../../api-authorization/AuthorizeService';
 import { Link } from 'react-router-dom';
 import MaterialTable from 'material-table';
+import Swal from 'sweetalert2';
 
 import './PublicDeckDetail.css';
 
@@ -45,8 +46,22 @@ class PublicDeckDetail extends Component {
     }
   };
 
-  onClickDownload = async (e, deckId) => {
+  onClickDownload = (e, deckId) => {
     e.preventDefault();
+    Swal.fire({
+			title: 'Are you sure to download this deck?',
+			showCancelButton: true,
+			cancelButtonColor: '#b3b3b3',
+			confirmButtonColor: '#007bff',
+			confirmButtonText: 'Yes'
+		}).then(result => {
+			if (result.value) {
+				this.download(deckId);
+			}
+		});
+  }
+
+  download = async deckId => {
     const url = `/api/publicdecks/${deckId}/download`;
     const token = await authService.getAccessToken();
     const response = await fetch(url, {
@@ -56,6 +71,18 @@ class PublicDeckDetail extends Component {
       this.getPublicDeckData();
     }
   }
+
+  // onClickDownload = async (e, deckId) => {
+  //   e.preventDefault();
+  //   const url = `/api/publicdecks/${deckId}/download`;
+  //   const token = await authService.getAccessToken();
+  //   const response = await fetch(url, {
+  //     headers: !token ? {} : { 'Authorization': `Bearer ${token}` }
+  //   });
+  //   if (response.status === 200) {
+  //     this.getPublicDeckData();
+  //   }
+  // }
 
   onClickDownloaded = e => {
     e.preventDefault();

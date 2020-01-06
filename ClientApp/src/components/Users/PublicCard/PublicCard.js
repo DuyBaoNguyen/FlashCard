@@ -66,7 +66,7 @@ class PublicCard extends Component {
 			showCancelButton: true,
 			cancelButtonColor: '#b3b3b3',
 			confirmButtonColor: '#007bff',
-			confirmButtonText: 'Yes!'
+			confirmButtonText: 'Yes'
 		}).then(result => {
 			if (result.value) {
 				this.downloadCard(front);
@@ -88,7 +88,7 @@ class PublicCard extends Component {
 			showCancelButton: true,
 			cancelButtonColor: '#b3b3b3',
 			confirmButtonColor: '#007bff',
-			confirmButtonText: 'Yes!'
+			confirmButtonText: 'Yes'
 		}).then(result => {
 			if (result.value) {
 				this.downloadAllCards();
