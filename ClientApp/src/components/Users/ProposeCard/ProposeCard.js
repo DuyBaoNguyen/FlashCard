@@ -161,8 +161,8 @@ class ProposeCard extends Component {
 			title: 'Are you sure to propse this card?',
 			showCancelButton: true,
 			cancelButtonColor: '#b3b3b3',
-			// confirmButtonColor: '#DD3333',
-			confirmButtonText: 'Yes!'
+			confirmButtonColor: '#007bff',
+			confirmButtonText: 'Yes'
 		}).then(result => {
 			if (result.value) {
 				this.addCard();
