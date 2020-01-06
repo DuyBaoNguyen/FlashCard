@@ -55,7 +55,7 @@ class Testing extends Component {
 			heightAuto: false,
 			title: 'Hold on!',
 			html: 'We are processing the test!',
-			timer: 5000,
+			timer: 2000,
 			// timerProgressBar: true,
 			onBeforeOpen: () => {
 				Swal.showLoading();
