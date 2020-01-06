@@ -65,7 +65,7 @@ class PublicCard extends Component {
 			title: 'Are you sure to download this card?',
 			showCancelButton: true,
 			cancelButtonColor: '#b3b3b3',
-			// confirmButtonColor: '#DD3333',
+			confirmButtonColor: '#007bff',
 			confirmButtonText: 'Yes!'
 		}).then(result => {
 			if (result.value) {
@@ -82,16 +82,26 @@ class PublicCard extends Component {
 		});
 	};
 
+	onClickDownloadAllCards = () => {
+		Swal.fire({
+			title: 'Are you sure to download all cards?',
+			showCancelButton: true,
+			cancelButtonColor: '#b3b3b3',
+			confirmButtonColor: '#007bff',
+			confirmButtonText: 'Yes!'
+		}).then(result => {
+			if (result.value) {
+				this.downloadAllCards();
+			}
+		});
+	};
+
 	downloadAllCards = async () => {
 		var url = '/api/publiccards/download';
 		const token = await authService.getAccessToken();
-		var r = window.confirm('Are you sure to delete this card?');
-		if (r == true) {
-			const response = await fetch(url, {
-				headers: !token ? {} : { Authorization: `Bearer ${token}` }
-			});
-		}
-		// const data = await response.json();
+		const response = await fetch(url, {
+			headers: !token ? {} : { Authorization: `Bearer ${token}` }
+		});
 	};
 
 	addCard = async param => {
@@ -172,7 +182,7 @@ class PublicCard extends Component {
 						icon: () => <Icon className="far fa-arrow-to-bottom" style={{ fontSize: 18 }}/>,
 						tooltip: 'Download All Cards',
 						isFreeAction: true,
-						onClick: event => this.downloadAllCards()
+						onClick: event => this.onClickDownloadAllCards()
 					},
 					{
 						icon: 'add',
