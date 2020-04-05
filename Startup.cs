@@ -2,8 +2,6 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.UI;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
 using Microsoft.EntityFrameworkCore;
 using FlashCard.Data;
@@ -12,7 +10,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Data.SqlClient;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 
 namespace FlashCard
 {
@@ -39,18 +36,8 @@ namespace FlashCard
 
             services.AddIdentityServer()
                 .AddApiAuthorization<ApplicationUser, ApplicationDbContext>();
-                // .AddDeveloperSigningCredential()
-                // .AddInMemoryIdentityResources(Config.GetIdentityResources())
-                // .AddInMemoryApiResources(Config.GetApiResources())
-                // .AddInMemoryClients(Config.GetClients())
-                // .AddAspNetIdentity<ApplicationUser>();
 
             services.AddAuthentication()
-                // .AddAuthentication(options =>
-                // {
-                //     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                //     options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-                // })
                 .AddIdentityServerJwt()
                 .AddGoogle(options =>
                 {
@@ -62,11 +49,6 @@ namespace FlashCard
                     options.AppId = Configuration["Authentication:Facebook:AppId"];
                     options.AppSecret = Configuration["Authentication:Facebook:AppSecret"];
                 });
-                // .AddJwtBearer(options =>
-                // {
-                //     options.Authority = "https://localhost:5001";
-                //     options.Audience = "FlashCardAPI";
-                // });
 
             services.AddControllersWithViews();
             services.AddRazorPages();
