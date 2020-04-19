@@ -3,48 +3,40 @@ using System.ComponentModel.DataAnnotations;
 
 namespace FlashCard.Models
 {
-    public class Back
-    {
-        public int Id { get; set; }
+	public class Back
+	{
+		public int Id { get; set; }
 
-        [StringLength(20)]
-        public string Type { get; set; }
+		[StringLength(20)]
+		public string Type { get; set; }
 
-        [Required]
-        [StringLength(200)]
-        public string Meaning { get; set; }
+		[StringLength(200)]
+		public string Meaning { get; set; }
 
-        [StringLength(400)]
-        public string Example { get; set; }
+		[StringLength(400)]
+		public string Example { get; set; }
 
-        public byte[] Image { get; set; }
+		[StringLength(100)]
+		public string Image { get; set; }
 
-        [StringLength(4)]
-        public string ImageType { get; set; }
+		public bool Public { get; set; }
 
-        public bool Public { get; set; }
+		public bool Approved { get; set; }
 
-        [DataType(DataType.DateTime)]
-        public DateTime LastModified { get; set; }
+		[DataType(DataType.DateTime)]
+		public DateTime CreatedDate { get; set; }
 
-        public bool Approved { get; set; }
+		[DataType(DataType.DateTime)]
+		public DateTime LastModifiedDate { get; set; }
 
-        public int Version { get; set; }
+		public int CardId { get; set; }
 
-        public bool FromAdmin { get; set; }
+		public int? SourceId { get; set; }
 
-        public int CardId { get; set; }
+		public string AuthorId { get; set; }
 
-        public int? SourceId { get; set; }
-
-        [Required]
-        public string OwnerId { get; set; }
-
-        public string AuthorId { get; set; }
-
-        public Card Card { get; set; }
-        public Back Source { get; set; }
-        public ApplicationUser Owner { get; set; }
-        public ApplicationUser Author { get; set; }
-    }
+		public Card Card { get; set; }
+		public Back Source { get; set; }
+		public ApplicationUser Author { get; set; }
+	}
 }

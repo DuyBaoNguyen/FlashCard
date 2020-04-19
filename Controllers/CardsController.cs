@@ -1,354 +1,235 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Net.Mime;
 using System.Threading.Tasks;
-using FlashCard.ApiModels;
-using FlashCard.Data;
+using FlashCard.Contracts;
+using FlashCard.Dto;
 using FlashCard.Models;
 using FlashCard.RequestModels;
 using FlashCard.Services;
+using FlashCard.Util;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace FlashCard.Controllers
 {
-    [Authorize]
-    [Route("api/[controller]")]
-    [Produces(MediaTypeNames.Application.Json)]
-    public class CardsController : ControllerBase
-    {
-        private UserManager<ApplicationUser> userManager;
-        private ApplicationDbContext dbContext;
+	[Authorize]
+	[Route("api/[controller]")]
+	[ApiController]
+	[Produces(MediaTypeNames.Application.Json)]
+	public class CardsController : ControllerBase
+	{
+		private readonly IRepositoryWrapper repository;
+		private readonly UserManager<ApplicationUser> userManager;
+		private readonly IImageService imageService;
 
-        public CardsController(UserManager<ApplicationUser> userManager, ApplicationDbContext dbContext)
-        {
-            this.userManager = userManager;
-            this.dbContext = dbContext;
-        }
+		public CardsController(IRepositoryWrapper repository, UserManager<ApplicationUser> userManager,
+			IImageService imageService)
+		{
+			this.repository = repository;
+			this.userManager = userManager;
+			this.imageService = imageService;
+		}
 
-        [HttpGet]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<IEnumerable<CardApiModel>> GetAllByUser(int? pageSize, int pageIndex = 1)
-        {
-            var user = await UserService.GetUser(userManager, User);
-            var cards = dbContext.Cards
-                            .Include(c => c.Backs)
-                                .ThenInclude(b => b.Author)
-                            .Include(c => c.CardOwners)
-                                .ThenInclude(co => co.User)
-                            .Where(c => c.CardOwners.FirstOrDefault(co => co.UserId == user.Id) != null &&
-                                c.Backs.Where(b => !b.Public || b.Approved).Count() > 0)
-                            .OrderBy(c => c.Front)
-                            .AsNoTracking();
+		[HttpGet]
+		[ProducesResponseType(200)]
+		public async Task<IEnumerable<CardDto>> GetAllCards()
+		{
+			var userId = UserUtil.GetUserId(User);
+			var cards = await repository.Card
+				.Query(userId)
+				.AsNoTracking()
+				.MapToCardDto(imageService.GetBackImageBaseUrl())
+				.ToListAsync();
 
-            if (pageSize != null)
-            {
-                var numberPages = await GetNumberOfCardPages(pageSize.Value);
+			return cards;
+		}
 
-                if (pageIndex <= 0)
-                {
-                    pageIndex = 1;
-                }
-                else if (pageIndex > numberPages)
-                {
-                    pageIndex = numberPages;
-                }
+		[HttpGet("{id}")]
+		[ProducesResponseType(200)]
+		[ProducesResponseType(404)]
+		public async Task<ActionResult<CardDto>> GetCardById(int id)
+		{
+			var userId = UserUtil.GetUserId(User);
+			var card = await repository.Card
+				.QueryById(userId, id)
+				.AsNoTracking()
+				.MapToCardDto(imageService.GetBackImageBaseUrl())
+				.FirstOrDefaultAsync();
 
-                pageSize = pageSize <= 0 ? 1 : pageSize;
+			if (card == null)
+			{
+				return NotFound();
+			}
 
-                cards = cards.Skip((pageIndex - 1) * pageSize.Value).Take(pageSize.Value);
-            }
+			return card;
+		}
 
-            var cardmodels = new List<CardApiModel>();
+		[HttpPost]
+		[ProducesResponseType(201)]
+		[ProducesResponseType(400)]
+		public async Task<IActionResult> Create(CardRequestModel cardRqModel)
+		{
+			var userId = UserUtil.GetUserId(User);
+			var countSameFront = await repository.Card
+				.QueryByFront(userId, cardRqModel.Front)
+				.CountAsync();
 
-            foreach (var card in cards)
-            {
-                var cardmodel = new CardApiModel(card);
-                var backs = card.Backs.Where(b => b.OwnerId == user.Id && (!b.Public || b.Approved));
+			if (countSameFront > 0)
+			{
+				ModelState.AddModelError("Front", "The front is taken.");
+				return BadRequest(ModelState);
+			}
 
-                foreach (var back in backs)
-                {
-                    cardmodel.Backs.Add(new BackApiModel(back));
-                }
+			var now = DateTime.Now;
+			var newCard = new Card()
+			{
+				Front = cardRqModel.Front.Trim(),
+				CreatedDate = now,
+				LastModifiedDate = now,
+				OwnerId = userId,
+				AuthorId = userId
+			};
 
-                cardmodels.Add(cardmodel);
-            }
+			repository.Card.Create(newCard);
+			await repository.SaveChangesAsync();
 
-            return cardmodels;
-        }
+			return CreatedAtAction(nameof(GetCardById), new { Id = newCard.Id },
+				new { Message = "Created Successfully.", Id = newCard.Id });
+		}
 
-        [HttpPost]
-        [ProducesResponseType(StatusCodes.Status201Created)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<CardApiModel>> Create([FromBody] CardRequestModel cardmodel)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
+		[HttpPut("{id}")]
+		[ProducesResponseType(204)]
+		[ProducesResponseType(400)]
+		[ProducesResponseType(404)]
+		public async Task<IActionResult> Update(int id, CardRequestModel cardRqModel)
+		{
+			var userId = UserUtil.GetUserId(User);
+			var existingCard = await repository.Card
+				.QueryById(userId, id)
+				.FirstOrDefaultAsync();
 
-            var user = await UserService.GetUser(userManager, User);
-            var userIsInAdminRole = await userManager.IsInRoleAsync(user, Roles.Administrator);
+			if (existingCard == null)
+			{
+				return NotFound();
+			}
 
-            var card = await dbContext.Cards
-                            .Include(c => c.CardAssignments)
-                            .Include(c => c.CardOwners)
-                            .Include(c => c.Backs)
-                            .FirstOrDefaultAsync(c => c.Front == cardmodel.Front.Trim().ToLower());
-            var image = ImageService.GetImage(cardmodel.Back.Image);
+			var cardSameFront = await repository.Card
+				.QueryByFront(userId, cardRqModel.Front)
+				.AsNoTracking()
+				.FirstOrDefaultAsync();
 
-            if (card == null)
-            {
-                card = new Card()
-                {
-                    Front = cardmodel.Front.Trim().ToLower(),
-                    CardAssignments = new List<CardAssignment>(),
-                    CardOwners = new List<CardOwner>(),
-                    Backs = new List<Back>()
-                };
-                dbContext.Cards.Add(card);
-            }
+			if (cardSameFront != null)
+			{
+				if (cardSameFront.Id == existingCard.Id)
+				{
+					return NoContent();
+				}
 
-            if (card.CardOwners.FirstOrDefault(co => co.UserId == user.Id) == null)
-            {
-                card.CardOwners.Add(new CardOwner() { UserId = user.Id });
-            }
+				ModelState.AddModelError("Front", "The front is taken.");
+				return BadRequest(ModelState);
+			}
 
-            card.Backs.Add(new Back
-            {
-                Type = cardmodel.Back.Type,
-                Meaning = cardmodel.Back.Meaning.Trim(),
-                Example = cardmodel.Back.Example?.Trim(),
-                Image = image?.Data,
-                ImageType = image?.Type,
-                Public = userIsInAdminRole,
-                Approved = userIsInAdminRole,
-                LastModified = DateTime.Now,
-                OwnerId = user.Id,
-                AuthorId = user.Id
-            });
+			existingCard.Front = cardRqModel.Front.Trim();
+			existingCard.LastModifiedDate = DateTime.Now;
+			await repository.SaveChangesAsync();
 
-            await dbContext.SaveChangesAsync();
+			return NoContent();
+		}
 
-            var returnedCard = new CardApiModel(card);
-            var backs = card.Backs.Where(b => b.OwnerId == user.Id && (!b.Public || b.Approved));
+		[HttpDelete("{id}")]
+		[ProducesResponseType(204)]
+		[ProducesResponseType(404)]
+		public async Task<IActionResult> Delete(int id)
+		{
+			var userId = UserUtil.GetUserId(User);
+			var existingCard = await repository.Card
+				.QueryById(userId, id)
+				.FirstOrDefaultAsync();
 
-            foreach (var back in backs)
-            {
-                returnedCard.Backs.Add(new BackApiModel(back));
-            }
+			if (existingCard == null)
+			{
+				return NotFound();
+			}
 
-            return CreatedAtAction(nameof(GetByFront), new { Id = card.Id }, returnedCard);
-        }
+			repository.Card.Delete(existingCard);
+			await repository.SaveChangesAsync();
 
-        [HttpGet("{front}")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<CardApiModel>> GetByFront(string front)
-        {
-            var user = await UserService.GetUser(userManager, User);
-            var card = await dbContext.Cards
-                            .Include(c => c.Backs)
-                                .ThenInclude(b => b.Author)
-                            .Include(c => c.CardOwners)
-                                .ThenInclude(co => co.User)
-                            .Where(c => c.CardOwners.FirstOrDefault(co => co.UserId == user.Id) != null &&
-                                c.Backs.Where(b => !b.Public || b.Approved).Count() > 0)
-                            .AsNoTracking()
-                            .FirstOrDefaultAsync(c => c.Front == front);
+			return NoContent();
+		}
 
-            if (card == null)
-            {
-                return NotFound();
-            }
+		[HttpPost("{id}/backs")]
+		[ProducesResponseType(201)]
+		[ProducesResponseType(400)]
+		[ProducesResponseType(404)]
+		public async Task<IActionResult> CreateBack(int id, [FromForm] BackRequestModel backRqModel)
+		{
+			if (backRqModel.Image != null)
+			{
+				if (backRqModel.Image.Length > 5242880)
+				{
+					ModelState.AddModelError("Image", "File is not exceeded 5MB.");
+				}
+				if (!ImageUtil.CheckExtensions(backRqModel.Image))
+				{
+					ModelState.AddModelError("Image",
+						"Accepted images that images are with an extension of .png, .jpg, .jpeg or .bmp.");
+				}
+			}
+			if ((backRqModel.Meaning == null || backRqModel.Meaning.Length == 0)
+				&& (backRqModel.Image == null || backRqModel.Image.Length == 0))
+			{
+				ModelState.AddModelError("", "Card must at least have either meaning or image.");
+			}
+			if (!ModelState.IsValid)
+			{
+				return BadRequest(ModelState);
+			}
 
-            var cardmodel = new CardApiModel(card);
-            var backs = card.Backs.Where(b => b.OwnerId == user.Id && (!b.Public || b.Approved));
+			var user = await UserUtil.GetUser(userManager, User);
+			var card = await repository.Card
+				.QueryById(user.Id, id)
+				.FirstOrDefaultAsync();
 
-            foreach (var back in backs)
-            {
-                cardmodel.Backs.Add(new BackApiModel(back));
-            }
+			if (card == null)
+			{
+				return NotFound();
+			}
 
-            return cardmodel;
-        }
+			var imageName = await imageService.UploadImage(backRqModel.Image);
+			var userIsAdmin = await userManager.IsInRoleAsync(user, Roles.Administrator);
+			var now = DateTime.Now;
+			var newBack = new Back()
+			{
+				Type = backRqModel.Type == null || backRqModel.Type.Trim().Length == 0
+					? null : backRqModel.Type.Trim().ToLower(),
+				Meaning = backRqModel.Meaning == null || backRqModel.Meaning.Trim().Length == 0
+					? null : backRqModel.Meaning.Trim(),
+				Example = backRqModel.Example == null || backRqModel.Example.Trim().Length == 0
+					? null : backRqModel.Example.Trim(),
+				Image = imageName,
+				Public = userIsAdmin,
+				Approved = userIsAdmin,
+				CreatedDate = now,
+				LastModifiedDate = now,
+				Card = card,
+				Author = user
+			};
 
-        [HttpPut("{front}")]
-        [ProducesResponseType(StatusCodes.Status204NoContent)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> Update(string front, [FromBody] SimpleCardRequestModel cardmodel)
-        {
-            var user = await UserService.GetUser(userManager, User);
-            // Check if the user owns the card
-            var card = await dbContext.Cards
-                            .Include(c => c.CardOwners)
-                            .FirstOrDefaultAsync(c => c.Front == front &&
-                                c.CardOwners.FirstOrDefault(co => co.UserId == user.Id) != null);
+			repository.Back.Create(newBack);
+			await repository.SaveChangesAsync();
 
-            if (card == null)
-            {
-                return NotFound();
-            }
-
-            // Check if the new front equals the old front
-            if (front.Trim().ToLower() == cardmodel.Front.Trim().ToLower())
-            {
-                return NoContent();
-            }
-
-            var newCard = await dbContext.Cards
-                                .Include(c => c.CardOwners)
-                                .FirstOrDefaultAsync(c => c.Front == cardmodel.Front.Trim().ToLower() &&
-                                    c.CardOwners.FirstOrDefault(co => co.UserId == user.Id) != null);
-
-            if (newCard != null)
-            {
-                ModelState.AddModelError("Front", "The Front is taken");
-            }
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            // Remove relationship between the card and the user
-            dbContext.CardOwners.Remove(dbContext.CardOwners.First(co => co.UserId == user.Id && co.CardId == card.Id));
-
-            // Remove relationship between the card and decks containing it
-            var cardAssignments = dbContext.CardAssignments
-                                    .Include(ca => ca.Deck)
-                                    .Where(ca => ca.Deck.OwnerId == user.Id && ca.CardId == card.Id);
-
-            dbContext.CardAssignments.RemoveRange(cardAssignments);
-
-            // Remove relationship between the card and tests
-            var testedCards = dbContext.TestedCards
-                                .Include(tc => tc.Test)
-                                    .ThenInclude(t => t.Deck)
-                                .Where(tc => tc.Test.Deck.OwnerId == user.Id && tc.CardId == card.Id);
-
-            dbContext.TestedCards.RemoveRange(testedCards);
-
-            // Check if there is card being new front
-            var updatedCard = await dbContext.Cards
-                                .Include(c => c.CardAssignments)
-                                .Include(c => c.CardOwners)
-                                .Include(c => c.TestedCards)
-                                .FirstOrDefaultAsync(c => c.Front == cardmodel.Front);
-            var backs = dbContext.Backs.Where(b => b.OwnerId == user.Id && b.CardId == card.Id);
-
-            if (updatedCard == null)
-            {
-                updatedCard = new Card()
-                {
-                    Front = cardmodel.Front.Trim().ToLower(),
-                    CardAssignments = new List<CardAssignment>(),
-                    CardOwners = new List<CardOwner>(),
-                    TestedCards = new List<TestedCard>()
-                };
-                dbContext.Cards.Add(updatedCard);
-            }
-
-            updatedCard.CardOwners.Add(new CardOwner() { UserId = user.Id });
-
-            foreach (var cardAssignment in cardAssignments)
-            {
-                updatedCard.CardAssignments.Add(new CardAssignment() { DeckId = cardAssignment.DeckId });
-            }
-            foreach (var testedCard in testedCards)
-            {
-                updatedCard.TestedCards.Add(new TestedCard()
-                {
-                    TestId = testedCard.TestId,
-                    Failed = testedCard.Failed
-                });
-            }
-            foreach (var back in backs)
-            {
-                back.Card = updatedCard;
-            }
-
-            await dbContext.SaveChangesAsync();
-
-            // Remove the old card if no user owns it
-            if (await dbContext.CardOwners.CountAsync(co => co.CardId == card.Id) == 0)
-            {
-                dbContext.Cards.Remove(card);
-            }
-
-            await dbContext.SaveChangesAsync();
-
-            return NoContent();
-        }
-
-        [HttpDelete("{front}")]
-        [ProducesResponseType(StatusCodes.Status204NoContent)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> Delete(string front)
-        {
-            var user = await UserService.GetUser(userManager, User);
-            // Check if the user owns the card
-            var card = await dbContext.Cards.FirstOrDefaultAsync(c => c.Front == front &&
-                            c.CardOwners.FirstOrDefault(co => co.UserId == user.Id) != null);
-
-            if (card == null)
-            {
-                return NotFound();
-            }
-
-            // Remove relationship between the card and the user, decks and tests
-            dbContext.CardOwners.Remove(dbContext.CardOwners.First(co => co.UserId == user.Id && co.CardId == card.Id));
-            dbContext.CardAssignments.RemoveRange(dbContext.CardAssignments
-                                                    .Include(ca => ca.Deck)
-                                                    .Where(ca => ca.CardId == card.Id && ca.Deck.OwnerId == user.Id));
-            dbContext.TestedCards.RemoveRange(dbContext.TestedCards
-                                                .Include(f => f.Test)
-                                                    .ThenInclude(t => t.Deck)
-                                                .Where(f => f.Test.Deck.OwnerId == user.Id && f.CardId == card.Id));
-            var deletedBacks = await dbContext.Backs
-                                   .Where(b => b.CardId == card.Id && b.OwnerId == user.Id)
-                                   .Select(b => b.Id)
-                                   .ToArrayAsync<int>();
-            var derivedBacks = dbContext.Backs.Where(b => b.SourceId != null && deletedBacks.Contains((int)b.SourceId));
-            
-            foreach (var derivedBack in derivedBacks)
-            {
-                derivedBack.SourceId = null;
-            }
-
-            dbContext.Backs.RemoveRange(dbContext.Backs.Where(b => b.CardId == card.Id && b.OwnerId == user.Id));
-
-            await dbContext.SaveChangesAsync();
-
-            if (await dbContext.CardOwners.CountAsync(co => co.CardId == card.Id) == 0)
-            {
-                dbContext.Cards.Remove(card);
-            }
-
-            await dbContext.SaveChangesAsync();
-
-            return NoContent();
-        }
-
-        [HttpGet("pages")]
-        public async Task<int> GetNumberOfCardPages(int pageSize)
-        {
-            var user = await UserService.GetUser(userManager, User);
-            var numberCards = await dbContext.Cards
-                                .Include(c => c.CardOwners)
-                                    .ThenInclude(co => co.User)
-                                .Where(c => c.CardOwners.FirstOrDefault(co => co.UserId == user.Id) != null)
-                                .CountAsync();
-
-            if (pageSize <= 0)
-            {
-                return 1;
-            }
-            return (int)Math.Ceiling((float)numberCards / pageSize);
-        }
-    }
+			return CreatedAtAction("GetBack", "Backs", new
+			{
+				Id = newBack.Id
+			},
+				new
+				{
+					Message = "Created Successfully.",
+					Id = newBack.Id
+				});
+		}
+	}
 }

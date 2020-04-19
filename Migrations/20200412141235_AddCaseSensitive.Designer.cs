@@ -4,14 +4,16 @@ using FlashCard.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace FlashCard.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200412141235_AddCaseSensitive")]
+    partial class AddCaseSensitive
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -62,7 +64,6 @@ namespace FlashCard.Migrations
                         .HasMaxLength(256);
 
                     b.Property<string>("PasswordHash")
-                        .HasColumnName("Password")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("PhoneNumber")
@@ -121,12 +122,17 @@ namespace FlashCard.Migrations
                         .HasColumnType("nvarchar(100)")
                         .HasMaxLength(100);
 
-                    b.Property<DateTime>("LastModifiedDate")
+                    b.Property<DateTime>("LastModified")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Meaning")
+                        .IsRequired()
                         .HasColumnType("nvarchar(200)")
                         .HasMaxLength(200);
+
+                    b.Property<string>("OwnerId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<bool>("Public")
                         .HasColumnType("bit");
@@ -144,6 +150,8 @@ namespace FlashCard.Migrations
 
                     b.HasIndex("CardId");
 
+                    b.HasIndex("OwnerId");
+
                     b.HasIndex("SourceId");
 
                     b.ToTable("Back");
@@ -156,34 +164,12 @@ namespace FlashCard.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("AuthorId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("datetime2");
-
                     b.Property<string>("Front")
                         .IsRequired()
                         .HasColumnType("nvarchar(100)")
                         .HasMaxLength(100);
 
-                    b.Property<DateTime>("LastModifiedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("OwnerId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<int?>("SourceId")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("AuthorId");
-
-                    b.HasIndex("OwnerId");
-
-                    b.HasIndex("SourceId");
 
                     b.ToTable("Card");
                 });
@@ -201,6 +187,21 @@ namespace FlashCard.Migrations
                     b.HasIndex("DeckId");
 
                     b.ToTable("CardAssignment");
+                });
+
+            modelBuilder.Entity("FlashCard.Models.CardOwner", b =>
+                {
+                    b.Property<int>("CardId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("CardId", "UserId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("CardOwner");
                 });
 
             modelBuilder.Entity("FlashCard.Models.Deck", b =>
@@ -223,7 +224,7 @@ namespace FlashCard.Migrations
                         .HasColumnType("nvarchar(500)")
                         .HasMaxLength(500);
 
-                    b.Property<DateTime>("LastModifiedDate")
+                    b.Property<DateTime>("LastModified")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Name")
@@ -585,25 +586,13 @@ namespace FlashCard.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("FlashCard.Models.Back", "Source")
-                        .WithMany()
-                        .HasForeignKey("SourceId");
-                });
-
-            modelBuilder.Entity("FlashCard.Models.Card", b =>
-                {
-                    b.HasOne("FlashCard.Models.ApplicationUser", "Author")
-                        .WithMany("AuthorizedCards")
-                        .HasForeignKey("AuthorId")
-                        .OnDelete(DeleteBehavior.SetNull);
-
                     b.HasOne("FlashCard.Models.ApplicationUser", "Owner")
-                        .WithMany("OwnedCards")
+                        .WithMany("OwnedBacks")
                         .HasForeignKey("OwnerId")
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
-                    b.HasOne("FlashCard.Models.Card", "Source")
+                    b.HasOne("FlashCard.Models.Back", "Source")
                         .WithMany()
                         .HasForeignKey("SourceId");
                 });
@@ -619,6 +608,21 @@ namespace FlashCard.Migrations
                     b.HasOne("FlashCard.Models.Deck", "Deck")
                         .WithMany("CardAssignments")
                         .HasForeignKey("DeckId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("FlashCard.Models.CardOwner", b =>
+                {
+                    b.HasOne("FlashCard.Models.Card", "Card")
+                        .WithMany("CardOwners")
+                        .HasForeignKey("CardId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("FlashCard.Models.ApplicationUser", "User")
+                        .WithMany("CardOwners")
+                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

@@ -69,6 +69,7 @@ class Dashboard extends Component {
 
 		return (
 			<div>
+				{this.state.imageUrl && <div style={{ width: 200, height: 200, backgroundImage: `url(${this.state.imageUrl})`}}></div>}
 				<div className="dashboard-field">
 					<div className="dashboard-container">
 						{info}

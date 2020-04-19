@@ -1,37 +1,62 @@
 using System;
-using System.Text.RegularExpressions;
+using System.IO;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 
 namespace FlashCard.Services
 {
-    public class ImageService
-    {
-        public class Image
-        {
-            public byte[] Data { get; set; }
-            public string Type { get; set; }
-        }
+	public class ImageService : IImageService
+	{
+		private readonly IWebHostEnvironment env;
+		private readonly IHttpContextAccessor httpContextAccessor;
 
-        public static Image GetImage(string base64)
-        {
-            if (base64 == null)
-            {
-                return null;
-            }
+		public ImageService(IWebHostEnvironment env, IHttpContextAccessor httpContextAccessor)
+		{
+			this.env = env;
+			this.httpContextAccessor = httpContextAccessor;
+		}
 
-            string pattern = @"data:image/([a-z]+);base64,";
-            string prefix = Regex.Match(base64, pattern).Value;
-            string stringData = Regex.Replace(base64, pattern, "");
+		public async Task<string> UploadImage(IFormFile image)
+		{
+			if (image == null || image.Length == 0)
+			{
+				return null;
+			}
 
-            return new Image
-            {
-                Data = Convert.FromBase64String(stringData),
-                Type = Regex.Replace(prefix, pattern, "$1")
-            };
-        }
+			var imageName = Guid.NewGuid().ToString().Replace("-", "") + Path.GetExtension(image.FileName);
+			var filePath = Path.Combine(env.ContentRootPath, "assets/images", imageName);
 
-        public static string GetBase64(byte[] image, string type)
-        {
-            return image == null ? null : $"data:image/{type};base64,{Convert.ToBase64String(image)}";
-        }
-    }
+			using (var stream = File.Create(filePath))
+			{
+				await image.CopyToAsync(stream);
+			}
+			return imageName;
+		}
+
+		public bool TryDeleteImage(string imageName)
+		{
+			if (imageName == null)
+			{
+				return true;
+			}
+
+			var filePath = Path.Combine(env.ContentRootPath, "assets/images", imageName);
+			try
+			{
+				File.Delete(filePath);
+				return true;
+			}
+			catch
+			{
+				return false;
+			}
+		}
+
+		public string GetBackImageBaseUrl()
+		{
+			var req = httpContextAccessor.HttpContext.Request;
+			return $"{req.Scheme}://{req.Host}/storage/images";
+		}
+	}
 }

@@ -5,19 +5,11 @@ namespace FlashCard.RequestModels
     public class DeckRequestModel
     {
         [Required]
-        [StringLength(50)]
+        [StringLength(100)]
+		[RegularExpression("[a-zA-Z0-9 ]+")]
         public string Name { get; set; }
 
-        [StringLength(400)]
+        [StringLength(500)]
         public string Description { get; set; }
-
-        public bool? Public { get; set; }
-
-        public CategoryRequestModel Category { get; set; }
-
-        public DeckRequestModel()
-        {
-            Category = new CategoryRequestModel();
-        }
     }
 }

@@ -3,593 +3,280 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.Mime;
 using System.Threading.Tasks;
-using FlashCard.ApiModels;
-using FlashCard.Data;
+using FlashCard.Contracts;
+using FlashCard.Dto;
 using FlashCard.Models;
 using FlashCard.RequestModels;
 using FlashCard.Services;
+using FlashCard.Util;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace FlashCard.Controllers
 {
-    [Authorize]
-    [Route("api/[controller]")]
-    [Produces(MediaTypeNames.Application.Json)]
-    public class DecksController : ControllerBase
-    {
-        private UserManager<ApplicationUser> userManager;
-        private ApplicationDbContext dbContext;
-
-        public DecksController(UserManager<ApplicationUser> userManager, ApplicationDbContext dbContext)
-        {
-            this.userManager = userManager;
-            this.dbContext = dbContext;
-        }
-
-        [HttpGet]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<IEnumerable<DeckApiModel>> GetAllByUser()
-        {
-            var user = await UserService.GetUser(userManager, User);
-            var decks = dbContext.Decks
-                            .Include(d => d.Category)
-                            .Include(d => d.Source)
-                                .ThenInclude(s => s.Category)
-                            .Include(d => d.Source)
-                                .ThenInclude(s => s.CardAssignments)
-                            .Include(d => d.Source)
-                                .ThenInclude(s => s.Owner)
-                            .Include(d => d.Source)
-                                .ThenInclude(s => s.Author)
-                            .Include(d => d.Owner)
-                            .Include(d => d.Author)
-                            .Include(d => d.CardAssignments)
-                            .Include(d => d.Proposals)
-                                .ThenInclude(p => p.User)
-                            .Where(d => d.OwnerId == user.Id && (!d.Public || d.Approved))
-                            .OrderBy(d => d.Name)
-                            .AsNoTracking();
-
-            var deckmodels = new List<DeckApiModel>();
-
-            foreach (var deck in decks)
-            {
-                deckmodels.Add(new DeckApiModel(deck));
-            }
-
-            return deckmodels;
-        }
-
-        [HttpPost]
-        [ProducesResponseType(StatusCodes.Status201Created)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<DeckApiModel>> Create([FromBody] DeckRequestModel deckModel)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            var category = await dbContext.Categories.FirstOrDefaultAsync(c => c.Id == deckModel.Category.Id);
-            var user = await UserService.GetUser(userManager, User);
-            var deckNames = dbContext.Decks
-                                .Where(d => d.OwnerId == user.Id)
-                                .Select(d => d.Name.ToLower())
-                                .ToHashSet<string>();
-            var newDeckName = deckModel.Name.Trim().ToLower();
-
-            if (category == null)
-            {
-                ModelState.AddModelError("Category.Id", "The Category Id is not provided or does not exist.");
-            }
-            if (deckNames.Contains(newDeckName))
-            {
-                ModelState.AddModelError("Name", "The deck name is taken.");
-            }
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            var deck = new Deck()
-            {
-                Name = deckModel.Name.Trim(),
-                Description = deckModel.Description?.Trim(),
-                CreatedDate = DateTime.Now,
-                LastModified = DateTime.Now,
-                Category = category,
-                Owner = user,
-                Author = user
-            };
-
-            dbContext.Decks.Add(deck);
-            await dbContext.SaveChangesAsync();
-
-            return CreatedAtAction(nameof(GetById), new { id = deck.Id }, new DeckApiModel(deck));
-        }
-
-        [HttpGet("{id}")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<DeckApiModel>> GetById(int id, int? pageSize, int pageIndex = 1)
-        {
-            var deck = await dbContext.Decks
-                            .Include(d => d.Category)
-                            .Include(d => d.Source)
-                                .ThenInclude(s => s.Category)
-                            .Include(d => d.Source)
-                                .ThenInclude(s => s.CardAssignments)
-                            .Include(d => d.Source)
-                                .ThenInclude(s => s.Owner)
-                            .Include(d => d.Source)
-                                .ThenInclude(s => s.Author)
-                            .Include(d => d.Owner)
-                            .Include(d => d.Author)
-                            .Include(d => d.CardAssignments)
-                                .ThenInclude(ca => ca.Card)
-                                    .ThenInclude(c => c.Backs)
-                                        .ThenInclude(b => b.Author)
-                            .Include(d => d.Proposals)
-                                .ThenInclude(p => p.User)
-                            .Include(d => d.Tests)
-                                .ThenInclude(t => t.TestedCards)
-                            .AsNoTracking()
-                            .FirstOrDefaultAsync(d => d.Id == id && (!d.Public || d.Approved));
-
-            if (deck == null)
-            {
-                return NotFound();
-            }
-
-            var user = await UserService.GetUser(userManager, User);
-
-            bool userIsInUserRole = await userManager.IsInRoleAsync(user, Roles.User);
-            // bool ownerIsInUserRole = await userManager.IsInRoleAsync(deck.Owner, Roles.User);
-
-            // Check the deck belongs with current user or is pucblic, if user is in administrator, it will be ignored
-            // if (userIsInUserRole && deck.OwnerId != user.Id && (ownerIsInUserRole || !deck.Public || !deck.Approved))
-            // {
-            //     return Forbid();
-            // }
-
-            if (userIsInUserRole && deck.OwnerId != user.Id)
-            {
-                return Forbid();
-            }
-
-            // Paginate cards of deck if pageSize parameter is specified
-            var cardAssignments = deck.CardAssignments;
-
-            if (pageSize != null)
-            {
-                var numberPages = await GetNumberOfCardPages(id, pageSize.Value);
-
-                if (pageIndex <= 0)
-                {
-                    pageIndex = 1;
-                }
-                else if (pageIndex > numberPages.Value)
-                {
-                    pageIndex = numberPages.Value;
-                }
-
-                if (pageSize.Value <= 0)
-                {
-                    pageSize = 1;
-                }
-
-                cardAssignments = cardAssignments.Skip((pageIndex - 1) * pageSize.Value).Take(pageSize.Value).ToArray();
-            }
-
-            // Get list of cards of the deck
-            var cardmodels = new List<CardApiModel>();
-
-            foreach (var cardAssignment in cardAssignments)
-            {
-                var cardmodel = new CardApiModel(cardAssignment.Card);
-                var backs = cardAssignment.Card.Backs.Where(b => b.OwnerId == user.Id && (!b.Public || b.Approved));
-
-                foreach (var back in backs)
-                {
-                    cardmodel.Backs.Add(new BackApiModel(back));
-                }
-
-                cardmodels.Add(cardmodel);
-            }
-            cardmodels.Sort(CardComparison.CompareByFront);
-
-            // Get statistics of the deck
-            var now = DateTime.Now;
-            var testsToday = deck.Tests.Where(t => t.DateTime.Date == now.Date);
-
-            object statistics = new
-            {
-                TotalCards = deck.Tests.Sum(t => t.TestedCards.Count),
-                FailedCards = deck.Tests.Sum(t => t.TestedCards.Where(tc => tc.Failed).Count()),
-                GradePointAverage = deck.Tests.Count == 0 ? 0 : deck.Tests.Average(t => t.Score),
-                TotalCardsToday = testsToday.Sum(t => t.TestedCards.Count),
-                FailedCardsToday = testsToday.Sum(t => t.TestedCards.Where(tc => tc.Failed).Count()),
-                gradePointAverageToday = testsToday.Count() == 0 ? 0 : testsToday.Average(t => t.Score)
-            };
-
-            var deckmodel = new DeckApiModel(deck);
-            deckmodel.Statistics = statistics;
-            deckmodel.Cards = cardmodels;
-
-            return deckmodel;
-        }
-
-        [HttpPut("{id}")]
-        [ProducesResponseType(StatusCodes.Status204NoContent)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> Update(int id, [FromBody] DeckRequestModel deckmodel)
-        {
-            var deck = await dbContext.Decks.FirstOrDefaultAsync(d => d.Id == id);
-
-            if (deck == null)
-            {
-                return NotFound();
-            }
-
-            var user = await UserService.GetUser(userManager, User);
-
-            if (deck.OwnerId != user.Id)
-            {
-                return Forbid();
-            }
-
-            var category = await dbContext.Categories.FindAsync(deckmodel.Category.Id);
-            var deckNames = dbContext.Decks
-                                .Where(d => d.OwnerId == user.Id && d.Id != deck.Id)
-                                .Select(d => d.Name.ToLower())
-                                .ToHashSet<string>();
-            var newDeckName = deckmodel.Name.Trim().ToLower();
-
-            if (category == null)
-            {
-                ModelState.AddModelError("Category.Id", "The Category Id is not provided or does not exist.");
-            }
-            if (deckNames.Contains(newDeckName))
-            {
-                ModelState.AddModelError("Name", "The deck name is taken.");
-            }
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            var userIsInAdminRole = await userManager.IsInRoleAsync(user, Roles.Administrator);
-
-            deck.Name = deckmodel.Name.Trim();
-            deck.Description = deckmodel.Description?.Trim();
-            deck.Category = category;
-            deck.Public = userIsInAdminRole && deckmodel.Public != null ? deckmodel.Public.Value : deck.Public;
-            deck.Approved = deck.Public;
-
-            await dbContext.SaveChangesAsync();
-
-            return NoContent();
-        }
-
-        [HttpDelete("{id}")]
-        [ProducesResponseType(StatusCodes.Status204NoContent)]
-        [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> Delete(int id)
-        {
-            var deck = await dbContext.Decks.FirstOrDefaultAsync(d => d.Id == id);
-
-            if (deck == null)
-            {
-                return NotFound();
-            }
-
-            var user = await UserService.GetUser(userManager, User);
-
-            if (deck.OwnerId != user.Id)
-            {
-                return Forbid();
-            }
-
-            var derivedDecks = dbContext.Decks.Where(d => d.SourceId == deck.Id);
-
-            foreach (var derivedDeck in derivedDecks)
-            {
-                derivedDeck.SourceId = null;
-            }
-
-            dbContext.Decks.Remove(deck);
-            await dbContext.SaveChangesAsync();
-
-            return NoContent();
-        }
-
-        [HttpGet("{id}/remainingcards")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<IEnumerable<CardApiModel>>> GetRemainingCards(int id)
-        {
-            var deck = await dbContext.Decks
-                            .Include(d => d.CardAssignments)
-                                .ThenInclude(ca => ca.Card)
-                            .AsNoTracking()
-                            .FirstOrDefaultAsync(d => d.Id == id);
-
-            if (deck == null)
-            {
-                return NotFound();
-            }
-
-            var user = await UserService.GetUser(userManager, User);
-            bool userIsInUserRole = await userManager.IsInRoleAsync(user, Roles.User);
-
-            // Check the deck belongs with the current user
-            if (userIsInUserRole && deck.OwnerId != user.Id)
-            {
-                return Forbid();
-            }
-
-            var cardIds = dbContext.CardAssignments
-                            .Where(ca => ca.DeckId == deck.Id)
-                            .AsNoTracking()
-                            .Select(ca => ca.CardId);
-            var remainingCards = dbContext.Cards
-                                    .Include(c => c.Backs)
-                                        .ThenInclude(b => b.Author)
-                                    .Include(c => c.CardOwners)
-                                    .Where(c => c.CardOwners.FirstOrDefault(co => co.UserId == user.Id) != null &&
-                                        !cardIds.Contains(c.Id) && c.Backs.Where(b => !b.Public || b.Approved).Count() > 0)
-                                    .OrderBy(c => c.Front)
-                                    .AsNoTracking();
-
-            var cardmodels = new List<CardApiModel>();
-
-            foreach (var card in remainingCards)
-            {
-                var cardmodel = new CardApiModel(card);
-                var backs = card.Backs.Where(b => b.OwnerId == user.Id && (!b.Public || b.Approved));
-
-                foreach (var back in backs)
-                {
-                    cardmodel.Backs.Add(new BackApiModel(back));
-                }
-
-                cardmodels.Add(cardmodel);
-            }
-
-            return cardmodels;
-        }
-
-        [HttpPut("{id}/cards")]
-        [ProducesResponseType(StatusCodes.Status204NoContent)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> InsertCards(int id, [FromBody] int[] cardIds)
-        {
-            var deck = await dbContext.Decks.FirstOrDefaultAsync(d => d.Id == id);
-
-            if (deck == null)
-            {
-                return NotFound();
-            }
-
-            var user = await UserService.GetUser(userManager, User);
-
-            if (deck.OwnerId != user.Id)
-            {
-                return Forbid();
-            }
-
-            var cards = await dbContext.Cards
-                            .Include(c => c.CardOwners)
-                            .Include(c => c.CardAssignments)
-                            .Where(c => c.CardOwners.FirstOrDefault(co => co.UserId == user.Id) != null &&
-                                cardIds.Contains(c.Id))
-                            .ToListAsync();
-
-            if (cards.Count != cardIds.Length)
-            {
-                ModelState.AddModelError("CardIds",
-                    "At least one card that does not belong with you or does not exist");
-            }
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            foreach (var card in cards)
-            {
-                if (await dbContext.CardAssignments.FirstOrDefaultAsync(ca => ca.DeckId == deck.Id &&
-                    ca.CardId == card.Id) == null)
-                {
-                    dbContext.CardAssignments.Add(new CardAssignment
-                    {
-                        DeckId = deck.Id,
-                        CardId = card.Id
-                    });
-                }
-            }
-
-            await dbContext.SaveChangesAsync();
-
-            return NoContent();
-        }
-
-        [HttpDelete("{id}/cards")]
-        [ProducesResponseType(StatusCodes.Status204NoContent)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> RemoveCards(int id, [FromBody] int[] cardIds)
-        {
-            var deck = await dbContext.Decks.FirstOrDefaultAsync(d => d.Id == id);
-
-            if (deck == null)
-            {
-                return NotFound();
-            }
-
-            var user = await UserService.GetUser(userManager, User);
-
-            if (deck.OwnerId != user.Id)
-            {
-                return Forbid();
-            }
-
-            var cardAssignments = await dbContext.CardAssignments
-                                        .Include(ca => ca.Card)
-                                            .ThenInclude(c => c.CardOwners)
-                                        .Where(ca => ca.DeckId == deck.Id && cardIds.Contains(ca.CardId) &&
-                                            ca.Card.CardOwners.FirstOrDefault(co => co.UserId == user.Id) != null)
-                                        .ToListAsync();
-
-            if (cardAssignments.Count != cardIds.Length)
-            {
-                ModelState.AddModelError("CardIds",
-                    "At least one card that does not belong with you or is not included in this deck or does not exist");
-            }
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            dbContext.CardAssignments.RemoveRange(cardAssignments);
-
-            var testedCards = dbContext.TestedCards
-                                .Include(tc => tc.Test)
-                                .Where(tc => tc.Test.DeckId == deck.Id && cardIds.Contains(tc.CardId));
-
-            dbContext.TestedCards.RemoveRange(testedCards);
-
-            await dbContext.SaveChangesAsync();
-
-            return NoContent();
-        }
-
-        [HttpPost("{id}/test")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> CreateTest(int id, [FromBody] TestRequestModel testmodel)
-        {
-            var deck = await dbContext.Decks.FirstOrDefaultAsync(d => d.Id == id);
-
-            if (deck == null)
-            {
-                return NotFound();
-            }
-
-            var user = await UserService.GetUser(userManager, User);
-
-            if (deck.OwnerId != user.Id)
-            {
-                return Forbid();
-            }
-
-            foreach (var failedCardId in testmodel.FailedCardIds)
-            {
-                if (testmodel.SuccessCardIds.Contains(failedCardId))
-                {
-                    ModelState.AddModelError("", "At least one card belongs to both");
-                    break;
-                }
-            }
-
-            int failedCardsCount = await dbContext.CardAssignments
-                                        .Include(c => c.Deck)
-                                        .Where(c => c.DeckId == deck.Id && testmodel.FailedCardIds.Contains(c.CardId))
-                                        .CountAsync();
-            int successCardsCount = await dbContext.CardAssignments
-                                        .Include(c => c.Deck)
-                                        .Where(c => c.DeckId == deck.Id && testmodel.SuccessCardIds.Contains(c.CardId))
-                                        .CountAsync();
-
-            if (failedCardsCount != testmodel.FailedCardIds.Length)
-            {
-                ModelState.AddModelError("FailedCardIds",
-                    "The FailedCardIds containing card does not belong with deck or does not exist");
-            }
-            if (successCardsCount != testmodel.SuccessCardIds.Length)
-            {
-                ModelState.AddModelError("SuccessCardIds",
-                    "The SuccessCardIds containing card does not belong with deck or does not exist");
-            }
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            var test = new Test()
-            {
-                DateTime = DateTime.Now,
-                DeckId = deck.Id,
-                Score = (float)testmodel.SuccessCardIds.Length / (testmodel.FailedCardIds.Length + testmodel.SuccessCardIds.Length),
-                TestedCards = new List<TestedCard>()
-            };
-
-            foreach (var failedCardId in testmodel.FailedCardIds)
-            {
-                test.TestedCards.Add(new TestedCard()
-                {
-                    CardId = failedCardId,
-                    Failed = true
-                });
-            }
-            foreach (var successCardId in testmodel.SuccessCardIds)
-            {
-                test.TestedCards.Add(new TestedCard()
-                {
-                    CardId = successCardId,
-                    Failed = false
-                });
-            }
-
-            dbContext.Tests.Add(test);
-            await dbContext.SaveChangesAsync();
-
-            return Ok();
-        }
-
-        [HttpGet("{id}/pages")]
-        public async Task<ActionResult<int>> GetNumberOfCardPages(int id, int pageSize)
-        {
-            var deck = await dbContext.Decks
-                            .Include(d => d.Owner)
-                            .Include(d => d.CardAssignments)
-                            .AsNoTracking()
-                            .FirstOrDefaultAsync(d => d.Id == id);
-
-            if (deck == null)
-            {
-                return NotFound();
-            }
-
-            var user = await UserService.GetUser(userManager, User);
-
-            bool userIsInUserRole = await userManager.IsInRoleAsync(user, Roles.User);
-            bool ownerIsInUserRole = await userManager.IsInRoleAsync(deck.Owner, Roles.User);
-
-            // Check the deck belongs with current user or is pucblic, if user is in administrator
-            if (userIsInUserRole && deck.OwnerId != user.Id && (ownerIsInUserRole || !deck.Public || !deck.Approved))
-            {
-                return Forbid();
-            }
-
-            if (pageSize <= 0)
-            {
-                return 1;
-            }
-            return (int)Math.Ceiling((float)deck.CardAssignments.Count / pageSize);
-        }
-    }
+	[Authorize]
+	[Route("api/[controller]")]
+	[ApiController]
+	[Produces(MediaTypeNames.Application.Json)]
+	public class DecksController : ControllerBase
+	{
+		private readonly IRepositoryWrapper repository;
+		private readonly UserManager<ApplicationUser> userManager;
+		private readonly IImageService imageService;
+
+		public DecksController(IRepositoryWrapper repository, UserManager<ApplicationUser> userManager,
+			IImageService imageService)
+		{
+			this.repository = repository;
+			this.userManager = userManager;
+			this.imageService = imageService;
+		}
+
+		[HttpGet]
+		[ProducesResponseType(200)]
+		public async Task<IEnumerable<DeckDto>> GetAllDecks()
+		{
+			var userId = UserUtil.GetUserId(User);
+			var decks = await repository.Deck
+				.Query(userId)
+				.AsNoTracking()
+				.MapToDeckDto()
+				.ToListAsync();
+
+			return decks;
+		}
+
+		[HttpGet("{id}")]
+		[ProducesResponseType(200)]
+		[ProducesResponseType(404)]
+		public async Task<ActionResult<DeckDto>> GetDeck(int id)
+		{
+			var userId = UserUtil.GetUserId(User);
+			var deck = await repository.Deck
+				.QueryByIdCheckingSharedDeck(userId, id)
+				.AsNoTracking()
+				.MapToDeckDto()
+				.FirstOrDefaultAsync();
+
+			if (deck == null)
+			{
+				return NotFound();
+			}
+
+			return deck;
+		}
+
+		[HttpGet("{id}/cards")]
+		[ProducesResponseType(200)]
+		[ProducesResponseType(404)]
+		public async Task<ActionResult<IEnumerable<CardDto>>> GetCardsOfDeck(int id)
+		{
+			var userId = UserUtil.GetUserId(User);
+			var deck = await repository.Deck
+				.QueryByIdCheckingSharedDeck(userId, id)
+				.AsNoTracking()
+				.FirstOrDefaultAsync();
+
+			if (deck == null)
+			{
+				return NotFound();
+			}
+
+			var cards = await repository.Card
+				.QueryByDeckId(id)
+				.AsNoTracking()
+				.MapToCardDto(imageService.GetBackImageBaseUrl())
+				.ToListAsync();
+
+			return cards;
+		}
+
+		[HttpPost]
+		[ProducesResponseType(201)]
+		[ProducesResponseType(400)]
+		public async Task<IActionResult> Create(DeckRequestModel deckRqModel)
+		{
+			var userId = UserUtil.GetUserId(User);
+			var countSameName = await repository.Deck
+				.QueryByName(userId, deckRqModel.Name)
+				.CountAsync();
+
+			if (countSameName > 0)
+			{
+				ModelState.AddModelError("Name", "The deck name is taken.");
+				return BadRequest(ModelState);
+			}
+
+			var now = DateTime.Now;
+			var newDeck = new Deck()
+			{
+				Name = deckRqModel.Name.Trim(),
+				Description = deckRqModel.Description == null || deckRqModel.Description.Trim().Length == 0
+					? null : deckRqModel.Description.Trim(),
+				CreatedDate = now,
+				LastModifiedDate = now,
+				OwnerId = userId,
+				AuthorId = userId
+			};
+
+			repository.Deck.Create(newDeck);
+			await repository.SaveChangesAsync();
+
+			return CreatedAtAction(nameof(GetDeck), new { Id = newDeck.Id },
+				new { Message = "Created Successfully", Id = newDeck.Id });
+		}
+
+		[HttpPut("{id}")]
+		[ProducesResponseType(204)]
+		[ProducesResponseType(400)]
+		[ProducesResponseType(404)]
+		public async Task<IActionResult> Update(int id, DeckRequestModel deckRqModel)
+		{
+			var userId = UserUtil.GetUserId(User);
+			var existingDeck = await repository.Deck
+				.QueryById(userId, id)
+				.FirstOrDefaultAsync();
+
+			if (existingDeck == null)
+			{
+				return NotFound();
+			}
+
+			var deckSameName = await repository.Deck
+				.QueryByName(userId, deckRqModel.Name)
+				.AsNoTracking()
+				.FirstOrDefaultAsync();
+
+			if (deckSameName != null && deckSameName.Id != existingDeck.Id)
+			{
+				ModelState.AddModelError("Name", "The deck name is taken.");
+				return BadRequest(ModelState);
+			}
+
+			existingDeck.Name = deckRqModel.Name.Trim();
+			existingDeck.Description = deckRqModel.Description == null || deckRqModel.Description.Trim().Length == 0
+				? null : deckRqModel.Description.Trim();
+			existingDeck.LastModifiedDate = DateTime.Now;
+
+			await repository.SaveChangesAsync();
+
+			return NoContent();
+		}
+
+		[HttpPut("{id}/public")]
+		[ProducesResponseType(204)]
+		[ProducesResponseType(404)]
+		public async Task<IActionResult> UpdateStatus(int id, BoolValueRequestModel valueRqModel)
+		{
+			var user = await UserUtil.GetUser(userManager, User);
+			var deck = await repository.Deck
+				.QueryById(user.Id, id)
+				.FirstOrDefaultAsync();
+
+			if (deck == null)
+			{
+				return NotFound();
+			}
+
+			var userIsAdmin = await userManager.IsInRoleAsync(user, Roles.Administrator);
+
+			deck.Public = valueRqModel.Value;
+			deck.Approved = valueRqModel.Value && (userIsAdmin || deck.Approved);
+
+			await repository.SaveChangesAsync();
+			return NoContent();
+		}
+
+		[HttpDelete("{id}")]
+		[ProducesResponseType(204)]
+		[ProducesResponseType(404)]
+		public async Task<IActionResult> Delete(int id)
+		{
+			var userId = UserUtil.GetUserId(User);
+			var existingDeck = await repository.Deck
+				.QueryById(userId, id)
+				.FirstOrDefaultAsync();
+
+			if (existingDeck == null)
+			{
+				return NotFound();
+			}
+
+			repository.Deck.Delete(existingDeck);
+			await repository.SaveChangesAsync();
+
+			return NoContent();
+		}
+
+		[HttpPut("{deckId}/cards/{cardId}")]
+		[ProducesResponseType(204)]
+		[ProducesResponseType(404)]
+		public async Task<IActionResult> AddCardToDeck(int deckId, int cardId)
+		{
+			var userId = UserUtil.GetUserId(User);
+			var deck = await repository.Deck
+				.QueryByIdIncludesCardAssignments(userId, deckId)
+				.FirstOrDefaultAsync();
+
+			if (deck == null)
+			{
+				return NotFound();
+			}
+
+			var card = await repository.Card
+				.QueryById(userId, cardId)
+				.FirstOrDefaultAsync();
+
+			if (card == null)
+			{
+				return NotFound();
+			}
+			if (deck.CardAssignments.Any(ca => ca.CardId == cardId))
+			{
+				return NoContent();
+			}
+
+			deck.CardAssignments.Add(new CardAssignment() { Card = card });
+			await repository.SaveChangesAsync();
+
+			return NoContent();
+		}
+
+		[HttpDelete("{deckId}/cards/{cardId}")]
+		[ProducesResponseType(204)]
+		[ProducesResponseType(404)]
+		public async Task<IActionResult> RemoveCardFromDeck(int deckId, int cardId)
+		{
+			var userId = UserUtil.GetUserId(User);
+			var deck = await repository.Deck
+				.QueryByIdIncludesCardAssignments(userId, deckId)
+				.FirstOrDefaultAsync();
+
+			if (deck == null)
+			{
+				return NotFound();
+			}
+
+			var countCard = await repository.Card
+				.QueryById(userId, cardId)
+				.AsNoTracking()
+				.CountAsync();
+
+			if (countCard == 0)
+			{
+				return NotFound();
+			}
+
+			var cardAssignment = deck.CardAssignments.FirstOrDefault(ca => ca.CardId == cardId);
+			if (cardAssignment != null)
+			{
+				deck.CardAssignments.Remove(cardAssignment);
+				await repository.SaveChangesAsync();
+			}
+
+			return NoContent();
+		}
+	}
 }

@@ -1,11 +1,11 @@
 namespace FlashCard.Models
 {
-	public class TestedCard
+	public class MatchedCard
 	{
-		public int TestId { get; set; }
+		public int MatchId { get; set; }
 		public int CardId { get; set; }
 		public bool Failed { get; set; }
-		public Test Test { get; set; }
+		public Match Match { get; set; }
 		public Card Card { get; set; }
 	}
 }

@@ -4,25 +4,22 @@ using Microsoft.AspNetCore.Identity;
 
 namespace FlashCard.Models
 {
-    public class ApplicationUser : IdentityUser
-    {
-        [PersonalData]
-        [Required]
-        [StringLength(50)]
-        public string Name { get; set; }
+	public class ApplicationUser : IdentityUser
+	{
+		[PersonalData]
+		[Required]
+		[StringLength(50)]
+		public string Name { get; set; }
 
-        [PersonalData]
-        public byte[] Avatar { get; set; }
+		[PersonalData]
+		[StringLength(100)]
+		public string Avatar { get; set; }
 
-        [PersonalData]
-        [StringLength(4)]
-        public string ImageType { get; set; }
-
-        public ICollection<Deck> OwnedDecks { get; set; }
-        public ICollection<Deck> AuthorizedDecks { get; set; }
-        public ICollection<Back> OwnedBacks { get; set; }
-        public ICollection<Back> AuthorizedBacks { get; set; }
-        public ICollection<Proposal> Proposals { get; set; }
-        public ICollection<CardOwner> CardOwners { get; set; }
-    }
+		public ICollection<Deck> OwnedDecks { get; set; }
+		public ICollection<Deck> AuthorizedDecks { get; set; }
+		public ICollection<Card> OwnedCards { get; set; }
+		public ICollection<Card> AuthorizedCards { get; set; }
+		public ICollection<Back> AuthorizedBacks { get; set; }
+		public ICollection<SharedDeck> SharedDecks { get; set; }
+	}
 }

@@ -1,118 +1,187 @@
-using System.Linq;
+using System;
 using System.Net.Mime;
 using System.Threading.Tasks;
-using FlashCard.Data;
-using FlashCard.Models;
+using FlashCard.Contracts;
+using FlashCard.Dto;
 using FlashCard.RequestModels;
 using FlashCard.Services;
+using FlashCard.Util;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 
 namespace FlashCard.Controllers
 {
-    [Authorize]
-    [Route("api/[controller]")]
-    [Produces(MediaTypeNames.Application.Json)]
-    public class BacksController : ControllerBase
-    {
-        private UserManager<ApplicationUser> userManager;
-        private ApplicationDbContext dbContext;
+	[Authorize]
+	[Route("api/[controller]")]
+	[ApiController]
+	[Produces(MediaTypeNames.Application.Json)]
+	public class BacksController : ControllerBase
+	{
+		private readonly IRepositoryWrapper repository;
+		private readonly ILogger<BacksController> logger;
+		private readonly IImageService imageService;
 
-        public BacksController(UserManager<ApplicationUser> userManager, ApplicationDbContext dbContext)
-        {
-            this.userManager = userManager;
-            this.dbContext = dbContext;
-        }
+		public BacksController(IRepositoryWrapper repository, ILogger<BacksController> logger,
+			IImageService imageService)
+		{
+			this.repository = repository;
+			this.logger = logger;
+			this.imageService = imageService;
+		}
 
-        [HttpPut("{id}")]
-        [ProducesResponseType(StatusCodes.Status204NoContent)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> Update(int id, [FromBody] BackRequestModel backmodel)
-        {
-            var back = await dbContext.Backs.FirstOrDefaultAsync(b => b.Id == id);
+		[HttpGet("{id}")]
+		[ProducesResponseType(200)]
+		[ProducesResponseType(404)]
+		public async Task<ActionResult<BackDto>> GetBack(int id)
+		{
+			var userId = UserUtil.GetUserId(User);
+			var back = await repository.Back
+				.QueryById(userId, id)
+				.AsNoTracking()
+				.MapToBackDto(imageService.GetBackImageBaseUrl())
+				.FirstOrDefaultAsync();
 
-            if (back == null)
-            {
-                return NotFound();
-            }
+			if (back == null)
+			{
+				return NotFound();
+			}
+			return back;
+		}
 
-            var user = await UserService.GetUser(userManager, User);
+		// [HttpGet("{id}/image")]
+		// [ProducesResponseType(200)]
+		// [ProducesResponseType(404)]
+		// [ResponseCache(Duration = 2592000)]
+		// public async Task<IActionResult> GetBackImage(int id)
+		// {
+		// 	var userId = UserUtil.GetUserId(User);
+		// 	var back = await repository.Back
+		// 		.QueryById(userId, id)
+		// 		.AsNoTracking()
+		// 		.FirstOrDefaultAsync();
 
-            if (back.OwnerId != user.Id)
-            {
-                return Forbid();
-            }
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
+		// 	if (back == null)
+		// 	{
+		// 		return NotFound();
+		// 	}
 
-            ImageService.Image image = ImageService.GetImage(backmodel.Image);
+		// 	var filePath = Path.Combine(env.ContentRootPath, "assets/images", back.Image);
+		// 	var stream = System.IO.File.OpenRead(filePath);
+		// 	return File(stream, $"image/{Path.GetExtension(filePath).Remove(0, 1)}");
+		// }
 
-            back.Type = backmodel.Type;
-            back.Meaning = backmodel.Meaning.Trim();
-            back.Example = backmodel.Example?.Trim();
-            back.Image = image?.Data;
-            back.ImageType = image?.Type;
+		[HttpPut("{id}")]
+		[ProducesResponseType(204)]
+		[ProducesResponseType(400)]
+		[ProducesResponseType(404)]
+		public async Task<IActionResult> Update(int id, BackNotImageRequestModel backRqModel)
+		{
+			var userId = UserUtil.GetUserId(User);
+			var back = await repository.Back
+				.QueryById(userId, id)
+				.FirstOrDefaultAsync();
 
-            await dbContext.SaveChangesAsync();
+			if (back == null)
+			{
+				return NotFound();
+			}
+			if (back.Image == null && (backRqModel.Meaning == null || back.Meaning.Length == 0))
+			{
+				ModelState.AddModelError("", "Card must at least have either meaning or image.");
+				return BadRequest(ModelState);
+			}
 
-            return NoContent();
-        }
+			back.Type = backRqModel.Type == null || backRqModel.Type.Trim().Length == 0
+				? null : backRqModel.Type.Trim().ToLower();
+			back.Meaning = backRqModel.Meaning == null || backRqModel.Meaning.Trim().Length == 0
+				? null : backRqModel.Meaning.Trim();
+			back.Example = backRqModel.Example == null || backRqModel.Example.Trim().Length == 0
+				? null : backRqModel.Example.Trim();
+			back.LastModifiedDate = DateTime.Now;
 
-        [HttpDelete("{id}")]
-        [ProducesResponseType(StatusCodes.Status204NoContent)]
-        [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> Delete(int id)
-        {
-            var back = await dbContext.Backs.FirstOrDefaultAsync(b => b.Id == id);
+			await repository.SaveChangesAsync();
 
-            if (back == null)
-            {
-                return NotFound();
-            }
+			return NoContent();
+		}
 
-            var user = await UserService.GetUser(userManager, User);
+		[HttpPut("{id}/image")]
+		[ProducesResponseType(204)]
+		[ProducesResponseType(400)]
+		[ProducesResponseType(404)]
+		public async Task<IActionResult> UpdateImage(int id, [FromForm] IFormFile image)
+		{
+			var userId = UserUtil.GetUserId(User);
+			var back = await repository.Back
+				.QueryById(userId, id)
+				.FirstOrDefaultAsync();
 
-            if (back.OwnerId != user.Id)
-            {
-                return Forbid();
-            }
+			if (back == null)
+			{
+				return NotFound();
+			}
+			if (back.Meaning == null && image == null)
+			{
+				ModelState.AddModelError("", "Card must at least have either meaning or image.");
+			}
+			if (image != null)
+			{
+				if (image.Length > 5242880)
+				{
+					ModelState.AddModelError("Image", "File is not exceeded 5MB.");
+				}
+				if (!ImageUtil.CheckExtensions(image))
+				{
+					ModelState.AddModelError("Image",
+						"Accepted images that images are with an extension of .png, .jpg, .jpeg or .bmp.");
+				}
+			}
+			if (!ModelState.IsValid)
+			{
+				return BadRequest(ModelState);
+			}
+			
+			var oldImageName = back.Image;
+			var imageName = await imageService.UploadImage(image);
+			back.Image = imageName;
+			back.LastModifiedDate = DateTime.Now;
 
-            var derivedBacks = dbContext.Backs.Where(b => b.SourceId == back.Id);
+			await repository.SaveChangesAsync();
 
-            foreach (var derivedBack in derivedBacks)
-            {
-                derivedBack.SourceId = null;
-            }
+			if (!imageService.TryDeleteImage(oldImageName))
+			{
+				logger.LogError("Occur an error when deleting image with name {0}", oldImageName);
+			}
 
-            dbContext.Backs.Remove(back);
-            await dbContext.SaveChangesAsync();
+			return NoContent();
+		}
 
-            // Remove card if card has no back and no one owns it
-            var card = await dbContext.Cards
-                            .Include(c => c.Backs)
-                            .FirstOrDefaultAsync(c => c.Id == back.CardId);
+		[HttpDelete("{id}")]
+		[ProducesResponseType(204)]
+		[ProducesResponseType(404)]
+		public async Task<IActionResult> Delete(int id)
+		{
+			var userId = UserUtil.GetUserId(User);
+			var back = await repository.Back
+				.QueryById(userId, id)
+				.FirstOrDefaultAsync();
 
-            if (card != null && card.Backs.Where(b => b.OwnerId == user.Id).Count() == 0)
-            {
-                dbContext.CardOwners.Remove(dbContext.CardOwners.FirstOrDefault(co =>
-                    co.CardId == card.Id && co.UserId == user.Id));
+			if (back == null)
+			{
+				return NotFound();
+			}
 
-                if (card.Backs.Count == 0)
-                {
-                    dbContext.Cards.Remove(card);
-                }
-                await dbContext.SaveChangesAsync();
-            }
+			repository.Back.Delete(back);
+			await repository.SaveChangesAsync();
 
-            return NoContent();
-        }
-    }
+			if (!imageService.TryDeleteImage(back.Image))
+			{
+				logger.LogError("Occur an error when deleting image with name {0}", back.Image);
+			}
+
+			return NoContent();
+		}
+	}
 }
