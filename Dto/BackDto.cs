@@ -10,7 +10,7 @@ namespace FlashCard.Dto
 		// public bool Public { get; set; }
 		// public bool Approved { get; set; }
 		// public DateTime CreatedDate { get; set; }
-		// public DateTime LastModified { get; set; }
+		// public DateTime LastModifiedDate { get; set; }
 		// public int? SourceId { get; set; }
 		// public PersonDto Owner { get; set; }
 		// public PersonDto Author { get; set; }

@@ -73,11 +73,12 @@ namespace FlashCard.Controllers
 		public async Task<IActionResult> Create(CardRequestModel cardRqModel)
 		{
 			var userId = UserUtil.GetUserId(User);
-			var countSameFront = await repository.Card
+			var cardSameFront = await repository.Card
 				.QueryByFront(userId, cardRqModel.Front)
-				.CountAsync();
+				.AsNoTracking()
+				.FirstOrDefaultAsync();
 
-			if (countSameFront > 0)
+			if (cardSameFront != null)
 			{
 				ModelState.AddModelError("Front", "The front is taken.");
 				return BadRequest(ModelState);
@@ -221,15 +222,8 @@ namespace FlashCard.Controllers
 			repository.Back.Create(newBack);
 			await repository.SaveChangesAsync();
 
-			return CreatedAtAction("GetBack", "Backs", new
-			{
-				Id = newBack.Id
-			},
-				new
-				{
-					Message = "Created Successfully.",
-					Id = newBack.Id
-				});
+			return CreatedAtAction("GetBack", "Backs", new { Id = newBack.Id },
+				new { Message = "Created Successfully.", Id = newBack.Id });
 		}
 	}
 }

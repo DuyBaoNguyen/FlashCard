@@ -93,17 +93,43 @@ namespace FlashCard.Controllers
 			return cards;
 		}
 
+		[HttpGet("{id}/remainingcards")]
+		[ProducesResponseType(200)]
+		[ProducesResponseType(404)]
+		public async Task<ActionResult<IEnumerable<CardDto>>> GetCardsOutOfDeck(int id)
+		{
+			var userId = UserUtil.GetUserId(User);
+			var deck = await repository.Deck
+				.QueryById(userId, id)
+				.AsNoTracking()
+				.FirstOrDefaultAsync();
+
+			if (deck == null)
+			{
+				return NotFound();
+			}
+
+			var remainingCards = await repository.Card
+				.QueryRemainingByDeckId(userId, id)
+				.AsNoTracking()
+				.MapToCardDto(imageService.GetBackImageBaseUrl())
+				.ToListAsync();
+
+			return remainingCards;
+		}
+
 		[HttpPost]
 		[ProducesResponseType(201)]
 		[ProducesResponseType(400)]
 		public async Task<IActionResult> Create(DeckRequestModel deckRqModel)
 		{
 			var userId = UserUtil.GetUserId(User);
-			var countSameName = await repository.Deck
+			var deckSameName = await repository.Deck
 				.QueryByName(userId, deckRqModel.Name)
-				.CountAsync();
+				.AsNoTracking()
+				.FirstOrDefaultAsync();
 
-			if (countSameName > 0)
+			if (deckSameName != null)
 			{
 				ModelState.AddModelError("Name", "The deck name is taken.");
 				return BadRequest(ModelState);
@@ -259,12 +285,12 @@ namespace FlashCard.Controllers
 				return NotFound();
 			}
 
-			var countCard = await repository.Card
+			var card = await repository.Card
 				.QueryById(userId, cardId)
 				.AsNoTracking()
-				.CountAsync();
+				.FirstOrDefaultAsync();
 
-			if (countCard == 0)
+			if (card == null)
 			{
 				return NotFound();
 			}
@@ -277,6 +303,280 @@ namespace FlashCard.Controllers
 			}
 
 			return NoContent();
+		}
+
+		[HttpGet("{id}/test/cards")]
+		[ProducesResponseType(200)]
+		[ProducesResponseType(404)]
+		public async Task<ActionResult<IEnumerable<CardDto>>> GetTestedCardsRandom(int id, int amount = -1)
+		{
+			var userId = UserUtil.GetUserId(User);
+			var deck = await repository.Deck
+				.QueryByIdCheckingSharedDeck(userId, id)
+				.AsNoTracking()
+				.FirstOrDefaultAsync();
+
+			if (deck == null)
+			{
+				return NotFound();
+			}
+
+			var cards = await repository.Card
+				.QueryByDeckId(id)
+				.AsNoTracking()
+				.MapToCardDto(imageService.GetBackImageBaseUrl())
+				.ToListAsync();
+
+			amount = amount < 0 || amount > cards.Count ? cards.Count : amount;
+
+			return Ok(cards.TakeRandom(amount));
+		}
+
+		[HttpPost("{id}/test")]
+		[ProducesResponseType(200)]
+		[ProducesResponseType(400)]
+		[ProducesResponseType(404)]
+		public async Task<IActionResult> SubmitTest(int id, TestRequestModel testRqModel)
+		{
+			var user = await userManager.GetUser(User);
+			// Admin can't sumbit test
+			if (await userManager.IsInRoleAsync(user, Roles.Administrator))
+			{
+				return Ok();
+			}
+
+			if (testRqModel.SucceededCardIds.Intersect(testRqModel.FailedCardIds).Count() > 0)
+			{
+				ModelState.AddModelError("", "At least a card is both succeeded and failed.");
+				return BadRequest(ModelState);
+			}
+
+			var deck = await repository.Deck
+				.QueryByIdCheckingSharedDeck(user.Id, id)
+				.FirstOrDefaultAsync();
+
+			if (deck == null)
+			{
+				return NotFound();
+			}
+
+			var newTest = new Test()
+			{
+				DateTime = testRqModel.DateTime.Value,
+				Deck = deck,
+				Taker = user,
+				TestedCards = new List<TestedCard>()
+			};
+			var cards = await repository.Card
+				.QueryByDeckId(id)
+				.ToListAsync();
+			var succeededCards = FilterCards(cards, testRqModel.SucceededCardIds);
+			var failedCards = FilterCards(cards, testRqModel.FailedCardIds);
+
+			foreach (var card in succeededCards)
+			{
+				newTest.TestedCards.Add(new TestedCard()
+				{
+					Card = card,
+					Failed = false
+				});
+			}
+			foreach (var card in failedCards)
+			{
+				newTest.TestedCards.Add(new TestedCard()
+				{
+					Card = card,
+					Failed = true
+				});
+			}
+
+			newTest.Score = (float)succeededCards.Count / (succeededCards.Count + failedCards.Count);
+
+			repository.Test.Create(newTest);
+			await repository.SaveChangesAsync();
+
+			return Ok();
+		}
+
+		[HttpGet("{id}/match/cards")]
+		[ProducesResponseType(200)]
+		[ProducesResponseType(404)]
+		public async Task<ActionResult<IEnumerable<CardDto>>> GetMatchedCardsRandom(int id, int amount = -1)
+		{
+			var userId = UserUtil.GetUserId(User);
+			var deck = await repository.Deck
+				.QueryByIdCheckingSharedDeck(userId, id)
+				.AsNoTracking()
+				.FirstOrDefaultAsync();
+
+			if (deck == null)
+			{
+				return NotFound();
+			}
+
+			var cards = await repository.Card
+				.QueryByDeckId(id)
+				.AsNoTracking()
+				.MapToCardDto(imageService.GetBackImageBaseUrl())
+				.ToListAsync();
+
+			amount = amount < 0 || amount > cards.Count ? cards.Count : amount;
+
+			return Ok(cards.TakeRandom(amount));
+		}
+
+		[HttpPost("{id}/match")]
+		[ProducesResponseType(200)]
+		[ProducesResponseType(400)]
+		[ProducesResponseType(404)]
+		public async Task<IActionResult> SubmitMatch(int id, MatchRequestModel matchRqModel)
+		{
+			var user = await userManager.GetUser(User);
+			// Admin can't sumbit test
+			if (await userManager.IsInRoleAsync(user, Roles.Administrator))
+			{
+				return Ok();
+			}
+
+			if (matchRqModel.SucceededCardIds.Intersect(matchRqModel.FailedCardIds).Count() > 0)
+			{
+				ModelState.AddModelError("", "At least a card is both succeeded and failed.");
+				return BadRequest(ModelState);
+			}
+
+			var deck = await repository.Deck
+				.QueryByIdCheckingSharedDeck(user.Id, id)
+				.FirstOrDefaultAsync();
+
+			if (deck == null)
+			{
+				return NotFound();
+			}
+
+			var newMatch = new Match()
+			{
+				TotalTime = matchRqModel.TotalTime,
+				StartTime = matchRqModel.StartTime.Value,
+				EndTime = matchRqModel.EndTime.Value,
+				Deck = deck,
+				Taker = user,
+				MatchedCards = new List<MatchedCard>()
+			};
+			var cards = await repository.Card
+				.QueryByDeckId(id)
+				.ToListAsync();
+			var succeededCards = FilterCards(cards, matchRqModel.SucceededCardIds);
+			var failedCards = FilterCards(cards, matchRqModel.FailedCardIds);
+
+			foreach (var card in succeededCards)
+			{
+				newMatch.MatchedCards.Add(new MatchedCard()
+				{
+					Card = card,
+					Failed = false
+				});
+			}
+			foreach (var card in failedCards)
+			{
+				newMatch.MatchedCards.Add(new MatchedCard()
+				{
+					Card = card,
+					Failed = true
+				});
+			}
+
+			newMatch.Score = (float)succeededCards.Count / (succeededCards.Count + failedCards.Count);
+
+			repository.Match.Create(newMatch);
+			await repository.SaveChangesAsync();
+
+			return Ok();
+		}
+
+		[HttpGet("{id}/statistics")]
+		[ProducesResponseType(200)]
+		[ProducesResponseType(404)]
+		public async Task<ActionResult> GetStatistics(int id)
+		{
+			var amountTest = 5;
+			var amountMatch = 5;
+			var userId = UserUtil.GetUserId(User);
+			var deck = await repository.Deck
+				.QueryByIdCheckingSharedDeck(userId, id)
+				.AsNoTracking()
+				.FirstOrDefaultAsync();
+
+			if (deck == null)
+			{
+				return NotFound();
+			}
+
+			var today = DateTime.Now;
+			var tests = await repository.Test
+				.QueryByDeckIdIncludesTestedCards(userId, id)
+				.AsNoTracking()
+				.ToListAsync();
+			var testsToday = tests.Where(t => t.DateTime.Date == today.Date);
+			var matches = await repository.Match
+				.QueryByDeckIdIncludesMatchedCards(userId, id)
+				.AsNoTracking()
+				.ToListAsync();
+			var matchesToday = matches.Where(m => m.StartTime.Date == today.Date);
+
+			return Ok(new
+			{
+				Test = new
+				{
+					Statistics = new
+					{
+						Today = new
+						{
+							TotalCards = testsToday.Sum(t => t.TestedCards.Count),
+							FailedCards = testsToday.Sum(t => t.TestedCards.Where(tc => tc.Failed).Count()),
+							GradePointAverage = testsToday.Count() == 0 ? 0 : Math.Round(testsToday.Average(t => t.Score), 2)
+						},
+						Summary = new
+						{
+							TotalCards = tests.Sum(t => t.TestedCards.Count),
+							FailedCards = tests.Sum(t => t.TestedCards.Where(tc => tc.Failed).Count()),
+							GradePointAverage = tests.Count == 0 ? 0 : Math.Round(tests.Average(t => t.Score), 2)
+						}
+					},
+					Data = tests.Take(amountTest).MapToTestDto()
+				},
+				Match = new
+				{
+					Statistics = new
+					{
+						Today = new
+						{
+							TotalCards = matchesToday.Sum(t => t.MatchedCards.Count),
+							FailedCards = matchesToday.Sum(t => t.MatchedCards.Where(tc => tc.Failed).Count()),
+							GradePointAverage = matchesToday.Count() == 0 ? 0 : Math.Round(matchesToday.Average(t => t.Score), 2)
+						},
+						Summary = new
+						{
+							TotalCards = matches.Sum(t => t.MatchedCards.Count),
+							FailedCards = matches.Sum(t => t.MatchedCards.Where(tc => tc.Failed).Count()),
+							GradePointAverage = matches.Count == 0 ? 0 : Math.Round(matches.Average(t => t.Score), 2)
+						}
+					},
+					Data = matches.Take(amountMatch).MapToMatchDto()
+				}
+			});
+		}
+
+		private List<Card> FilterCards(List<Card> source, int[] cardIds)
+		{
+			var filteredList = new List<Card>();
+			foreach (var card in source)
+			{
+				if (cardIds.Contains(card.Id))
+				{
+					filteredList.Add(card);
+				}
+			}
+			return filteredList;
 		}
 	}
 }

@@ -16,7 +16,7 @@ namespace FlashCard.Repositories
 		public IQueryable<Card> Query(string userId)
 		{
 			return dbContext.Cards
-				.Where(c => c.OwnerId == userId)
+				.Where(c => c.OwnerId == userId && (!c.Public || c.Approved))
 				.OrderBy(c => c.Front);
 		}
 
@@ -38,6 +38,17 @@ namespace FlashCard.Repositories
 
 			return dbContext.Cards
 				.Where(c => queryCardIds.Contains(c.Id))
+				.OrderBy(c => c.Front);
+		}
+
+		public IQueryable<Card> QueryRemainingByDeckId(string userId, int deckId)
+		{
+			var queryCardIds = dbContext.CardAssignments
+				.Where(c => c.DeckId == deckId)
+				.Select(c => c.CardId);
+
+			return dbContext.Cards
+				.Where(c => c.OwnerId == userId && !queryCardIds.Contains(c.Id))
 				.OrderBy(c => c.Front);
 		}
 	}

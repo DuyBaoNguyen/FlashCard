@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using FlashCard.Dto;
@@ -17,7 +18,7 @@ namespace FlashCard.Util
 				Public = d.Public,
 				Approved = d.Approved,
 				CreatedDate = d.CreatedDate,
-				LastModified = d.LastModifiedDate,
+				LastModifiedDate = d.LastModifiedDate,
 				FromPublic = d.OwnerId != d.AuthorId,
 				Owner = new PersonDto()
 				{
@@ -43,7 +44,7 @@ namespace FlashCard.Util
 			{
 				Id = c.Id,
 				Front = c.Front,
-				Backs = c.Backs.Select(b => new BackDto()
+				Backs = c.Backs.Where(b => !b.Public || b.Approved).Select(b => new BackDto()
 				{
 					Id = b.Id,
 					Type = b.Type,
@@ -63,6 +64,40 @@ namespace FlashCard.Util
 				Meaning = b.Meaning,
 				Example = b.Example,
 				ImageUrl = b.Image != null ? Path.Combine(imageBaseUrl, b.Image) : b.Image
+			});
+		}
+
+		public static IEnumerable<TestDto> MapToTestDto(this IEnumerable<Test> source)
+		{
+			return source.Select(t => new TestDto()
+			{
+				Score = t.Score,
+				DateTime = t.DateTime,
+				Deck = new DeckWithNameDto()
+				{
+					Id = t.DeckId,
+					Name = t.Deck.Name
+				},
+				SucceededCards = t.TestedCards.Where(tc => !tc.Failed).Select(tc => tc.Card.Front),
+				FailedCards = t.TestedCards.Where(tc => tc.Failed).Select(tc => tc.Card.Front)
+			});
+		}
+
+		public static IEnumerable<MatchDto> MapToMatchDto(this IEnumerable<Match> source)
+		{
+			return source.Select(m => new MatchDto()
+			{
+				Score = m.Score,
+				TotalTime = m.TotalTime,
+				StartTime = m.StartTime,
+				EndTime = m.EndTime,
+				Deck = new DeckWithNameDto()
+				{
+					Id = m.DeckId,
+					Name = m.Deck.Name
+				},
+				SucceededCards = m.MatchedCards.Where(mc => !mc.Failed).Select(mc => mc.Card.Front),
+				FailedCards = m.MatchedCards.Where(mc => mc.Failed).Select(mc => mc.Card.Front)
 			});
 		}
 	}

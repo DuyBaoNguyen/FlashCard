@@ -4,14 +4,16 @@ using FlashCard.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace FlashCard.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200421132755_EditMatch")]
+    partial class EditMatch
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -156,9 +158,6 @@ namespace FlashCard.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<bool>("Approved")
-                        .HasColumnType("bit");
-
                     b.Property<string>("AuthorId")
                         .HasColumnType("nvarchar(450)");
 
@@ -176,9 +175,6 @@ namespace FlashCard.Migrations
                     b.Property<string>("OwnerId")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
-
-                    b.Property<bool>("Public")
-                        .HasColumnType("bit");
 
                     b.Property<int?>("SourceId")
                         .HasColumnType("int");
@@ -277,18 +273,9 @@ namespace FlashCard.Migrations
                     b.Property<DateTime>("StartTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("TakerId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<int>("TotalTime")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
 
                     b.HasIndex("DeckId");
-
-                    b.HasIndex("TakerId");
 
                     b.ToTable("Match");
                 });
@@ -342,15 +329,9 @@ namespace FlashCard.Migrations
                     b.Property<float>("Score")
                         .HasColumnType("real");
 
-                    b.Property<string>("TakerId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
                     b.HasKey("Id");
 
                     b.HasIndex("DeckId");
-
-                    b.HasIndex("TakerId");
 
                     b.ToTable("Test");
                 });
@@ -666,12 +647,6 @@ namespace FlashCard.Migrations
                         .HasForeignKey("DeckId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.HasOne("FlashCard.Models.ApplicationUser", "Taker")
-                        .WithMany("Matches")
-                        .HasForeignKey("TakerId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
                 });
 
             modelBuilder.Entity("FlashCard.Models.MatchedCard", b =>
@@ -709,12 +684,6 @@ namespace FlashCard.Migrations
                     b.HasOne("FlashCard.Models.Deck", "Deck")
                         .WithMany("Tests")
                         .HasForeignKey("DeckId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("FlashCard.Models.ApplicationUser", "Taker")
-                        .WithMany("Tests")
-                        .HasForeignKey("TakerId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

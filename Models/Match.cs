@@ -8,20 +8,23 @@ namespace FlashCard.Models
 	{
 		public int Id { get; set; }
 
-		[DataType(DataType.DateTime)]
-		public DateTime DateTime { get; set; }
-
-		[DataType(DataType.DateTime)]
-		public DateTime TotalTime { get; set; }
-
-		[DataType(DataType.DateTime)]
-		public DateTime CompletionTime { get; set; }
-
 		public float Score { get; set; }
+
+		public int TotalTime { get; set; }
+
+		[DataType(DataType.DateTime)]
+		public DateTime StartTime { get; set; }
+
+		[DataType(DataType.DateTime)]
+		public DateTime EndTime { get; set; }
 
 		public int DeckId { get; set; }
 
+		[Required]
+		public string TakerId { get; set; }
+
 		public Deck Deck { get; set; }
+		public ApplicationUser Taker { get; set; }
 		public ICollection<MatchedCard> MatchedCards { get; set; }
 	}
 }

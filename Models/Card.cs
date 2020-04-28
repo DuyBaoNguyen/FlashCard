@@ -12,6 +12,10 @@ namespace FlashCard.Models
 		[StringLength(100)]
 		public string Front { get; set; }
 
+		public bool Public { get; set; }
+
+		public bool Approved { get; set; }
+
 		[DataType(DataType.DateTime)]
 		public DateTime CreatedDate { get; set; }
 

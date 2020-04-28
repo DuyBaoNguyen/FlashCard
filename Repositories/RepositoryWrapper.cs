@@ -10,6 +10,8 @@ namespace FlashCard.Repositories
 		private readonly IDeckRepository deck = null;
 		private readonly ICardRepository card = null;
 		private readonly IBackRepository back = null;
+		private readonly ITestRepository test = null;
+		private readonly IMatchRepository match = null;
 
 		public IDeckRepository Deck
 		{
@@ -44,6 +46,30 @@ namespace FlashCard.Repositories
 					return new BackRepository(dbContext);
 				}
 				return back;
+			}
+		}
+
+		public ITestRepository Test
+		{
+			get
+			{
+				if (test == null)
+				{
+					return new TestRepository(dbContext);
+				}
+				return test;
+			}
+		}
+
+		public IMatchRepository Match
+		{
+			get
+			{
+				if (match == null)
+				{
+					return new MatchRepository(dbContext);
+				}
+				return match;
 			}
 		}
 

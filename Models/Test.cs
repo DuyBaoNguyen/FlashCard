@@ -15,7 +15,11 @@ namespace FlashCard.Models
 
 		public int DeckId { get; set; }
 
+		[Required]
+		public string TakerId { get; set; }
+
 		public Deck Deck { get; set; }
+		public ApplicationUser Taker { get; set; }
 		public ICollection<TestedCard> TestedCards { get; set; }
 	}
 }

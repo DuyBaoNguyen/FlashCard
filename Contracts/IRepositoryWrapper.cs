@@ -7,6 +7,8 @@ namespace FlashCard.Contracts
 		IDeckRepository Deck { get; }
 		ICardRepository Card { get; }
 		IBackRepository Back { get; }
+		ITestRepository Test { get; }
+		IMatchRepository Match { get; }
 		Task<int> SaveChangesAsync();
 	}
 }

@@ -21,5 +21,7 @@ namespace FlashCard.Models
 		public ICollection<Card> AuthorizedCards { get; set; }
 		public ICollection<Back> AuthorizedBacks { get; set; }
 		public ICollection<SharedDeck> SharedDecks { get; set; }
+		public ICollection<Test> Tests { get; set; }
+		public ICollection<Match> Matches { get; set; }
 	}
 }
