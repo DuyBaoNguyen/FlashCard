@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 
 namespace FlashCard.Controllers
 {
@@ -24,13 +25,15 @@ namespace FlashCard.Controllers
 		private readonly IRepositoryWrapper repository;
 		private readonly UserManager<ApplicationUser> userManager;
 		private readonly IImageService imageService;
+		private readonly ILogger<CardsController> logger;
 
 		public CardsController(IRepositoryWrapper repository, UserManager<ApplicationUser> userManager,
-			IImageService imageService)
+			IImageService imageService, ILogger<CardsController> logger)
 		{
 			this.repository = repository;
 			this.userManager = userManager;
 			this.imageService = imageService;
+			this.logger = logger;
 		}
 
 		[HttpGet]
@@ -147,7 +150,7 @@ namespace FlashCard.Controllers
 		{
 			var userId = UserUtil.GetUserId(User);
 			var existingCard = await repository.Card
-				.QueryById(userId, id)
+				.QueryByIdIncludesBacks(userId, id)
 				.FirstOrDefaultAsync();
 
 			if (existingCard == null)
@@ -157,6 +160,17 @@ namespace FlashCard.Controllers
 
 			repository.Card.Delete(existingCard);
 			await repository.SaveChangesAsync();
+
+			foreach (var back in existingCard.Backs)
+			{
+				if (back.Image != null)
+				{
+					if (!imageService.TryDeleteImage(back.Image))
+					{
+						logger.LogError("An error occurs when deleting the image with name {0}", back.Image);
+					}
+				}
+			}
 
 			return NoContent();
 		}

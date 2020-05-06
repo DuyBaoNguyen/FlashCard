@@ -16,5 +16,10 @@ namespace FlashCard.Repositories
 		{
 			return dbContext.Backs.Where(b => b.Id == backId && b.Card.OwnerId == userId);
 		}
+
+		public IQueryable<Back> QueryByBeingProposed(string userId, string adminId, int backId)
+		{
+			return dbContext.Backs.Where(b => b.Id == backId && b.AuthorId == userId && b.Card.OwnerId == adminId);
+		}
 	}
 }

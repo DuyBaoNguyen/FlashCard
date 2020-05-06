@@ -27,12 +27,8 @@ namespace FlashCard.Repositories
 
 		public IQueryable<Deck> QueryByIdCheckingSharedDeck(string userId, int deckId)
 		{
-			var query = dbContext.SharedDecks
-				.Where(d => d.DeckId == deckId && d.UserId == userId)
-				.Select(d => d.DeckId);
-
 			return dbContext.Decks
-				.Where(d => d.Id == deckId && (d.OwnerId == userId || d.Approved && query.Contains(d.Id)));
+				.Where(d => d.Id == deckId && (d.OwnerId == userId || d.Approved));
 		}
 
 		public IQueryable<Deck> QueryByIdIncludesCardAssignments(string userId, int deckId)
@@ -45,6 +41,51 @@ namespace FlashCard.Repositories
 		public IQueryable<Deck> QueryByName(string userId, string deckName)
 		{
 			return dbContext.Decks.Where(d => d.OwnerId == userId && d.Name == deckName.Trim());
+		}
+
+		public IQueryable<Deck> QueryByBeingApprovedAndAdminId(string adminId)
+		{
+			return dbContext.Decks.Where(d => d.OwnerId == adminId && d.Approved);
+		}
+
+		public IQueryable<Deck> QueryByIdAndBeingApprovedAndAdminId(string adminId, int deckId)
+		{
+			return dbContext.Decks.Where(d => d.Id == deckId && d.OwnerId == adminId && d.Approved);
+		}
+
+		public IQueryable<Deck> QueryByHavingSource(string userId)
+		{
+			return dbContext.Decks.Where(d => d.OwnerId == userId && d.SourceId != null);
+		}
+
+		public IQueryable<Deck> QueryBySourceId(string userId, int sourceId)
+		{
+			return dbContext.Decks.Where(d => d.OwnerId == userId && d.SourceId == sourceId);
+		}
+
+		public IQueryable<Deck> QueryByBeingApprovedAndNotAdmin(string adminId)
+		{
+			return dbContext.Decks.Where(d => d.OwnerId != adminId && d.Approved);
+		}
+
+		public IQueryable<Deck> QueryByIdAndBeingApprovedAndNotAdmin(string adminId, int deckId)
+		{
+			return dbContext.Decks.Where(d => d.Id == deckId && d.OwnerId != adminId && d.Approved);
+		}
+
+		public IQueryable<Deck> QueryByIdIncludesSharedDeck(int deckId)
+		{
+			return dbContext.Decks
+				.Include(d => d.SharedDecks)
+				.Where(d => d.Id == deckId && d.Approved);
+		}
+
+		public IQueryable<Deck> QueryByBeingShared(string userId)
+		{
+			var querySharedDeckIds = dbContext.SharedDecks
+				.Where(sd => sd.UserId == userId)
+				.Select(sd => sd.DeckId);
+			return dbContext.Decks.Where(d => d.Approved && querySharedDeckIds.Contains(d.Id));
 		}
 	}
 }

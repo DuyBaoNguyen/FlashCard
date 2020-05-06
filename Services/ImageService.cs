@@ -27,11 +27,37 @@ namespace FlashCard.Services
 			var imageName = Guid.NewGuid().ToString().Replace("-", "") + Path.GetExtension(image.FileName);
 			var filePath = Path.Combine(env.ContentRootPath, "assets/images", imageName);
 
-			using (var stream = File.Create(filePath))
+			try
 			{
-				await image.CopyToAsync(stream);
+				using (var stream = File.Create(filePath))
+				{
+					await image.CopyToAsync(stream);
+				}
+			}
+			catch
+			{
+				return null;
 			}
 			return imageName;
+		}
+
+		public string DuplicateImage(string imageName)
+		{
+			if (imageName == null)
+			{
+				return null;
+			}
+
+			var filePath = Path.Combine(env.ContentRootPath, "assets/images", imageName);
+			var newImageName = Guid.NewGuid().ToString().Replace("-", "") + Path.GetExtension(imageName);
+			var newFilePath = Path.Combine(env.ContentRootPath, "assets/images", newImageName);
+			
+			if (File.Exists(filePath))
+			{
+				File.Copy(filePath, newFilePath);
+				return newImageName;
+			}
+			return null;
 		}
 
 		public bool TryDeleteImage(string imageName)

@@ -25,9 +25,37 @@ namespace FlashCard.Repositories
 			return dbContext.Cards.Where(c => c.OwnerId == userId && c.Id == cardId);
 		}
 
+		public IQueryable<Card> QueryByIdIncludesBacks(int cardId)
+		{
+			return dbContext.Cards
+				.Include(c => c.Backs)
+				.Where(c => c.Id == cardId);
+		}
+
+		public IQueryable<Card> QueryByIdIncludesBacks(string userId, int cardId)
+		{
+			return dbContext.Cards
+				.Include(c => c.Backs)
+				.Where(c => c.Id == cardId && c.OwnerId == userId);
+		}
+
 		public IQueryable<Card> QueryByFront(string userId, string front)
 		{
 			return dbContext.Cards.Where(c => c.OwnerId == userId && c.Front.ToLower() == front.Trim().ToLower());
+		}
+
+		public IQueryable<Card> QueryByFrontIncludesBacks(string userId, string front)
+		{
+			return dbContext.Cards
+				.Include(c => c.Backs)
+				.Where(c => c.OwnerId == userId && c.Front.ToLower() == front.Trim().ToLower());
+		}
+
+		public IQueryable<Card> QueryByFrontsIncludesBacks(string userId, string[] fronts)
+		{
+			return dbContext.Cards
+				.Include(c => c.Backs)
+				.Where(c => c.OwnerId == userId && fronts.Contains(c.Front.ToLower()));
 		}
 
 		public IQueryable<Card> QueryByDeckId(int deckId)
@@ -41,6 +69,18 @@ namespace FlashCard.Repositories
 				.OrderBy(c => c.Front);
 		}
 
+		public IQueryable<Card> QueryByDeckIdIncludesBacks(int deckId)
+		{
+			var queryCardIds = dbContext.CardAssignments
+				.Where(ca => ca.DeckId == deckId)
+				.Select(ca => ca.CardId);
+
+			return dbContext.Cards
+				.Include(c => c.Backs)
+				.Where(c => queryCardIds.Contains(c.Id))
+				.OrderBy(c => c.Front);
+		}
+
 		public IQueryable<Card> QueryRemainingByDeckId(string userId, int deckId)
 		{
 			var queryCardIds = dbContext.CardAssignments
@@ -50,6 +90,20 @@ namespace FlashCard.Repositories
 			return dbContext.Cards
 				.Where(c => c.OwnerId == userId && !queryCardIds.Contains(c.Id))
 				.OrderBy(c => c.Front);
+		}
+
+		public IQueryable<Card> QueryByBeingApproved()
+		{
+			return dbContext.Cards
+				.Where(c => c.Approved)
+				.OrderBy(c => c.Front);
+		}
+
+		public IQueryable<Card> QueryByBeingApprovedIncludesBacks()
+		{
+			return dbContext.Cards
+				.Include(c => c.Backs)
+				.Where(c => c.Approved);
 		}
 	}
 }

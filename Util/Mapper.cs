@@ -27,13 +27,38 @@ namespace FlashCard.Util
 					Email = d.Owner.Email
 				},
 				Author = d.AuthorId != null
-							? new PersonDto()
-							{
-								Id = d.AuthorId,
-								Name = d.Author.Name,
-								Email = d.Author.Email
-							}
-							: null,
+					? new PersonDto()
+					{
+						Id = d.AuthorId,
+						Name = d.Author.Name,
+						Email = d.Author.Email
+					}
+					: null,
+				TotalCards = d.CardAssignments.Count
+			});
+		}
+
+		public static IQueryable<PublicDeckDto> MapToPublicDeckDto(this IQueryable<Deck> query)
+		{
+			return query.Select(d => new PublicDeckDto()
+			{
+				Id = d.Id,
+				Name = d.Name,
+				Description = d.Description,
+				Owner = new PersonDto()
+				{
+					Id = d.OwnerId,
+					Name = d.Owner.Name,
+					Email = d.Owner.Email
+				},
+				Author = d.AuthorId != null
+					? new PersonDto()
+					{
+						Id = d.AuthorId,
+						Name = d.Author.Name,
+						Email = d.Author.Email
+					}
+					: null,
 				TotalCards = d.CardAssignments.Count
 			});
 		}
@@ -55,6 +80,25 @@ namespace FlashCard.Util
 			});
 		}
 
+		public static IQueryable<ProposedCardDto> MapToProposedCardDto(this IQueryable<Card> query, string userId,
+			string imageBaseUrl)
+		{
+			return query.Select(c => new ProposedCardDto()
+			{
+				Id = c.Id,
+				Front = c.Front,
+				Backs = c.Backs.Where(b => b.AuthorId == userId && !b.Approved).Select(b => new ProposedBackDto()
+				{
+					Id = b.Id,
+					Type = b.Type,
+					Meaning = b.Meaning,
+					Example = b.Example,
+					ImageUrl = b.Image != null ? Path.Combine(imageBaseUrl, b.Image) : b.Image,
+					Approved = b.Approved
+				})
+			});
+		}
+
 		public static IQueryable<BackDto> MapToBackDto(this IQueryable<Back> query, string imageBaseUrl)
 		{
 			return query.Select(b => new BackDto()
@@ -64,6 +108,28 @@ namespace FlashCard.Util
 				Meaning = b.Meaning,
 				Example = b.Example,
 				ImageUrl = b.Image != null ? Path.Combine(imageBaseUrl, b.Image) : b.Image
+			});
+		}
+
+		public static IQueryable<ProposedBackDto> MapToProposedBackDto(this IQueryable<Back> query, string imageBaseUrl)
+		{
+			return query.Select(b => new ProposedBackDto()
+			{
+				Id = b.Id,
+				Type = b.Type,
+				Meaning = b.Meaning,
+				Example = b.Example,
+				ImageUrl = b.Image != null ? Path.Combine(imageBaseUrl, b.Image) : b.Image,
+				Approved = b.Approved
+			});
+		}
+
+		public static IQueryable<DeckWithSourceIdDto> MapToDeckWithSourceId(this IQueryable<Deck> query)
+		{
+			return query.Select(d => new DeckWithSourceIdDto()
+			{
+				Id = d.Id,
+				SourceId = d.SourceId
 			});
 		}
 

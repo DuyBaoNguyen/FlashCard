@@ -1,7 +1,7 @@
 using System.Net.Mime;
 using System.Threading.Tasks;
-using FlashCard.Data;
 using FlashCard.Models;
+using FlashCard.RequestModels;
 using FlashCard.Util;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -18,27 +18,18 @@ namespace FlashCard.Controllers
 	{
 		private readonly UserManager<ApplicationUser> userManager;
 		private readonly SignInManager<ApplicationUser> signInManager;
-		private readonly ApplicationDbContext dbContext;
 
-		public CurrentUserController(UserManager<ApplicationUser> userManager,
-			SignInManager<ApplicationUser> signInManager, ApplicationDbContext dbContext)
+		public CurrentUserController(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager)
 		{
 			this.userManager = userManager;
 			this.signInManager = signInManager;
-			this.dbContext = dbContext;
 		}
 
 		[HttpGet]
 		[ProducesResponseType(StatusCodes.Status200OK)]
 		public async Task<IActionResult> Get()
 		{
-			var user = await UserUtil.GetUser(userManager, User);
-
-			if (user == null)
-			{
-				return null;
-			}
-
+			var user = await userManager.GetUser(User);
 			var roles = await userManager.GetRolesAsync(user);
 
 			return Ok(new
@@ -51,48 +42,39 @@ namespace FlashCard.Controllers
 			});
 		}
 
-		// [HttpPut]
-		// [ProducesResponseType(StatusCodes.Status204NoContent)]
-		// [ProducesResponseType(StatusCodes.Status400BadRequest)]
-		// public async Task<IActionResult> Update([FromBody] UserRequestModel userModel)
-		// {
-		//     if (!ModelState.IsValid)
-		//     {
-		//         return BadRequest(ModelState);
-		//     }
+		[HttpPut]
+		[ProducesResponseType(204)]
+		[ProducesResponseType(400)]
+		public async Task<IActionResult> Update(UserRequestModel userRqModel)
+		{
+			var user = await userManager.GetUser(User);
+			user.Name = userRqModel.DisplayName.Trim();
 
-		//     var user = await UserService.GetUser(userManager, User);
-		//     user.Name = userModel.DisplayName;
+			await userManager.UpdateAsync(user);
+			return NoContent();
+		}
 
-		//     await dbContext.SaveChangesAsync();
-		//     return NoContent();
-		// }
+		[HttpPut("password")]
+		[ProducesResponseType(204)]
+		[ProducesResponseType(400)]
+		public async Task<IActionResult> ChangePassword(PasswordRequestModel passwordRqModel)
+		{
+			var user = await userManager.GetUser(User);
+			var result = await userManager.ChangePasswordAsync(user, passwordRqModel.OldPassword,
+				passwordRqModel.NewPassword);
 
-		// [HttpPut("changepassword")]
-		// [ProducesResponseType(StatusCodes.Status204NoContent)]
-		// [ProducesResponseType(StatusCodes.Status400BadRequest)]
-		// public async Task<IActionResult> ChangePassword([FromBody] PasswordRequestModel passwordModel)
-		// {
-		//     if (!ModelState.IsValid)
-		//     {
-		//         return BadRequest(ModelState);
-		//     }
+			if (!result.Succeeded)
+			{
+				foreach (var error in result.Errors)
+				{
+					ModelState.AddModelError("", error.Description);
+				}
+				return BadRequest(ModelState);
+			}
 
-		//     var user = await UserService.GetUser(userManager, User);
-		//     var result = await userManager.ChangePasswordAsync(user, passwordModel.OldPassword, passwordModel.NewPassword);
+			await signInManager.RefreshSignInAsync(user);
 
-		//     if (!result.Succeeded)
-		//     {
-		//         foreach (var error in result.Errors)
-		//         {
-		//             ModelState.AddModelError("", error.Description);
-		//         }
-		//         return BadRequest(ModelState);
-		//     }
-
-		//     await signInManager.RefreshSignInAsync(user);
-
-		//     return NoContent();
-		// }
+			return NoContent();
+		}
 	}
 }

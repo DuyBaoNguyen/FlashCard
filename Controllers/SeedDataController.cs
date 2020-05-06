@@ -24,7 +24,7 @@ namespace FlashCard.Controllers
 			this.roleManager = roleManager;
 		}
 
-		[HttpGet("api/seeddata")]
+		[HttpPost("api/seeddata")]
 		public async Task<IActionResult> SeedData()
 		{
 			// Seed user role
@@ -87,6 +87,8 @@ namespace FlashCard.Controllers
 
 				foreach (var user in users)
 				{
+					var userIsAdmin = user.Name == "Admin";
+
 					for (int i = 1; i <= 5; i++)
 					{
 						string name = "General";
@@ -101,6 +103,8 @@ namespace FlashCard.Controllers
 							Description = "Some text here",
 							CreatedDate = DateTime.Now,
 							LastModifiedDate = DateTime.Now,
+							Public = userIsAdmin,
+							Approved = userIsAdmin,
 							Owner = user,
 							Author = user
 						};
@@ -115,6 +119,7 @@ namespace FlashCard.Controllers
 				foreach (var user in users)
 				{
 					var userDecks = decks.Where(d => d.OwnerId == user.Id);
+					var userIsAdmin = user.Name == "Admin";
 
 					foreach (var deck in userDecks)
 					{
@@ -127,6 +132,8 @@ namespace FlashCard.Controllers
 							var card = cards[i];
 							card.CreatedDate = now;
 							card.LastModifiedDate = now;
+							card.Public = userIsAdmin;
+							card.Approved = userIsAdmin;
 							card.Owner = user;
 							card.Author = user;
 							card.CardAssignments = new List<CardAssignment>() { new CardAssignment() { Deck = deck } };
@@ -135,6 +142,8 @@ namespace FlashCard.Controllers
 							var back = backs[i];
 							back.CreatedDate = now;
 							back.LastModifiedDate = now;
+							back.Public = userIsAdmin;
+							back.Approved = userIsAdmin;
 							back.Author = user;
 
 							card.Backs.Add(back);

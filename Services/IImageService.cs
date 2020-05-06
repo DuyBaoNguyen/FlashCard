@@ -6,7 +6,8 @@ namespace FlashCard.Services
 	public interface IImageService
 	{
 		Task<string> UploadImage(IFormFile image);
-		bool TryDeleteImage(string name);
+		string DuplicateImage(string imageNname);
+		bool TryDeleteImage(string imageName);
 		string GetBackImageBaseUrl();
 	}
 }
