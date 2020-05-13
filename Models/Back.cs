@@ -16,7 +16,7 @@ namespace FlashCard.Models
 		[StringLength(400)]
 		public string Example { get; set; }
 
-		[StringLength(100)]
+		[StringLength(40)]
 		public string Image { get; set; }
 
 		public bool Public { get; set; }

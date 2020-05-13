@@ -5,7 +5,8 @@ namespace FlashCard.Contracts
 {
 	public interface ICardRepository : IRepositoryBase<Card>
 	{
-		IQueryable<Card> Query(string userId);
+		IQueryable<Card> Query(string userId, string front = null);
+		IQueryable<Card> QueryIncludesBacks(string userId);
 		IQueryable<Card> QueryById(string userId, int cardId);
 		IQueryable<Card> QueryByIdIncludesBacks(int cardId);
 		IQueryable<Card> QueryByIdIncludesBacks(string userId, int cardId);
@@ -15,7 +16,7 @@ namespace FlashCard.Contracts
 		IQueryable<Card> QueryByDeckId(int deckId);
 		IQueryable<Card> QueryByDeckIdIncludesBacks(int deckId);
 		IQueryable<Card> QueryRemainingByDeckId(string userId, int deckId);
-		IQueryable<Card> QueryByBeingApproved();
+		IQueryable<Card> QueryByBeingApproved(string front = null);
 		IQueryable<Card> QueryByBeingApprovedIncludesBacks();
 	}
 }

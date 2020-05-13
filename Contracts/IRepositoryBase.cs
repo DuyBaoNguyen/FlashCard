@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+
 namespace FlashCard.Contracts
 {
 	public interface IRepositoryBase<T> where T : class
@@ -5,5 +7,6 @@ namespace FlashCard.Contracts
 		void Create(T entity);
 		void Update(T entity);
 		void Delete(T entity);
+		void DeleteRange(IEnumerable<T> entities);
 	}
 }

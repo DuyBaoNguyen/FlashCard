@@ -13,11 +13,26 @@ namespace FlashCard.Repositories
 
 		}
 
-		public IQueryable<Card> Query(string userId)
+		public IQueryable<Card> Query(string userId, string front)
+		{
+			if (front == null || front.Length == 0)
+			{
+				return dbContext.Cards
+					.Where(c => c.OwnerId == userId && (!c.Public || c.Approved))
+					.OrderBy(c => c.Front);
+			}
+
+			return dbContext.Cards
+				.Where(c => c.OwnerId == userId && (!c.Public || c.Approved)
+					&& c.Front.ToLower().Contains(front.ToLower()))
+				.OrderBy(c => c.Front);
+		}
+
+		public IQueryable<Card> QueryIncludesBacks(string userId)
 		{
 			return dbContext.Cards
-				.Where(c => c.OwnerId == userId && (!c.Public || c.Approved))
-				.OrderBy(c => c.Front);
+				.Include(c => c.Backs)
+				.Where(c => c.OwnerId == userId && (!c.Public || c.Approved));
 		}
 
 		public IQueryable<Card> QueryById(string userId, int cardId)
@@ -92,10 +107,17 @@ namespace FlashCard.Repositories
 				.OrderBy(c => c.Front);
 		}
 
-		public IQueryable<Card> QueryByBeingApproved()
+		public IQueryable<Card> QueryByBeingApproved(string front)
 		{
+			if (front == null || front.Length == 0)
+			{
+				return dbContext.Cards
+					.Where(c => c.Approved)
+					.OrderBy(c => c.Front);
+			}
+
 			return dbContext.Cards
-				.Where(c => c.Approved)
+				.Where(c => c.Approved && c.Front.ToLower().Contains(front.ToLower()))
 				.OrderBy(c => c.Front);
 		}
 

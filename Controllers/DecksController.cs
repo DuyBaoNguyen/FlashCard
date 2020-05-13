@@ -87,7 +87,7 @@ namespace FlashCard.Controllers
 			var cards = await repository.Card
 				.QueryByDeckId(id)
 				.AsNoTracking()
-				.MapToCardDto(imageService.GetBackImageBaseUrl())
+				.MapToCardDto(imageService.BackImageBaseUrl)
 				.ToListAsync();
 
 			return cards;
@@ -112,7 +112,7 @@ namespace FlashCard.Controllers
 			var remainingCards = await repository.Card
 				.QueryRemainingByDeckId(userId, id)
 				.AsNoTracking()
-				.MapToCardDto(imageService.GetBackImageBaseUrl())
+				.MapToCardDto(imageService.BackImageBaseUrl)
 				.ToListAsync();
 
 			return remainingCards;
@@ -324,7 +324,7 @@ namespace FlashCard.Controllers
 			var cards = await repository.Card
 				.QueryByDeckId(id)
 				.AsNoTracking()
-				.MapToCardDto(imageService.GetBackImageBaseUrl())
+				.MapToCardDto(imageService.BackImageBaseUrl)
 				.ToListAsync();
 
 			amount = amount < 0 || amount > cards.Count ? cards.Count : amount;
@@ -417,7 +417,7 @@ namespace FlashCard.Controllers
 			var cards = await repository.Card
 				.QueryByDeckId(id)
 				.AsNoTracking()
-				.MapToCardDto(imageService.GetBackImageBaseUrl())
+				.MapToCardDto(imageService.BackImageBaseUrl)
 				.ToListAsync();
 
 			amount = amount < 0 || amount > cards.Count ? cards.Count : amount;

@@ -38,13 +38,13 @@ namespace FlashCard.Controllers
 
 		[HttpGet]
 		[ProducesResponseType(200)]
-		public async Task<IEnumerable<CardDto>> GetAllCards()
+		public async Task<IEnumerable<CardDto>> GetAllCards(string front)
 		{
 			var userId = UserUtil.GetUserId(User);
 			var cards = await repository.Card
-				.Query(userId)
+				.Query(userId, front)
 				.AsNoTracking()
-				.MapToCardDto(imageService.GetBackImageBaseUrl())
+				.MapToCardDto(imageService.BackImageBaseUrl)
 				.ToListAsync();
 
 			return cards;
@@ -59,7 +59,7 @@ namespace FlashCard.Controllers
 			var card = await repository.Card
 				.QueryById(userId, id)
 				.AsNoTracking()
-				.MapToCardDto(imageService.GetBackImageBaseUrl())
+				.MapToCardDto(imageService.BackImageBaseUrl)
 				.FirstOrDefaultAsync();
 
 			if (card == null)
@@ -165,7 +165,7 @@ namespace FlashCard.Controllers
 			{
 				if (back.Image != null)
 				{
-					if (!imageService.TryDeleteImage(back.Image))
+					if (!imageService.TryDeleteImage(back.Image, ImageType.Image))
 					{
 						logger.LogError("An error occurs when deleting the image with name {0}", back.Image);
 					}
@@ -213,7 +213,7 @@ namespace FlashCard.Controllers
 				return NotFound();
 			}
 
-			var imageName = await imageService.UploadImage(backRqModel.Image);
+			var imageName = await imageService.UploadImage(backRqModel.Image, ImageType.Image);
 			var userIsAdmin = await userManager.IsInRoleAsync(user, Roles.Administrator);
 			var now = DateTime.Now;
 			var newBack = new Back()

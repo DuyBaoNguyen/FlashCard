@@ -1,6 +1,7 @@
 using System;
 using System.IO;
 using System.Threading.Tasks;
+using FlashCard.Util;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 
@@ -17,7 +18,25 @@ namespace FlashCard.Services
 			this.httpContextAccessor = httpContextAccessor;
 		}
 
-		public async Task<string> UploadImage(IFormFile image)
+		public string BackImageBaseUrl
+		{
+			get
+			{
+				var req = httpContextAccessor.HttpContext.Request;
+				return $"{req.Scheme}://{req.Host}/storage/images";
+			}
+		}
+
+		public string UserPictureBaseUrl
+		{
+			get
+			{
+				var req = httpContextAccessor.HttpContext.Request;
+				return $"{req.Scheme}://{req.Host}/storage/pictures";
+			}
+		}
+
+		public async Task<string> UploadImage(IFormFile image, ImageType imageType)
 		{
 			if (image == null || image.Length == 0)
 			{
@@ -25,7 +44,8 @@ namespace FlashCard.Services
 			}
 
 			var imageName = Guid.NewGuid().ToString().Replace("-", "") + Path.GetExtension(image.FileName);
-			var filePath = Path.Combine(env.ContentRootPath, "assets/images", imageName);
+			var imageDirName = imageType == ImageType.Image ? "images" : "pictures";
+			var filePath = Path.Combine(env.ContentRootPath, "assets", imageDirName, imageName);
 
 			try
 			{
@@ -51,7 +71,7 @@ namespace FlashCard.Services
 			var filePath = Path.Combine(env.ContentRootPath, "assets/images", imageName);
 			var newImageName = Guid.NewGuid().ToString().Replace("-", "") + Path.GetExtension(imageName);
 			var newFilePath = Path.Combine(env.ContentRootPath, "assets/images", newImageName);
-			
+
 			if (File.Exists(filePath))
 			{
 				File.Copy(filePath, newFilePath);
@@ -60,14 +80,15 @@ namespace FlashCard.Services
 			return null;
 		}
 
-		public bool TryDeleteImage(string imageName)
+		public bool TryDeleteImage(string imageName, ImageType imageType)
 		{
 			if (imageName == null)
 			{
 				return true;
 			}
 
-			var filePath = Path.Combine(env.ContentRootPath, "assets/images", imageName);
+			var imageDirName = imageType == ImageType.Image ? "images" : "pictures";
+			var filePath = Path.Combine(env.ContentRootPath, "assets", imageDirName, imageName);
 			try
 			{
 				File.Delete(filePath);
@@ -77,12 +98,6 @@ namespace FlashCard.Services
 			{
 				return false;
 			}
-		}
-
-		public string GetBackImageBaseUrl()
-		{
-			var req = httpContextAccessor.HttpContext.Request;
-			return $"{req.Scheme}://{req.Host}/storage/images";
 		}
 	}
 }

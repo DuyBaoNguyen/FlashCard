@@ -41,7 +41,7 @@ namespace FlashCard.Controllers
 		{
 			var admin = await userManager.GetAdmin();
 			var publicDeck = await repository.Deck
-				.QueryByIdAndBeingApprovedAndAdminId(admin.Id, id)
+				.QueryByIdAndBeingApproved(admin.Id, id)
 				.FirstOrDefaultAsync();
 
 			if (publicDeck == null)

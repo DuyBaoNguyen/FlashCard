@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using FlashCard.Contracts;
 using FlashCard.Data;
 
@@ -20,6 +21,11 @@ namespace FlashCard.Repositories
 		public void Delete(T entity)
 		{
 			dbContext.Set<T>().Remove(entity);
+		}
+
+		public void DeleteRange(IEnumerable<T> entities)
+		{
+			dbContext.Set<T>().RemoveRange(entities);
 		}
 
 		public void Update(T entity)

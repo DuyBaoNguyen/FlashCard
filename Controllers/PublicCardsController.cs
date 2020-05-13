@@ -28,12 +28,12 @@ namespace FlashCard.Controllers
 
 		[HttpGet]
 		[ProducesResponseType(200)]
-		public async Task<ActionResult<IEnumerable<CardDto>>> GetAllPublicCards()
+		public async Task<ActionResult<IEnumerable<CardDto>>> GetAllPublicCards(string front)
 		{
 			var publicCards = await repository.Card
-				.QueryByBeingApproved()
+				.QueryByBeingApproved(front)
 				.AsNoTracking()
-				.MapToCardDto(imageService.GetBackImageBaseUrl())
+				.MapToCardDto(imageService.BackImageBaseUrl)
 				.ToListAsync();
 			return publicCards;
 		}

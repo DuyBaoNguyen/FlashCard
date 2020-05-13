@@ -41,7 +41,7 @@ namespace FlashCard.Controllers
 			var back = await repository.Back
 				.QueryById(userId, id)
 				.AsNoTracking()
-				.MapToBackDto(imageService.GetBackImageBaseUrl())
+				.MapToBackDto(imageService.BackImageBaseUrl)
 				.FirstOrDefaultAsync();
 
 			if (back == null)
@@ -88,7 +88,7 @@ namespace FlashCard.Controllers
 			{
 				return NotFound();
 			}
-			if (back.Image == null && (backRqModel.Meaning == null || back.Meaning.Length == 0))
+			if (back.Image == null && (backRqModel.Meaning == null || backRqModel.Meaning.Length == 0))
 			{
 				ModelState.AddModelError("", "Card must at least have either meaning or image.");
 				return BadRequest(ModelState);
@@ -142,15 +142,15 @@ namespace FlashCard.Controllers
 			{
 				return BadRequest(ModelState);
 			}
-			
+
 			var oldImageName = back.Image;
-			var imageName = await imageService.UploadImage(image);
+			var imageName = await imageService.UploadImage(image, ImageType.Image);
 			back.Image = imageName;
 			back.LastModifiedDate = DateTime.Now;
 
 			await repository.SaveChangesAsync();
 
-			if (!imageService.TryDeleteImage(oldImageName))
+			if (!imageService.TryDeleteImage(oldImageName, ImageType.Image))
 			{
 				logger.LogError("Occur an error when deleting image with name {0}", oldImageName);
 			}
@@ -176,7 +176,7 @@ namespace FlashCard.Controllers
 			repository.Back.Delete(back);
 			await repository.SaveChangesAsync();
 
-			if (!imageService.TryDeleteImage(back.Image))
+			if (!imageService.TryDeleteImage(back.Image, ImageType.Image))
 			{
 				logger.LogError("Occur an error when deleting image with name {0}", back.Image);
 			}

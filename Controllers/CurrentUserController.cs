@@ -1,12 +1,15 @@
+using System.IO;
 using System.Net.Mime;
 using System.Threading.Tasks;
 using FlashCard.Models;
 using FlashCard.RequestModels;
+using FlashCard.Services;
 using FlashCard.Util;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 
 namespace FlashCard.Controllers
 {
@@ -18,11 +21,16 @@ namespace FlashCard.Controllers
 	{
 		private readonly UserManager<ApplicationUser> userManager;
 		private readonly SignInManager<ApplicationUser> signInManager;
+		private readonly IImageService imageService;
+		private readonly ILogger<CurrentUserController> logger;
 
-		public CurrentUserController(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager)
+		public CurrentUserController(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager,
+			IImageService imageService, ILogger<CurrentUserController> logger)
 		{
 			this.userManager = userManager;
 			this.signInManager = signInManager;
+			this.imageService = imageService;
+			this.logger = logger;
 		}
 
 		[HttpGet]
@@ -38,7 +46,7 @@ namespace FlashCard.Controllers
 				DisplayName = user.Name,
 				Email = user.Email,
 				Role = roles[0],
-				Image = user.Avatar
+				PictureUrl = user.Picture != null ? Path.Combine(imageService.UserPictureBaseUrl, user.Picture) : null
 			});
 		}
 
@@ -51,6 +59,46 @@ namespace FlashCard.Controllers
 			user.Name = userRqModel.DisplayName.Trim();
 
 			await userManager.UpdateAsync(user);
+			return NoContent();
+		}
+
+		[HttpPut("picture")]
+		[ProducesResponseType(204)]
+		[ProducesResponseType(400)]
+		public async Task<IActionResult> UpdatePicture([FromForm] IFormFile picture)
+		{
+			var user = await userManager.GetUser(User);
+			if (picture != null)
+			{
+				if (picture.Length > 5242880)
+				{
+					ModelState.AddModelError("Image", "File is not exceeded 5MB.");
+				}
+				if (!ImageUtil.CheckExtensions(picture))
+				{
+					ModelState.AddModelError("Image",
+						"Accepted images that images are with an extension of .png, .jpg, .jpeg or .bmp.");
+				}
+				if (!ModelState.IsValid)
+				{
+					return BadRequest(ModelState);
+				}
+			}
+			var oldImageName = user.Picture;
+			var imageName = await imageService.UploadImage(picture, ImageType.Picture);
+			if (picture != null && picture.Length > 0 && imageName == null)
+			{
+				ModelState.AddModelError("", "An error when uploading the image");
+				return BadRequest(ModelState);
+			}
+
+			user.Picture = imageName;
+			await userManager.UpdateAsync(user);
+
+			if (!imageService.TryDeleteImage(oldImageName, ImageType.Picture))
+			{
+				logger.LogError("Occur an error when deleting image with name {0}", oldImageName);
+			}
 			return NoContent();
 		}
 

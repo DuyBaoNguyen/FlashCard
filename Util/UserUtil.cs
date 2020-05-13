@@ -23,5 +23,10 @@ namespace FlashCard.Util
 		{
 			return (await userManager.GetUsersInRoleAsync(Roles.Administrator)).FirstOrDefault();
 		}
+
+		public async static Task<bool> CheckAdminRole(this UserManager<ApplicationUser> userManager, ApplicationUser user)
+		{
+			return await userManager.IsInRoleAsync(user, Roles.Administrator);
+		}
 	}
 }

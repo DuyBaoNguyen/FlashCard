@@ -87,7 +87,7 @@ namespace FlashCard.Util
 			{
 				Id = c.Id,
 				Front = c.Front,
-				Backs = c.Backs.Where(b => b.AuthorId == userId && !b.Approved).Select(b => new ProposedBackDto()
+				Backs = c.Backs.Where(b => b.AuthorId == userId).Select(b => new ProposedBackDto()
 				{
 					Id = b.Id,
 					Type = b.Type,
@@ -164,6 +164,17 @@ namespace FlashCard.Util
 				},
 				SucceededCards = m.MatchedCards.Where(mc => !mc.Failed).Select(mc => mc.Card.Front),
 				FailedCards = m.MatchedCards.Where(mc => mc.Failed).Select(mc => mc.Card.Front)
+			});
+		}
+
+		public static IQueryable<UserDto> MapToUserDto(this IQueryable<ApplicationUser> query, string pictureBaseUrl)
+		{
+			return query.Select(u => new UserDto()
+			{
+				Id = u.Id,
+				Name = u.Name,
+				Email = u.Email,
+				PictureUrl = u.Picture != null ? Path.Combine(pictureBaseUrl, u.Picture) : null
 			});
 		}
 	}

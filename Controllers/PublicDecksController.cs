@@ -39,7 +39,7 @@ namespace FlashCard.Controllers
 			var userId = UserUtil.GetUserId(User);
 			var admin = await userManager.GetAdmin();
 			var publicDecks = await repository.Deck
-				.QueryByBeingApprovedAndAdminId(admin.Id)
+				.QueryByBeingApproved(admin.Id)
 				.AsNoTracking()
 				.MapToPublicDeckDto()
 				.ToListAsync();
@@ -65,7 +65,7 @@ namespace FlashCard.Controllers
 			var userId = UserUtil.GetUserId(User);
 			var admin = await userManager.GetAdmin();
 			var publicDeck = await repository.Deck
-				.QueryByIdAndBeingApprovedAndAdminId(admin.Id, id)
+				.QueryByIdAndBeingApproved(admin.Id, id)
 				.AsNoTracking()
 				.MapToPublicDeckDto()
 				.FirstOrDefaultAsync();

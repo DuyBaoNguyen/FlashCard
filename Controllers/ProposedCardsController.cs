@@ -42,7 +42,7 @@ namespace FlashCard.Controllers
 			var card = await repository.Card
 				.QueryById(admin.Id, id)
 				.AsNoTracking()
-				.MapToProposedCardDto(userId, imageService.GetBackImageBaseUrl())
+				.MapToProposedCardDto(userId, imageService.BackImageBaseUrl)
 				.FirstOrDefaultAsync();
 
 			if (card == null)
@@ -128,7 +128,7 @@ namespace FlashCard.Controllers
 				return NotFound();
 			}
 
-			var imageName = await imageService.UploadImage(backRqModel.Image);
+			var imageName = await imageService.UploadImage(backRqModel.Image, ImageType.Image);
 			var now = DateTime.Now;
 			var newBack = new Back()
 			{

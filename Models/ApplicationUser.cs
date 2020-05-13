@@ -12,8 +12,8 @@ namespace FlashCard.Models
 		public string Name { get; set; }
 
 		[PersonalData]
-		[StringLength(100)]
-		public string Avatar { get; set; }
+		[StringLength(40)]
+		public string Picture { get; set; }
 
 		public ICollection<Deck> OwnedDecks { get; set; }
 		public ICollection<Deck> AuthorizedDecks { get; set; }
@@ -23,5 +23,6 @@ namespace FlashCard.Models
 		public ICollection<SharedDeck> SharedDecks { get; set; }
 		public ICollection<Test> Tests { get; set; }
 		public ICollection<Match> Matches { get; set; }
+		public virtual ICollection<ApplicationUserRole> UserRoles { get; set; }
 	}
 }

@@ -11,7 +11,9 @@ using System.Threading.Tasks;
 
 namespace FlashCard.Data
 {
-	public class ApplicationDbContext : IdentityDbContext<ApplicationUser, IdentityRole, string>, IPersistedGrantDbContext
+	public class ApplicationDbContext : IdentityDbContext<ApplicationUser, ApplicationRole, string,
+		IdentityUserClaim<string>, ApplicationUserRole, IdentityUserLogin<string>,
+		IdentityRoleClaim<string>, IdentityUserToken<string>>, IPersistedGrantDbContext
 	{
 		private readonly IOptions<OperationalStoreOptions> _operationalStoreOptions;
 
@@ -42,13 +44,13 @@ namespace FlashCard.Data
 			builder.ConfigurePersistedGrantContext(_operationalStoreOptions.Value);
 
 			builder.Entity<ApplicationUser>().ToTable("User");
-			builder.Entity<IdentityRole>().ToTable("Role");
+			builder.Entity<ApplicationRole>().ToTable("Role");
 			builder.Entity<PersistedGrant>().ToTable("PersistedGrant");
 			builder.Entity<DeviceFlowCodes>().ToTable("DeviceFlowCodes");
 			builder.Entity<IdentityRoleClaim<string>>().ToTable("RoleClaim");
 			builder.Entity<IdentityUserClaim<string>>().ToTable("UserClaim");
 			builder.Entity<IdentityUserLogin<string>>().ToTable("UserLogin");
-			builder.Entity<IdentityUserRole<string>>().ToTable("UserRole");
+			builder.Entity<ApplicationUserRole>().ToTable("UserRole");
 			builder.Entity<IdentityUserToken<string>>().ToTable("UserToken");
 			builder.Entity<Deck>().ToTable("Deck");
 			builder.Entity<Card>().ToTable("Card");
@@ -66,6 +68,18 @@ namespace FlashCard.Data
 			builder.Entity<SharedDeck>().HasKey(s => new { s.DeckId, s.UserId });
 			builder.Entity<TestedCard>().HasKey(f => new { f.CardId, f.TestId });
 			builder.Entity<MatchedCard>().HasKey(m => new { m.CardId, m.MatchId });
+
+			builder.Entity<ApplicationUser>()
+				.HasMany(u => u.UserRoles)
+				.WithOne(ur => ur.User)
+				.HasForeignKey(ur => ur.UserId)
+				.IsRequired();
+
+			builder.Entity<ApplicationRole>()
+				.HasMany(r => r.UserRoles)
+				.WithOne(ur => ur.Role)
+				.HasForeignKey(ur => ur.RoleId)
+				.IsRequired();
 
 			builder.Entity<Deck>()
 				.HasOne(d => d.Owner)

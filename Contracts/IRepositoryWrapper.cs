@@ -9,6 +9,7 @@ namespace FlashCard.Contracts
 		IBackRepository Back { get; }
 		ITestRepository Test { get; }
 		IMatchRepository Match { get; }
+		IUserRepository User { get; }
 		Task<int> SaveChangesAsync();
 	}
 }

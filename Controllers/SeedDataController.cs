@@ -14,18 +14,19 @@ namespace FlashCard.Controllers
 	{
 		private readonly ApplicationDbContext dbContext;
 		private readonly UserManager<ApplicationUser> userManager;
-		private readonly RoleManager<IdentityRole> roleManager;
+		private readonly RoleManager<ApplicationRole> roleManager;
 
 		public SeedDataController(ApplicationDbContext dbContext,
-			UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager)
+			UserManager<ApplicationUser> userManager, RoleManager<ApplicationRole> roleManager)
 		{
 			this.dbContext = dbContext;
 			this.userManager = userManager;
 			this.roleManager = roleManager;
 		}
 
-		[HttpPost("api/seeddata")]
-		public async Task<IActionResult> SeedData()
+		[HttpPost("api/seedrolesandusers")]
+		[ProducesResponseType(200)]
+		public async Task<IActionResult> SeedRolesAndUsers()
 		{
 			// Seed user role
 			string[] roles = new string[] { Roles.Administrator, Roles.User };
@@ -34,7 +35,7 @@ namespace FlashCard.Controllers
 			{
 				if (!await roleManager.RoleExistsAsync(role))
 				{
-					await roleManager.CreateAsync(new IdentityRole(role));
+					await roleManager.CreateAsync(new ApplicationRole(role));
 				}
 			}
 
@@ -74,7 +75,13 @@ namespace FlashCard.Controllers
 					}
 				}
 			}
+			return Ok();
+		}
 
+		[HttpPost("api/seeddata")]
+		[ProducesResponseType(200)]
+		public async Task<IActionResult> SeedData()
+		{
 			// Seed data
 			string[] categoryNames = { "General", "Family", "Career", "Personality", "Vehicle", "Furniture", "Animal", "Nature", "Fruit" };
 

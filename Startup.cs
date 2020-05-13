@@ -37,7 +37,7 @@ namespace FlashCard
 			services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(builder.ConnectionString));
 
 			services.AddDefaultIdentity<ApplicationUser>()
-				.AddRoles<IdentityRole>()
+				.AddRoles<ApplicationRole>()
 				.AddEntityFrameworkStores<ApplicationDbContext>();
 
 			services.AddIdentityServer()
