@@ -15,6 +15,11 @@ namespace FlashCard.Models
 		[StringLength(500)]
 		public string Description { get; set; }
 
+		[Required]
+		[StringLength(7)]
+		[RegularExpression(@"^#[a-f0-9]{6}$")]
+		public string Theme { get; set; }
+
 		public bool Public { get; set; }
 
 		public bool Approved { get; set; }

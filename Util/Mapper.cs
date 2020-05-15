@@ -15,6 +15,7 @@ namespace FlashCard.Util
 				Id = d.Id,
 				Name = d.Name,
 				Description = d.Description,
+				Theme = d.Theme,
 				Public = d.Public,
 				Approved = d.Approved,
 				CreatedDate = d.CreatedDate,
@@ -45,6 +46,7 @@ namespace FlashCard.Util
 				Id = d.Id,
 				Name = d.Name,
 				Description = d.Description,
+				Theme = d.Theme,
 				Owner = new PersonDto()
 				{
 					Id = d.OwnerId,

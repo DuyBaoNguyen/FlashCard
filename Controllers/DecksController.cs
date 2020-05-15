@@ -141,6 +141,7 @@ namespace FlashCard.Controllers
 				Name = deckRqModel.Name.Trim(),
 				Description = deckRqModel.Description == null || deckRqModel.Description.Trim().Length == 0
 					? null : deckRqModel.Description.Trim(),
+				Theme = deckRqModel.Theme,
 				CreatedDate = now,
 				LastModifiedDate = now,
 				OwnerId = userId,
@@ -184,6 +185,7 @@ namespace FlashCard.Controllers
 			existingDeck.Name = deckRqModel.Name.Trim();
 			existingDeck.Description = deckRqModel.Description == null || deckRqModel.Description.Trim().Length == 0
 				? null : deckRqModel.Description.Trim();
+			existingDeck.Theme = deckRqModel.Theme;
 			existingDeck.LastModifiedDate = DateTime.Now;
 
 			await repository.SaveChangesAsync();

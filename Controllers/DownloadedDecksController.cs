@@ -69,6 +69,7 @@ namespace FlashCard.Controllers
 			{
 				Name = newDeckName,
 				Description = publicDeck.Description,
+				Theme = publicDeck.Theme,
 				CreatedDate = publicDeck.CreatedDate,
 				LastModifiedDate = publicDeck.LastModifiedDate,
 				OwnerId = userId,
