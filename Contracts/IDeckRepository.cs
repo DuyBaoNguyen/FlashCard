@@ -5,7 +5,7 @@ namespace FlashCard.Contracts
 {
 	public interface IDeckRepository : IRepositoryBase<Deck>
 	{
-		IQueryable<Deck> Query(string userId);
+		IQueryable<Deck> Query(string userId, string deckName = null);
 		IQueryable<Deck> QueryById(string userId, int deckId);
 		IQueryable<Deck> QueryByIdCheckingSharedDeck(string userId, int deckId);
 		IQueryable<Deck> QueryByIdIncludesCardAssignments(string userId, int deckId);
@@ -13,7 +13,7 @@ namespace FlashCard.Contracts
 		IQueryable<Deck> QueryByName(string userId, string deckName);
 		IQueryable<Deck> QueryByBeingNotApproved();
 		IQueryable<Deck> QueryByIdAndBeingNotApproved(int deckId);
-		IQueryable<Deck> QueryByBeingApproved(string adminId);
+		IQueryable<Deck> QueryByBeingApproved(string adminId, string deckName = null);
 		IQueryable<Deck> QueryByIdAndBeingApproved(string adminId, int deckId);
 		IQueryable<Deck> QueryByHavingSource(string userId);
 		IQueryable<Deck> QueryBySourceId(string userId, int sourceId);

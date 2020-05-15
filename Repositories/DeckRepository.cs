@@ -13,10 +13,16 @@ namespace FlashCard.Repositories
 
 		}
 
-		public IQueryable<Deck> Query(string userId)
+		public IQueryable<Deck> Query(string userId, string deckName)
 		{
+			if (deckName == null || deckName.Length == 0)
+			{
+				return dbContext.Decks
+					.Where(d => d.OwnerId == userId)
+					.OrderBy(d => d.Name);
+			}
 			return dbContext.Decks
-				.Where(d => d.OwnerId == userId)
+				.Where(d => d.OwnerId == userId && d.Name.ToLower().Contains(deckName.ToLower()))
 				.OrderBy(d => d.Name);
 		}
 
@@ -53,9 +59,17 @@ namespace FlashCard.Repositories
 			return dbContext.Decks.Where(d => d.Id == deckId && d.Public && !d.Approved);
 		}
 
-		public IQueryable<Deck> QueryByBeingApproved(string adminId)
+		public IQueryable<Deck> QueryByBeingApproved(string adminId, string deckName)
 		{
-			return dbContext.Decks.Where(d => d.OwnerId == adminId && d.Approved);
+			if (deckName == null || deckName.Length == 0)
+			{
+				return dbContext.Decks
+					.Where(d => d.OwnerId == adminId && d.Approved)
+					.OrderBy(d => d.Name);
+			}
+			return dbContext.Decks
+				.Where(d => d.OwnerId == adminId && d.Approved && d.Name.ToLower().Contains(deckName.ToLower()))
+				.OrderBy(d => d.Name);
 		}
 
 		public IQueryable<Deck> QueryByIdAndBeingApproved(string adminId, int deckId)

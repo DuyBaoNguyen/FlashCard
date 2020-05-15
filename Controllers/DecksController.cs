@@ -36,11 +36,11 @@ namespace FlashCard.Controllers
 
 		[HttpGet]
 		[ProducesResponseType(200)]
-		public async Task<IEnumerable<DeckDto>> GetAllDecks()
+		public async Task<IEnumerable<DeckDto>> GetAllDecks(string name)
 		{
 			var userId = UserUtil.GetUserId(User);
 			var decks = await repository.Deck
-				.Query(userId)
+				.Query(userId, name)
 				.AsNoTracking()
 				.MapToDeckDto()
 				.ToListAsync();

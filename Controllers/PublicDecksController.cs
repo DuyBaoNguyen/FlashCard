@@ -34,12 +34,12 @@ namespace FlashCard.Controllers
 
 		[HttpGet]
 		[ProducesResponseType(200)]
-		public async Task<ActionResult<IEnumerable<PublicDeckDto>>> GetAllPublicDecks()
+		public async Task<IEnumerable<PublicDeckDto>> GetAllPublicDecks(string name)
 		{
 			var userId = UserUtil.GetUserId(User);
 			var admin = await userManager.GetAdmin();
 			var publicDecks = await repository.Deck
-				.QueryByBeingApproved(admin.Id)
+				.QueryByBeingApproved(admin.Id, name)
 				.AsNoTracking()
 				.MapToPublicDeckDto()
 				.ToListAsync();
