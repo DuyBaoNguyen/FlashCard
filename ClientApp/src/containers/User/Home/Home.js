@@ -3,6 +3,8 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import './Home.css';
 import Statistics from '../../../components/User/Statistics/Statistics';
+import DeckWrapper from '../../../components/User/DeckWrapper/DeckWrapper';
+
 
 export class Home extends Component { 
   constructor(props) {
@@ -19,8 +21,8 @@ export class Home extends Component {
     }
     return (
       <div className="home">
-        <Statistics className='home-statistics'/>
-        <Statistics className='home-statistics'/>
+        <Statistics />
+        <DeckWrapper />
       </div>
     );
   }
