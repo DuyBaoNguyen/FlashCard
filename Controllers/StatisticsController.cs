@@ -23,14 +23,15 @@ namespace FlashCard.Controllers
 			this.repository = repository;
 		}
 
-		[HttpGet("tests")]
+		[HttpGet("test")]
 		[ProducesResponseType(200)]
 		public async Task<ActionResult> GetTestStatistics()
 		{
 			var userId = UserUtil.GetUserId(User);
-			var AMOUNT_TESTS = 2;
-			var today = DateTime.Now;
+
+			var amountTests = 2;
 			var dates = DateTimeUtil.GetDaysOfWeek();
+
 			var tests = await repository.Test
 				.QueryIncludesTestedCards(userId, dates)
 				.AsNoTracking()
@@ -46,23 +47,24 @@ namespace FlashCard.Controllers
 						? tests.Sum(t => t.TestedCards.Count) : 0,
 					FailedCards = tests != null
 						? tests.Sum(t => t.TestedCards.Where(tc => tc.Failed).Count()) : 0,
-					GradePointAverage = tests != null
-						? tests.Count() == 0 ? 0 : Math.Round(tests.Average(t => t.Score), 2) : 0,
-					Tests = tests != null ? tests.Take(AMOUNT_TESTS).MapToTestDto() : null
+					GradePointAverage = tests == null || tests.Count() == 0
+						? 0 : Math.Round(tests.Average(t => t.Score), 2),
+					Tests = tests != null ? tests.Take(amountTests).MapToTestDto() : null
 				};
 			});
 
 			return Ok(statistics);
 		}
 
-		[HttpGet("matches")]
+		[HttpGet("match")]
 		[ProducesResponseType(200)]
 		public async Task<ActionResult> GetMatchStatistics()
 		{
 			var userId = UserUtil.GetUserId(User);
-			var AMOUNT_MATCHES = 2;
-			var today = DateTime.Now;
+
+			var amountMatches = 2;
 			var dates = DateTimeUtil.GetDaysOfWeek();
+
 			var matches = await repository.Match
 				.QueryIncludesMatchedCards(userId, dates)
 				.AsNoTracking()
@@ -80,7 +82,7 @@ namespace FlashCard.Controllers
 						? matches.Sum(m => m.MatchedCards.Where(mc => mc.Failed).Count()) : 0,
 					GradePointAverage = matches == null || matches.Count() == 0
 						? 0 : Math.Round(matches.Average(m => m.Score), 2),
-					Tests = matches != null ? matches.Take(AMOUNT_MATCHES).MapToMatchDto() : null
+					Tests = matches != null ? matches.Take(amountMatches).MapToMatchDto() : null
 				};
 			});
 
