@@ -495,6 +495,90 @@ namespace FlashCard.Controllers
 			return Ok();
 		}
 
+		[HttpGet("{id}/statistics/test")]
+		[ProducesResponseType(200)]
+		[ProducesResponseType(404)]
+		public async Task<ActionResult> GetTestStatistics(int id)
+		{
+			var userId = UserUtil.GetUserId(User);
+			var deck = await repository.Deck
+				.QueryByIdCheckingSharedDeck(userId, id)
+				.AsNoTracking()
+				.FirstOrDefaultAsync();
+			if (deck == null)
+			{
+				return NotFound();
+			}
+
+			var amountTests = 2;
+			var dates = DateTimeUtil.GetDaysOfWeek();
+
+			var tests = await repository.Test
+				.QueryByDeckIdIncludesTestedCards(userId, deck.Id, dates)
+				.AsNoTracking()
+				.ToListAsync();
+			var groups = tests.GroupBy(t => t.DateTime.Date).ToDictionary(g => g.Key);
+			var statistics = dates.Select(d =>
+			{
+				var tests = groups.ContainsKey(d) ? groups[d] : null;
+				return new
+				{
+					DateTime = d,
+					TotalCards = tests != null
+						? tests.Sum(t => t.TestedCards.Count) : 0,
+					FailedCards = tests != null
+						? tests.Sum(t => t.TestedCards.Where(tc => tc.Failed).Count()) : 0,
+					GradePointAverage = tests == null || tests.Count() == 0
+						? 0 : Math.Round(tests.Average(t => t.Score), 2),
+					Tests = tests != null ? tests.Take(amountTests).MapToTestDto() : null
+				};
+			});
+
+			return Ok(statistics);
+		}
+
+		[HttpGet("{id}/statistics/match")]
+		[ProducesResponseType(200)]
+		[ProducesResponseType(404)]
+		public async Task<ActionResult> GetMatchStatistics(int id)
+		{
+			var userId = UserUtil.GetUserId(User);
+			var deck = await repository.Deck
+				.QueryByIdCheckingSharedDeck(userId, id)
+				.AsNoTracking()
+				.FirstOrDefaultAsync();
+			if (deck == null)
+			{
+				return NotFound();
+			}
+
+			var amountMatches = 2;
+			var dates = DateTimeUtil.GetDaysOfWeek();
+
+			var matches = await repository.Match
+				.QueryByDeckIdIncludesMatchedCards(userId, deck.Id, dates)
+				.AsNoTracking()
+				.ToListAsync();
+			var groups = matches.GroupBy(m => m.StartTime.Date).ToDictionary(g => g.Key);
+			var statistics = dates.Select(d =>
+			{
+				var matches = groups.ContainsKey(d) ? groups[d] : null;
+				return new
+				{
+					DateTime = d,
+					TotalCards = matches != null
+						? matches.Sum(m => m.MatchedCards.Count) : 0,
+					FailedCards = matches != null
+						? matches.Sum(m => m.MatchedCards.Where(mc => mc.Failed).Count()) : 0,
+					GradePointAverage = matches == null || matches.Count() == 0
+						? 0 : Math.Round(matches.Average(m => m.Score), 2),
+					Tests = matches != null ? matches.Take(amountMatches).MapToMatchDto() : null
+				};
+			});
+
+			return Ok(statistics);
+		}
+
 		// [HttpGet("{id}/statistics")]
 		// [ProducesResponseType(200)]
 		// [ProducesResponseType(404)]
