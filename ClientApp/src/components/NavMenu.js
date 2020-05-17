@@ -1,9 +1,8 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
 import { Collapse, Container, Navbar, NavbarBrand, NavbarToggler, NavItem, NavLink } from 'reactstrap';
 import { Link } from 'react-router-dom';
 import { LoginMenu } from './api-authorization/LoginMenu';
 import './NavMenu.css';
-import authService from './api-authorization/AuthorizeService';
 
 export class NavMenu extends Component {
   static displayName = NavMenu.name;
@@ -13,25 +12,13 @@ export class NavMenu extends Component {
 
     this.toggleNavbar = this.toggleNavbar.bind(this);
     this.state = {
-      collapsed: true,
-      user: null
+      collapsed: true
     };
   }
 
   toggleNavbar() {
     this.setState({
       collapsed: !this.state.collapsed
-    });
-  }
-
-  componentDidMount() {
-    this.populateState();
-  }
-
-  async populateState() {
-    const currentUser = await authService.getUser();
-    this.setState({
-      user: currentUser
     });
   }
 
@@ -44,25 +31,7 @@ export class NavMenu extends Component {
             <NavbarToggler onClick={this.toggleNavbar} className="mr-2" />
             <Collapse className="d-sm-inline-flex flex-sm-row-reverse" isOpen={!this.state.collapsed} navbar>
               <ul className="navbar-nav flex-grow">
-                <NavItem>
-                  <NavLink tag={Link} className="text-dark" to="/">Dashboard</NavLink>
-                </NavItem>
-                <NavItem>
-                  <NavLink tag={Link} className="text-dark" to="/cards">Cards</NavLink>
-                </NavItem>
-                {this.state.user && this.state.user.role === 'user' ?
-                  <Fragment>
-                    <NavItem>
-                      <NavLink tag={Link} className="text-dark" to="/publiccards">Public Cards</NavLink>
-                    </NavItem>
-                    <NavItem>
-                      <NavLink tag={Link} className="text-dark" to="/publicdecks">Public Decks</NavLink>
-                    </NavItem>
-                  </Fragment> : 
-                  ''
-                }
-                <LoginMenu user={this.state.user}>
-                </LoginMenu>
+                <LoginMenu></LoginMenu>
               </ul>
             </Collapse>
           </Container>
