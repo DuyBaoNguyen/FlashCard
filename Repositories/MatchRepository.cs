@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using FlashCard.Contracts;
 using FlashCard.Data;
@@ -13,23 +14,23 @@ namespace FlashCard.Repositories
 
 		}
 
-		public IQueryable<Match> QueryIncludesMatchedCards(string userId)
+		public IQueryable<Match> QueryIncludesMatchedCards(string userId, DateTime[] dates)
 		{
 			return dbContext.Matches
 				.Include(m => m.MatchedCards)
 					.ThenInclude(mc => mc.Card)
 				.Include(m => m.Deck)
-				.Where(m => m.TakerId == userId)
+				.Where(m => m.TakerId == userId && dates.Contains(m.StartTime.Date))
 				.OrderByDescending(m => m.StartTime);
 		}
 
-		public IQueryable<Match> QueryByDeckIdIncludesMatchedCards(string userId, int deckId)
+		public IQueryable<Match> QueryByDeckIdIncludesMatchedCards(string userId, int deckId, DateTime[] dates)
 		{
 			return dbContext.Matches
 				.Include(m => m.MatchedCards)
 					.ThenInclude(mc => mc.Card)
 				.Include(m => m.Deck)
-				.Where(m => m.TakerId == userId && m.DeckId == deckId)
+				.Where(m => m.TakerId == userId && m.DeckId == deckId && dates.Contains(m.StartTime.Date))
 				.OrderByDescending(m => m.StartTime);
 		}
 	}

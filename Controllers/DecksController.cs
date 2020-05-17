@@ -495,78 +495,78 @@ namespace FlashCard.Controllers
 			return Ok();
 		}
 
-		[HttpGet("{id}/statistics")]
-		[ProducesResponseType(200)]
-		[ProducesResponseType(404)]
-		public async Task<ActionResult> GetStatistics(int id)
-		{
-			var amountTest = 5;
-			var amountMatch = 5;
-			var userId = UserUtil.GetUserId(User);
-			var deck = await repository.Deck
-				.QueryByIdCheckingSharedDeck(userId, id)
-				.AsNoTracking()
-				.FirstOrDefaultAsync();
+		// [HttpGet("{id}/statistics")]
+		// [ProducesResponseType(200)]
+		// [ProducesResponseType(404)]
+		// public async Task<ActionResult> GetStatistics(int id)
+		// {
+		// 	var amountTest = 5;
+		// 	var amountMatch = 5;
+		// 	var userId = UserUtil.GetUserId(User);
+		// 	var deck = await repository.Deck
+		// 		.QueryByIdCheckingSharedDeck(userId, id)
+		// 		.AsNoTracking()
+		// 		.FirstOrDefaultAsync();
 
-			if (deck == null)
-			{
-				return NotFound();
-			}
+		// 	if (deck == null)
+		// 	{
+		// 		return NotFound();
+		// 	}
 
-			var today = DateTime.Now;
-			var tests = await repository.Test
-				.QueryByDeckIdIncludesTestedCards(userId, id)
-				.AsNoTracking()
-				.ToListAsync();
-			var testsToday = tests.Where(t => t.DateTime.Date == today.Date);
-			var matches = await repository.Match
-				.QueryByDeckIdIncludesMatchedCards(userId, id)
-				.AsNoTracking()
-				.ToListAsync();
-			var matchesToday = matches.Where(m => m.StartTime.Date == today.Date);
+		// 	var today = DateTime.Now;
+		// 	var tests = await repository.Test
+		// 		.QueryByDeckIdIncludesTestedCards(userId, id)
+		// 		.AsNoTracking()
+		// 		.ToListAsync();
+		// 	var testsToday = tests.Where(t => t.DateTime.Date == today.Date);
+		// 	var matches = await repository.Match
+		// 		.QueryByDeckIdIncludesMatchedCards(userId, id)
+		// 		.AsNoTracking()
+		// 		.ToListAsync();
+		// 	var matchesToday = matches.Where(m => m.StartTime.Date == today.Date);
 
-			return Ok(new
-			{
-				Test = new
-				{
-					Statistics = new
-					{
-						Today = new
-						{
-							TotalCards = testsToday.Sum(t => t.TestedCards.Count),
-							FailedCards = testsToday.Sum(t => t.TestedCards.Where(tc => tc.Failed).Count()),
-							GradePointAverage = testsToday.Count() == 0 ? 0 : Math.Round(testsToday.Average(t => t.Score), 2)
-						},
-						Summary = new
-						{
-							TotalCards = tests.Sum(t => t.TestedCards.Count),
-							FailedCards = tests.Sum(t => t.TestedCards.Where(tc => tc.Failed).Count()),
-							GradePointAverage = tests.Count == 0 ? 0 : Math.Round(tests.Average(t => t.Score), 2)
-						}
-					},
-					Data = tests.Take(amountTest).MapToTestDto()
-				},
-				Match = new
-				{
-					Statistics = new
-					{
-						Today = new
-						{
-							TotalCards = matchesToday.Sum(t => t.MatchedCards.Count),
-							FailedCards = matchesToday.Sum(t => t.MatchedCards.Where(tc => tc.Failed).Count()),
-							GradePointAverage = matchesToday.Count() == 0 ? 0 : Math.Round(matchesToday.Average(t => t.Score), 2)
-						},
-						Summary = new
-						{
-							TotalCards = matches.Sum(t => t.MatchedCards.Count),
-							FailedCards = matches.Sum(t => t.MatchedCards.Where(tc => tc.Failed).Count()),
-							GradePointAverage = matches.Count == 0 ? 0 : Math.Round(matches.Average(t => t.Score), 2)
-						}
-					},
-					Data = matches.Take(amountMatch).MapToMatchDto()
-				}
-			});
-		}
+		// 	return Ok(new
+		// 	{
+		// 		Test = new
+		// 		{
+		// 			Statistics = new
+		// 			{
+		// 				Today = new
+		// 				{
+		// 					TotalCards = testsToday.Sum(t => t.TestedCards.Count),
+		// 					FailedCards = testsToday.Sum(t => t.TestedCards.Where(tc => tc.Failed).Count()),
+		// 					GradePointAverage = testsToday.Count() == 0 ? 0 : Math.Round(testsToday.Average(t => t.Score), 2)
+		// 				},
+		// 				Summary = new
+		// 				{
+		// 					TotalCards = tests.Sum(t => t.TestedCards.Count),
+		// 					FailedCards = tests.Sum(t => t.TestedCards.Where(tc => tc.Failed).Count()),
+		// 					GradePointAverage = tests.Count == 0 ? 0 : Math.Round(tests.Average(t => t.Score), 2)
+		// 				}
+		// 			},
+		// 			Data = tests.Take(amountTest).MapToTestDto()
+		// 		},
+		// 		Match = new
+		// 		{
+		// 			Statistics = new
+		// 			{
+		// 				Today = new
+		// 				{
+		// 					TotalCards = matchesToday.Sum(t => t.MatchedCards.Count),
+		// 					FailedCards = matchesToday.Sum(t => t.MatchedCards.Where(tc => tc.Failed).Count()),
+		// 					GradePointAverage = matchesToday.Count() == 0 ? 0 : Math.Round(matchesToday.Average(t => t.Score), 2)
+		// 				},
+		// 				Summary = new
+		// 				{
+		// 					TotalCards = matches.Sum(t => t.MatchedCards.Count),
+		// 					FailedCards = matches.Sum(t => t.MatchedCards.Where(tc => tc.Failed).Count()),
+		// 					GradePointAverage = matches.Count == 0 ? 0 : Math.Round(matches.Average(t => t.Score), 2)
+		// 				}
+		// 			},
+		// 			Data = matches.Take(amountMatch).MapToMatchDto()
+		// 		}
+		// 	});
+		// }
 
 		private List<Card> FilterCards(List<Card> source, int[] cardIds)
 		{
