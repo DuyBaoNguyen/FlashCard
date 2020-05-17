@@ -1,0 +1,9 @@
+.home {
+  display: -ms-inline-grid;
+  display: inline-grid;
+  -ms-grid-columns: 30% 70%;
+      grid-template-columns: 30% 70%;
+  grid-gap: 20px;
+  width: 100%;
+}
+/*# sourceMappingURL=Home.css.map */

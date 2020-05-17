@@ -1,0 +1,38 @@
+.statistics-wrapper {
+	background: #ffffff;
+	box-shadow: 0px 0px 30px rgba(0, 0, 0, 0.05);
+	border-radius: 15px;
+	padding: 30px;
+	width: 100%;
+	min-height: 100px;
+	.statistics-header {
+		color: #9eacf4;
+		font-style: normal;
+		font-weight: bold;
+		font-size: 18px;
+	}
+	.statistics-info {
+		display: flex;
+    justify-content: start;
+    height: 35px;
+		.statistics-info-name {
+			color: #979797;
+			justify-self: flex-start;
+			width: 70%;
+			font-style: normal;
+			font-weight: normal;
+			font-size: 14px;
+			line-height: 32px;
+		}
+		.statistics-info-value {
+			color: #9eacf4;
+			justify-self: flex-end;
+			text-align: right;
+			width: 30%;
+			font-style: normal;
+			font-weight: bold;
+			font-size: 14px;
+			line-height: 32px;
+		}
+	}
+}
