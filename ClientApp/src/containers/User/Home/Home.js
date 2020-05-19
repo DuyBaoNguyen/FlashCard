@@ -5,8 +5,7 @@ import './Home.css';
 import Statistics from '../../../components/User/Statistics/Statistics';
 import DeckWrapper from '../../../components/User/DeckWrapper/DeckWrapper';
 
-
-export class Home extends Component { 
+class Home extends Component {
   constructor(props) {
     super(props);
 
@@ -15,7 +14,7 @@ export class Home extends Component {
     };
   }
 
-  render () {
+  render() {
     if (this.state.hasError) {
       return <h1>Something went wrong.</h1>;
     }
@@ -43,3 +42,5 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => ({
   // fnBlaBla: () => dispatch(action.name()),
 });
+
+export default Home;
