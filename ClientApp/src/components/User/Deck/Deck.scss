@@ -5,8 +5,8 @@
 			// background: #95dded;
 			box-shadow: 2px 0px 8px rgba(0, 0, 0, 0.15);
 			border-radius: 15px;
-			position: absolute;
-			width: 331px;
+			position: relative;
+			width: 100%;
 			height: 184px;
 			padding: 20px;
 			z-index: 100;
@@ -62,7 +62,7 @@
 			box-shadow: -2px 0px 8px rgba(0, 0, 0, 0.15);
 			border-radius: 15px;
 			position: absolute;
-			width: 331px;
+			width: 100%;
 			height: 184px;
 			z-index: 2;
 		}
@@ -73,7 +73,7 @@
 			box-shadow: -2px 0px 8px rgba(0, 0, 0, 0.15);
 			border-radius: 15px;
 			position: absolute;
-			width: 331px;
+			width: 100%;
 			height: 184px;
 			z-index: 1;
 		}

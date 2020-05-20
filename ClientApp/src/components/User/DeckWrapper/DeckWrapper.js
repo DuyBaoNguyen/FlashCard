@@ -47,6 +47,8 @@ class DeckWrapper extends Component {
 				<div className="decks">
 					<Deck backgroundColor='#95dded' cards='123' date='12th May, 2020'/>
 					<Deck backgroundColor='#9FCBF5' cards='123' date='12th May, 2020'/>
+					<Deck backgroundColor='#9FCBF5' cards='123' date='12th May, 2020'/>
+					<Deck backgroundColor='#95dded' cards='123' date='12th May, 2020'/>
 					{/* <Deck backgroundColor='#9FCBF5'/> */}
 				</div>
 			</div>
