@@ -1,0 +1,81 @@
+.deck {
+	.wrapper {
+		position: relative;
+		.deck-background-color {
+			// background: #95dded;
+			box-shadow: 2px 0px 8px rgba(0, 0, 0, 0.15);
+			border-radius: 15px;
+			position: absolute;
+			width: 331px;
+			height: 184px;
+			padding: 20px;
+			z-index: 100;
+			transition: 0.3s;
+			&:hover {
+				transition: 0.3s;
+				transform: translateX(20px) translateY(-10px);
+			}
+			.deck-name {
+				height: 31px;
+				color: #ffffff;
+				font-style: normal;
+				font-weight: bold;
+				font-size: 24px;
+				line-height: 32px;
+			}
+			.deck-description {
+				height: 54px;
+				font-style: italic;
+				font-weight: normal;
+				font-size: 14px;
+				line-height: 25px;
+				margin-top: 20px;
+				margin-bottom: 15px;
+				color: #ffffff;
+			}
+			.deck-info {
+        width: 100%;
+				position: relative;
+				.deck-info-value {
+          margin-right: 100px;
+          display: inline-flex;
+          align-items: center;
+					p {
+						position: absolute;
+						margin-left: 35px;
+						// text-align: left;
+            // height: 18px;
+						font-style: normal;
+						font-weight: bold;
+						font-size: 14px;
+						line-height: 32px;
+						color: #ffffff;
+						width: 100px;
+					}
+				}
+			}
+		}
+		.deck-background-white-1 {
+			top: 5px;
+			left: 5px;
+			background: white;
+			box-shadow: -2px 0px 8px rgba(0, 0, 0, 0.15);
+			border-radius: 15px;
+			position: absolute;
+			width: 331px;
+			height: 184px;
+			z-index: 2;
+		}
+		.deck-background-white-2 {
+			top: 10px;
+			left: 10px;
+			background: white;
+			box-shadow: -2px 0px 8px rgba(0, 0, 0, 0.15);
+			border-radius: 15px;
+			position: absolute;
+			width: 331px;
+			height: 184px;
+			z-index: 1;
+		}
+	}
+}

@@ -8,6 +8,19 @@
   height: 85vh;
 }
 
+.deck-wrapper .decks {
+  width: 100%;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: start;
+      -ms-flex-pack: start;
+          justify-content: flex-start;
+  -webkit-box-align: start;
+      -ms-flex-align: start;
+          align-items: flex-start;
+}
+
 .deck-wrapper .deck-header {
   color: #9eacf4;
   font-style: normal;
