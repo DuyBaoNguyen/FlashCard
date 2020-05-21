@@ -1,0 +1,9 @@
+.create-deck-wrapper .back-button {
+  -ms-grid-column-align: left;
+      justify-self: left;
+  -ms-flex-item-align: start;
+      align-self: flex-start;
+  top: 0px;
+  left: 0px;
+}
+/*# sourceMappingURL=CreateDeck.css.map */

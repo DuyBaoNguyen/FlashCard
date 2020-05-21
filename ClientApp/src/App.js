@@ -2,7 +2,9 @@ import React, { Component } from 'react';
 import { BrowserRouter as Router, Switch } from 'react-router-dom';
 import { Route } from 'react-router';
 import { Layout } from './components/Layout';
+
 import Home from './containers/User/Home/Home';
+import CreateDeck from './containers/User/CreateDeck/CreateDeck';
 
 import AuthorizeRoute from './components/api-authorization/AuthorizeRoute';
 import ApiAuthorizationRoutes from './components/api-authorization/ApiAuthorizationRoutes';
@@ -19,6 +21,8 @@ export default class App extends Component {
 			<Layout>
 				<Switch>
 					<Route exact path="/" component={Home} />
+					<Route exact path="/createDeck" component={CreateDeck} />
+
 					<Route path={ApplicationPaths.ApiAuthorizationPrefix} component={ApiAuthorizationRoutes} />
 				</Switch>
 			</Layout>

@@ -1,0 +1,168 @@
+.deck-form {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  height: 80vh;
+}
+
+.deck-form .deck-form-wrapper {
+  width: 563px;
+  height: 460px;
+  background: #ffffff;
+  -webkit-box-shadow: 0px 0px 30px rgba(0, 0, 0, 0.05);
+          box-shadow: 0px 0px 30px rgba(0, 0, 0, 0.05);
+  border-radius: 15px;
+  padding: 30px;
+}
+
+.deck-form .deck-form-wrapper .deck-form-button {
+  display: -ms-grid;
+  display: grid;
+  -ms-grid-columns: auto auto;
+      grid-template-columns: auto auto;
+  -webkit-column-gap: 10px;
+          column-gap: 10px;
+}
+
+.deck-form .deck-form-wrapper .deck-form-button .deck-form-button-cancel {
+  width: 100%;
+  height: 50px;
+  border: none;
+  -webkit-box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.05);
+          box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.05);
+  background: #ffffff;
+  border-radius: 15px;
+  font-style: normal;
+  font-size: 18px;
+  line-height: 28px;
+  color: #979797;
+}
+
+.deck-form .deck-form-wrapper .deck-form-button .deck-form-button-create {
+  width: 100%;
+  height: 50px;
+  border: none;
+  -webkit-box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.05);
+          box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.05);
+  background: #9EACF4;
+  border-radius: 15px;
+  font-style: normal;
+  font-size: 18px;
+  line-height: 28px;
+  color: #ffffff;
+}
+
+.deck-form .deck-form-wrapper .deck-form-button button {
+  -webkit-transition: 0.1s;
+  transition: 0.1s;
+}
+
+.deck-form .deck-form-wrapper .deck-form-button button:active {
+  -webkit-transition: 0.1s;
+  transition: 0.1s;
+  -webkit-transform: translateY(10px);
+          transform: translateY(10px);
+}
+
+.deck-form .deck-form-wrapper .deck-form-circle {
+  margin-top: 30px;
+  margin-bottom: 20px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+.deck-form .deck-form-wrapper .deck-form-circle input {
+  display: none;
+}
+
+.deck-form .deck-form-wrapper .deck-form-circle input:checked ~ .button span {
+  border: 0px solid white;
+}
+
+.deck-form .deck-form-wrapper .deck-form-circle .button {
+  display: inline-block;
+  position: relative;
+  width: 50px;
+  height: 50px;
+  margin: 10px;
+  cursor: pointer;
+}
+
+.deck-form .deck-form-wrapper .deck-form-circle .button span {
+  border: 15px solid white;
+  display: block;
+  position: absolute;
+  width: 70px;
+  height: 70px;
+  padding: 0;
+  top: 50%;
+  left: 50%;
+  -webkit-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+  border-radius: 100%;
+  background: #ffffff;
+  -webkit-transition: ease 0.3s;
+  transition: ease 0.3s;
+}
+
+.deck-form .deck-form-wrapper .deck-form-circle .button span:hover {
+  padding: 10px;
+}
+
+.deck-form .deck-form-wrapper .deck-form-header {
+  height: 47px;
+  font-style: normal;
+  font-weight: bold;
+  font-size: 24px;
+  line-height: 32px;
+  color: #9eacf4;
+}
+
+.deck-form .deck-form-wrapper .deck-form-input {
+  margin-top: 20px;
+  margin-bottom: 10px;
+  display: -ms-grid;
+  display: grid;
+}
+
+.deck-form .deck-form-wrapper .deck-form-input label {
+  margin-bottom: 20px;
+  height: 8px;
+  font-style: normal;
+  font-weight: bold;
+  font-size: 14px;
+  line-height: 22px;
+  color: #9eacf4;
+}
+
+.deck-form .deck-form-wrapper .deck-form-input input {
+  height: 40px;
+  background: #ffffff;
+  border: 1px solid #d9d9d9;
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+  border-radius: 4px;
+  padding: 10px;
+  -webkit-transition: 0.3s;
+  transition: 0.3s;
+}
+
+.deck-form .deck-form-wrapper .deck-form-input input:focus {
+  -webkit-transition: 0.3s;
+  transition: 0.3s;
+  border: 2px solid #9eacf4;
+}
+/*# sourceMappingURL=DeckForm.css.map */

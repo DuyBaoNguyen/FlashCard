@@ -1,0 +1,132 @@
+.deck-form {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	height: 80vh;
+	.deck-form-wrapper {
+		width: 563px;
+		height: 460px;
+		background: #ffffff;
+		box-shadow: 0px 0px 30px rgba(0, 0, 0, 0.05);
+		border-radius: 15px;
+		padding: 30px;
+		.deck-form-button {
+			display: grid;
+			grid-template-columns: auto auto;
+			column-gap: 10px;
+			.deck-form-button-cancel {
+				width: 100%;
+				height: 50px;
+				border: none;
+				box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.05);
+				background: #ffffff;
+				border-radius: 15px;
+				font-style: normal;
+				font-size: 18px;
+				line-height: 28px;
+				color: #979797;
+			}
+			.deck-form-button-create {
+				width: 100%;
+				height: 50px;
+				border: none;
+				box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.05);
+				background: #9EACF4;
+				border-radius: 15px;
+				font-style: normal;
+				font-size: 18px;
+				line-height: 28px;
+				color: #ffffff;
+			}
+			button {
+				transition: 0.1s;
+			}
+			button:active {
+				transition: 0.1s;
+				transform: translateY(10px);
+			}
+		}
+		.deck-form-circle {
+			margin-top: 30px;
+			margin-bottom: 20px;
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+			input {
+				display: none;
+			}
+			input:checked ~ .button span {
+				border: 0px solid white;
+				// opacity: 0.5;
+				// transform: scale(2,2);
+			}
+			.button {
+				display: inline-block;
+				position: relative;
+				width: 50px;
+				height: 50px;
+				margin: 10px;
+				cursor: pointer;
+			}
+
+			.button span {
+				border: 15px solid white;
+				display: block;
+				position: absolute;
+				width: 70px;
+				height: 70px;
+				padding: 0;
+				top: 50%;
+				left: 50%;
+				-webkit-transform: translate(-50%, -50%);
+				-ms-transform: translate(-50%, -50%);
+				-o-transform: translate(-50%, -50%);
+				transform: translate(-50%, -50%);
+				border-radius: 100%;
+				background: #ffffff;
+				transition: ease 0.3s;
+			}
+
+			.button span:hover {
+				padding: 10px;
+				// opacity: 0.5;
+			}
+		}
+		.deck-form-header {
+			height: 47px;
+			font-style: normal;
+			font-weight: bold;
+			font-size: 24px;
+			line-height: 32px;
+			color: #9eacf4;
+		}
+		.deck-form-input {
+			margin-top: 20px;
+			margin-bottom: 10px;
+			display: grid;
+			label {
+				margin-bottom: 20px;
+				// display: inline-block;
+				height: 8px;
+				font-style: normal;
+				font-weight: bold;
+				font-size: 14px;
+				line-height: 22px;
+				color: #9eacf4;
+			}
+			input {
+				height: 40px;
+				background: #ffffff;
+				border: 1px solid #d9d9d9;
+				box-sizing: border-box;
+				border-radius: 4px;
+				padding: 10px;
+				transition: 0.3s;
+				&:focus {
+					transition: 0.3s;
+					border: 2px solid #9eacf4;
+				}
+			}
+		}
+	}
+}
