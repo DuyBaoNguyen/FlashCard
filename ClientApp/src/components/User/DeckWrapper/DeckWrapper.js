@@ -79,6 +79,8 @@ class DeckWrapper extends Component {
 				<div className="deck-pagination">
 					<Pagination
 						hideFirstLastPages
+						prevPageText="<"
+						nextPageText=">"
 						activePage={this.state.activePage}
 						itemsCountPerPage={4}
 						totalItemsCount={
