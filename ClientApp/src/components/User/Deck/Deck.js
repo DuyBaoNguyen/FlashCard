@@ -20,6 +20,7 @@ class Deck extends Component {
 	}
 
 	render() {
+		// let date = new Date(this.props.deck.createdDate);
 		const backgroundColor = {
 			background: this.props.backgroundColor,
 		};
@@ -31,10 +32,9 @@ class Deck extends Component {
 			<div className="deck">
 				<div className="wrapper">
 					<div className="deck-background-color" style={backgroundColor}>
-						<div className="deck-name">Name</div>
+						<div className="deck-name">{this.props.name}</div>
 						<div className="deck-description">
-							This is a short description about this deck, It helps people know
-							more about the deck
+							{this.props.description}
 						</div>
 						<div className="deck-info">
 							<div className="deck-info-value">
@@ -46,7 +46,7 @@ class Deck extends Component {
 							</div>
 							<div className="deck-info-value">
 							<Icon icon={calendarAlt} style={{color: '#ffffff', fontSize: '24px'}} />
-							<p>{this.props.date}</p>
+							{/* <p>{this.props.createdDate.toLocaleDateString()}</p> */}
 							</div>
 						</div>
 					</div>

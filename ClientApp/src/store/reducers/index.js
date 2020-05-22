@@ -1,0 +1,1 @@
+export { homeReducer } from './Home';

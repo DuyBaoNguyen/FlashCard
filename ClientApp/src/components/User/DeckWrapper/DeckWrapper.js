@@ -1,9 +1,13 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 
-import { Button, Input, Pagination } from 'antd';
+import Pagination from 'react-js-pagination';
+import { Button, Input } from 'antd';
 import { Icon, InlineIcon } from '@iconify/react';
 import plusIcon from '@iconify/icons-uil/plus';
+
+import * as actions from '../../../store/actions/index';
 
 import Deck from '../Deck/Deck';
 
@@ -14,15 +18,46 @@ const { Search } = Input;
 class DeckWrapper extends Component {
 	constructor(props) {
 		super(props);
-
 		this.state = {
+			activePage: 1,
 			hasError: false,
 		};
 	}
 
+	handlePageChange(pageNumber) {
+		console.log(pageNumber);
+		this.setState({ activePage: pageNumber });
+	}
+
+	componentDidMount() {
+		this.props.onGetDecks();
+	}
+
 	render() {
+		let deckList;
 		if (this.state.hasError) {
 			return <h1>Something went wrong.</h1>;
+		}
+
+		if (this.props.decks === null) {
+			console.log('null');
+		} else {
+			deckList = this.props.decks.map((deck, index) => {
+				return (
+					<div>
+						{index < 4 ? (
+							<Deck
+								backgroundColor="#95dded"
+								name={deck.name}
+								description={deck.description}
+								cards={deck.totalCards}
+								date={deck.createdDate}
+							/>
+						) : undefined}
+					</div>
+				);
+				// return <Deck backgroundColor="#95dded" name={deck.name} description={deck.description} cards={deck.totalCards} date={deck.createdDeck} />;
+			});
 		}
 		return (
 			<div className="deck-wrapper">
@@ -40,20 +75,39 @@ class DeckWrapper extends Component {
 							className="deck-header-features-search"
 							placeholder="Search..."
 						/>
-						{/* <Pagination size="small" total={50} /> */}
 					</div>
 				</div>
 				<br />
-				<div className="decks">
-					<Deck backgroundColor='#95dded' cards='123' date='12th May, 2020'/>
-					<Deck backgroundColor='#9FCBF5' cards='123' date='12th May, 2020'/>
-					<Deck backgroundColor='#FFB1B1' cards='123' date='12th May, 2020'/>
-					<Deck backgroundColor='#FDD39D' cards='123' date='12th May, 2020'/>
-					{/* <Deck backgroundColor='#9FCBF5'/> */}
-				</div>
+				<div className="decks">{deckList}</div>
+				<Pagination
+          activePage={this.state.activePage}
+          itemsCountPerPage={4}
+          totalItemsCount={10}
+          pageRangeDisplayed={5}
+          onChange={this.handlePageChange.bind(this)}
+        />
+				{/* <div className="decks">
+					{deckList} */}
+				{/* <Deck backgroundColor="#95dded" cards="123" date="12th May, 2020" />
+					<Deck backgroundColor="#9FCBF5" cards="123" date="12th May, 2020" />
+					<Deck backgroundColor="#FFB1B1" cards="123" date="12th May, 2020" />
+					<Deck backgroundColor="#FDD39D" cards="123" date="12th May, 2020" /> */}
+				{/* <Deck backgroundColor='#9FCBF5'/> */}
+				{/* </div> */}
 			</div>
 		);
 	}
 }
+const mapStateToProps = (state) => {
+	return {
+		decks: state.home.decks,
+	};
+};
 
-export default DeckWrapper;
+const mapDispatchToProps = (dispatch) => {
+	return {
+		onGetDecks: () => dispatch(actions.getDecks()),
+	};
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(DeckWrapper);
