@@ -20,6 +20,41 @@
           justify-content: space-between;
 }
 
+.deck-wrapper .deck-pagination {
+  margin-top: 10px;
+  height: 100px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+.deck-wrapper .deck-pagination .pagination li {
+  margin-left: 10px;
+  margin-right: 10px;
+}
+
+.deck-wrapper .deck-pagination .pagination li a {
+  color: rgba(0, 0, 0, 0.65);
+}
+
+.deck-wrapper .deck-pagination .pagination .pagination-item-active {
+  text-decoration: none;
+  background: #9eacf4;
+  border-radius: 4px;
+  width: 22.22px;
+  text-align: center;
+}
+
+.deck-wrapper .deck-pagination .pagination .pagination-item-active a {
+  color: white;
+}
+
 .deck-wrapper .deck-header {
   color: #9eacf4;
   font-style: normal;

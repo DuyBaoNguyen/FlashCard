@@ -12,6 +12,32 @@
 		gap: 30px;
 		justify-content: space-between;
 	}
+	.deck-pagination {
+		margin-top: 10px;
+		height: 100px;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		.pagination {
+			li {
+				margin-left: 10px;
+				margin-right: 10px;
+				a {
+					color: rgba(0, 0, 0, 0.65);
+				}
+			}
+			.pagination-item-active {
+				text-decoration: none;
+				background: #9eacf4;
+				border-radius: 4px;
+				width: 22.22px;
+				text-align: center;
+				a {
+					color: white;
+				}
+			}
+		}
+	}
 	.deck-header {
 		color: #9eacf4;
 		font-style: normal;
@@ -37,12 +63,10 @@
 			}
 			.deck-header-features-search {
 				width: 175px;
-        background: white;
-        border-color: none;
+				background: white;
+				border-color: none;
 				border-radius: 30px;
 			}
 		}
 	}
 }
-
-
