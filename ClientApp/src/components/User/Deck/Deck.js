@@ -20,7 +20,7 @@ class Deck extends Component {
 	}
 
 	render() {
-		// let date = new Date(this.props.deck.createdDate);
+		let date = new Date(this.props.createdDate);
 		const backgroundColor = {
 			background: this.props.backgroundColor,
 		};
@@ -46,7 +46,7 @@ class Deck extends Component {
 							</div>
 							<div className="deck-info-value">
 							<Icon icon={calendarAlt} style={{color: '#ffffff', fontSize: '24px'}} />
-							{/* <p>{this.props.createdDate.toLocaleDateString()}</p> */}
+							<p>{date !== undefined ? date.toLocaleDateString() : null}</p>
 							</div>
 						</div>
 					</div>
