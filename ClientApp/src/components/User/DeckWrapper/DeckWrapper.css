@@ -9,6 +9,7 @@
 }
 
 .deck-wrapper .decks {
+  min-height: 428px;
   display: -ms-grid;
   display: grid;
   -ms-grid-columns: auto auto;

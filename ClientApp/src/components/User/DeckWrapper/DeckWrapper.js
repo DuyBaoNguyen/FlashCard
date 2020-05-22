@@ -44,8 +44,9 @@ class DeckWrapper extends Component {
 		} else {
 			deckList = this.props.decks.map((deck, index) => {
 				return (
-					<div>
-						{index < 4 ? (
+					<>
+						{index >= (this.state.activePage - 1) * 4 &&
+						index <= (this.state.activePage * 4) - 1 ? (
 							<Deck
 								backgroundColor="#95dded"
 								name={deck.name}
@@ -54,7 +55,7 @@ class DeckWrapper extends Component {
 								date={deck.createdDate}
 							/>
 						) : undefined}
-					</div>
+					</>
 				);
 				// return <Deck backgroundColor="#95dded" name={deck.name} description={deck.description} cards={deck.totalCards} date={deck.createdDeck} />;
 			});
@@ -80,12 +81,14 @@ class DeckWrapper extends Component {
 				<br />
 				<div className="decks">{deckList}</div>
 				<Pagination
-          activePage={this.state.activePage}
-          itemsCountPerPage={4}
-          totalItemsCount={10}
-          pageRangeDisplayed={5}
-          onChange={this.handlePageChange.bind(this)}
-        />
+					activePage={this.state.activePage}
+					itemsCountPerPage={4}
+					totalItemsCount={
+						this.props.decks !== null ? this.props.decks.length : null
+					}
+					pageRangeDisplayed={5}
+					onChange={this.handlePageChange.bind(this)}
+				/>
 				{/* <div className="decks">
 					{deckList} */}
 				{/* <Deck backgroundColor="#95dded" cards="123" date="12th May, 2020" />
