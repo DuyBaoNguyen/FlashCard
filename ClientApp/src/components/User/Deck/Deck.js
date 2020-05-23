@@ -1,14 +1,9 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
-
-import { Button, Input, Pagination } from 'antd';
-import { Icon, InlineIcon } from '@iconify/react';
+import { Icon } from '@iconify/react';
 import layerGroup from '@iconify/icons-uil/layer-group';
 import calendarAlt from '@iconify/icons-uil/calendar-alt';
 
 import './Deck.css';
-
-const { Search } = Input;
 
 class Deck extends Component {
 	constructor(props) {

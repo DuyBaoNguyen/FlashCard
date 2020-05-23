@@ -4,7 +4,7 @@
 * {
   outline: none !important;
 	font-family: 'Lato';
-
+  box-sizing: border-box;
 }
 
 .ant-btn-primary {

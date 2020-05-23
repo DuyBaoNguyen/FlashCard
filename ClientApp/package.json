@@ -5,6 +5,7 @@
   "dependencies": {
     "@material-ui/core": "^4.7.0",
     "@material-ui/icons": "^4.5.1",
+    "@nivo/bar": "^0.61.1",
     "antd": "^4.2.3",
     "axios": "^0.19.2",
     "bootstrap": "^4.1.3",
