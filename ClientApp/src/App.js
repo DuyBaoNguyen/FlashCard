@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { BrowserRouter as Router, Switch } from 'react-router-dom';
+import { Switch } from 'react-router-dom';
 import { Route } from 'react-router';
 import { Layout } from './components/Layout';
 
@@ -11,7 +11,6 @@ import ApiAuthorizationRoutes from './components/api-authorization/ApiAuthorizat
 import { ApplicationPaths } from './components/api-authorization/ApiAuthorizationConstants';
 
 import './custom.css';
-import './font-awesome/css/all.css';
 
 export default class App extends Component {
 	static displayName = App.name;
@@ -20,8 +19,8 @@ export default class App extends Component {
 		return (
 			<Layout>
 				<Switch>
-					<Route exact path="/" component={Home} />
-					<Route exact path="/createDeck" component={CreateDeck} />
+					<AuthorizeRoute exact path="/" component={Home} />
+					<AuthorizeRoute exact path="/createDeck" component={CreateDeck} />
 
 					<Route path={ApplicationPaths.ApiAuthorizationPrefix} component={ApiAuthorizationRoutes} />
 				</Switch>

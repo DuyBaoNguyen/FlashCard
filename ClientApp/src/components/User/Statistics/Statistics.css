@@ -5,7 +5,9 @@
   border-radius: 15px;
   padding: 30px;
   width: 100%;
-  height: 279px;
+  height: -webkit-fit-content;
+  height: -moz-fit-content;
+  height: fit-content;
 }
 
 .statistics-wrapper .statistics-header {

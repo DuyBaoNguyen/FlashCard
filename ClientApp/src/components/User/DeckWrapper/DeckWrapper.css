@@ -15,9 +15,7 @@
   -ms-grid-columns: auto auto;
       grid-template-columns: auto auto;
   gap: 30px;
-  -webkit-box-pack: justify;
-      -ms-flex-pack: justify;
-          justify-content: space-between;
+  padding-right: 10px;
 }
 
 .deck-wrapper .deck-pagination {
