@@ -1,5 +1,6 @@
 import React from 'react';
 import { ResponsiveBar } from '@nivo/bar'
+import { AutoSizer } from 'react-virtualized';
 
 import './Chart.css';
 
@@ -36,48 +37,52 @@ const data = [
 
 const chart = props => (
   <div className="chart">
-    <div className="chart-wrapper">
-      <ResponsiveBar
-        data={props.data || data}
-        minValue={0}
-        maxValue={100}
-        keys={['score']}
-        indexBy="day"
-        margin={{ top: 0, right: 0, bottom: 20, left: 0 }}
-        padding={0.15}
-        colors="orange"
-        theme={{
-          fontSize: 12,
-          fontFamily: 'inherit',
-          textColor: '#888',
-          axis: {
-            ticks: {
-              text: {
-                fontWeight: 400
+    <AutoSizer>
+      {({ width, height }) => (
+        <div className="chart-wrapper" style={{ width: width, height: height }}>
+          <ResponsiveBar
+            data={props.data || data}
+            minValue={0}
+            maxValue={100}
+            keys={['score']}
+            indexBy="day"
+            margin={{ top: 0, right: 0, bottom: 20, left: 0 }}
+            padding={0.15}
+            colors="#9eacf4"
+            theme={{
+              fontSize: 12,
+              fontFamily: 'inherit',
+              textColor: '#888',
+              axis: {
+                ticks: {
+                  text: {
+                    fontWeight: 400
+                  }
+                }
               }
-            }
-          }
-        }}
-        borderRadius={4}
-        axisBottom={{
-          tickSize: 0,
-          tickPadding: 5,
-          tickRotation: 0,
-          legend: 'day',
-          legendPosition: 'middle',
-          legendOffset: 32
-        }}
-        enableGridY={false}
-        label={d => `${d.value}`}
-        labelSkipWidth={12}
-        labelSkipHeight={12}
-        labelTextColor="#fff"
-        isInteractive={false}
-        animate={true}
-        motionStiffness={90}
-        motionDamping={15}
-      />
-    </div>
+            }}
+            borderRadius={4}
+            axisBottom={{
+              tickSize: 0,
+              tickPadding: 5,
+              tickRotation: 0,
+              legend: 'day',
+              legendPosition: 'middle',
+              legendOffset: 32
+            }}
+            enableGridY={false}
+            label={d => `${d.value}`}
+            labelSkipWidth={12}
+            labelSkipHeight={12}
+            labelTextColor="#fff"
+            isInteractive={false}
+            animate={true}
+            motionStiffness={90}
+            motionDamping={15}
+          />
+        </div>
+      )}
+    </AutoSizer>
   </div>
 );
 

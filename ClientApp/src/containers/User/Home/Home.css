@@ -1,8 +1,8 @@
 .home {
   display: -ms-inline-grid;
   display: inline-grid;
-  -ms-grid-columns: auto 70%;
-      grid-template-columns: auto 70%;
+  -ms-grid-columns: (1fr)[3];
+      grid-template-columns: repeat(3, 1fr);
   grid-gap: 20px;
   width: 100%;
 }
