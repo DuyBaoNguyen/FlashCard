@@ -24,13 +24,20 @@ class DeckWrapper extends Component {
   }
 
   componentDidMount() {
-    this.props.onGetDecks();
+    this.props.onGetDecks('');
+  }
+
+  searchDeckHandler = (event) => {
+    this.props.onGetDecks(event.target.value);
+    this.setState({ activePage: 1 });
   }
 
   render() {
-    let deckList;
+    console.log(this.props.decks);
+    let deckList = <p>There are no decks here!</p>;
+    let pagination;
 
-    if (this.props.decks !== null) {
+    if (this.props.decks !== null && this.props.decks.length > 0) {
       deckList = this.props.decks.map((deck, index) => {
         return (
           <>
@@ -40,6 +47,23 @@ class DeckWrapper extends Component {
           </>
         );
       });
+
+      pagination = (
+        <Pagination
+          hideFirstLastPages
+          prevPageText="<"
+          nextPageText=">"
+          activePage={this.state.activePage}
+          itemsCountPerPage={4}
+          totalItemsCount={
+            this.props.decks !== null ? this.props.decks.length : null
+          }
+          pageRangeDisplayed={5}
+          onChange={this.handlePageChange.bind(this)}
+          activeClass="pagination-item-active"
+          itemClass="pagination-item"
+        />
+      );
     }
 
     return (
@@ -58,26 +82,14 @@ class DeckWrapper extends Component {
               className="deck-header-features-search"
               placeholder="Search..."
               prefix={<Icon icon={searchIcon} color="#aaa" />}
+              onChange={(event) => this.searchDeckHandler(event)}
             />
           </div>
         </div>
         <br />
         <div className="decks">{deckList}</div>
         <div className="deck-pagination">
-          <Pagination
-            hideFirstLastPages
-            prevPageText="<"
-            nextPageText=">"
-            activePage={this.state.activePage}
-            itemsCountPerPage={4}
-            totalItemsCount={
-              this.props.decks !== null ? this.props.decks.length : null
-            }
-            pageRangeDisplayed={5}
-            onChange={this.handlePageChange.bind(this)}
-            activeClass="pagination-item-active"
-            itemClass="pagination-item"
-          />
+          {pagination}
         </div>
       </div>
     );
@@ -91,7 +103,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    onGetDecks: () => dispatch(actions.getDecks()),
+    onGetDecks: (name) => dispatch(actions.getDecks(name)),
   };
 };
 

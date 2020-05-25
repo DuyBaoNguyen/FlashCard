@@ -13,6 +13,7 @@ namespace FlashCard.Dto
 		public bool Approved { get; set; }
 		public DateTime CreatedDate { get; set; }
 		public DateTime LastModifiedDate { get; set; }
+		public string LastTestedTime { get; set; }
 		public PersonDto Owner { get; set; }
 		public PersonDto Author { get; set; }
 		public int TotalCards { get; set; }

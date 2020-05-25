@@ -6,7 +6,7 @@ using FlashCard.Models;
 
 namespace FlashCard.Util
 {
-	public static class Mapper
+    public static class Mapper
 	{
 		public static IQueryable<DeckDto> MapToDeckDto(this IQueryable<Deck> query)
 		{
@@ -20,6 +20,10 @@ namespace FlashCard.Util
 				Approved = d.Approved,
 				CreatedDate = d.CreatedDate,
 				LastModifiedDate = d.LastModifiedDate,
+				LastTestedTime = d.Tests
+					.OrderByDescending(d => d.DateTime)
+					.FirstOrDefault().DateTime
+					.ToString(),
 				FromPublic = d.OwnerId != d.AuthorId,
 				Owner = new PersonDto()
 				{

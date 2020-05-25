@@ -42,5 +42,47 @@ namespace FlashCard.Util
 					return -1;
 			}
 		}
+
+		public static string GetDuration(DateTime testedTime, DateTime now) {
+			var time = now.Subtract(testedTime).TotalSeconds;
+			var temp = 0;
+			var unit = "";
+			var prefix = "Tested";
+
+			if (time < 60)
+			{
+				temp = (int)Math.Ceiling(time);
+				unit = "second";
+			}
+			else if (time < 3600)
+			{
+				temp = (int)Math.Floor(time / 60);
+				unit = "minute";
+			}
+			else if (time < 86400)
+			{
+				temp = (int)Math.Floor(time / 360);
+				unit = "hour";
+			}
+			else if (time < 2592000)
+			{
+				temp = (int)Math.Floor(time / 86000);
+				unit = "day";
+			}
+			else
+			{
+				unit = "date";
+			}
+
+			if (unit == "date")
+			{
+				return $"{prefix} {testedTime.Date}";
+			}
+			if (temp == 1)
+			{
+				return $"{prefix} 1 {unit} ago";
+			}
+			return $"{prefix} {temp} {unit}s ago";
+		}
 	}
 }

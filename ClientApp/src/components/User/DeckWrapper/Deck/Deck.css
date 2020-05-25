@@ -47,7 +47,7 @@
 }
 
 .deck .wrapper .deck-background-color .deck-info .deck-info-value {
-  margin-right: 100px;
+  margin-right: 80px;
   display: -webkit-inline-box;
   display: -ms-inline-flexbox;
   display: inline-flex;
@@ -64,7 +64,6 @@
   font-size: 14px;
   line-height: 32px;
   color: #ffffff;
-  width: 100px;
 }
 
 .deck .wrapper .deck-background-white-1 {

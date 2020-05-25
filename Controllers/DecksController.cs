@@ -45,6 +45,14 @@ namespace FlashCard.Controllers
 				.MapToDeckDto()
 				.ToListAsync();
 
+			var now = DateTime.Now;
+			foreach (var deck in decks)
+			{
+				if (deck.LastTestedTime != null) {
+					deck.LastTestedTime = DateTimeUtil.GetDuration(DateTime.Parse(deck.LastTestedTime), now);
+				}
+			}
+
 			return decks;
 		}
 

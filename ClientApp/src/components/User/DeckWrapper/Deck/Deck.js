@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { Icon } from '@iconify/react';
 import layerGroup from '@iconify/icons-uil/layer-group';
-import calendarAlt from '@iconify/icons-uil/calendar-alt';
+import clock from '@iconify/icons-uil/clock';
 
 import './Deck.css';
 
@@ -23,10 +23,12 @@ class Deck extends Component {
                   />
                   <p>{this.props.deck.totalCards}</p>
                 </div>
-                <div className="deck-info-value">
-                  <Icon icon={calendarAlt} style={{ color: '#ffffff', fontSize: '24px' }} />
-                  <p>{new Date(this.props.deck.createdDate).toLocaleDateString()}</p>
-                </div>
+                {this.props.deck.lastTestedTime !== null && (
+                  <div className="deck-info-value">
+                    <Icon icon={clock} style={{ color: '#ffffff', fontSize: '24px' }} />
+                    <p>{this.props.deck.lastTestedTime}</p>
+                  </div>
+                )}
               </div>
             </div>
             <div className="deck-background-white-1"></div>

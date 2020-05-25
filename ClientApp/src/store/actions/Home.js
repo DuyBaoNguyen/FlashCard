@@ -17,9 +17,9 @@ export const getDecksFailed = () => {
 };
 
 // return dispatch
-export const getDecks = () => {
+export const getDecks = (name) => {
 	return (dispatch) => {
-    axios.get('/api/decks')
+    axios.get(`/api/decks?name=${name}`)
     .then((res) => {
 			dispatch(getDecksSuccess(res.data));
     })
