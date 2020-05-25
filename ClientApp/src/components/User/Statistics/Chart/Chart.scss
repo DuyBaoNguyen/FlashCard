@@ -1,6 +1,7 @@
-.chart {
+.chart-wrapper {
   height: 160px;
-  .chart-wrapper {
+  .chart {
+    max-width: 300px;
     margin: auto;
   }
 }

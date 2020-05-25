@@ -6,8 +6,8 @@ import { Icon } from '@iconify/react';
 import plusIcon from '@iconify/icons-uil/plus';
 import searchIcon from '@iconify/icons-uil/search';
 
-import * as actions from '../../../store/actions/index';
-import Deck from '../Deck/Deck';
+import * as actions from '../../../store/actions';
+import Deck from './Deck/Deck';
 
 import './DeckWrapper.css';
 
@@ -15,13 +15,11 @@ class DeckWrapper extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      activePage: 1,
-      hasError: false,
+      activePage: 1
     };
   }
 
   handlePageChange(pageNumber) {
-    console.log(pageNumber);
     this.setState({ activePage: pageNumber });
   }
 
@@ -31,30 +29,19 @@ class DeckWrapper extends Component {
 
   render() {
     let deckList;
-    if (this.state.hasError) {
-      return <h1>Something went wrong.</h1>;
-    }
 
-    if (this.props.decks === null) {
-      console.log('null');
-    } else {
+    if (this.props.decks !== null) {
       deckList = this.props.decks.map((deck, index) => {
         return (
           <>
             {index >= (this.state.activePage - 1) * 4 && index <= this.state.activePage * 4 - 1 && (
-              <Deck
-                key={deck.id}
-                backgroundColor="#95dded"
-                name={deck.name}
-                description={deck.description}
-                cards={deck.totalCards}
-                date={deck.createdDate}
-              />
+              <Deck key={deck.id} deck={deck} />
             )}
           </>
         );
       });
     }
+
     return (
       <div className="deck-wrapper">
         <div className="deck-header">

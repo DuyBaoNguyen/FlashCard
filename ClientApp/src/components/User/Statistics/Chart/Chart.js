@@ -36,10 +36,10 @@ const data = [
 ];
 
 const chart = props => (
-  <div className="chart">
+  <div className="chart-wrapper">
     <AutoSizer>
       {({ width, height }) => (
-        <div className="chart-wrapper" style={{ width: width, height: height }}>
+        <div className="chart" style={{ width: width, height: height }}>
           <ResponsiveBar
             data={props.data || data}
             minValue={0}

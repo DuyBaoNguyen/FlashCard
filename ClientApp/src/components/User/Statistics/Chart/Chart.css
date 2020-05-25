@@ -1,8 +1,9 @@
-.chart {
+.chart-wrapper {
   height: 160px;
 }
 
-.chart .chart-wrapper {
+.chart-wrapper .chart {
+  max-width: 300px;
   margin: auto;
 }
 /*# sourceMappingURL=Chart.css.map */
