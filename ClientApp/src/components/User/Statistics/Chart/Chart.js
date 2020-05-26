@@ -20,8 +20,6 @@ const chart = props => {
     item.percent = item.percent || 1;
   }
 
-  console.log(data);
-
   return (
     <div className="chart-wrapper">
       <AutoSizer>

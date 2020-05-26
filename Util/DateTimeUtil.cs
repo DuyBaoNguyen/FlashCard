@@ -61,12 +61,12 @@ namespace FlashCard.Util
 			}
 			else if (time < 86400)
 			{
-				temp = (int)Math.Floor(time / 360);
+				temp = (int)Math.Floor(time / 3600);
 				unit = "hour";
 			}
 			else if (time < 2592000)
 			{
-				temp = (int)Math.Floor(time / 86000);
+				temp = (int)Math.Floor(time / 86400);
 				unit = "day";
 			}
 			else
