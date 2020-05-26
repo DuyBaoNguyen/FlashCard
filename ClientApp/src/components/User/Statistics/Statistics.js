@@ -1,20 +1,38 @@
-import React, { PureComponent } from 'react';
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
 
 import Chart from './Chart/Chart';
+import * as actions from '../../../store/actions';
+
 import './Statistics.css';
 
-class Statistics extends PureComponent {
+class Statistics extends Component {
+  componentDidMount() {
+    this.props.onGetStatistics();
+  }
+
   render() {
     return (
       <div className="statistics-wrapper">
         <div className="statistics-header">
           <p>Statistics</p>
         </div>
-        <p style={{ fontSize: 12 }}>(%) Failed cards on total tested cards</p>
-        <Chart data={undefined} />
+        <Chart data={this.props.statistics} />
       </div>
     );
   }
 }
 
-export default Statistics;
+const mapStateToProps = state => {
+  return {
+    statistics: state.home.statistics
+  };
+};
+
+const mapDispatchToProps = dispatch => {
+  return {
+    onGetStatistics: () => dispatch(actions.getStatistics())
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Statistics);

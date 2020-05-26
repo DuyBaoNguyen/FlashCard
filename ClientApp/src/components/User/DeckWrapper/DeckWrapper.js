@@ -33,19 +33,14 @@ class DeckWrapper extends Component {
   }
 
   render() {
-    console.log(this.props.decks);
     let deckList = <p>There are no decks here!</p>;
     let pagination;
 
     if (this.props.decks !== null && this.props.decks.length > 0) {
       deckList = this.props.decks.map((deck, index) => {
-        return (
-          <>
-            {index >= (this.state.activePage - 1) * 4 && index <= this.state.activePage * 4 - 1 && (
-              <Deck key={deck.id} deck={deck} />
-            )}
-          </>
-        );
+        if (index >= (this.state.activePage - 1) * 4 && index <= this.state.activePage * 4 - 1) {
+          return <Deck key={deck.id} deck={deck} />;
+        }
       });
 
       pagination = (

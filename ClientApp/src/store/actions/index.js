@@ -1,2 +1,6 @@
-export {increase} from './Counter';
-export {getDecks} from './Home';
+export { increase } from './Counter';
+
+export {
+  getDecks,
+  getStatistics
+} from './Home';
