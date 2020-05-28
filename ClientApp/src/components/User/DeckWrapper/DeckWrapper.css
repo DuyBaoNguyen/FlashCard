@@ -33,7 +33,12 @@
           align-items: center;
 }
 
+.deck-wrapper .deck-pagination .pagination {
+  list-style-type: none;
+}
+
 .deck-wrapper .deck-pagination .pagination li {
+  display: inline-block;
   margin-left: 10px;
   margin-right: 10px;
 }
@@ -55,7 +60,7 @@
 }
 
 .deck-wrapper .deck-header {
-  color: #9eacf4;
+  color: #535353;
   font-style: normal;
   font-weight: bold;
   font-size: 18px;

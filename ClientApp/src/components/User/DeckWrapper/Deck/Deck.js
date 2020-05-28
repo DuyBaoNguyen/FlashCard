@@ -10,7 +10,7 @@ class Deck extends Component {
   render() {
     return (
       <div className="deck">
-        <Link to={`/deck/${this.props.deck.id}`}>
+        <Link to={`/decks/${this.props.deck.id}`}>
           <div className="wrapper">
             <div className="deck-background-color" style={{ background: this.props.deck.theme }}>
               <div className="deck-name">{this.props.deck.name}</div>

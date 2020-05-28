@@ -14,8 +14,12 @@ const tempData = [
   { day: "Sun", percent: 0 }
 ];
 
+const isToday = ({ indexValue }) => indexValue === new Date().toString().substr(0, 3);
+const getColor = bar => isToday(bar) ? '#ffb922' : '#eee';
+
 const chart = props => {
   const data = props.data || tempData;
+  // const data = tempData;
   for (let item of data) {
     item.percent = item.percent || 1;
   }
@@ -33,11 +37,11 @@ const chart = props => {
               indexBy="day"
               margin={{ top: 0, right: 0, bottom: 20, left: 0 }}
               padding={0.15}
-              colors="#9eacf4"
+              colors={getColor}
               theme={{
-                fontSize: 12,
+                fontSize: 13,
                 fontFamily: 'inherit',
-                textColor: '#888',
+                textColor: '#555',
                 axis: {
                   ticks: {
                     text: {
@@ -59,7 +63,7 @@ const chart = props => {
               label={d => `${d.value}`}
               labelSkipWidth={12}
               labelSkipHeight={12}
-              labelTextColor="#fff"
+              labelTextColor="#535353"
               isInteractive={false}
               animate={true}
               motionStiffness={90}
