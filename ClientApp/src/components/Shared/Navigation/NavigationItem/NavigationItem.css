@@ -1,0 +1,18 @@
+.navigation-item {
+  display: inline-block;
+  margin-left: 30px;
+}
+
+.navigation-item a {
+  color: white;
+  font-size: 14px;
+}
+
+.navigation-item a:hover {
+  color: white;
+}
+
+.navigation-item a.active {
+  font-weight: 800;
+}
+/*# sourceMappingURL=NavigationItem.css.map */

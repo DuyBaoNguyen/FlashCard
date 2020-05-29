@@ -1,0 +1,23 @@
+.navigation-wrapper {
+  background-color: #9eacf4;
+  height: 56px;
+  box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.1);
+  margin-bottom: 20px;
+  .container {
+    height: 100%;
+    .navigation {
+      height: 100%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      .brand {
+        color: white;
+        font-size: 20px;
+      }
+      .navigation-items {
+        list-style-type: none;
+        margin: 0;
+      }
+    }
+  }
+}

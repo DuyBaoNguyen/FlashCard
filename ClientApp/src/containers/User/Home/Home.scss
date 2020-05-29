@@ -1,8 +1,10 @@
 .home {
-  // background-color: #F7F7F7;
   display: inline-grid;
   grid-template-columns: repeat(3, 1fr);
   grid-gap: 20px;
   // height: 85vh;
   width: 100%;
+  .deck-wrapper {
+    grid-column: span 2;
+  }
 }

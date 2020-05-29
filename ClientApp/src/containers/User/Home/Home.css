@@ -6,4 +6,8 @@
   grid-gap: 20px;
   width: 100%;
 }
+
+.home .deck-wrapper {
+  grid-column: span 2;
+}
 /*# sourceMappingURL=Home.css.map */

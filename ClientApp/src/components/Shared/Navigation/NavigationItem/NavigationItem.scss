@@ -1,0 +1,14 @@
+.navigation-item {
+  display: inline-block;
+  margin-left: 30px;
+  a {
+    color: white;
+    font-size: 14px;
+    &:hover {
+      color: white;
+    }
+    &.active {
+      font-weight: 800;
+    }
+  }
+}

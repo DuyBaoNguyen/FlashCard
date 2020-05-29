@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Switch } from 'react-router-dom';
 import { Route } from 'react-router';
-import { Layout } from './components/Shared/Layout/Layout';
+import Layout from './components/Shared/Layout/Layout';
 
 import Home from './containers/User/Home/Home';
 import CreateDeck from './containers/User/CreateDeck/CreateDeck';
