@@ -1,13 +1,15 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, withRouter } from 'react-router-dom';
 import { Icon } from '@iconify/react';
 import userIcon from '@iconify/icons-uil/user';
 import logoutIcon from '@iconify/icons-uil/arrow-left';
 import arrowDown from '@iconify/icons-uil/angle-down';
+import { connect } from 'react-redux';
 
 import Container from '../Container/Container';
 import NavigationItem from './NavigationItem/NavigationItem';
-import NavigationDropDown from './NavigationDropDown/NavigationDropDown';
+import DropDown from '../DropDown/DropDown';
+import DropDownItem from '../DropDownItem/DropDownItem';
 import authService from '../../api-authorization/AuthorizeService';
 import { ApplicationPaths } from '../../api-authorization/ApiAuthorizationConstants';
 import './Navigation.css';
@@ -38,31 +40,29 @@ class Navigation extends Component {
   render() {
     let navigation;
     if (this.state.isAuthenticated) {
-      const dropDownLabel = (
-        <span>
-          Hi, User!
-          <Icon icon={arrowDown} style={{ fontSize: 20 }} />
-        </span>
-      );
-      const dropDownItems = [
-        {
-          icon: userIcon,
-          label: 'Profile',
-          to: '/profile'
-        },
-        {
-          icon: logoutIcon,
-          label: 'Logout',
-          to: { pathname: ApplicationPaths.LogOut, state: { local: true } }
-        }
-      ];
+      const name = this.props.profile?.displayName || 'User';
+      const logoutPath = {
+        pathname: ApplicationPaths.LogOut,
+        state: { local: true }
+      };
 
       navigation = (
         <ul className="navigation-items">
           <NavigationItem to="/" exact label="Home" />
           <NavigationItem to="/cards" label="My cards" />
           <NavigationItem to="/market" label="Market" />
-          <NavigationDropDown items={dropDownItems} label={dropDownLabel} />
+          <DropDown label={`Hi, ${name}!`} postfix={<Icon icon={arrowDown} style={{ fontSize: 20 }} />}>
+            <DropDownItem
+              type="link"
+              path="/profile"
+              icon={<Icon icon={userIcon} />}
+              label="Profile" />
+            <DropDownItem
+              type="link"
+              path={logoutPath}
+              icon={<Icon icon={logoutIcon} />}
+              label="Logout" />
+          </DropDown>
         </ul>
       );
     }
@@ -80,4 +80,10 @@ class Navigation extends Component {
   }
 }
 
-export default Navigation;
+const mapStateToProps = state => {
+  return {
+    profile: state.home.profile
+  };
+};
+
+export default withRouter(connect(mapStateToProps)(Navigation));

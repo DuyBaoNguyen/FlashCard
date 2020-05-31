@@ -2,5 +2,6 @@ export { increase } from './Counter';
 
 export {
   getDecks,
-  getStatistics
+  getStatistics,
+  getProfile
 } from './Home';

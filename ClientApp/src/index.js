@@ -4,12 +4,11 @@ import { createStore, combineReducers, applyMiddleware } from 'redux';
 import { Provider } from 'react-redux';
 import { Router } from 'react-router-dom';
 import thunk  from 'redux-thunk';
-import * as reducers from './store/reducers';
-
 import App from './App';
-
 import history from './history';
 //import registerServiceWorker from './registerServiceWorker';
+
+import * as reducers from './store/reducers';
 
 const baseUrl = document.getElementsByTagName('base')[0].getAttribute('href');
 const rootElement = document.getElementById('root');

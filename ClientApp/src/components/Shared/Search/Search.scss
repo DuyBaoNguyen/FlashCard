@@ -1,0 +1,25 @@
+.search-box {
+  display: inline-flex;
+  width: 175px;
+  background-color: #f5f5f5;
+  border-radius: 20px;
+  padding: 4px 10px;
+  .search-prefix {
+    display: flex;
+    align-items: center;
+    margin-right: 4px;
+    color: #9c9c9c;
+    font-size: 16px;
+  }
+  input {
+    width: 100%;
+    background-color: inherit;
+    border: none;
+    font-size: 14px;
+    padding: 4px 0;
+    color: #535353;
+    &::placeholder {
+      color: #c1c1c1;
+    }
+  }
+}

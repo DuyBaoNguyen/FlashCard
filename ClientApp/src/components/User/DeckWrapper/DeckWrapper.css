@@ -38,8 +38,10 @@
 
 .deck-wrapper .deck-pagination .pagination li {
   display: inline-block;
+  font-size: 14px;
   margin-left: 10px;
   margin-right: 10px;
+  padding: 2px;
 }
 
 .deck-wrapper .deck-pagination .pagination li a {
@@ -91,9 +93,7 @@
 }
 
 .deck-wrapper .deck-header .deck-header-features .deck-header-features-add {
-  vertical-align: baseline;
-  background-color: #9eacf4;
-  margin-right: 20px;
+  margin-right: 10px;
 }
 
 .deck-wrapper .deck-header .deck-header-features .deck-header-features-search {

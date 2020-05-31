@@ -1,10 +1,22 @@
-@import '~antd/dist/antd.css';
+/* @import '~antd/dist/antd.css'; */
 
 /* Provide sufficient contrast against white background */
 * {
   outline: none !important;
 	font-family: 'Lato';
   box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+}
+
+a {
+  text-decoration: none;
+}
+
+h1, h2, h3, h4, h5, h6, p {
+  margin-top: 0;
 }
 
 .ant-btn-primary {

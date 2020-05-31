@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import Pagination from 'react-js-pagination';
-import { Button, Input } from 'antd';
 import { Icon } from '@iconify/react';
 import plusIcon from '@iconify/icons-uil/plus';
-import searchIcon from '@iconify/icons-uil/search';
 
+import Search from '../../Shared/Search/Search';
+import Button from '../../Shared/Button/Button';
 import * as actions from '../../../store/actions';
 import Deck from './Deck/Deck';
 
@@ -33,7 +33,7 @@ class DeckWrapper extends Component {
   }
 
   render() {
-    let deckList = <p>There are no decks here!</p>;
+    let deckList = <p style={{ color: '#535353' }}>There are no decks here!</p>;
     let pagination;
 
     if (this.props.decks !== null && this.props.decks.length > 0) {
@@ -66,19 +66,8 @@ class DeckWrapper extends Component {
         <div className="deck-header">
           <p>My decks</p>
           <div className="deck-header-features">
-            <Button
-              className="deck-header-features-add"
-              type="primary"
-              shape="rounded"
-              icon={<Icon icon={plusIcon} />}
-              size="medium"
-            />
-            <Input
-              className="deck-header-features-search"
-              placeholder="Search..."
-              prefix={<Icon icon={searchIcon} color="#aaa" />}
-              onChange={(event) => this.searchDeckHandler(event)}
-            />
+            <Button className="deck-header-features-add" icon={<Icon icon={plusIcon} />}></Button>
+            <Search placeholder="Search..." onChange={(event) => this.searchDeckHandler(event)} />
           </div>
         </div>
         <br />
@@ -90,6 +79,7 @@ class DeckWrapper extends Component {
     );
   }
 }
+
 const mapStateToProps = (state) => {
   return {
     decks: state.home.decks,

@@ -1,19 +1,21 @@
 import React, { Component } from 'react';
-import { Switch } from 'react-router-dom';
+import { Switch, withRouter } from 'react-router-dom';
 import { Route } from 'react-router';
 import Layout from './components/Shared/Layout/Layout';
+import { connect } from 'react-redux';
 
 import Home from './containers/User/Home/Home';
 import CreateDeck from './containers/User/CreateDeck/CreateDeck';
-
 import AuthorizeRoute from './components/api-authorization/AuthorizeRoute';
 import ApiAuthorizationRoutes from './components/api-authorization/ApiAuthorizationRoutes';
 import { ApplicationPaths } from './components/api-authorization/ApiAuthorizationConstants';
-
+import * as actions from './store/actions';
 import './custom.css';
 
-export default class App extends Component {
-	static displayName = App.name;
+class App extends Component {
+	componentDidMount() {
+		this.props.onGetProfile();
+	}
 
 	render() {
 		return (
@@ -28,3 +30,17 @@ export default class App extends Component {
 		);
 	}
 }
+
+const mapStateToProps = state => {
+	return {
+		profile: state.home.profile
+	};
+};
+
+const mapDispatchToProps = dispatch => {
+	return {
+		onGetProfile: () => dispatch(actions.getProfile())
+	};
+};
+
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(App));

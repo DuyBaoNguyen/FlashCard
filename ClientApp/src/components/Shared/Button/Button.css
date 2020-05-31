@@ -1,0 +1,34 @@
+.button {
+  padding: 8px;
+  background-color: #9eacf4;
+  border: none;
+  border-radius: 7px;
+  font-size: 14px;
+  text-align: center;
+  color: white;
+  display: -webkit-inline-box;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+  cursor: pointer;
+}
+
+.button .icon {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  font-size: 16px;
+  color: white;
+  margin-right: 10px;
+}
+
+.button:hover {
+  background-color: #b0bdff;
+}
+
+.button-only-icon .icon {
+  margin-right: 0;
+}
+/*# sourceMappingURL=Button.css.map */
