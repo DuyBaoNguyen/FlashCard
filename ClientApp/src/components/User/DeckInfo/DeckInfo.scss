@@ -1,0 +1,57 @@
+.deck-information {
+  background: #ffffff;
+  box-shadow: 0px 0px 30px rgba(0, 0, 0, 0.05);
+  border-radius: 15px;
+  padding: 30px;
+  .deck-info-header {
+    color: #535353;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 18px;
+    .deck-info-options {
+      float: right;
+      .deck-info-dropdown {
+        font-weight: normal;
+        .delete-deck-btn {
+          color: red;
+        }
+      }
+    }
+  }
+  .deck-description {
+    color: #979797;
+    font-size: 14px;
+    margin-bottom: 20px;
+  }
+  .deck-field {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+    span {
+      font-size: 14px;
+    }
+    .deck-field-label {
+      color: #979797;
+    }
+    .deck-field-value {
+      color: #9eacf4;
+      font-weight: bold;
+    }
+  }
+  .deck-features {
+    display: grid;
+    grid-template-columns: auto auto;
+    gap: 20px;
+    a {
+      background-color: #9eacf4;
+      color: #fff;
+      font-size: 14px;
+      border-radius: 7px;
+      text-align: center;
+      padding: 8px;
+    }
+    a:hover {
+      background-color: #b0bdff;
+    }
+  }
+}

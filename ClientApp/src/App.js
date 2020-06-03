@@ -6,6 +6,7 @@ import { connect } from 'react-redux';
 
 import Home from './containers/User/Home/Home';
 import CreateDeck from './containers/User/CreateDeck/CreateDeck';
+import DeckDetail from './containers/User/DeckDetail/DeckDetail';
 import AuthorizeRoute from './components/api-authorization/AuthorizeRoute';
 import ApiAuthorizationRoutes from './components/api-authorization/ApiAuthorizationRoutes';
 import { ApplicationPaths } from './components/api-authorization/ApiAuthorizationConstants';
@@ -23,6 +24,7 @@ class App extends Component {
 				<Switch>
 					<AuthorizeRoute exact path="/" component={Home} />
 					<AuthorizeRoute exact path="/createDeck" component={CreateDeck} />
+					<AuthorizeRoute path="/decks/:deckId" component={DeckDetail} />
 
 					<Route path={ApplicationPaths.ApiAuthorizationPrefix} component={ApiAuthorizationRoutes} />
 				</Switch>

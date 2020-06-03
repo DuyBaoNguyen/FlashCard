@@ -6,8 +6,8 @@ import './Chart.css';
 
 const tempData = [
   { day: "Mon", percent: 0 },
-  { day: "Tue", percent: 0 },
-  { day: "Wed", percent: 0 },
+  { day: "Tue", percent: 50 },
+  { day: "Wed", percent: 65 },
   { day: "Thu", percent: 0 },
   { day: "Fri", percent: 0 },
   { day: "Sat", percent: 0 },
@@ -26,7 +26,7 @@ const chart = props => {
 
   return (
     <div className="chart-wrapper">
-      <AutoSizer>
+      <AutoSizer className="auto-sizer">
         {({ width, height }) => (
           <div className="chart" style={{ width: width, height: height }}>
             <ResponsiveBar

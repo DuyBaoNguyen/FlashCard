@@ -1,7 +1,11 @@
 .chart-wrapper {
   height: 160px;
-  .chart {
-    max-width: 300px;
-    margin: auto;
+  .auto-sizer {
+    width: 100%;
+    .chart {
+      // display: inline-block;
+      max-width: 300px;
+      margin: auto;
+    }
   }
 }
