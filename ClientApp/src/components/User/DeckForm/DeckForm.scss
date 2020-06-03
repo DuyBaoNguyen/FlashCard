@@ -31,7 +31,7 @@
 				height: 50px;
 				border: none;
 				box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.05);
-				background: #9EACF4;
+				// background: #9EACF4;
 				border-radius: 15px;
 				font-style: normal;
 				font-size: 18px;
@@ -57,8 +57,6 @@
 			}
 			input:checked ~ .button span {
 				border: 0px solid white;
-				// opacity: 0.5;
-				// transform: scale(2,2);
 			}
 			.button {
 				display: inline-block;
