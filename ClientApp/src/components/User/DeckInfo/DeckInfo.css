@@ -1,0 +1,77 @@
+.deck-information {
+  background: #ffffff;
+  -webkit-box-shadow: 0px 0px 30px rgba(0, 0, 0, 0.05);
+          box-shadow: 0px 0px 30px rgba(0, 0, 0, 0.05);
+  border-radius: 15px;
+  padding: 30px;
+}
+
+.deck-information .deck-info-header {
+  color: #535353;
+  font-style: normal;
+  font-weight: bold;
+  font-size: 18px;
+}
+
+.deck-information .deck-info-header .deck-info-options {
+  float: right;
+}
+
+.deck-information .deck-info-header .deck-info-options .deck-info-dropdown {
+  font-weight: normal;
+}
+
+.deck-information .deck-info-header .deck-info-options .deck-info-dropdown .delete-deck-btn {
+  color: red;
+}
+
+.deck-information .deck-description {
+  color: #979797;
+  font-size: 14px;
+  margin-bottom: 20px;
+}
+
+.deck-information .deck-field {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.deck-information .deck-field span {
+  font-size: 14px;
+}
+
+.deck-information .deck-field .deck-field-label {
+  color: #979797;
+}
+
+.deck-information .deck-field .deck-field-value {
+  color: #9eacf4;
+  font-weight: bold;
+}
+
+.deck-information .deck-features {
+  display: -ms-grid;
+  display: grid;
+  -ms-grid-columns: auto auto;
+      grid-template-columns: auto auto;
+  gap: 20px;
+}
+
+.deck-information .deck-features a {
+  background-color: #9eacf4;
+  color: #fff;
+  font-size: 14px;
+  border-radius: 7px;
+  text-align: center;
+  padding: 8px;
+}
+
+.deck-information .deck-features a:hover {
+  background-color: #b0bdff;
+}
+/*# sourceMappingURL=DeckInfo.css.map */

@@ -1,0 +1,56 @@
+.deck-detail {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  margin-right: -20px;
+}
+
+.deck-detail .back-feature {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  color: #979797;
+}
+
+.deck-detail .back-feature .back-feature-icon {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  font-size: 22px;
+}
+
+.deck-detail .back-feature .back-feature-label {
+  font-size: 14px;
+  line-height: 22px;
+}
+
+.deck-detail section {
+  overflow: visible;
+  padding-right: 20px;
+}
+
+.deck-detail .left-section {
+  width: 33.33%;
+}
+
+.deck-detail .left-section .statistics-wrapper,
+.deck-detail .left-section .deck-information {
+  margin-top: 20px;
+}
+
+.deck-detail .right-section {
+  width: 66.67%;
+}
+
+.deck-detail .deck-cards {
+  background: #ffffff;
+  -webkit-box-shadow: 0px 0px 30px rgba(0, 0, 0, 0.05);
+          box-shadow: 0px 0px 30px rgba(0, 0, 0, 0.05);
+  border-radius: 15px;
+  padding: 30px;
+  height: 85vh;
+}
+/*# sourceMappingURL=DeckDetail.css.map */

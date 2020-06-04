@@ -11,6 +11,7 @@
      -moz-user-select: none;
       -ms-user-select: none;
           user-select: none;
+  color: #535353;
 }
 
 .dropdown-item .dropdown-item-icon {
@@ -22,12 +23,10 @@
           align-items: center;
   margin-right: 10px;
   font-size: 16px;
-  color: #535353;
 }
 
 .dropdown-item .dropdown-item-label {
   font-size: 14px;
-  color: #535353;
   white-space: nowrap;
 }
 
