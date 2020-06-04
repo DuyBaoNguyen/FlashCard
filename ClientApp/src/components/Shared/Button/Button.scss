@@ -1,27 +1,29 @@
 .button {
-  padding: 8px;
-  // background-color: #9eacf4;
-  border: none;
-  border-radius: 7px;
-  font-size: 14px;
-  text-align: center;
-  color: white;
-  display: inline-flex;
-  cursor: pointer;
-  .icon {
-    display: flex;
-    align-items: center;
-    font-size: 16px;
-    color: white;
-    margin-right: 10px;
-  }
-  &:hover {
-    // background-color: #b0bdff;
-  }
+	padding: 8px;
+	background-color: #9eacf4;
+	border: none;
+	border-radius: 7px;
+	font-size: 14px;
+	text-align: center;
+	color: white;
+	display: inline-flex;
+	transition: 0.3s;
+	cursor: pointer;
+	.icon {
+		display: flex;
+		align-items: center;
+		font-size: 16px;
+		color: white;
+		margin-right: 10px;
+	}
+	&:hover {
+		transition: 0.3s;
+		background-color: #b0bdff;
+	}
 }
 
 .button-only-icon {
-  .icon {
-    margin-right: 0;
-  }
+	.icon {
+		margin-right: 0;
+	}
 }

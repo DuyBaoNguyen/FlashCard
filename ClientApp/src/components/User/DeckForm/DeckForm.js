@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import * as actions from '../../../store/actions';
+import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { Button, Input, Pagination } from 'antd';
 import authService from '../../api-authorization/AuthorizeService';
@@ -93,7 +94,7 @@ class DeckForm extends Component {
 									// checked={this.state.selectedOption === '#95DDED'}
 									// onChange={(e) => this.handleInputChange(e)}
 								/>
-								<div class="button">
+								<div class="button-circle">
 									<span style={{ background: '#95dded' }}></span>
 								</div>
 							</label>
@@ -102,12 +103,12 @@ class DeckForm extends Component {
 								<input
 									type="radio"
 									name="theme"
-									value="#95dded"
+									value="#9fcbf5"
 									// checked={this.state.selectedOption === '#9FCBF5'}
 									// onChange={(e) => this.handleInputChange(e)}
 								/>
-								<div class="button">
-									<span style={{ background: '#95dded' }}></span>
+								<div class="button-circle">
+									<span style={{ background: '#9fcbf5' }}></span>
 								</div>
 							</label>
 
@@ -119,7 +120,7 @@ class DeckForm extends Component {
 									// checked={this.state.selectedOption === '#FFB1B1'}
 									// onChange={(e) => this.handleInputChange(e)}
 								/>
-								<div class="button">
+								<div class="button-circle">
 									<span style={{ background: '#ffb1b1' }}></span>
 								</div>
 							</label>
@@ -132,7 +133,7 @@ class DeckForm extends Component {
 									// checked={this.state.selectedOption === '#FDD39D'}
 									// onChange={(e) => this.handleInputChange(e)}
 								/>
-								<div class="button">
+								<div class="button-circle">
 									<span style={{ background: '#fdd39d' }}></span>
 								</div>
 							</label>
@@ -145,7 +146,7 @@ class DeckForm extends Component {
 									// checked={this.state.selectedOption === '#B7EB8F'}
 									// onChange={(e) => this.handleInputChange(e)}
 								/>
-								<div class="button">
+								<div class="button-circle">
 									<span style={{ background: '#b7eb8f' }}></span>
 								</div>
 							</label>
@@ -158,13 +159,15 @@ class DeckForm extends Component {
 									// checked={this.state.selectedOption === '#EBAAEA'}
 									// onChange={(e) => this.handleInputChange(e)}
 								/>
-								<div class="button">
+								<div class="button-circle">
 									<span style={{ background: '#ebaaea' }}></span>
 								</div>
 							</label>
 						</div>
 						<div className="deck-form-button">
-							<button className="deck-form-button-cancel">Cancel</button>
+							<Link to={'/'}>
+								<button className="deck-form-button-cancel">Cancel</button>
+							</Link>
 							<button
 								className="deck-form-button-create"
 								type="submit"

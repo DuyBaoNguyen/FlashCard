@@ -50,6 +50,7 @@
   border: none;
   -webkit-box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.05);
           box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.05);
+  background: #9EACF4;
   border-radius: 15px;
   font-style: normal;
   font-size: 18px;
@@ -87,11 +88,11 @@
   display: none;
 }
 
-.deck-form .deck-form-wrapper .deck-form-circle input:checked ~ .button span {
+.deck-form .deck-form-wrapper .deck-form-circle input:checked ~ .button-circle span {
   border: 0px solid white;
 }
 
-.deck-form .deck-form-wrapper .deck-form-circle .button {
+.deck-form .deck-form-wrapper .deck-form-circle .button-circle {
   display: inline-block;
   position: relative;
   width: 50px;
@@ -100,7 +101,7 @@
   cursor: pointer;
 }
 
-.deck-form .deck-form-wrapper .deck-form-circle .button span {
+.deck-form .deck-form-wrapper .deck-form-circle .button-circle span {
   border: 10px solid white;
   display: block;
   position: absolute;
@@ -117,7 +118,7 @@
   transition: ease 0.3s;
 }
 
-.deck-form .deck-form-wrapper .deck-form-circle .button span:hover {
+.deck-form .deck-form-wrapper .deck-form-circle .button-circle span:hover {
   padding: 10px;
 }
 

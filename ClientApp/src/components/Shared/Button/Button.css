@@ -1,5 +1,6 @@
 .button {
   padding: 8px;
+  background-color: #9eacf4;
   border: none;
   border-radius: 7px;
   font-size: 14px;
@@ -8,6 +9,8 @@
   display: -webkit-inline-box;
   display: -ms-inline-flexbox;
   display: inline-flex;
+  -webkit-transition: 0.3s;
+  transition: 0.3s;
   cursor: pointer;
 }
 
@@ -21,6 +24,12 @@
   font-size: 16px;
   color: white;
   margin-right: 10px;
+}
+
+.button:hover {
+  -webkit-transition: 0.3s;
+  transition: 0.3s;
+  background-color: #b0bdff;
 }
 
 .button-only-icon .icon {
