@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import * as actions from '../../../store/actions';
 import PropTypes from 'prop-types';
-import axios from 'axios';
 import { Button, Input, Pagination } from 'antd';
+import authService from '../../api-authorization/AuthorizeService';
 
 import './DeckForm.css';
 
@@ -15,27 +17,21 @@ class DeckForm extends Component {
 			hasError: false,
 			name: null,
 			description: null,
-			color: '#95DDED',
+			theme: '#95DDED',
 		};
 	}
 
 	createDeck = () => {
-		axios({
-			method: 'post',
-			url: '/api/decks',
-			data: {
-				name: 'Lam',
-				description: 'Some text here',
-				theme: '#000000',
-			},
-		})
-			.then(function (response) {
-				console.log(response);
-			})
-			.catch(function (error) {
-				console.log(error);
-			});
+
+		let deck = {
+			name: this.state.name,
+			description: this.state.description,
+			theme: this.state.theme,
+		}
+
+		this.props.onCreateDeck(deck);
 	};
+
 	handleSubmit = (event) => {
 		event.preventDefault();
 		this.createDeck();
@@ -45,11 +41,9 @@ class DeckForm extends Component {
 		let target = event.target;
 		let name = target.name;
 		let value = target.value;
-		console.log(name, value);
 		this.setState({
 			[name]: value,
 		});
-		console.log(this.state.color);
 	};
 
 	render() {
@@ -93,7 +87,7 @@ class DeckForm extends Component {
 							<label class="circle">
 								<input
 									type="radio"
-									name="color"
+									name="theme"
 									value="#95DDED"
 									defaultChecked
 									// checked={this.state.selectedOption === '#95DDED'}
@@ -107,7 +101,7 @@ class DeckForm extends Component {
 							<label class="circle">
 								<input
 									type="radio"
-									name="color"
+									name="theme"
 									value="#9FCBF5"
 									// checked={this.state.selectedOption === '#9FCBF5'}
 									// onChange={(e) => this.handleInputChange(e)}
@@ -120,7 +114,7 @@ class DeckForm extends Component {
 							<label class="circle">
 								<input
 									type="radio"
-									name="color"
+									name="theme"
 									value="#FFB1B1"
 									// checked={this.state.selectedOption === '#FFB1B1'}
 									// onChange={(e) => this.handleInputChange(e)}
@@ -133,7 +127,7 @@ class DeckForm extends Component {
 							<label class="circle">
 								<input
 									type="radio"
-									name="color"
+									name="theme"
 									value="#FDD39D"
 									// checked={this.state.selectedOption === '#FDD39D'}
 									// onChange={(e) => this.handleInputChange(e)}
@@ -146,7 +140,7 @@ class DeckForm extends Component {
 							<label class="circle">
 								<input
 									type="radio"
-									name="color"
+									name="theme"
 									value="#B7EB8F"
 									// checked={this.state.selectedOption === '#B7EB8F'}
 									// onChange={(e) => this.handleInputChange(e)}
@@ -159,7 +153,7 @@ class DeckForm extends Component {
 							<label class="circle">
 								<input
 									type="radio"
-									name="color"
+									name="theme"
 									value="#EBAAEA"
 									// checked={this.state.selectedOption === '#EBAAEA'}
 									// onChange={(e) => this.handleInputChange(e)}
@@ -186,4 +180,16 @@ class DeckForm extends Component {
 	}
 }
 
-export default DeckForm;
+const mapStateToProps = (state) => {
+  return {
+    deck: state.home.deck,
+  };
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    onCreateDeck: (deck) => dispatch(actions.createDeck(deck)),
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(DeckForm);

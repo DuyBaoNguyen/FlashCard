@@ -5,3 +5,7 @@ export {
   getStatistics,
   getProfile
 } from './Home';
+
+export {
+  createDeck
+} from './Deck';
