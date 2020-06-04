@@ -19,9 +19,6 @@ class CreateDeck extends Component {
 		}
 		return (
 			<div className="create-deck-wrapper">
-          <div className='back-button'>
-          Back
-        </div>
 				<div className='form'>
         <DeckForm header='Create new deck'/>
         </div>

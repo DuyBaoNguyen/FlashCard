@@ -15,7 +15,6 @@ export const createDeckFail = () => {
 };
 
 export const createDeck = (deck) => {
-	console.log('test');
 	return (dispatch) => {
 		axios
 			.post('/api/decks', {

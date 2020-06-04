@@ -4,6 +4,7 @@ import * as actions from '../../../store/actions';
 import PropTypes from 'prop-types';
 import { Button, Input, Pagination } from 'antd';
 import authService from '../../api-authorization/AuthorizeService';
+import withErrorHandler from '../../../hoc/withErrorHandler';
 
 import './DeckForm.css';
 
@@ -17,17 +18,16 @@ class DeckForm extends Component {
 			hasError: false,
 			name: null,
 			description: null,
-			theme: '#95DDED',
+			theme: '#95dded',
 		};
 	}
 
 	createDeck = () => {
-
 		let deck = {
 			name: this.state.name,
 			description: this.state.description,
 			theme: this.state.theme,
-		}
+		};
 
 		this.props.onCreateDeck(deck);
 	};
@@ -88,13 +88,13 @@ class DeckForm extends Component {
 								<input
 									type="radio"
 									name="theme"
-									value="#95DDED"
+									value="#95dded"
 									defaultChecked
 									// checked={this.state.selectedOption === '#95DDED'}
 									// onChange={(e) => this.handleInputChange(e)}
 								/>
 								<div class="button">
-									<span style={{ background: '#95DDED' }}></span>
+									<span style={{ background: '#95dded' }}></span>
 								</div>
 							</label>
 
@@ -102,12 +102,12 @@ class DeckForm extends Component {
 								<input
 									type="radio"
 									name="theme"
-									value="#9FCBF5"
+									value="#95dded"
 									// checked={this.state.selectedOption === '#9FCBF5'}
 									// onChange={(e) => this.handleInputChange(e)}
 								/>
 								<div class="button">
-									<span style={{ background: '#9FCBF5' }}></span>
+									<span style={{ background: '#95dded' }}></span>
 								</div>
 							</label>
 
@@ -115,12 +115,12 @@ class DeckForm extends Component {
 								<input
 									type="radio"
 									name="theme"
-									value="#FFB1B1"
+									value="#ffb1b1"
 									// checked={this.state.selectedOption === '#FFB1B1'}
 									// onChange={(e) => this.handleInputChange(e)}
 								/>
 								<div class="button">
-									<span style={{ background: '#FFB1B1' }}></span>
+									<span style={{ background: '#ffb1b1' }}></span>
 								</div>
 							</label>
 
@@ -128,12 +128,12 @@ class DeckForm extends Component {
 								<input
 									type="radio"
 									name="theme"
-									value="#FDD39D"
+									value="#fdd39d"
 									// checked={this.state.selectedOption === '#FDD39D'}
 									// onChange={(e) => this.handleInputChange(e)}
 								/>
 								<div class="button">
-									<span style={{ background: '#FDD39D' }}></span>
+									<span style={{ background: '#fdd39d' }}></span>
 								</div>
 							</label>
 
@@ -141,12 +141,12 @@ class DeckForm extends Component {
 								<input
 									type="radio"
 									name="theme"
-									value="#B7EB8F"
+									value="#b7eb8f"
 									// checked={this.state.selectedOption === '#B7EB8F'}
 									// onChange={(e) => this.handleInputChange(e)}
 								/>
 								<div class="button">
-									<span style={{ background: '#B7EB8F' }}></span>
+									<span style={{ background: '#b7eb8f' }}></span>
 								</div>
 							</label>
 
@@ -154,12 +154,12 @@ class DeckForm extends Component {
 								<input
 									type="radio"
 									name="theme"
-									value="#EBAAEA"
+									value="#ebaaea"
 									// checked={this.state.selectedOption === '#EBAAEA'}
 									// onChange={(e) => this.handleInputChange(e)}
 								/>
 								<div class="button">
-									<span style={{ background: '#EBAAEA' }}></span>
+									<span style={{ background: '#ebaaea' }}></span>
 								</div>
 							</label>
 						</div>
@@ -181,15 +181,18 @@ class DeckForm extends Component {
 }
 
 const mapStateToProps = (state) => {
-  return {
-    deck: state.home.deck,
-  };
+	return {
+		deck: state.home.deck,
+	};
 };
 
 const mapDispatchToProps = (dispatch) => {
-  return {
-    onCreateDeck: (deck) => dispatch(actions.createDeck(deck)),
-  };
+	return {
+		onCreateDeck: (deck) => dispatch(actions.createDeck(deck)),
+	};
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(DeckForm);
+export default connect(
+	mapStateToProps,
+	mapDispatchToProps
+)(withErrorHandler(DeckForm));
