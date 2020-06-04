@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-
+import axios from 'axios';
 import { Button, Input, Pagination } from 'antd';
 
 import './DeckForm.css';
@@ -19,9 +19,26 @@ class DeckForm extends Component {
 		};
 	}
 
+	createDeck = () => {
+		axios({
+			method: 'post',
+			url: '/api/decks',
+			data: {
+				name: 'Lam',
+				description: 'Some text here',
+				theme: '#000000',
+			},
+		})
+			.then(function (response) {
+				console.log(response);
+			})
+			.catch(function (error) {
+				console.log(error);
+			});
+	};
 	handleSubmit = (event) => {
 		event.preventDefault();
-		console.log(this.state);
+		this.createDeck();
 	};
 
 	handleInputChange = (event) => {
@@ -32,8 +49,7 @@ class DeckForm extends Component {
 		this.setState({
 			[name]: value,
 		});
-		console.log(this.state.color)
-		
+		console.log(this.state.color);
 	};
 
 	render() {
@@ -70,7 +86,10 @@ class DeckForm extends Component {
 								onChange={(e) => this.handleInputChange(e)}
 							/>
 						</div>
-						<div className="deck-form-circle" onChange={(e) => this.handleInputChange(e)}>
+						<div
+							className="deck-form-circle"
+							onChange={(e) => this.handleInputChange(e)}
+						>
 							<label class="circle">
 								<input
 									type="radio"

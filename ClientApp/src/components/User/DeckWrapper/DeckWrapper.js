@@ -54,7 +54,7 @@ class DeckWrapper extends Component {
             this.props.decks !== null ? this.props.decks.length : null
           }
           pageRangeDisplayed={5}
-          onChange={() => this.handlePageChange}
+          onChange={this.handlePageChange.bind(this)}
           activeClass="pagination-item-active"
           itemClass="pagination-item"
         />
