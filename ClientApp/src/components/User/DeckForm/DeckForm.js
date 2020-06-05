@@ -2,14 +2,9 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import * as actions from '../../../store/actions';
 import { Link } from 'react-router-dom';
-import PropTypes from 'prop-types';
-import { Button, Input, Pagination } from 'antd';
-import authService from '../../api-authorization/AuthorizeService';
 import withErrorHandler from '../../../hoc/withErrorHandler';
 
 import './DeckForm.css';
-
-const { Search } = Input;
 
 class DeckForm extends Component {
 	constructor(props) {
@@ -17,11 +12,23 @@ class DeckForm extends Component {
 
 		this.state = {
 			hasError: false,
-			name: null,
-			description: null,
-			theme: '#95dded',
+			name: this.props.name !== null ? this.props.name : null,
+			description:
+				this.props.description !== null ? this.props.description : null,
+			theme: this.props.theme !== null ? this.props.theme : '#95dded',
 		};
 	}
+
+	editDeck = () => {
+		let id = 37;
+		let deck = {
+			name: this.state.name,
+			description: this.state.description,
+			theme: this.state.theme,
+		};
+
+		this.props.onEditDeck(deck, id);
+	};
 
 	createDeck = () => {
 		let deck = {
@@ -35,7 +42,13 @@ class DeckForm extends Component {
 
 	handleSubmit = (event) => {
 		event.preventDefault();
-		this.createDeck();
+		if (this.props.editDeck === true) {
+			// Edit deck calls API here
+			this.editDeck();
+			console.log('Edit');
+		} else {
+			this.createDeck();
+		}
 	};
 
 	handleInputChange = (event) => {
@@ -48,9 +61,9 @@ class DeckForm extends Component {
 	};
 
 	render() {
-		const backgroundColor = {
-			background: this.props.backgroundColor,
-		};
+		// const backgroundColor = {
+		// 	background: this.props.backgroundColor,
+		// };
 
 		if (this.state.hasError) {
 			return <h1>Something went wrong.</h1>;
@@ -173,7 +186,7 @@ class DeckForm extends Component {
 								type="submit"
 								value="Submit"
 							>
-								Create
+								{this.props.editDeck === true ? 'Edit' : 'Create'}
 							</button>
 						</div>
 					</form>
@@ -192,6 +205,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
 	return {
 		onCreateDeck: (deck) => dispatch(actions.createDeck(deck)),
+		onEditDeck: (deck, id) => dispatch(actions.editDeck(deck, id)),
 	};
 };
 

@@ -2,14 +2,15 @@ import React, { Component } from 'react';
 
 import DeckForm from '../../../components/User/DeckForm/DeckForm';
 
-import './CreateDeck.css';
+import './EditDeck.css';
 
-class CreateDeck extends Component {
+class EditDeck extends Component {
 	constructor(props) {
 		super(props);
 
 		this.state = {
 			hasError: false,
+			id: 10,
 		};
 	}
 
@@ -19,12 +20,12 @@ class CreateDeck extends Component {
 		}
 		return (
 			<div className="create-deck-wrapper">
-				<div className='form'>
-        <DeckForm header='Create new deck'/>
-        </div>
+				<div className="form">
+					<DeckForm id={this.state.id} editDeck={true} header="Edit deck" />
+				</div>
 			</div>
 		);
 	}
 }
 
-export default CreateDeck;
+export default EditDeck;

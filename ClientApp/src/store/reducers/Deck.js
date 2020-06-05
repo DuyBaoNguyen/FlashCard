@@ -16,6 +16,16 @@ export const deckReducer = (state = initialState, action) => {
 				...state,
 				getDeckError: 'Create deck failed!',
 			};
+			case actionTypes.EDIT_DECK_SUCCESS:
+			return {
+				...state,
+				editDeckError: null,
+			};
+		case actionTypes.EDIT_DECK_FAIL:
+			return {
+				...state,
+				editDeckError: 'Edit deck failed!',
+			};
 		default:
 			return state;
 	}

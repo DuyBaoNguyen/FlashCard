@@ -7,7 +7,6 @@ import deleteIcon from '@iconify/icons-uil/trash-alt';
 
 import DropDown from '../../Shared/DropDown/DropDown';
 import DropDownItem from '../../Shared/DropDownItem/DropDownItem';
-import Button from '../../Shared/Button/Button';
 import './DeckInfo.css';
 
 const deckInfo = props => {
