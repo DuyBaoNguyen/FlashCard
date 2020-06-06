@@ -13,6 +13,7 @@ class DeckDetail extends Component {
   }
 
   render() {
+    console.log(this.deckId);
     return (
       <div className="deck-detail">
         <section className="left-section">
