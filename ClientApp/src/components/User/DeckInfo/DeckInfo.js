@@ -23,7 +23,8 @@ const deckInfo = props => {
       <div className="deck-info-header">
         <div className="deck-info-options">
           <DropDown
-            postfix={<Icon icon={optionIcon} color="#535353" style={{ fontSize: 20 }} />}
+            right
+            postfix={<Icon icon={optionIcon} color="#979797" style={{ fontSize: 20 }} />}
             className="deck-info-dropdown">
             <DropDownItem
               type="button"

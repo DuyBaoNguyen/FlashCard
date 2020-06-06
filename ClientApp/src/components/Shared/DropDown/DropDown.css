@@ -1,26 +1,25 @@
 .dropdown {
-  display: -webkit-inline-box;
-  display: -ms-inline-flexbox;
-  display: inline-flex;
+  display: inline-block;
   position: relative;
-  margin-left: 30px;
   color: white;
   font-size: 14px;
   cursor: pointer;
+  min-height: 30px;
 }
 
-.dropdown .postfix {
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
+.dropdown .dropdown-label {
+  position: relative;
+  padding: 6px 0;
+  padding-right: 22px;
+}
+
+.dropdown .dropdown-label .postfix {
+  position: absolute;
+  right: 0;
 }
 
 .dropdown .dropdown-content {
   position: absolute;
-  right: 0;
   top: 105%;
   min-width: 120px;
   padding: 10px 0;
@@ -29,5 +28,9 @@
           box-shadow: -2px 0px 8px rgba(0, 0, 0, 0.15);
   border-radius: 6px;
   z-index: 1;
+}
+
+.dropdown .dropdown-content.right {
+  right: 0;
 }
 /*# sourceMappingURL=DropDown.css.map */
