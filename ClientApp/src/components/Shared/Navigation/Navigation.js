@@ -51,7 +51,11 @@ class Navigation extends Component {
           <NavigationItem to="/" exact label="Home" />
           <NavigationItem to="/cards" label="My cards" />
           <NavigationItem to="/market" label="Market" />
-          <DropDown label={`Hi, ${name}!`} postfix={<Icon icon={arrowDown} style={{ fontSize: 20 }} />}>
+          <DropDown
+            label={`Hi, ${name}!`}
+            right
+            postfix={<Icon icon={arrowDown} style={{ fontSize: 20 }} />}
+            className="navigation-options">
             <DropDownItem
               type="link"
               path="/profile"

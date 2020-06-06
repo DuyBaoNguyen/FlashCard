@@ -6,25 +6,18 @@
 }
 
 .deck-detail .back-feature {
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
   color: #979797;
+  position: relative;
 }
 
 .deck-detail .back-feature .back-feature-icon {
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
+  position: absolute;
   font-size: 22px;
 }
 
 .deck-detail .back-feature .back-feature-label {
   font-size: 14px;
-  line-height: 22px;
+  padding-left: 26px;
 }
 
 .deck-detail section {

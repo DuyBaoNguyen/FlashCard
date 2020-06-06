@@ -22,7 +22,7 @@ const dropDownItem = props => {
 
   if (props.type === 'link') {
     return (
-      <Link to={props.path} className="dropdown-item" onClick={props.onClick}>
+      <Link to={props.path} className={classes.join(' ')} onClick={props.onClick}>
         {dropDownItemContent}
       </Link>
     );

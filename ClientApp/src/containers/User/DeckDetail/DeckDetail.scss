@@ -2,16 +2,26 @@
   display: flex;
   margin-right: -20px;
   .back-feature {
-    display: flex;
+    // display: flex;
+    // color: #979797;
+    // .back-feature-icon {
+    //   display: flex;
+    //   align-items: center;
+    //   font-size: 22px;
+    // }
+    // .back-feature-label {
+    //   font-size: 14px;
+    //   line-height: 22px;
+    // }
     color: #979797;
+    position: relative;
     .back-feature-icon {
-      display: flex;
-      align-items: center;
+      position: absolute;
       font-size: 22px;
     }
     .back-feature-label {
       font-size: 14px;
-      line-height: 22px;
+      padding-left: 26px;
     }
   }
   section {

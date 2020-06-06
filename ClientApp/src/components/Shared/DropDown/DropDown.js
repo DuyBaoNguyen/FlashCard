@@ -38,14 +38,21 @@ class DropDown extends Component {
       classes.push(this.props.className);
     }
 
+    const menuClasses = ['dropdown-content'];
+    if (this.props.right) {
+      menuClasses.push('right');
+    }
+
     return (
       <li className={classes.join(' ')} ref={this.dropdown} onClick={this.handleClick}>
-        {this.props.label}
-        <span className="postfix">
-          {this.props.postfix}
-        </span>
+        <div className="dropdown-label">
+          {this.props.label}
+          <span className="postfix">
+            {this.props.postfix}
+          </span>
+        </div>
         {this.state.open && (
-          <div className="dropdown-content">
+          <div className={menuClasses.join(' ')}>
             {this.props.children}
           </div>
         )}

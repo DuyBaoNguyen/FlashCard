@@ -1,23 +1,20 @@
 .dropdown-item {
-  display: flex;
-  align-items: center;
-  padding: 8px 17px 8px 15px;
+  display: block;
+  position: relative;
   cursor: pointer;
   user-select: none;
   color: #535353;
+  padding: 8px 17px 8px 15px;
   .dropdown-item-icon {
-    display: flex;
-    align-items: center;
-    margin-right: 10px;
-    font-size: 16px;
-    // color: #535353;
+    position: absolute;
+    font-size: 17px;
   }
   .dropdown-item-label {
    font-size: 14px;
-  //  color: inherit;
    white-space: nowrap;
+   padding-left: 26px;
   }
   &:hover {
-    background-color: #eee;
+    background-color: #f5f5f5;
   }
 }

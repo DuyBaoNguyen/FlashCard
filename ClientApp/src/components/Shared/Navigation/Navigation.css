@@ -32,4 +32,8 @@
   list-style-type: none;
   margin: 0;
 }
+
+.navigation-wrapper .container .navigation .navigation-items .navigation-options {
+  margin-left: 30px;
+}
 /*# sourceMappingURL=Navigation.css.map */
