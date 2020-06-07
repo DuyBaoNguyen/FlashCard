@@ -5,13 +5,13 @@ import { AutoSizer } from 'react-virtualized';
 import './Chart.css';
 
 const tempData = [
-  { day: "Mon", percent: 0 },
-  { day: "Tue", percent: 50 },
-  { day: "Wed", percent: 65 },
-  { day: "Thu", percent: 0 },
-  { day: "Fri", percent: 0 },
-  { day: "Sat", percent: 0 },
-  { day: "Sun", percent: 0 }
+  { day: "Mon", gradePointAverage: 0 },
+  { day: "Tue", gradePointAverage: 0 },
+  { day: "Wed", gradePointAverage: 0 },
+  { day: "Thu", gradePointAverage: 0 },
+  { day: "Fri", gradePointAverage: 0 },
+  { day: "Sat", gradePointAverage: 0 },
+  { day: "Sun", gradePointAverage: 0 }
 ];
 
 const isToday = ({ indexValue }) => indexValue === new Date().toString().substr(0, 3);
@@ -19,9 +19,8 @@ const getColor = bar => isToday(bar) ? '#ffb922' : '#eee';
 
 const chart = props => {
   const data = props.data || tempData;
-  // const data = tempData;
   for (let item of data) {
-    item.percent = item.percent || 1;
+    item.gradePointAverage = item.gradePointAverage || 1;
   }
 
   return (
@@ -33,7 +32,7 @@ const chart = props => {
               data={data}
               minValue={0}
               maxValue={100}
-              keys={['percent']}
+              keys={['gradePointAverage']}
               indexBy="day"
               margin={{ top: 0, right: 0, bottom: 20, left: 0 }}
               padding={0.15}

@@ -27,7 +27,7 @@ class DeckWrapper extends Component {
 		this.props.onGetDecks('');
 	}
 
-	searchDeckHandler = (event) => {
+	handleSearchDeck = (event) => {
 		this.props.onGetDecks(event.target.value);
 		this.setState({ activePage: 1 });
 	};
@@ -69,15 +69,15 @@ class DeckWrapper extends Component {
 				<div className="deck-header">
 					<p>My decks</p>
 					<div className="deck-header-features">
-						<Link to={'/createDeck'}>
-							<Button
-								className="deck-header-features-add"
-								icon={<Icon icon={plusIcon} />}
-							></Button>
-						</Link>
+						<Button
+							className="deck-header-features-add"
+							type="link"
+							path="/createdeck"
+							icon={<Icon icon={plusIcon} />}>
+						</Button>
 						<Search
 							placeholder="Search..."
-							onChange={(event) => this.searchDeckHandler(event)}
+							onChange={(event) => this.handleSearchDeck(event)}
 						/>
 					</div>
 				</div>

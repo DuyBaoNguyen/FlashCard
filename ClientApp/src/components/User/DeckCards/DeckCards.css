@@ -1,0 +1,105 @@
+.deck-cards-wrapper {
+  background: #ffffff;
+  -webkit-box-shadow: 0px 0px 30px rgba(0, 0, 0, 0.05);
+          box-shadow: 0px 0px 30px rgba(0, 0, 0, 0.05);
+  border-radius: 15px;
+  padding: 30px;
+  width: 100%;
+  height: 655px;
+}
+
+.deck-cards-wrapper .cards {
+  min-height: 428px;
+  display: -ms-grid;
+  display: grid;
+  -ms-grid-columns: (1fr)[4];
+      grid-template-columns: repeat(4, 1fr);
+  -ms-grid-rows: (1fr)[3];
+      grid-template-rows: repeat(3, 1fr);
+  gap: 17px 30px;
+}
+
+.deck-cards-wrapper .cards-pagination {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+.deck-cards-wrapper .cards-pagination .pagination {
+  list-style-type: none;
+}
+
+.deck-cards-wrapper .cards-pagination .pagination li {
+  display: inline-block;
+  font-size: 14px;
+  margin-left: 10px;
+  margin-right: 10px;
+  padding: 2px;
+}
+
+.deck-cards-wrapper .cards-pagination .pagination li a {
+  color: rgba(0, 0, 0, 0.65);
+}
+
+.deck-cards-wrapper .cards-pagination .pagination .pagination-item-active {
+  text-decoration: none;
+  background: #9eacf4;
+  border-radius: 4px;
+  width: 22.22px;
+  text-align: center;
+}
+
+.deck-cards-wrapper .cards-pagination .pagination .pagination-item-active a {
+  color: white;
+}
+
+.deck-cards-wrapper .deck-cards-header {
+  color: #535353;
+  font-style: normal;
+  font-weight: bold;
+  font-size: 18px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: start;
+      -ms-flex-pack: start;
+          justify-content: flex-start;
+  margin-bottom: 10px;
+}
+
+.deck-cards-wrapper .deck-cards-header p {
+  text-align: left;
+  width: 20%;
+}
+
+.deck-cards-wrapper .deck-cards-header .deck-cards-header-features {
+  text-align: right;
+  width: 80%;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: end;
+      -ms-flex-pack: end;
+          justify-content: flex-end;
+  -webkit-box-align: start;
+      -ms-flex-align: start;
+          align-items: flex-start;
+}
+
+.deck-cards-wrapper .deck-cards-header .deck-cards-header-features .deck-cards-header-features-add {
+  margin-right: 10px;
+}
+
+.deck-cards-wrapper .deck-cards-header .deck-cards-header-features .deck-cards-header-features-search {
+  width: 175px;
+  background: white;
+  border-color: none;
+  border-radius: 30px;
+}
+/*# sourceMappingURL=DeckCards.css.map */

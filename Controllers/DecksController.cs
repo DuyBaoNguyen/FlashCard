@@ -79,7 +79,7 @@ namespace FlashCard.Controllers
 		[HttpGet("{id}/cards")]
 		[ProducesResponseType(200)]
 		[ProducesResponseType(404)]
-		public async Task<ActionResult<IEnumerable<CardDto>>> GetCardsOfDeck(int id)
+		public async Task<ActionResult<IEnumerable<CardDto>>> GetCardsOfDeck(int id, string front)
 		{
 			var userId = UserUtil.GetUserId(User);
 			var deck = await repository.Deck
@@ -93,7 +93,7 @@ namespace FlashCard.Controllers
 			}
 
 			var cards = await repository.Card
-				.QueryByDeckId(id)
+				.QueryByDeckId(id, front)
 				.AsNoTracking()
 				.MapToCardDto(imageService.BackImageBaseUrl)
 				.ToListAsync();
@@ -104,7 +104,7 @@ namespace FlashCard.Controllers
 		[HttpGet("{id}/remainingcards")]
 		[ProducesResponseType(200)]
 		[ProducesResponseType(404)]
-		public async Task<ActionResult<IEnumerable<CardDto>>> GetCardsOutOfDeck(int id)
+		public async Task<ActionResult<IEnumerable<CardDto>>> GetCardsOutOfDeck(int id, string front)
 		{
 			var userId = UserUtil.GetUserId(User);
 			var deck = await repository.Deck
@@ -118,7 +118,7 @@ namespace FlashCard.Controllers
 			}
 
 			var remainingCards = await repository.Card
-				.QueryRemainingByDeckId(userId, id)
+				.QueryRemainingByDeckId(userId, id, front)
 				.AsNoTracking()
 				.MapToCardDto(imageService.BackImageBaseUrl)
 				.ToListAsync();
@@ -537,7 +537,7 @@ namespace FlashCard.Controllers
 					FailedCards = tests != null
 						? tests.Sum(t => t.TestedCards.Where(tc => tc.Failed).Count()) : 0,
 					GradePointAverage = tests == null || tests.Count() == 0
-						? 0 : Math.Round(tests.Average(t => t.Score), 2),
+						? 0 : Math.Round(tests.Average(t => t.Score) * 100, 0),
 					Tests = tests != null ? tests.Take(amountTests).MapToTestDto() : null
 				};
 			});
@@ -579,7 +579,7 @@ namespace FlashCard.Controllers
 					FailedCards = matches != null
 						? matches.Sum(m => m.MatchedCards.Where(mc => mc.Failed).Count()) : 0,
 					GradePointAverage = matches == null || matches.Count() == 0
-						? 0 : Math.Round(matches.Average(m => m.Score), 2),
+						? 0 : Math.Round(matches.Average(m => m.Score) * 100, 0),
 					Tests = matches != null ? matches.Take(amountMatches).MapToMatchDto() : null
 				};
 			});

@@ -1,0 +1,17 @@
+.card-wrapper {
+  background: #ffffff;
+  -webkit-box-shadow: 0px 0px 30px rgba(0, 0, 0, 0.05);
+          box-shadow: 0px 0px 30px rgba(0, 0, 0, 0.05);
+  border-radius: 15px;
+  height: 160px;
+}
+
+.card-wrapper .card {
+  height: 100%;
+  text-align: center;
+  line-height: 160px;
+  color: #666666;
+  font-size: 18px;
+  overflow: auto;
+}
+/*# sourceMappingURL=Card.css.map */

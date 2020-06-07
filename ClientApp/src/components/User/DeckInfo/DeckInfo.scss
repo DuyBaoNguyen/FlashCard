@@ -43,15 +43,8 @@
     grid-template-columns: auto auto;
     gap: 20px;
     a {
-      background-color: #9eacf4;
-      color: #fff;
-      font-size: 14px;
-      border-radius: 7px;
+      display: block;
       text-align: center;
-      padding: 8px;
-    }
-    a:hover {
-      background-color: #b0bdff;
     }
   }
 }

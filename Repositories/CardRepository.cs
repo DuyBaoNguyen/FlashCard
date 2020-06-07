@@ -73,15 +73,22 @@ namespace FlashCard.Repositories
 				.Where(c => c.OwnerId == userId && fronts.Contains(c.Front.ToLower()));
 		}
 
-		public IQueryable<Card> QueryByDeckId(int deckId)
+		public IQueryable<Card> QueryByDeckId(int deckId, string front)
 		{
 			var queryCardIds = dbContext.CardAssignments
 				.Where(ca => ca.DeckId == deckId)
 				.Select(ca => ca.CardId);
 
+			if (front == null || front.Length == 0)
+			{
+				return dbContext.Cards
+					.Where(c => queryCardIds.Contains(c.Id))
+					.OrderBy(c => c.Front);
+			}
+
 			return dbContext.Cards
-				.Where(c => queryCardIds.Contains(c.Id))
-				.OrderBy(c => c.Front);
+					.Where(c => queryCardIds.Contains(c.Id) && c.Front.ToLower().Contains(front.ToLower()))
+					.OrderBy(c => c.Front);
 		}
 
 		public IQueryable<Card> QueryByDeckIdIncludesBacks(int deckId)
@@ -96,14 +103,22 @@ namespace FlashCard.Repositories
 				.OrderBy(c => c.Front);
 		}
 
-		public IQueryable<Card> QueryRemainingByDeckId(string userId, int deckId)
+		public IQueryable<Card> QueryRemainingByDeckId(string userId, int deckId, string front)
 		{
 			var queryCardIds = dbContext.CardAssignments
 				.Where(c => c.DeckId == deckId)
 				.Select(c => c.CardId);
 
-			return dbContext.Cards
+			if (front == null || front.Length == 0)
+			{
+				return dbContext.Cards
 				.Where(c => c.OwnerId == userId && !queryCardIds.Contains(c.Id))
+				.OrderBy(c => c.Front);
+			}
+
+			return dbContext.Cards
+				.Where(c => c.OwnerId == userId && !queryCardIds.Contains(c.Id) &&
+					c.Front.ToLower().Contains(front.ToLower()))
 				.OrderBy(c => c.Front);
 		}
 

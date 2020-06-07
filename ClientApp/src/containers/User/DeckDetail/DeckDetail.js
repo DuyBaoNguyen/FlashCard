@@ -5,15 +5,25 @@ import arrowLeftIcon from '@iconify/icons-uil/angle-left';
 
 import Statistics from '../../../components/User/Statistics/Statistics';
 import DeckInfo from '../../../components/User/DeckInfo/DeckInfo';
+import DeckCards from '../../../components/User/DeckCards/DeckCards';
+import withErrorHandler from '../../../hoc/withErrorHandler';
+import * as actions from '../../../store/actions/index';
 import './DeckDetail.css';
+import { connect } from 'react-redux';
 
 class DeckDetail extends Component {
   UNSAFE_componentWillMount() {
     this.deckId = this.props.match.params.deckId;
   }
 
+  componentDidMount() {
+    this.props.onGetDeck(this.deckId);
+    this.props.onGetDeckStatistics(this.deckId);
+    this.props.onGetDeckCards(this.deckId, '');
+  }
+
   render() {
-    console.log(this.deckId);
+    const { deck, statistics } = this.props;
     return (
       <div className="deck-detail">
         <section className="left-section">
@@ -25,15 +35,30 @@ class DeckDetail extends Component {
               <span className="back-feature-label"> Back</span>
             </div>
           </Link>
-          <DeckInfo />
-          <Statistics />
+          <DeckInfo deck={deck} />
+          <Statistics data={statistics} />
         </section>
         <section className="right-section">
-          <div className="deck-cards"></div>
+          <DeckCards />
         </section>
       </div>
     );
   }
 }
 
-export default DeckDetail;
+const mapStateToProps = state => {
+  return {
+    deck: state.deckDetail.deck,
+    statistics: state.deckDetail.statistics
+  };
+};
+
+const mapDispatchToProps = dispatch => {
+  return {
+    onGetDeck: (id) => dispatch(actions.getDeck(id)),
+    onGetDeckStatistics: (id) => dispatch(actions.getDeckStatistics(id)),
+    onGetDeckCards: (id, front) => dispatch(actions.getDeckCards(id, front))
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(withErrorHandler(DeckDetail));

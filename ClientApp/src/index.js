@@ -14,6 +14,7 @@ const baseUrl = document.getElementsByTagName('base')[0].getAttribute('href');
 const rootElement = document.getElementById('root');
 const rootReducer = combineReducers({
 	home: reducers.homeReducer,
+	deckDetail: reducers.deckDetailReducer
 });
 const store = createStore(rootReducer, applyMiddleware(thunk));
 const app = (

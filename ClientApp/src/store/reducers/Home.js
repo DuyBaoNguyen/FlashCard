@@ -1,4 +1,5 @@
 import * as actionTypes from '../actions/actionTypes';
+import { transformStatistics } from '../../util/util';
 
 const initialState = {
   decks: null,
@@ -6,8 +7,7 @@ const initialState = {
   statistics: null,
   getStatisticsError: null,
   profile: null,
-  getProfileError: null,
-  count: 1
+  getProfileError: null
 };
 
 export const homeReducer = (state = initialState, action) => {
@@ -48,20 +48,7 @@ export const homeReducer = (state = initialState, action) => {
         profile: null,
         getProfileError: 'Something went wrong'
       }
-    case 'TEST':
-      return {
-        ...state,
-        count: state.count + 1
-      }
     default:
       return state;
   }
 };
-
-function transformStatistics(statistics) {
-  for (let item of statistics) {
-    item.day = new Date(item.dateTime).toString().substr(0, 3);
-    item.percent = item.gradePointAverage * 100;
-  }
-  return statistics;
-}

@@ -63,15 +63,7 @@
 }
 
 .deck-information .deck-features a {
-  background-color: #9eacf4;
-  color: #fff;
-  font-size: 14px;
-  border-radius: 7px;
+  display: block;
   text-align: center;
-  padding: 8px;
-}
-
-.deck-information .deck-features a:hover {
-  background-color: #b0bdff;
 }
 /*# sourceMappingURL=DeckInfo.css.map */

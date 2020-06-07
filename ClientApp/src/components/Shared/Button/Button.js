@@ -1,4 +1,6 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
+
 import './Button.css';
 
 const button = props => {
@@ -10,10 +12,20 @@ const button = props => {
     classes.push(props.className);
   }
 
+  if (props.type === 'link') {
+    return (
+      <Link to={props.path} className={classes.join(' ')}>
+        {!!props.icon && (
+          <span className="icon">
+            {props.icon}
+          </span>
+        )}
+        {props.children}
+      </Link>
+    );
+  }
   return (
-    <button
-      className={classes.join(' ')}
-      onClick={props.onClick}>
+    <button className={classes.join(' ')} onClick={props.onClick}>
       {!!props.icon && (
         <span className="icon">
           {props.icon}

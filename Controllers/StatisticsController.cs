@@ -48,7 +48,7 @@ namespace FlashCard.Controllers
 					FailedCards = tests != null
 						? tests.Sum(t => t.TestedCards.Where(tc => tc.Failed).Count()) : 0,
 					GradePointAverage = tests == null || tests.Count() == 0
-						? 0 : Math.Round(tests.Average(t => t.Score), 2),
+						? 0 : Math.Round(tests.Average(t => t.Score) * 100, 0),
 					Tests = tests != null ? tests.Take(amountTests).MapToTestDto() : null
 				};
 			});
@@ -81,7 +81,7 @@ namespace FlashCard.Controllers
 					FailedCards = matches != null
 						? matches.Sum(m => m.MatchedCards.Where(mc => mc.Failed).Count()) : 0,
 					GradePointAverage = matches == null || matches.Count() == 0
-						? 0 : Math.Round(matches.Average(m => m.Score), 2),
+						? 0 : Math.Round(matches.Average(m => m.Score) * 100, 0),
 					Tests = matches != null ? matches.Take(amountMatches).MapToMatchDto() : null
 				};
 			});

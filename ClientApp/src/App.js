@@ -28,7 +28,7 @@ class App extends Component {
 					<AuthorizeRoute exact path="/createDeck" component={CreateDeck} />
 					<AuthorizeRoute exact path="/editDeck/" component={EditDeck} />
 					<AuthorizeRoute exact path="/testing/" component={Testing} />
-					<AuthorizeRoute path="/decks/:deckId" component={DeckDetail} />
+					<AuthorizeRoute exact path="/decks/:deckId" component={DeckDetail} />
 
 					<Route path={ApplicationPaths.ApiAuthorizationPrefix} component={ApiAuthorizationRoutes} />
 				</Switch>

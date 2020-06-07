@@ -25,6 +25,7 @@ const withErrorHandler = (WrappedComponent) => {
         if (error.response.status === 401) {
           history.push(`${ApplicationPaths.Login}`);
         }
+        return Promise.reject(error);
       });
     }
 
