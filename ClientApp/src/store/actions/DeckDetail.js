@@ -1,5 +1,6 @@
 import axios from '../../axios';
 import * as actionTypes from '../actions/actionTypes';
+import history from '../../history';
 
 const getDeckSuccess = (deck) => {
   return {
@@ -61,5 +62,28 @@ export const getDeckCards = (id, front) => {
     axios.get(`/api/decks/${id}/cards?front=${front}`)
       .then(res => dispatch(getDeckCardsSuccess(res.data)))
       .catch(err => dispatch(getDeckCardsFail()));
+  };
+};
+
+const deleteDeckSuccess = () => {
+  return {
+    type: actionTypes.DELETE_DECK_SUCCESS
+  };
+};
+
+const deleteDeckFail = () => {
+  return {
+    type: actionTypes.DELETE_DECK_FAIL
+  };
+};
+
+export const deleteDeck = (id) => {
+  return dispatch => {
+    axios.delete(`/api/decks/${id}`)
+      .then(() => {
+        dispatch(deleteDeckSuccess());
+        history.push('/');
+      })
+      .catch(err => dispatch(deleteDeckFail()));
   };
 };

@@ -7,7 +7,8 @@ const initialState = {
   statistics: null,
   getStatisticsError: false,
   cards: [],
-  getCardsError: false
+  getCardsError: false,
+  deleteDeckError: false
 };
 
 export const deckDetailReducer = (state = initialState, action) => {
@@ -47,6 +48,22 @@ export const deckDetailReducer = (state = initialState, action) => {
         ...state,
         cards: [],
         getCardsError: true
+      }
+    case actionTypes.DELETE_DECK_SUCCESS:
+      return {
+        ...state,
+        deck: null,
+        getDeckError: false,
+        statistics: null,
+        getStatisticsError: false,
+        cards: [],
+        getCardsError: false,
+        deleteDeckError: false
+      };
+    case actionTypes.DELETE_DECK_FAIL:
+      return {
+        ...state,
+        deleteDeckError: true
       }
     default:
       return state;
