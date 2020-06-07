@@ -12,11 +12,8 @@ import './DeckDetail.css';
 import { connect } from 'react-redux';
 
 class DeckDetail extends Component {
-  UNSAFE_componentWillMount() {
-    this.deckId = this.props.match.params.deckId;
-  }
-
   componentDidMount() {
+    this.deckId = this.props.match.params.deckId;
     this.props.onGetDeck(this.deckId);
     this.props.onGetDeckStatistics(this.deckId);
     this.props.onGetDeckCards(this.deckId, '');

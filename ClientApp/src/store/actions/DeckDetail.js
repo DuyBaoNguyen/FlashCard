@@ -23,7 +23,6 @@ export const getDeck = (id) => {
 };
 
 const getDeckStatisticsSuccess = (statistics) => {
-  console.log(statistics);
   return {
     type: actionTypes.GET_DECK_STATISTICS_SUCCESS,
     statistics: statistics
@@ -54,7 +53,7 @@ const getDeckCardsSuccess = (cards) => {
 const getDeckCardsFail = () => {
   return {
     type: actionTypes.GET_DECK_CARDS_FAIL
-  };   
+  };
 };
 
 export const getDeckCards = (id, front) => {

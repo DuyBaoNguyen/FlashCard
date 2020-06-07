@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import Pagination from 'react-js-pagination';
 import { Icon } from '@iconify/react';
 import plusIcon from '@iconify/icons-uil/plus';
-import { Link } from 'react-router-dom';
+
 import Search from '../../Shared/Search/Search';
 import Button from '../../Shared/Button/Button';
 import * as actions from '../../../store/actions';
@@ -37,14 +37,9 @@ class DeckWrapper extends Component {
 		let pagination;
 
 		if (this.props.decks !== null && this.props.decks.length > 0) {
-			deckList = this.props.decks.map((deck, index) => {
-				if (
-					index >= (this.state.activePage - 1) * 4 &&
-					index <= this.state.activePage * 4 - 1
-				) {
-					return <Deck key={deck.id} deck={deck} />;
-				}
-			});
+			deckList = this.props.decks
+				.filter((deck, index) => index >= (this.state.activePage - 1) * 4 && index <= this.state.activePage * 4 - 1)
+				.map((deck, index) => <Deck key={deck.id} deck={deck} />);
 
 			pagination = (
 				<Pagination

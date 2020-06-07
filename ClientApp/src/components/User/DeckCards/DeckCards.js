@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Icon } from '@iconify/react';
 import plusIcon from '@iconify/icons-uil/plus';
-import { Link } from 'react-router-dom';
 import Pagination from 'react-js-pagination';
 
 import Search from '../../Shared/Search/Search';
@@ -34,15 +33,13 @@ class DeckCards extends Component {
   render() {
     const { deck, cards } = this.props;
     const { activePage } = this.state;
-    let cardsList = <p style={{ color: '#979797' }}>There are no decks here!</p>;
+    let cardsList = <p className="text-notify">There are no cards here!</p>;
     let pagination;
 
     if (cards.length > 0) {
-      cardsList = cards.map((card, index) => {
-        if (index >= (activePage - 1) * AMOUNT_CARDS && index <= activePage * AMOUNT_CARDS - 1) {
-          return <Card key={card.id} card={card} />;
-        }
-      });
+      cardsList = cards
+        .filter((card, index) => index >= (activePage - 1) * AMOUNT_CARDS && index <= activePage * AMOUNT_CARDS - 1)
+        .map((card, index) => <Card key={card.id} card={card} />);
 
       pagination = (
         <Pagination
@@ -62,7 +59,7 @@ class DeckCards extends Component {
     return (
       <div className="deck-cards-wrapper">
         <div className="deck-cards-header">
-          <p>My cards</p>
+          <p>Cards in deck</p>
           <div className="deck-cards-header-features">
             <Button
               type="link"

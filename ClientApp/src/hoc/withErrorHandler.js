@@ -7,7 +7,8 @@ import history from '../history';
 
 const withErrorHandler = (WrappedComponent) => {
   return class extends Component {
-    UNSAFE_componentWillMount() {
+    constructor(props) {
+      super(props);
       this.initIntercaptors();
     }
 

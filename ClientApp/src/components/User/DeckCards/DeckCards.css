@@ -102,4 +102,10 @@
   border-color: none;
   border-radius: 30px;
 }
+
+.deck-cards-wrapper .text-notify {
+  color: #979797;
+  font-size: #979797;
+  white-space: nowrap;
+}
 /*# sourceMappingURL=DeckCards.css.map */
