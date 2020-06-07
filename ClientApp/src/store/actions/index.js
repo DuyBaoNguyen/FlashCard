@@ -4,4 +4,10 @@ export { getDecks, getStatistics, getProfile } from './Home';
 
 export { createDeck, editDeck } from './Deck';
 
-export { getDeck, getDeckCards, getDeckStatistics, deleteDeck } from './DeckDetail';
+export {
+  getDeck,
+  getDeckCards,
+  getDeckStatistics,
+  deleteDeck,
+  updateDeckPublicStatus
+} from './DeckDetail';

@@ -1,37 +1,64 @@
-import React from 'react';
+import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 
 import './DropDownItem.css';
 
-const dropDownItem = props => {
-  const classes = ['dropdown-item'];
-  if (props.className !== undefined) {
-    classes.push(props.className);
+class DropDownItem extends Component {
+  handleClick = () => {
+    if (this.props.type) {
+      this.props.handleCloseClick();
+    }
+    if (this.props.onClick) {
+      this.props.onClick();
+    }
   }
 
-  const dropDownItemContent = (
-    <>
-      <span className="dropdown-item-icon">
-        {props.icon}
-      </span>
-      <span className="dropdown-item-label">
-        {props.label}
-      </span>
-    </>
-  );
+  render() {
+    const classes = ['dropdown-item'];
+    if (this.props.className !== undefined) {
+      classes.push(this.props.className);
+    }
+    if (this.props.type) {
+      classes.push('dropdown-item-hover');
+    }
 
-  if (props.type === 'link') {
+    const dropDownItemContent = (
+      <>
+        <span className="dropdown-item-icon">
+          {this.props.icon}
+        </span>
+        <span className="dropdown-item-label">
+          {this.props.label}
+        </span>
+      </>
+    );
+
+    if (this.props.type === 'link') {
+      return (
+        <Link to={this.props.path} className={classes.join(' ')} onClick={this.handleClick}>
+          {dropDownItemContent}
+        </Link>
+      );
+    }
+    if (this.props.type === 'button') {
+      return (
+        <span className={classes.join(' ')} onClick={this.handleClick}>
+          {dropDownItemContent}
+        </span>
+      );
+    }
+    if (this.props.type === 'line') {
+      return (
+        <span className="dropdown-item-line"></span>
+      );
+    }
     return (
-      <Link to={props.path} className={classes.join(' ')} onClick={props.onClick}>
+      <span className={classes.join(' ')}>
         {dropDownItemContent}
-      </Link>
+        {this.props.children}
+      </span>
     );
   }
-  return (
-    <span className={classes.join(' ')} onClick={props.onClick}>
-      {dropDownItemContent}
-    </span>
-  );
-};
+}
 
-export default dropDownItem;
+export default DropDownItem;

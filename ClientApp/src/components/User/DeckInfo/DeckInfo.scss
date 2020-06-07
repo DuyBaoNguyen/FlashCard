@@ -16,6 +16,24 @@
           color: red;
         }
       }
+      .public-deck {
+        display: inline-flex;
+        width: 250px;
+        .switch-wrapper {
+          position: relative;
+          width: 100%;
+          .switch {
+            position: absolute;
+            top: -1px;
+            right: 0;
+          }
+        }
+        .pending-notification {
+          margin-left: 10px;
+          font-size: 13px;
+          vertical-align: bottom;
+        }
+      }
     }
   }
   .deck-description {
