@@ -26,7 +26,7 @@ class App extends Component {
 				<Switch>
 					<AuthorizeRoute exact path="/" component={Home} />
 					<AuthorizeRoute exact path="/createDeck" component={CreateDeck} />
-					<AuthorizeRoute exact path="/editDeck/" component={EditDeck} />
+					<AuthorizeRoute exact path="/decks/:deckId/edit/" component={EditDeck} />
 					<AuthorizeRoute exact path="/testing/" component={Testing} />
 					<AuthorizeRoute exact path="/decks/:deckId" component={DeckDetail} />
 

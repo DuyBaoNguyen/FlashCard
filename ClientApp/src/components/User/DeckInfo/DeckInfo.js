@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
 import { Icon } from '@iconify/react';
 import optionIcon from '@iconify/icons-uil/ellipsis-h';
 import editIcon from '@iconify/icons-uil/edit';
@@ -19,7 +20,6 @@ class DeckInfo extends Component {
   render() {
     console.log(this.props);
     const { deck } = this.props;
-
     return (
       <div className="deck-information">
         <div className="deck-info-header">
@@ -28,11 +28,12 @@ class DeckInfo extends Component {
               right
               postfix={<Icon icon={optionIcon} color="#979797" style={{ fontSize: 20 }} />}
               className="deck-info-dropdown">
+              <Link to="/">
               <DropDownItem
                 type="link"
-                path={`/decks/14/edit`}
+                path={`/decks/${this.props.deck !== null ? this.props.deck.id : null}/edit/`}
                 icon={<Icon icon={editIcon} color="#535353" />}
-                label="Edit deck" />
+                label="Edit deck" /></Link>
               <DropDownItem
                 className="delete-deck-btn"
                 type="button"

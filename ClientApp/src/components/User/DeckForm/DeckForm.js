@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import * as actions from '../../../store/actions';
-import { Link } from 'react-router-dom';
 import withErrorHandler from '../../../hoc/withErrorHandler';
+import { Link } from 'react-router-dom';
 
 import './DeckForm.css';
 
@@ -12,15 +12,14 @@ class DeckForm extends Component {
 
 		this.state = {
 			hasError: false,
-			name: this.props.name !== null ? this.props.name : null,
-			description:
-				this.props.description !== null ? this.props.description : null,
-			theme: this.props.theme !== null ? this.props.theme : '#95dded',
+			name: null,
+			description: null,
+			theme: '#95dded',
 		};
 	}
 
 	editDeck = () => {
-		let id = 37;
+		let { id } = this.props;
 		let deck = {
 			name: this.state.name,
 			description: this.state.description,
@@ -43,9 +42,7 @@ class DeckForm extends Component {
 	handleSubmit = (event) => {
 		event.preventDefault();
 		if (this.props.editDeck === true) {
-			// Edit deck calls API here
 			this.editDeck();
-			console.log('Edit');
 		} else {
 			this.createDeck();
 		}
@@ -61,13 +58,10 @@ class DeckForm extends Component {
 	};
 
 	render() {
-		// const backgroundColor = {
-		// 	background: this.props.backgroundColor,
-		// };
-
 		if (this.state.hasError) {
 			return <h1>Something went wrong.</h1>;
 		}
+		console.log(this.props.deck);
 		return (
 			<div className="deck-form">
 				<div className="deck-form-wrapper">
