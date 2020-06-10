@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, Children, isValidElement, cloneElement } from 'react';
 
 import './DropDown.css';
 
@@ -13,15 +13,19 @@ class DropDown extends Component {
   }
 
   handleClick = () => {
-    this.setState(state => {
-      return { open: !state.open }
-    });
+    if (!this.state.open) {
+      this.setState({ open: true });
+    }
   }
 
   handleClickOutside = event => {
     if (this.dropdown.current && !this.dropdown.current.contains(event.target)) {
       this.setState({ open: false });
     }
+  }
+
+  handleCloseClick = () => {
+    this.setState({ open: false });
   }
 
   componentDidMount() {
@@ -43,6 +47,13 @@ class DropDown extends Component {
       menuClasses.push('right');
     }
 
+    const childrenWithProps = Children.map(this.props.children, child => {
+      if (isValidElement(child)) {
+        return cloneElement(child, { handleCloseClick: this.handleCloseClick });
+      }
+      return child;
+    });
+
     return (
       <li className={classes.join(' ')} ref={this.dropdown} onClick={this.handleClick}>
         <div className="dropdown-label">
@@ -53,7 +64,7 @@ class DropDown extends Component {
         </div>
         {this.state.open && (
           <div className={menuClasses.join(' ')}>
-            {this.props.children}
+            {childrenWithProps}
           </div>
         )}
       </li>

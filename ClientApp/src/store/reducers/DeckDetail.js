@@ -9,6 +9,7 @@ const initialState = {
 	cards: [],
 	getCardsError: false,
 	deleteDeckError: false,
+	updateDeckPublicStatusError: false
 };
 
 export const deckDetailReducer = (state = initialState, action) => {
@@ -64,6 +65,16 @@ export const deckDetailReducer = (state = initialState, action) => {
 			return {
 				...state,
 				deleteDeckError: true,
+			};
+		case actionTypes.UPDATE_DECK_PUBLIC_STATUS_SUCCESS:
+			return {
+				...state,
+				updateDeckPublicStatusError: false
+			};
+		case actionTypes.UPDATE_DECK_PUBLIC_STATUS_FAIL:
+			return {
+				...state,
+				updateDeckPublicStatusError: true
 			};
 		default:
 			return state;

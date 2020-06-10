@@ -25,6 +25,30 @@
   color: red;
 }
 
+.deck-information .deck-info-header .deck-info-options .public-deck {
+  display: -webkit-inline-box;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+  width: 250px;
+}
+
+.deck-information .deck-info-header .deck-info-options .public-deck .switch-wrapper {
+  position: relative;
+  width: 100%;
+}
+
+.deck-information .deck-info-header .deck-info-options .public-deck .switch-wrapper .switch {
+  position: absolute;
+  top: -1px;
+  right: 0;
+}
+
+.deck-information .deck-info-header .deck-info-options .public-deck .pending-notification {
+  margin-left: 10px;
+  font-size: 13px;
+  vertical-align: bottom;
+}
+
 .deck-information .deck-description {
   color: #979797;
   font-size: 14px;

@@ -21,7 +21,14 @@
   padding-left: 26px;
 }
 
-.dropdown-item:hover {
+.dropdown-item.dropdown-item-hover:hover {
   background-color: #f5f5f5;
+}
+
+.dropdown-item-line {
+  display: block;
+  height: 1px;
+  margin: 10px 15px;
+  background-color: #eee;
 }
 /*# sourceMappingURL=DropDownItem.css.map */

@@ -87,3 +87,26 @@ export const deleteDeck = (id) => {
       .catch(err => dispatch(deleteDeckFail()));
   };
 };
+
+const updateDeckPublicStatusSuccess = () => {
+  return {
+    type: actionTypes.UPDATE_DECK_PUBLIC_STATUS_SUCCESS
+  };
+};
+
+const updateDeckPublicStatusFail = () => {
+  return {
+    type: actionTypes.UPDATE_DECK_PUBLIC_STATUS_FAIL
+  };
+};
+
+export const updateDeckPublicStatus = (id, value) => {
+  return dispatch => {
+    axios.put(`/api/decks/${id}/public`, { value })
+      .then(() => {
+        dispatch(getDeck(id));
+        dispatch(updateDeckPublicStatusSuccess());
+      })
+      .catch(err => dispatch(updateDeckPublicStatusFail()));
+  };
+};
