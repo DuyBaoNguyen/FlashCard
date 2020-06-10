@@ -1,0 +1,64 @@
+.testing-button {
+  display: -ms-grid;
+  display: grid;
+  -ms-grid-columns: auto auto;
+      grid-template-columns: auto auto;
+  -webkit-column-gap: 20px;
+          column-gap: 20px;
+  margin-top: 30px;
+}
+
+.testing-button .testing-button-remember button {
+  width: 100%;
+  height: 53px;
+  background: #52c41a;
+  border: none;
+  border-radius: 15px;
+  color: white;
+  -webkit-transition: 0.1s;
+  transition: 0.1s;
+}
+
+.testing-button .testing-button-remember button:active {
+  -webkit-transition: 0.1s;
+  transition: 0.1s;
+  -webkit-transform: translateY(10px);
+          transform: translateY(10px);
+}
+
+.testing-button .testing-button-dont-remember button {
+  width: 100%;
+  height: 53px;
+  background: #fe656d;
+  border: none;
+  border-radius: 15px;
+  color: white;
+  -webkit-transition: 0.1s;
+  transition: 0.1s;
+}
+
+.testing-button .testing-button-dont-remember button:active {
+  -webkit-transition: 0.1s;
+  transition: 0.1s;
+  -webkit-transform: translateY(10px);
+          transform: translateY(10px);
+}
+
+.testing-button .testing-button-next button {
+  width: 195%;
+  height: 53px;
+  background: #9EACF4;
+  border: none;
+  border-radius: 15px;
+  color: white;
+  -webkit-transition: 0.1s;
+  transition: 0.1s;
+}
+
+.testing-button .testing-button-next button:active {
+  -webkit-transition: 0.1s;
+  transition: 0.1s;
+  -webkit-transform: translateY(10px);
+          transform: translateY(10px);
+}
+/*# sourceMappingURL=LearnVocab.css.map */

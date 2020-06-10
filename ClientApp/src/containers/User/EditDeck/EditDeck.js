@@ -15,6 +15,11 @@ class EditDeck extends Component {
 		};
 	}
 
+	componentDidMount() {
+		this.deckId = this.props.match.params.deckId;
+		this.props.onGetDeck(this.deckId);
+	}
+
 	render() {
 		const { deck} = this.props;
 		console.log(deck);
@@ -25,6 +30,7 @@ class EditDeck extends Component {
 			<div className="create-deck-wrapper">
 				<div className="form">
 					<DeckForm
+						deck={this.props.deck}
 						id={this.props.match.params.deckId}
 						editDeck={true}
 						header="Edit deck"
@@ -34,4 +40,20 @@ class EditDeck extends Component {
 		);
 	}
 }
-export default EditDeck;
+
+const mapStateToProps = (state) => {
+	return {
+		deck: state.deckDetail.deck,
+	};
+};
+
+const mapDispatchToProps = (dispatch) => {
+	return {
+		onGetDeck: (id) => dispatch(actions.getDeck(id)),
+	};
+};
+
+export default connect(
+	mapStateToProps,
+	mapDispatchToProps
+)(withErrorHandler(EditDeck));

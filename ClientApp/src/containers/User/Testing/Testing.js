@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
 import { Progress } from 'react-sweet-progress';
-import ReactCardFlip from 'react-card-flip';
 import 'react-sweet-progress/lib/style.css';
+import LearnVocab from './LearnVocab/LearnVocab';
+import { connect } from 'react-redux';
+import * as actions from '../../../store/actions';
 import './Testing.css';
 
 class Testing extends Component {
@@ -13,58 +15,33 @@ class Testing extends Component {
 		};
 	}
 
-	showNextButton = () => {
-		this.setState({
-			isFlipped: !this.state.isFlipped,
-		});
-	};
-
+	componentDidMount() {
+		this.props.onGetCardsInDeck(this.props.match.params.deckId);
+	}
 	render() {
-		let buttons = (
-			<>
-				<div className="testing-button-dont-remember">
-					<button onClick={() => this.showNextButton()}>Don't Remember</button>
-				</div>
-				<div className="testing-button-remember">
-					<button>Remember</button>
-				</div>
-			</>
-		);
-
-		let nextButton = (
-			<>
-				<div className="testing-button-next">
-					<button onClick={() => this.showNextButton()}>Next</button>
-				</div>
-			</>
-		);
-
-		let front = <div className="testing-card">front</div>;
-		let back = <div className="testing-card">back</div>;
-
-		if (this.state.hasError) {
-			return <h1>Something went wrong.</h1>;
-		}
 		return (
 			<div className="testing-wrapper">
 				<div className="testing-container">
 					<div className="testing-progress">
 						<Progress percent={12} />
 					</div>
-					<ReactCardFlip
-						isFlipped={this.state.isFlipped}
-						flipDirection="vertical"
-					>
-						{front}
-						{back}
-					</ReactCardFlip>
-					<div className="testing-button">
-						{this.state.isFlipped !== true ? buttons : nextButton}
-					</div>
+					<LearnVocab />
 				</div>
 			</div>
 		);
 	}
 }
 
-export default Testing;
+const mapStateToProps = (state) => {
+	return {
+		cardList: state.testing.cardList,
+	};
+};
+
+const mapDispatchToProps = (dispatch) => {
+	return {
+		onGetCardsInDeck: (id) => dispatch(actions.getCardsInDeck(id)),
+	};
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Testing);
