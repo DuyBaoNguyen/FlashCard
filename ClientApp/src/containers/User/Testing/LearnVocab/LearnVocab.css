@@ -47,7 +47,7 @@
 .testing-button .testing-button-next button {
   width: 195%;
   height: 53px;
-  background: #9EACF4;
+  background: #9eacf4;
   border: none;
   border-radius: 15px;
   color: white;
@@ -60,5 +60,39 @@
   transition: 0.1s;
   -webkit-transform: translateY(10px);
           transform: translateY(10px);
+}
+
+.testing-card {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  padding: 50px;
+  height: 485px;
+  background: #ffffff;
+  -webkit-box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+          box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+  border-radius: 15px;
+}
+
+.testing-card .testing-card-front {
+  color: #535353;
+  line-height: 30px;
+  font-size: 20px;
+}
+
+.testing-card .testing-card-back {
+  line-height: 30px;
+  font-size: 20px;
+}
+
+.testing-card .testing-card-back .back-card {
+  text-align: left;
+  width: 450px;
 }
 /*# sourceMappingURL=LearnVocab.css.map */

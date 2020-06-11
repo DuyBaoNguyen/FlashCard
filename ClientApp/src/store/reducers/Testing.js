@@ -1,9 +1,10 @@
 import * as actionTypes from '../actions/actionTypes';
 
 const initialState = {
-  cardList : [],
-  getCardError : null,
-}
+	cardList: [],
+	getCardsError: null,
+	currentVocab: null,
+};
 
 export const testingReducer = (state = initialState, action) => {
 	switch (action.type) {
@@ -11,13 +12,18 @@ export const testingReducer = (state = initialState, action) => {
 			return {
 				...state,
 				cardList: action.cardList,
-				getCardError : null,
+				getCardsError: null,
 			};
 		case actionTypes.GET_CARDS_IN_DECK_FAIL:
 			return {
 				...state,
 				cardList: [],
-				getCardError : null,
+				getCardsError: null,
+			};
+		case actionTypes.UPDATE_RANDOM_CARD:
+			return {
+				...state,
+				currentVocab: action.currentVocab,
 			};
 		default:
 			return state;

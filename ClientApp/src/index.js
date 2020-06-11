@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import { createStore, combineReducers, applyMiddleware } from 'redux';
 import { Provider } from 'react-redux';
 import { Router } from 'react-router-dom';
-import thunk  from 'redux-thunk';
+import thunk from 'redux-thunk';
 import App from './App';
 import history from './history';
 //import registerServiceWorker from './registerServiceWorker';
@@ -14,7 +14,8 @@ const baseUrl = document.getElementsByTagName('base')[0].getAttribute('href');
 const rootElement = document.getElementById('root');
 const rootReducer = combineReducers({
 	home: reducers.homeReducer,
-	deckDetail: reducers.deckDetailReducer
+	deckDetail: reducers.deckDetailReducer,
+	testing: reducers.testingReducer,
 });
 const store = createStore(rootReducer, applyMiddleware(thunk));
 const app = (

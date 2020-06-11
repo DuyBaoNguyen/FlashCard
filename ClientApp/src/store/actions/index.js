@@ -5,11 +5,11 @@ export { getDecks, getStatistics, getProfile } from './Home';
 export { createDeck, editDeck } from './Deck';
 
 export {
-  getDeck,
-  getDeckCards,
-  getDeckStatistics,
-  deleteDeck,
-  updateDeckPublicStatus
+	getDeck,
+	getDeckCards,
+	getDeckStatistics,
+	deleteDeck,
+	updateDeckPublicStatus,
 } from './DeckDetail';
 
-export { getCardsInDeck } from './Testing';
+export { getCardsInDeck, updateRandomCard } from './Testing';
