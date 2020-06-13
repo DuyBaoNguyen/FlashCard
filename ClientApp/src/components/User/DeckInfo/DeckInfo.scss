@@ -3,6 +3,10 @@
   box-shadow: 0px 0px 30px rgba(0, 0, 0, 0.05);
   border-radius: 15px;
   padding: 30px;
+  height: 244px;
+  // overflow: hidden;
+  transition: height .15s ease;
+  position: relative;
   .deck-info-header {
     color: #535353;
     font-style: normal;
@@ -40,12 +44,11 @@
   .deck-description {
     color: #979797;
     font-size: 14px;
-    margin-bottom: 20px;
   }
   .deck-field {
     display: flex;
     justify-content: space-between;
-    margin-bottom: 20px;
+    margin: 20px 0 10px;
     span {
       font-size: 14px;
     }
@@ -58,6 +61,12 @@
     }
   }
   .deck-features {
+    position: absolute;
+    left: 30px;
+    bottom: 0;
+    right: 30px;
+    padding: 10px 0 30px;
+    background-color: #fff;
     display: grid;
     grid-template-columns: auto auto;
     gap: 20px;
@@ -66,5 +75,8 @@
       text-align: center;
       font-weight: 600;
     }
+  }
+  &.show-less {
+    height: 133px;
   }
 }

@@ -10,10 +10,10 @@
       -ms-flex-align: center;
           align-items: center;
   position: relative;
-  height: 485px;
+  height: 463px;
   background: #ffffff;
-  -webkit-box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
-          box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+  -webkit-box-shadow: 0px 0px 30px rgba(0, 0, 0, 0.05);
+          box-shadow: 0px 0px 30px rgba(0, 0, 0, 0.05);
   border-radius: 15px;
 }
 

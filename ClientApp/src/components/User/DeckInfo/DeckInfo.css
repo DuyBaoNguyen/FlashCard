@@ -4,6 +4,10 @@
           box-shadow: 0px 0px 30px rgba(0, 0, 0, 0.05);
   border-radius: 15px;
   padding: 30px;
+  height: 244px;
+  -webkit-transition: height .15s ease;
+  transition: height .15s ease;
+  position: relative;
 }
 
 .deck-information .deck-info-header {
@@ -53,7 +57,6 @@
 .deck-information .deck-description {
   color: #979797;
   font-size: 14px;
-  margin-bottom: 20px;
 }
 
 .deck-information .deck-field {
@@ -63,7 +66,7 @@
   -webkit-box-pack: justify;
       -ms-flex-pack: justify;
           justify-content: space-between;
-  margin-bottom: 20px;
+  margin: 20px 0 10px;
 }
 
 .deck-information .deck-field span {
@@ -80,6 +83,12 @@
 }
 
 .deck-information .deck-features {
+  position: absolute;
+  left: 30px;
+  bottom: 0;
+  right: 30px;
+  padding: 10px 0 30px;
+  background-color: #fff;
   display: -ms-grid;
   display: grid;
   -ms-grid-columns: auto auto;
@@ -91,5 +100,9 @@
   display: block;
   text-align: center;
   font-weight: 600;
+}
+
+.deck-information.show-less {
+  height: 133px;
 }
 /*# sourceMappingURL=DeckInfo.css.map */

@@ -13,10 +13,6 @@ import './DeckDetail.css';
 import { connect } from 'react-redux';
 
 class DeckDetail extends Component {
-  constructor(props) {
-    super(props);
-  }
-
   componentDidMount() {
     this.deckId = this.props.match.params.deckId;
     this.props.onGetDeck(this.deckId);
@@ -32,7 +28,12 @@ class DeckDetail extends Component {
     const { deck, statistics, selectedCard, returnUrl } = this.props;
     let leftSection;
     if (selectedCard) {
-      leftSection = <CardInfo card={selectedCard} closed={this.handleCloseCard} />;
+      leftSection = (
+        <>
+          <DeckInfo deck={deck} showLess />
+          <CardInfo card={selectedCard} closed={this.handleCloseCard} />
+        </>
+      );
     } else {
       leftSection = (
         <>

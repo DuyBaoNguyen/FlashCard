@@ -2,6 +2,7 @@ import * as actionTypes from '../actions/actionTypes';
 
 const initialState = {
 	createDeckError: null,
+	editDeckError: null,
 };
 
 export const deckReducer = (state = initialState, action) => {

@@ -7,33 +7,22 @@ import DeckForm from '../../../components/User/DeckForm/DeckForm';
 import './EditDeck.css';
 
 class EditDeck extends Component {
-	constructor(props) {
-		super(props);
-
-		this.state = {
-			hasError: false,
-		};
-	}
-
 	componentDidMount() {
 		this.deckId = this.props.match.params.deckId;
 		this.props.onGetDeck(this.deckId);
 	}
 
 	render() {
-		const { deck} = this.props;
-		console.log(deck);
-		if (this.state.hasError) {
-			return <h1>Something went wrong.</h1>;
-		}
+		const { deck, backUrl } = this.props;
 		return (
 			<div className="create-deck-wrapper">
 				<div className="form">
 					<DeckForm
-						deck={this.props.deck}
+						deck={deck}
 						id={this.props.match.params.deckId}
 						editDeck={true}
 						header="Edit deck"
+						backUrl={backUrl}
 					/>
 				</div>
 			</div>
