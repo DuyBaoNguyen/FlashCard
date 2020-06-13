@@ -12,12 +12,13 @@
 
 .deck-detail .back-feature .back-feature-icon {
   position: absolute;
+  left: -8px;
   font-size: 22px;
 }
 
 .deck-detail .back-feature .back-feature-label {
   font-size: 14px;
-  padding-left: 26px;
+  padding-left: 18px;
 }
 
 .deck-detail section {
@@ -30,7 +31,8 @@
 }
 
 .deck-detail .left-section .statistics-wrapper,
-.deck-detail .left-section .deck-information {
+.deck-detail .left-section .deck-information,
+.deck-detail .left-section .card-info {
   margin-top: 20px;
 }
 

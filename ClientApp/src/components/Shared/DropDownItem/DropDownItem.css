@@ -1,7 +1,6 @@
 .dropdown-item {
   display: block;
   position: relative;
-  cursor: pointer;
   -webkit-user-select: none;
      -moz-user-select: none;
       -ms-user-select: none;
@@ -19,6 +18,10 @@
   font-size: 14px;
   white-space: nowrap;
   padding-left: 26px;
+}
+
+.dropdown-item.dropdown-item-hover {
+  cursor: pointer;
 }
 
 .dropdown-item.dropdown-item-hover:hover {

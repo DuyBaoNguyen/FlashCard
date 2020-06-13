@@ -25,7 +25,7 @@ const chart = props => {
 
   return (
     <div className="chart-wrapper">
-      <AutoSizer className="auto-sizer">
+      <AutoSizer className="auto-sizer" style={{ width: '100%', height: '100%' }}>
         {({ width, height }) => (
           <div className="chart" style={{ width: width, height: height }}>
             <ResponsiveBar

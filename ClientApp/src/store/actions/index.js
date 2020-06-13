@@ -9,5 +9,8 @@ export {
   getDeckCards,
   getDeckStatistics,
   deleteDeck,
-  updateDeckPublicStatus
+  updateDeckPublicStatus,
+  selectCardInDeckDetails,
+  unselectCardInDeckDetails,
+  removeCard
 } from './DeckDetail';

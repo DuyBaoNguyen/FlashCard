@@ -30,6 +30,7 @@ class DeckInfo extends Component {
           <div className="deck-info-options">
             <DropDown
               right
+              changeable={deck?.public}
               postfix={<Icon icon={optionIcon} color="#979797" style={{ fontSize: 20 }} />}
               className="deck-info-dropdown">
               <DropDownItem
@@ -79,7 +80,7 @@ class DeckInfo extends Component {
           </span>
         </div>
         <div className="deck-features">
-          <Button type="link" path={`/testing/${deck?.id}`}>Test</Button>
+          <Button type="link" path={`/testing/${deck?.id}`}>Practice</Button>
           <Button type="link" path={`/matchgame/${deck?.id}`}>Match game</Button>
         </div>
       </div>
