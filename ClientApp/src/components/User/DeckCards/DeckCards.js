@@ -19,15 +19,25 @@ class DeckCards extends Component {
     this.state = {
       activePage: 1
     };
+    this.searchString = '';
+  }
+
+  handleClickCard = (cardId) => {
+    this.props.onSelectCard(cardId);
   }
 
   handlePageChange(pageNumber) {
     this.setState({ activePage: pageNumber });
   }
 
-  handleSearchCards(event) {
-    this.props.onGetDeckCards(this.props.deck.id, event.target.value);
+  handleSearchCards = (event) => {
+    this.searchString = event.target.value;
+    this.props.onGetDeckCards(this.props.deck.id, this.searchString);
     this.setState({ activePage: 1 });
+  }
+
+  handleRemoveCard = (cardId) => {
+    this.props.onRemoveCard(this.props.deck.id, cardId, this.searchString);
   }
 
   render() {
@@ -39,7 +49,15 @@ class DeckCards extends Component {
     if (cards.length > 0) {
       cardsList = cards
         .filter((card, index) => index >= (activePage - 1) * AMOUNT_CARDS && index <= activePage * AMOUNT_CARDS - 1)
-        .map((card, index) => <Card key={card.id} card={card} />);
+        .map(card => {
+          return (
+            <Card
+              key={card.id}
+              card={card}
+              onClick={this.handleClickCard}
+              onRemove={this.handleRemoveCard} />
+          );
+        });
 
       pagination = (
         <Pagination
@@ -69,7 +87,7 @@ class DeckCards extends Component {
             </Button>
             <Search
               placeholder="Search..."
-              onChange={(event) => this.handleSearchCards(event)} />
+              onChange={this.handleSearchCards} />
           </div>
         </div>
         <div className="cards">{cardsList}</div>
@@ -88,7 +106,9 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    onGetDeckCards: (id, front) => dispatch(actions.getDeckCards(id, front))
+    onGetDeckCards: (id, front) => dispatch(actions.getDeckCards(id, front)),
+    onSelectCard: (id) => dispatch(actions.selectCardInDeckDetails(id)),
+    onRemoveCard: (deckId, cardId, front) => dispatch(actions.removeCard(deckId, cardId, front))
   };
 };
 

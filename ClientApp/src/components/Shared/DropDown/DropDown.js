@@ -12,10 +12,16 @@ class DropDown extends Component {
     this.dropdown = React.createRef();
   }
 
-  handleClick = () => {
-    if (!this.state.open) {
-      this.setState({ open: true });
-    }
+  shouldComponentUpdate(nextProps, nextState) {
+    return this.state.open !== nextState.open || this.props.label !== nextProps.label ||
+      this.props.changeable !== nextProps.changeable;
+  }
+
+  handleClickLabel = event => {
+    event.stopPropagation();
+    this.setState(state => {
+      return { open: !state.open }
+    });
   }
 
   handleClickOutside = event => {
@@ -24,7 +30,7 @@ class DropDown extends Component {
     }
   }
 
-  handleCloseClick = () => {
+  handleClickItem = () => {
     this.setState({ open: false });
   }
 
@@ -49,14 +55,14 @@ class DropDown extends Component {
 
     const childrenWithProps = Children.map(this.props.children, child => {
       if (isValidElement(child)) {
-        return cloneElement(child, { handleCloseClick: this.handleCloseClick });
+        return cloneElement(child, { closeItem: this.handleClickItem });
       }
       return child;
     });
 
     return (
-      <li className={classes.join(' ')} ref={this.dropdown} onClick={this.handleClick}>
-        <div className="dropdown-label">
+      <li className={classes.join(' ')} ref={this.dropdown}>
+        <div className="dropdown-label" onClick={this.handleClickLabel}>
           {this.props.label}
           <span className="postfix">
             {this.props.postfix}

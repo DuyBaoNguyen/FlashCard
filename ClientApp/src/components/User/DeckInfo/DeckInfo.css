@@ -47,6 +47,7 @@
   margin-left: 10px;
   font-size: 13px;
   vertical-align: bottom;
+  color: #979797;
 }
 
 .deck-information .deck-description {
@@ -89,5 +90,6 @@
 .deck-information .deck-features a {
   display: block;
   text-align: center;
+  font-weight: 600;
 }
 /*# sourceMappingURL=DeckInfo.css.map */

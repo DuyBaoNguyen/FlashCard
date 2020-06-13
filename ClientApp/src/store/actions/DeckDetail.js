@@ -110,3 +110,41 @@ export const updateDeckPublicStatus = (id, value) => {
       .catch(err => dispatch(updateDeckPublicStatusFail()));
   };
 };
+
+export const selectCardInDeckDetails = (cardId) => {
+  return {
+    type: actionTypes.SELECT_CARD_IN_DECK_DETAILS,
+    cardId: cardId
+  };
+}
+
+export const unselectCardInDeckDetails = () => {
+  return {
+    type: actionTypes.UNSELECT_CARD_IN_DECK_DETAILS
+  };
+}
+
+const removeCardSuccess = (cardId) => {
+  return {
+    type: actionTypes.REMOVE_CARD_SUCCESS,
+    cardId: cardId
+  };
+};
+
+const removeCardFail = () => {
+  return {
+    type: actionTypes.REMOVE_CARD_FAIL
+  };
+};
+
+export const removeCard = (deckId, cardId, front) => {
+  return dispatch => {
+    axios.delete(`/api/decks/${deckId}/cards/${cardId}`)
+      .then(res => {
+        dispatch(removeCardSuccess(cardId));
+        dispatch(getDeck(deckId));
+        dispatch(getDeckCards(deckId, front));
+      })
+      .catch(err => dispatch(removeCardFail()));
+  };
+};
