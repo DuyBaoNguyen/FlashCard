@@ -1,5 +1,6 @@
 import axios from '../../axios';
 import * as actionTypes from '../actions/actionTypes';
+import history from '../../history';
 
 export const createDeckSuccess = () => {
 	return {
@@ -38,8 +39,7 @@ export const editDeckFail = () => {
 	};
 };
 
-export const editDeck = (deck, id) => {
-	console.log('Edit deck API called')
+export const editDeck = (deck, id, backUrl) => {
 	return (dispatch) => {
 		axios
 			.put('/api/decks/' + id, {
@@ -47,7 +47,10 @@ export const editDeck = (deck, id) => {
 				description: deck.description,
 				theme: deck.theme,
 			})
-			.then((res) => dispatch(editDeckSuccess()))
+			.then((res) => {
+				dispatch(editDeckSuccess());
+				history.push(backUrl)
+			})
 			.catch((err) => dispatch(editDeckFail()));
 	};
 };

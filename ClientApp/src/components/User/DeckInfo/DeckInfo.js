@@ -23,18 +23,26 @@ class DeckInfo extends Component {
   }
 
   render() {
-    const { deck, updateDeckPublicStatusError } = this.props;
+    const { deck, updateDeckPublicStatusError, showLess } = this.props;
+    const deckInfoClasses = ['deck-information'];
+    if (showLess) {
+      deckInfoClasses.push('show-less');
+    }
     return (
-      <div className="deck-information">
+      <div className={deckInfoClasses.join(' ')}>
         <div className="deck-info-header">
           <div className="deck-info-options">
             <DropDown
               right
+              changeable={deck?.public}
               postfix={<Icon icon={optionIcon} color="#979797" style={{ fontSize: 20 }} />}
               className="deck-info-dropdown">
               <DropDownItem
                 type="link"
-                path={`/decks/${this.props.deck?.id}/edit`}
+                path={{
+                  pathname: `/decks/${deck?.id}/edit`,
+                  backUrl: `/decks/${deck?.id}`
+                }}
                 icon={<Icon icon={editIcon} color="#535353" />}
                 label="Edit deck" />
               <DropDownItem
@@ -65,21 +73,25 @@ class DeckInfo extends Component {
           </div>
           <p>{deck?.name}</p>
         </div>
-        <div className="deck-description">
-          <i>{deck?.description}</i>
-        </div>
-        <div className="deck-field">
-          <span className="deck-field-label">Number of cards</span>
-          <span className="deck-field-value">{deck?.totalCards}</span>
-        </div>
-        <div className="deck-field">
-          <span className="deck-field-label">Created date</span>
-          <span className="deck-field-value">
-            {new Date(deck?.createdDate).toDateString()}
-          </span>
-        </div>
+        {!showLess && (
+          <>
+            <div className="deck-description">
+              <i>{deck?.description}</i>
+            </div>
+            <div className="deck-field">
+              <span className="deck-field-label">Number of cards</span>
+              <span className="deck-field-value">{deck?.totalCards}</span>
+            </div>
+            <div className="deck-field">
+              <span className="deck-field-label">Created date</span>
+              <span className="deck-field-value">
+                {new Date(deck?.createdDate).toDateString()}
+              </span>
+            </div>
+          </>
+        )}
         <div className="deck-features">
-          <Button type="link" path={`/decks/testing/${deck?.id}`}>Test</Button>
+          <Button type="link" path={`/decks/testing/${deck?.id}`}>Practice</Button>
           <Button type="link" path={`/matchgame/${deck?.id}`}>Match game</Button>
         </div>
       </div>

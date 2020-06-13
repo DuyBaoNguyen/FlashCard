@@ -4,9 +4,10 @@ import { Link } from 'react-router-dom';
 import './DropDownItem.css';
 
 class DropDownItem extends Component {
-  handleClick = () => {
+  handleClick = (event) => {
+    event.stopPropagation();
     if (this.props.type) {
-      this.props.handleCloseClick();
+      this.props.closeItem();
     }
     if (this.props.onClick) {
       this.props.onClick();

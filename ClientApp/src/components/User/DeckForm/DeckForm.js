@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import * as actions from '../../../store/actions';
 import withErrorHandler from '../../../hoc/withErrorHandler';
-import { Link } from 'react-router-dom';
+import { Link, withRouter } from 'react-router-dom';
 
 import './DeckForm.css';
 
@@ -11,11 +11,22 @@ class DeckForm extends Component {
 		super(props);
 
 		this.state = {
-			hasError: false,
 			name: null,
 			description: null,
-			theme: '#95dded',
+			theme: '#95dded'
 		};
+		this.themes = ['#95dded', '#9fcbf5', '#ffb1b1', '#fdd39d', '#b7eb8f', '#ebaaea'];
+	}
+
+	static getDerivedStateFromProps(props, state) {
+		if (props.deck && state.name === null) {
+			return {
+				name: props.deck.name,
+				description: props.deck.description,
+				theme: props.deck.theme
+			}
+		}
+		return null;
 	}
 
 	editDeck = () => {
@@ -26,7 +37,8 @@ class DeckForm extends Component {
 			theme: this.state.theme,
 		};
 
-		this.props.onEditDeck(deck, id);
+		const backUrl = this.props.location.backUrl || '/';
+		this.props.onEditDeck(deck, id, backUrl);
 	};
 
 	createDeck = () => {
@@ -58,10 +70,20 @@ class DeckForm extends Component {
 	};
 
 	render() {
-		if (this.state.hasError) {
-			return <h1>Something went wrong.</h1>;
-		}
-		console.log(this.props.deck);
+		const radios = this.themes.map((theme, index) => (
+			<label key={index} className="circle">
+				<input
+					type="radio"
+					name="theme"
+					value={theme}
+					checked={this.state.theme === theme}
+					onChange={(e) => this.handleInputChange(e)} />
+				<div className="button-circle">
+					<span style={{ background: theme }}></span>
+				</div>
+			</label>
+		));
+
 		return (
 			<div className="deck-form">
 				<div className="deck-form-wrapper">
@@ -75,7 +97,8 @@ class DeckForm extends Component {
 								type="text"
 								name="name"
 								checked
-								value={this.state.name}
+								defaultValue={this.state.name}
+								autoComplete="off"
 								onChange={(e) => this.handleInputChange(e)}
 							/>
 						</div>
@@ -84,95 +107,16 @@ class DeckForm extends Component {
 							<input
 								type="text"
 								name="description"
-								value={this.state.description}
+								defaultValue={this.state.description}
+								autoComplete="off"
 								onChange={(e) => this.handleInputChange(e)}
 							/>
 						</div>
-						<div
-							className="deck-form-circle"
-							onChange={(e) => this.handleInputChange(e)}
-						>
-							<label class="circle">
-								<input
-									type="radio"
-									name="theme"
-									value="#95dded"
-									defaultChecked
-									// checked={this.state.selectedOption === '#95DDED'}
-									// onChange={(e) => this.handleInputChange(e)}
-								/>
-								<div class="button-circle">
-									<span style={{ background: '#95dded' }}></span>
-								</div>
-							</label>
-
-							<label class="circle">
-								<input
-									type="radio"
-									name="theme"
-									value="#9fcbf5"
-									// checked={this.state.selectedOption === '#9FCBF5'}
-									// onChange={(e) => this.handleInputChange(e)}
-								/>
-								<div class="button-circle">
-									<span style={{ background: '#9fcbf5' }}></span>
-								</div>
-							</label>
-
-							<label class="circle">
-								<input
-									type="radio"
-									name="theme"
-									value="#ffb1b1"
-									// checked={this.state.selectedOption === '#FFB1B1'}
-									// onChange={(e) => this.handleInputChange(e)}
-								/>
-								<div class="button-circle">
-									<span style={{ background: '#ffb1b1' }}></span>
-								</div>
-							</label>
-
-							<label class="circle">
-								<input
-									type="radio"
-									name="theme"
-									value="#fdd39d"
-									// checked={this.state.selectedOption === '#FDD39D'}
-									// onChange={(e) => this.handleInputChange(e)}
-								/>
-								<div class="button-circle">
-									<span style={{ background: '#fdd39d' }}></span>
-								</div>
-							</label>
-
-							<label class="circle">
-								<input
-									type="radio"
-									name="theme"
-									value="#b7eb8f"
-									// checked={this.state.selectedOption === '#B7EB8F'}
-									// onChange={(e) => this.handleInputChange(e)}
-								/>
-								<div class="button-circle">
-									<span style={{ background: '#b7eb8f' }}></span>
-								</div>
-							</label>
-
-							<label class="circle">
-								<input
-									type="radio"
-									name="theme"
-									value="#ebaaea"
-									// checked={this.state.selectedOption === '#EBAAEA'}
-									// onChange={(e) => this.handleInputChange(e)}
-								/>
-								<div class="button-circle">
-									<span style={{ background: '#ebaaea' }}></span>
-								</div>
-							</label>
+						<div className="deck-form-circle">
+							{radios}
 						</div>
 						<div className="deck-form-button">
-							<Link to={'/'}>
+							<Link to={this.props.location.backUrl || '/'}>
 								<button className="deck-form-button-cancel">Cancel</button>
 							</Link>
 							<button
@@ -190,20 +134,14 @@ class DeckForm extends Component {
 	}
 }
 
-const mapStateToProps = (state) => {
-	return {
-		deck: state.home.deck,
-	};
-};
-
 const mapDispatchToProps = (dispatch) => {
 	return {
 		onCreateDeck: (deck) => dispatch(actions.createDeck(deck)),
-		onEditDeck: (deck, id) => dispatch(actions.editDeck(deck, id)),
+		onEditDeck: (deck, id, backUrl) => dispatch(actions.editDeck(deck, id, backUrl)),
 	};
 };
 
-export default connect(
-	mapStateToProps,
+export default withRouter(connect(
+	null,
 	mapDispatchToProps
-)(withErrorHandler(DeckForm));
+)(withErrorHandler(DeckForm)));
