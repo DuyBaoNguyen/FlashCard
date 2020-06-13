@@ -114,7 +114,6 @@ class LearnVocab extends Component {
 					<b style={{ color: '#9EACF4' }}>{back.meaning}</b>
 					<p style={{ fontStyle: 'italic' }}>{back.type}</p>
 					<p>{back.example}</p>
-
 				</div>
 			);
 		});
@@ -130,6 +129,7 @@ class LearnVocab extends Component {
 		return (
 			<div className="learn-wrapper">
 				<ReactCardFlip
+					flipSpeedBackToFront="0.00001"
 					isFlipped={this.state.isFlipped}
 					flipDirection="vertical"
 				>

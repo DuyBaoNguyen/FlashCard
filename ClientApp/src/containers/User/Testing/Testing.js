@@ -12,8 +12,14 @@ class Testing extends Component {
 		super(props);
 
 		this.state = {
+			finish: false,
+			process: 0,
+			listLength: 1,
 			currentVocab: null,
+			savedVocab: [],
 			isStart: false,
+			succeededCardIds: [],
+			failedCardIds: [],
 		};
 	}
 
@@ -31,17 +37,85 @@ class Testing extends Component {
 
 	onNext = (isDelete, id) => {
 		let { cardList } = this.props;
-		this.setState({
-			currentVocab: this.getRandomCard(cardList),
-		});
-		console.log(isDelete, id);
+		let { savedVocab, succeededCardIds, failedCardIds } = this.state;
+
+		let newSavedVocab = [...savedVocab];
+		let currentVocabList = [...cardList];
+
+		let newSucceededCardIds = [...succeededCardIds];
+		let newFailedCardIds = [...failedCardIds];
+		let process = (
+			(this.state.savedVocab.length /
+				(this.props.cardList.length + this.state.savedVocab.length)) *
+			100
+		).toFixed(2);
+		// Save word that user has just learned in a new array
+		newSavedVocab.push(cardList.filter((x) => x.id === id));
+
+		if (isDelete === true) {
+			newSucceededCardIds.push(this.state.currentVocab?.id);
+			newSucceededCardIds = newSucceededCardIds.filter(Number);
+			newFailedCardIds = newFailedCardIds.filter(Number);
+
+			// Remove word from list
+			currentVocabList.splice(
+				cardList.findIndex((x) => x.id === id),
+				1
+			);
+
+			this.props.onUpdateCardsInDeck(currentVocabList);
+
+			this.setState({
+				process: process,
+				currentVocab: this.getRandomCard(currentVocabList),
+				savedVocab: newSavedVocab,
+				succeededCardIds: newSucceededCardIds,
+			});
+		} else {
+			newFailedCardIds.push(this.state.currentVocab?.id);
+			this.props.onUpdateCardsInDeck(currentVocabList);
+			this.setState({
+				currentVocab: this.getRandomCard(cardList),
+				failedCardIds: newFailedCardIds,
+			});
+		}
+		// console.log(
+		// 	currentVocabList.length,
+		// 	this.props.cardList.length + this.state.savedVocab.length
+		// );
+		if (currentVocabList.length === 0) {
+			console.log('Call API');
+			this.isFinish(currentVocabList, newSucceededCardIds, newFailedCardIds);
+		}
+	};
+
+	isFinish = (currentVocabList, newSucceededCardIds, newFailedCardIds) => {
+		let formattedNewSucceededCardIds = newSucceededCardIds.filter(
+			(x) => !newFailedCardIds.includes(x)
+		);
+		console.log(formattedNewSucceededCardIds);
+		let date = new Date();
+
+		formattedNewSucceededCardIds = this.unique(formattedNewSucceededCardIds);
+		newFailedCardIds = this.unique(newFailedCardIds);
+		console.log(formattedNewSucceededCardIds, newFailedCardIds);
+		this.props.onSendTestResult(
+			this.props.match.params.deckId,
+			date.toISOString(),
+			newSucceededCardIds,
+			formattedNewSucceededCardIds
+		);
+	};
+
+	unique = (array) => {
+		return Array.from(new Set(array));
 	};
 
 	render() {
 		let testingField = (
 			<>
 				<div className="testing-progress">
-					<Progress percent={12} />
+					<Progress percent={this.state.process} />
 				</div>
 				<LearnVocab
 					onNext={this.onNext}
@@ -83,6 +157,8 @@ const mapStateToProps = (state) => {
 	return {
 		cardList: state.testing.cardList,
 		currentVocab: state.testing.currentVocab,
+		succeededCardIds: state.testing.succeededCardIds,
+		failedCardIds: state.testing.failedCardIds,
 	};
 };
 
@@ -91,6 +167,12 @@ const mapDispatchToProps = (dispatch) => {
 		onGetCardsInDeck: (id) => dispatch(actions.getCardsInDeck(id)),
 		onUpdateRandomCard: (currentVocab) =>
 			dispatch(actions.updateRandomCard(currentVocab)),
+		onUpdateCardsInDeck: (currentVocabList) =>
+			dispatch(actions.updateCardsInDeck(currentVocabList)),
+		onSendTestResult: (id, datetime, succeededCardIds, failedCardIds) =>
+			dispatch(
+				actions.sendTestResult(id, datetime, succeededCardIds, failedCardIds)
+			),
 	};
 };
 

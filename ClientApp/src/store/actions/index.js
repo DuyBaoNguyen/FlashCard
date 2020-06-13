@@ -12,4 +12,4 @@ export {
 	updateDeckPublicStatus,
 } from './DeckDetail';
 
-export { getCardsInDeck, updateRandomCard } from './Testing';
+export { getCardsInDeck, updateRandomCard, updateCardsInDeck, sendTestResult } from './Testing';

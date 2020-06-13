@@ -4,6 +4,9 @@ const initialState = {
 	cardList: [],
 	getCardsError: null,
 	currentVocab: null,
+	sendResultError: null,
+	succeededCardIds: null,
+	failedCardIds: null,
 };
 
 export const testingReducer = (state = initialState, action) => {
@@ -24,6 +27,24 @@ export const testingReducer = (state = initialState, action) => {
 			return {
 				...state,
 				currentVocab: action.currentVocab,
+			};
+		case actionTypes.UPDATE_CARDS_IN_DECK:
+			return {
+				...state,
+				cardList: action.cardList,
+				// succeededCardIds: action.succeededCardIds,
+				// failedCardIds: action.failedCardIds,
+				sendResultError: null,
+			};
+		case actionTypes.SEND_TEST_RESULT_SUCCESS:
+			return {
+				...state,
+				sendResultError: null,
+			};
+		case actionTypes.SEND_TEST_RESULT_FAIL:
+			return {
+				...state,
+				sendResultError: 'Send result failed!',
 			};
 		default:
 			return state;
