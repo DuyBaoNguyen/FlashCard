@@ -12,14 +12,14 @@ import * as reducers from './store/reducers';
 
 const baseUrl = document.getElementsByTagName('base')[0].getAttribute('href');
 const rootElement = document.getElementById('root');
-const composeEnhancers = process.env.NODE_ENV === 'development' ?
-  window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ : null || compose;
+// const composeEnhancers = process.env.NODE_ENV === 'development' ?
+//   window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ : null || compose;
 const rootReducer = combineReducers({
 	home: reducers.homeReducer,
 	deckDetail: reducers.deckDetailReducer,
 	testing: reducers.testingReducer,
 });
-const store = createStore(rootReducer, composeEnhancers(applyMiddleware(thunk)));
+const store = createStore(rootReducer, applyMiddleware(thunk));
 const app = (
 	<Provider store={store}>
 		<Router basename={baseUrl} history={history}>

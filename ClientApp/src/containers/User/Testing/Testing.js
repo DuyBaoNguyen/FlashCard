@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Progress } from 'react-sweet-progress';
 import 'react-sweet-progress/lib/style.css';
 import LearnVocab from './LearnVocab/LearnVocab';
+import Result from './Result/Result';
 import { connect } from 'react-redux';
 import * as actions from '../../../store/actions';
 import withErrorHandler from '../../../hoc/withErrorHandler';
@@ -12,7 +13,7 @@ class Testing extends Component {
 		super(props);
 
 		this.state = {
-			finish: false,
+			isFinish: false,
 			process: 0,
 			listLength: 1,
 			currentVocab: null,
@@ -20,6 +21,8 @@ class Testing extends Component {
 			isStart: false,
 			succeededCardIds: [],
 			failedCardIds: [],
+			succeededCardsLength: null,
+			failedCardsLength: null,
 		};
 	}
 
@@ -44,12 +47,15 @@ class Testing extends Component {
 
 		let newSucceededCardIds = [...succeededCardIds];
 		let newFailedCardIds = [...failedCardIds];
+		console.log(cardList);
+		console.log(currentVocabList);
 		let process = (
 			(this.state.savedVocab.length /
-				(this.props.cardList.length + this.state.savedVocab.length)) *
+				(currentVocabList.length + this.state.savedVocab.length - 1)) *
 			100
 		).toFixed(2);
 		// Save word that user has just learned in a new array
+
 		newSavedVocab.push(cardList.filter((x) => x.id === id));
 
 		if (isDelete === true) {
@@ -58,53 +64,62 @@ class Testing extends Component {
 			newFailedCardIds = newFailedCardIds.filter(Number);
 
 			// Remove word from list
-			currentVocabList.splice(
-				cardList.findIndex((x) => x.id === id),
-				1
-			);
+			if (id !== undefined) {
+				cardList.splice(
+					currentVocabList.findIndex((x) => x.id === id),
+					1
+				);
+			}
 
-			this.props.onUpdateCardsInDeck(currentVocabList);
+			this.props.onUpdateCardsInDeck(cardList);
 
 			this.setState({
 				process: process,
-				currentVocab: this.getRandomCard(currentVocabList),
+				currentVocab: this.getRandomCard(cardList),
 				savedVocab: newSavedVocab,
 				succeededCardIds: newSucceededCardIds,
 			});
 		} else {
 			newFailedCardIds.push(this.state.currentVocab?.id);
-			this.props.onUpdateCardsInDeck(currentVocabList);
+			this.props.onUpdateCardsInDeck(cardList);
 			this.setState({
 				currentVocab: this.getRandomCard(cardList),
 				failedCardIds: newFailedCardIds,
 			});
 		}
-		// console.log(
-		// 	currentVocabList.length,
-		// 	this.props.cardList.length + this.state.savedVocab.length
-		// );
-		if (currentVocabList.length === 0) {
-			console.log('Call API');
+		if (cardList.length === 0) {
 			this.isFinish(currentVocabList, newSucceededCardIds, newFailedCardIds);
+			this.setState({
+				isFinish: true,
+			});
 		}
 	};
 
-	isFinish = (currentVocabList, newSucceededCardIds, newFailedCardIds) => {
+	isFinish = (cardList, newSucceededCardIds, newFailedCardIds) => {
 		let formattedNewSucceededCardIds = newSucceededCardIds.filter(
 			(x) => !newFailedCardIds.includes(x)
 		);
-		console.log(formattedNewSucceededCardIds);
 		let date = new Date();
 
 		formattedNewSucceededCardIds = this.unique(formattedNewSucceededCardIds);
 		newFailedCardIds = this.unique(newFailedCardIds);
-		console.log(formattedNewSucceededCardIds, newFailedCardIds);
+		this.saveResult(
+			formattedNewSucceededCardIds.length,
+			newFailedCardIds.length
+		);
 		this.props.onSendTestResult(
 			this.props.match.params.deckId,
 			date.toISOString(),
-			newSucceededCardIds,
-			formattedNewSucceededCardIds
+			formattedNewSucceededCardIds,
+			newFailedCardIds
 		);
+	};
+
+	saveResult = (succeededCardsLength, failedCardsLength) => {
+		this.setState({
+			succeededCardsLength: succeededCardsLength,
+			failedCardsLength: failedCardsLength,
+		});
 	};
 
 	unique = (array) => {
@@ -117,10 +132,14 @@ class Testing extends Component {
 				<div className="testing-progress">
 					<Progress percent={this.state.process} />
 				</div>
-				<LearnVocab
-					onNext={this.onNext}
-					currentVocab={this.state.currentVocab}
-				/>
+				{this.state.isFinish === true ? (
+					<Result succeeded={this.state.succeededCardsLength} failed={this.state.failedCardsLength}/>
+				) : (
+					<LearnVocab
+						onNext={this.onNext}
+						currentVocab={this.state.currentVocab}
+					/>
+				)}
 			</>
 		);
 		let startButton = (

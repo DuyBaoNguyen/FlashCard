@@ -102,7 +102,7 @@ class LearnVocab extends Component {
 			<div className="testing-card">
 				<div className="testing-card-front">
 					{this.props.currentVocab !== null
-						? this.props.currentVocab.front
+						? this.props.currentVocab?.front
 						: instructionFront}
 				</div>
 			</div>

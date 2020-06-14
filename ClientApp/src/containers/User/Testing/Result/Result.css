@@ -1,0 +1,62 @@
+.result-wrapper {
+  width: 100%;
+}
+
+.result-wrapper .result-header {
+  color: #9EACF4;
+  width: 100%;
+  line-height: 60px;
+  font-size: 40px;
+  text-align: center;
+}
+
+.result-wrapper .result-table {
+  margin: 30px auto;
+  width: 50%;
+  height: auto;
+  background: #ffffff;
+  padding: 30px;
+  -webkit-box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+          box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+  border-radius: 15px;
+}
+
+.result-wrapper .result-table .result-info {
+  display: -ms-grid;
+  display: grid;
+  -ms-grid-columns: auto auto;
+      grid-template-columns: auto auto;
+}
+
+.result-wrapper .result-table .result-info .result-title {
+  font-size: 14px;
+  line-height: 32px;
+  color: #979797;
+}
+
+.result-wrapper .result-table .result-info .result-value {
+  text-align: right;
+  font-size: 14px;
+  font-weight: bold;
+  line-height: 32px;
+  color: #9eacf4;
+}
+
+.result-wrapper .result-button button {
+  width: 307px;
+  height: 53px;
+  background: #9eacf4;
+  border: none;
+  border-radius: 15px;
+  color: white;
+  -webkit-transition: 0.1s;
+  transition: 0.1s;
+}
+
+.result-wrapper .result-button button:active {
+  -webkit-transition: 0.1s;
+  transition: 0.1s;
+  -webkit-transform: translateY(10px);
+          transform: translateY(10px);
+}
+/*# sourceMappingURL=Result.css.map */
