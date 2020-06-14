@@ -24,7 +24,10 @@ const withErrorHandler = (WrappedComponent) => {
 
       this.resInterceptor = axios.interceptors.response.use(res => res, error => {
         if (error.response.status === 401) {
-          history.push(`${ApplicationPaths.Login}`);
+          history.push({
+            pathname: ApplicationPaths.LogOut,
+            state: { local: true }
+          });
         }
         return Promise.reject(error);
       });
