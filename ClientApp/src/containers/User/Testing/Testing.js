@@ -66,22 +66,23 @@ class Testing extends Component {
 				(currentVocabList.length + this.state.savedVocab.length - 1)) *
 			100
 		).toFixed(0);
-		//Multiple question counter
-		if (!this.isDisplayMultipleQuestion()) {
-			this.setState({
-				multipleCount: this.state.multipleCount - 1,
-				isMultiple: false,
-			});
-		} else {
-			this.setState({
-				multipleCount: 4,
-				isMultiple: true,
-			});
-		}
+
 		// Save word that user has just learned in a new array
 		newSavedVocab.push(cardList.filter((x) => x.id === id));
 
 		if (isDelete === true) {
+			//Multiple question counter
+			if (!this.isDisplayMultipleQuestion()) {
+				this.setState({
+					multipleCount: this.state.multipleCount - 1,
+					isMultiple: false,
+				});
+			} else {
+				this.setState({
+					multipleCount: 4,
+					isMultiple: true,
+				});
+			}
 			newSucceededCardIds.push(this.state.currentVocab?.id);
 			newSucceededCardIds = newSucceededCardIds.filter(Number);
 			newFailedCardIds = newFailedCardIds.filter(Number);
