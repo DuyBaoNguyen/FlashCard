@@ -7,12 +7,15 @@ import { connect } from 'react-redux';
 import * as actions from '../../../store/actions';
 import withErrorHandler from '../../../hoc/withErrorHandler';
 import './Testing.css';
+import Multiple from './Multiple/Multiple';
 
 class Testing extends Component {
 	constructor(props) {
 		super(props);
 
 		this.state = {
+			multipleCount: 4,
+			isMultiple: false,
 			isFinish: false,
 			process: 0,
 			listLength: 1,
@@ -34,6 +37,15 @@ class Testing extends Component {
 		this.props.onGetCardsInDeck(this.props.match.params.deckId);
 	}
 
+	isDisplayMultipleQuestion = () => {
+		let { multipleCount } = this.state;
+		if (multipleCount === 0) {
+			return true;
+		} else {
+			return false;
+		}
+	};
+
 	onStart = () => {
 		this.setState({ isStart: true });
 	};
@@ -53,9 +65,20 @@ class Testing extends Component {
 			(this.state.savedVocab.length /
 				(currentVocabList.length + this.state.savedVocab.length - 1)) *
 			100
-		).toFixed(2);
+		).toFixed(0);
+		//Multiple question counter
+		if (!this.isDisplayMultipleQuestion()) {
+			this.setState({
+				multipleCount: this.state.multipleCount - 1,
+				isMultiple: false,
+			});
+		} else {
+			this.setState({
+				multipleCount: 4,
+				isMultiple: true,
+			});
+		}
 		// Save word that user has just learned in a new array
-
 		newSavedVocab.push(cardList.filter((x) => x.id === id));
 
 		if (isDelete === true) {
@@ -126,20 +149,47 @@ class Testing extends Component {
 		return Array.from(new Set(array));
 	};
 
-	render() {
-		let testingField = (
-			<>
-				<div className="testing-progress">
-					<Progress percent={this.state.process} />
-				</div>
-				{this.state.isFinish === true ? (
-					<Result succeeded={this.state.succeededCardsLength} failed={this.state.failedCardsLength}/>
-				) : (
+	onChangeMultiple = () => {
+		this.setState({
+			isMultiple: false,
+		});
+	};
+
+	testingFieldOptions = () => {
+		if (this.state.isFinish === true) {
+			return (
+				<Result
+					succeeded={this.state.succeededCardsLength}
+					failed={this.state.failedCardsLength}
+				/>
+			);
+		} else {
+			if (this.state.isMultiple === true) {
+				return (
+					<Multiple
+						onChangeMultiple={this.onChangeMultiple}
+						cardList={this.state.savedVocab}
+					/>
+				);
+			} else {
+				return (
 					<LearnVocab
 						onNext={this.onNext}
 						currentVocab={this.state.currentVocab}
 					/>
-				)}
+				);
+			}
+		}
+	};
+
+	render() {
+		let testingOption = this.testingFieldOptions();
+		let testingField = (
+			<>
+				<div className="testing-progress">
+					<Progress percent={this.state.process} />
+					{testingOption}
+				</div>
 			</>
 		);
 		let startButton = (
