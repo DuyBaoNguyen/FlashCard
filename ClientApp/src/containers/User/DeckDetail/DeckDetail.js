@@ -17,7 +17,10 @@ class DeckDetail extends Component {
     this.deckId = this.props.match.params.deckId;
     this.props.onGetDeck(this.deckId);
     this.props.onGetDeckStatistics(this.deckId);
-    this.props.onGetDeckCards(this.deckId, '');
+  }
+
+  componentWillUnmount() {
+    this.props.onUnselectCard();
   }
 
   handleCloseCard = () => {
@@ -68,7 +71,6 @@ const mapStateToProps = state => {
   return {
     deck: state.deckDetail.deck,
     statistics: state.deckDetail.statistics,
-    cards: state.deckDetail.cards,
     selectedCard: state.deckDetail.selectedCard
   };
 };
@@ -77,7 +79,6 @@ const mapDispatchToProps = dispatch => {
   return {
     onGetDeck: (id) => dispatch(actions.getDeck(id)),
     onGetDeckStatistics: (id) => dispatch(actions.getDeckStatistics(id)),
-    onGetDeckCards: (id, front) => dispatch(actions.getDeckCards(id, front)),
     onUnselectCard: () => dispatch(actions.unselectCardInDeckDetails())
   };
 };

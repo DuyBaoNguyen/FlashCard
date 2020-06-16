@@ -1,19 +1,18 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Icon } from '@iconify/react';
-import plusIcon from '@iconify/icons-uil/plus';
 import Pagination from 'react-js-pagination';
 import { withRouter } from 'react-router-dom';
+import { Icon } from '@iconify/react';
+import selectionIcon from '@iconify/icons-bi/dash-circle';
 
 import Search from '../../Shared/Search/Search';
-import Button from '../../Shared/Button/Button';
-import Card from './Card/Card';
+import SelectableCard from '../SelectableCard/SelectableCard';
 import * as actions from '../../../store/actions';
-import './DeckCards.css';
+import './DeckCardsInside.css';
 
-const AMOUNT_CARDS = 12;
+const AMOUNT_CARDS = 9;
 
-class DeckCards extends Component {
+class DeckCardsInside extends Component {
   constructor(props) {
     super(props);
 
@@ -22,11 +21,8 @@ class DeckCards extends Component {
     };
   }
 
-  UNSAFE_componentWillMount() {
-    this.deckId = this.props.match.params.deckId;
-  }
-
   componentDidMount() {
+    this.deckId = this.props.match.params.deckId;
     this.props.onGetDeckCardsInside(this.deckId);
   }
 
@@ -34,23 +30,29 @@ class DeckCards extends Component {
     this.props.onUpdateSearchString('');
   }
 
-  handleClickCard = (cardId) => {
-    this.props.onSelectCard(cardId);
-  }
-
-  handlePageChange(pageNumber) {
+  handlePageChange = (pageNumber) => {
     this.setState({ activePage: pageNumber });
   }
 
   handleSearchCards = (event) => {
     const searchString = event.target.value;
-    this.props.onUpdateSearchString(searchString);
+    this.props.onUpdateSearchString(searchString)
     this.props.onGetDeckCardsInside(this.deckId, searchString);
     this.setState({ activePage: 1 });
   }
 
   handleRemoveCard = (cardId) => {
     this.props.onRemoveCard(this.deckId, cardId);
+
+    if (this.props.cards.length - 1 < (this.state.activePage - 1) * AMOUNT_CARDS + 1) {
+      this.setState(state => {
+        return { activePage: state.activePage - 1 };
+      });
+    }
+  }
+
+  handleDeleteCard = (cardId) => {
+
   }
 
   render() {
@@ -64,11 +66,12 @@ class DeckCards extends Component {
         .filter((card, index) => index >= (activePage - 1) * AMOUNT_CARDS && index <= activePage * AMOUNT_CARDS - 1)
         .map(card => {
           return (
-            <Card
+            <SelectableCard
+              selectionIcon={<Icon icon={selectionIcon} color="#ddd" style={{ fontSize: 20 }} />}
               key={card.id}
               card={card}
-              onClick={this.handleClickCard}
-              onRemove={this.handleRemoveCard} />
+              onSelect={this.handleRemoveCard}
+              onDelete={this.handleDeleteCard} />
           );
         });
 
@@ -81,27 +84,21 @@ class DeckCards extends Component {
           itemsCountPerPage={AMOUNT_CARDS}
           totalItemsCount={cards.length}
           pageRangeDisplayed={5}
-          onChange={this.handlePageChange.bind(this)}
+          onChange={this.handlePageChange}
           activeClass="pagination-item-active"
           itemClass="pagination-item"
         />
       );
     }
     return (
-      <div className="deck-cards-wrapper">
-        <div className="deck-cards-header">
-          <p>Cards in deck</p>
-          <div className="deck-cards-header-features">
-            <Button
-              type="link"
-              path={`/decks/${this.deckId}/addcards`}
-              className="deck-cards-header-features-add"
-              icon={<Icon icon={plusIcon} />} >
-            </Button>
+      <div className="deck-cards-inside-wrapper">
+        <div className="deck-cards-inside-header">
+          <div className="deck-cards-inside-header-features">
             <Search
               placeholder="Search..."
               onChange={this.handleSearchCards} />
           </div>
+          <p>Cards in deck</p>
         </div>
         <div className="cards">{cardsList}</div>
         <div className="cards-pagination">{pagination}</div>
@@ -118,11 +115,10 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    onGetDeckCardsInside: (id, front) => dispatch(actions.getDeckCardsInside(id, front)),
-    onSelectCard: (id) => dispatch(actions.selectCardInDeckDetails(id)),
+    onGetDeckCardsInside: (deckId, front) => dispatch(actions.getDeckCardsInside(deckId, front)),
     onRemoveCard: (deckId, cardId) => dispatch(actions.removeCard(deckId, cardId)),
     onUpdateSearchString: (value) => dispatch(actions.updateCardsInsideSearchString(value))
   };
 };
 
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(DeckCards));
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(DeckCardsInside));

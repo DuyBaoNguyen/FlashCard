@@ -44,27 +44,6 @@ export const getDeckStatistics = (id) => {
   };
 };
 
-const getDeckCardsSuccess = (cards) => {
-  return {
-    type: actionTypes.GET_DECK_CARDS_SUCCESS,
-    cards: cards
-  };
-};
-
-const getDeckCardsFail = () => {
-  return {
-    type: actionTypes.GET_DECK_CARDS_FAIL
-  };
-};
-
-export const getDeckCards = (id, front) => {
-  return dispatch => {
-    axios.get(`/api/decks/${id}/cards?front=${front}`)
-      .then(res => dispatch(getDeckCardsSuccess(res.data)))
-      .catch(err => dispatch(getDeckCardsFail()));
-  };
-};
-
 const deleteDeckSuccess = () => {
   return {
     type: actionTypes.DELETE_DECK_SUCCESS
@@ -137,14 +116,97 @@ const removeCardFail = () => {
   };
 };
 
-export const removeCard = (deckId, cardId, front) => {
+export const removeCard = (deckId, cardId) => {
   return dispatch => {
     axios.delete(`/api/decks/${deckId}/cards/${cardId}`)
       .then(res => {
         dispatch(removeCardSuccess(cardId));
         dispatch(getDeck(deckId));
-        dispatch(getDeckCards(deckId, front));
+        dispatch(getDeckCardsInside(deckId));
+        dispatch(getDeckCardsOutside(deckId));
       })
       .catch(err => dispatch(removeCardFail()));
   };
 };
+
+const addCardSuccess = () => {
+  return {
+    type: actionTypes.ADD_CARD_SUCCESS
+  };
+};
+
+const addCardFail = () => {
+  return {
+    type: actionTypes.ADD_CARD_FAIL
+  };
+};
+
+export const addCard = (deckId, cardId) => {
+  return dispatch => {
+    axios.put(`/api/decks/${deckId}/cards/${cardId}`)
+      .then(res => {
+        dispatch(addCardSuccess());
+        dispatch(getDeckCardsInside(deckId));
+        dispatch(getDeckCardsOutside(deckId));
+      })
+      .catch(err => dispatch(addCardFail()));
+  };
+};
+
+const getDeckCardsInsidesSuccess = (cards) => {
+  return {
+    type: actionTypes.GET_DECK_CARDS_INSIDE_SUCCESS,
+    cards: cards
+  };
+};
+
+const getDeckCardsInsidesFail = () => {
+  return {
+    type: actionTypes.GET_DECK_CARDS_INSIDE_FAIL
+  };
+};
+
+export const getDeckCardsInside = (deckId, front) => {
+  return (dispatch, getState) => {
+    const { cardsInsideSearchString } = getState().deckDetail;
+    axios.get(`/api/decks/${deckId}/cards?front=${front || cardsInsideSearchString}`)
+      .then(res => dispatch(getDeckCardsInsidesSuccess(res.data)))
+      .catch(err => dispatch(getDeckCardsInsidesFail()));
+  };
+};
+
+const getDeckCardsOutsidesSuccess = (cards) => {
+  return {
+    type: actionTypes.GET_DECK_CARDS_OUTSIDE_SUCCESS,
+    cards: cards
+  };
+};
+
+const getDeckCardsOutsidesFail = () => {
+  return {
+    type: actionTypes.GET_DECK_CARDS_OUTSIDE_FAIL
+  };
+};
+
+export const getDeckCardsOutside = (deckId, front) => {
+  return (dispatch, getState) => {
+    const { cardsOutsideSearchString } = getState().deckDetail;
+    axios.get(`/api/decks/${deckId}/remainingcards?front=${front || cardsOutsideSearchString}`)
+      .then(res => dispatch(getDeckCardsOutsidesSuccess(res.data)))
+      .catch(err => dispatch(getDeckCardsOutsidesFail()));
+  };
+};
+
+export const updateCardsInsideSearchString = (value) => {
+  return {
+    type: actionTypes.UPDATE_CARDS_INSIDE_SEARCH_STRING,
+    value: value
+  };
+}
+
+export const updateCardsOutsideSearchString = (value) => {
+  return {
+    type: actionTypes.UPDATE_CARDS_OUTSIDE_SEARCH_STRING,
+    value: value
+  };
+}
