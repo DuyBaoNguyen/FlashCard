@@ -5,14 +5,19 @@ const initialState = {
   deck: null,
   statistics: null,
   cards: [],
+  remainingCards: [],
+  cardsInsideSearchString: '',
+  cardsOutsideSearchString: '',
   selectedCard: null,
   errors: {
     getDeckError: false,
     getStatisticsError: false,
-    getCardsError: false,
+    getCardsInsideError: false,
+    getCardsOutsideError: false,
     deleteDeckError: false,
     updateDeckPublicStatusError: false,
-    removeCardError: false
+    removeCardError: false,
+    addCardError: false
   }
 };
 
@@ -54,39 +59,26 @@ export const deckDetailReducer = (state = initialState, action) => {
           getStatisticsError: true
         }
       };
-    case actionTypes.GET_DECK_CARDS_SUCCESS:
-      return {
-        ...state,
-        cards: action.cards,
-        errors: {
-          ...state.errors,
-          getCardsError: false
-        }
-      };
-    case actionTypes.GET_DECK_CARDS_FAIL:
-      return {
-        ...state,
-        cards: [],
-        errors: {
-          ...state.errors,
-          getCardsError: true
-        }
-      };
     case actionTypes.DELETE_DECK_SUCCESS:
       return {
         ...state,
         deck: null,
         statistics: null,
         cards: [],
+        remainingCards: [],
         selectedCard: null,
+        cardsInsideSearchString: '',
+        cardsOutsideSearchString: '',
         errors: {
           ...state.errors,
           getDeckError: false,
           getStatisticsError: false,
-          getCardsError: false,
           deleteDeckError: false,
           updateDeckPublicStatusError: false,
-          removeCardError: false
+          removeCardError: false,
+          addCardError: false,
+          getCardsInsideError: false,
+          getCardsOutsideError: false
         }
       };
     case actionTypes.DELETE_DECK_FAIL:
@@ -142,6 +134,68 @@ export const deckDetailReducer = (state = initialState, action) => {
           ...state.errors,
           removeCardError: true
         }
+      };
+    case actionTypes.ADD_CARD_SUCCESS:
+      return {
+        ...state,
+        errors: {
+          ...state.errors,
+          addCardError: false
+        }
+      };
+    case actionTypes.ADD_CARD_FAIL:
+      return {
+        ...state,
+        errors: {
+          ...state.errors,
+          addCardError: true
+        }
+      };
+    case actionTypes.GET_DECK_CARDS_INSIDE_SUCCESS:
+      return {
+        ...state,
+        cards: action.cards,
+        errors: {
+          ...state.errors,
+          getCardsInsideError: false
+        }
+      };
+    case actionTypes.GET_DECK_CARDS_INSIDE_FAIL:
+      return {
+        ...state,
+        cards: [],
+        errors: {
+          ...state.errors,
+          getCardsInsideError: true
+        }
+      };
+    case actionTypes.GET_DECK_CARDS_OUTSIDE_SUCCESS:
+      return {
+        ...state,
+        remainingCards: action.cards,
+        errors: {
+          ...state.errors,
+          getCardsOutsideError: false
+        }
+      };
+    case actionTypes.GET_DECK_CARDS_OUTSIDE_FAIL:
+      return {
+        ...state,
+        remainingCards: [],
+        errors: {
+          ...state.errors,
+          getCardsOutsideError: true
+        }
+      };
+    case actionTypes.UPDATE_CARDS_INSIDE_SEARCH_STRING:
+      return {
+        ...state,
+        cardsInsideSearchString: action.value
+      };
+    case actionTypes.UPDATE_CARDS_OUTSIDE_SEARCH_STRING:
+      return {
+        ...state,
+        cardsOutsideSearchString: action.value
       };
     default:
       return state;

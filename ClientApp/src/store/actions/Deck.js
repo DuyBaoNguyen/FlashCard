@@ -22,7 +22,10 @@ export const createDeck = (deck) => {
 				description: deck.description,
 				theme: deck.theme,
 			})
-			.then((res) => dispatch(createDeckSuccess()))
+			.then((res) => {
+				dispatch(createDeckSuccess());
+				history.push(`/decks/${res.data.id}/addcards`);
+			})
 			.catch((err) => dispatch(createDeckFail()));
 	};
 };
