@@ -3,16 +3,14 @@ import ReactCardFlip from 'react-card-flip';
 import { Icon } from '@iconify/react';
 import volumeIcon from '@iconify/icons-uil/volume';
 import optionIcon from '@iconify/icons-uil/ellipsis-h';
-import editIcon from '@iconify/icons-uil/edit';
-import deleteIcon from '@iconify/icons-uil/trash-alt';
 
-import { speak } from '../../../../textToSpeech';
-import DropDown from '../../../Shared/DropDown/DropDown';
-import DropDownItem from '../../../Shared/DropDownItem/DropDownItem';
+import { speak } from '../../../textToSpeech';
+import DropDown from '../../Shared/DropDown/DropDown';
+import DropDownItem from '../../Shared/DropDownItem/DropDownItem';
 import {
   NOT_SPEAKING_SPEAKER_COLOR,
   SPEAKING_SPEAKER_COLOR
-} from '../../../../applicationConstants';
+} from '../../../applicationConstants';
 import './Card.css';
 
 class Card extends Component {
@@ -52,8 +50,45 @@ class Card extends Component {
     });
   }
 
+  renderOptions = (options) => {
+    if (!options) {
+      return null;
+    }
+    return (
+      <DropDown
+        right
+        postfix={<Icon icon={optionIcon} color="#979797" style={{ fontSize: 20 }} />}
+        className="dropdown-toggler">
+        {options.map((option, index) => {
+          if (option.type === 'link') {
+            return (
+              <DropDownItem
+                key={index}
+                type="link"
+                path={option.path}
+                icon={option.icon}
+                label={option.label.value}
+                labelColor={option.label.color}
+                className="dropdown-item-custom" />
+            );
+          }
+          return (
+            <DropDownItem
+              key={index}
+              type="button"
+              icon={option.icon}
+              label={option.label.value}
+              labelColor={option.label.color}
+              onClick={option.onClick}
+              className="dropdown-item-custom" />
+          );
+        })}
+      </DropDown>
+    );
+  }
+
   render() {
-    const { card } = this.props;
+    const { card, options } = this.props;
     const { isFlipped, speakerColor } = this.state;
     return (
       <div className="card-wrapper" onClick={() => this.props.onClick(card.id)}>
@@ -62,22 +97,7 @@ class Card extends Component {
           flipDirection="horizontal">
           <div className="card-front" onClick={this.handleClickCard}>
             <div className="card-options">
-              <DropDown
-                right
-                postfix={<Icon icon={optionIcon} color="#979797" style={{ fontSize: 20 }} />}
-                className="dropdown-toggler">
-                <DropDownItem
-                  type="link"
-                  path={`/cards/${card.id}/edit`}
-                  icon={<Icon icon={editIcon} color="#535353" />}
-                  label="Edit card" />
-                <DropDownItem
-                  type="button"
-                  icon={<Icon icon={deleteIcon} color="red" />}
-                  label="Remove card"
-                  className="remove-card-btn"
-                  onClick={() => this.props.onRemove(card.id)} />
-              </DropDown>
+              {this.renderOptions(options)}
             </div>
             <div className="front">
               {card.front}
@@ -89,22 +109,7 @@ class Card extends Component {
           <div className="card-back" onClick={this.handleClickCard}>
             {card.backs.map(back => back.meaning).join(' - ')}
             <div className="card-options">
-              <DropDown
-                right
-                postfix={<Icon icon={optionIcon} color="#979797" style={{ fontSize: 20 }} />}
-                className="dropdown-toggler">
-                <DropDownItem
-                  type="link"
-                  path={`/cards/${card.id}/edit`}
-                  icon={<Icon icon={editIcon} color="#535353" />}
-                  label="Edit card" />
-                <DropDownItem
-                  type="button"
-                  icon={<Icon icon={deleteIcon} color="red" />}
-                  label="Remove card"
-                  className="remove-card-btn"
-                  onClick={() => this.props.onRemove(card.id)} />
-              </DropDown>
+              {this.renderOptions(options)}
             </div>
           </div>
         </ReactCardFlip>

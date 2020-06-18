@@ -2,12 +2,14 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Icon } from '@iconify/react';
 import plusIcon from '@iconify/icons-uil/plus';
+import editIcon from '@iconify/icons-uil/edit';
+import deleteIcon from '@iconify/icons-uil/trash-alt';
 import Pagination from 'react-js-pagination';
 import { withRouter } from 'react-router-dom';
 
 import Search from '../../Shared/Search/Search';
 import Button from '../../Shared/Button/Button';
-import Card from './Card/Card';
+import Card from '../Card/Card';
 import * as actions from '../../../store/actions';
 import './DeckCards.css';
 
@@ -67,8 +69,21 @@ class DeckCards extends Component {
             <Card
               key={card.id}
               card={card}
-              onClick={this.handleClickCard}
-              onRemove={this.handleRemoveCard} />
+              options={[
+                {
+                  type: 'link',
+                  path: `/cards/${card.id}/edit`,
+                  icon: <Icon icon={editIcon} color="#535353" />,
+                  label: { value: 'Edit card'}
+                },
+                {
+                  type: 'button',
+                  icon: <Icon icon={deleteIcon} color="red" />,
+                  label: { value: 'Remove card', color: 'red' },
+                  onClick: () => this.handleRemoveCard(card.id)
+                }
+              ]}
+              onClick={this.handleClickCard} />
           );
         });
 

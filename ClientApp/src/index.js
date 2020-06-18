@@ -18,6 +18,7 @@ const rootReducer = combineReducers({
 	home: reducers.homeReducer,
 	deckDetail: reducers.deckDetailReducer,
 	testing: reducers.testingReducer,
+	cards: reducers.cardsReducer
 });
 const store = createStore(rootReducer, applyMiddleware(thunk));
 const app = (

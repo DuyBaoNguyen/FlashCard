@@ -16,7 +16,7 @@
       grid-template-columns: repeat(3, 1fr);
   -ms-grid-rows: (1fr)[3];
       grid-template-rows: repeat(3, 1fr);
-  gap: 10px 30px;
+  gap: 10px 24px;
 }
 
 .deck-cards-outside-wrapper .cards-pagination {

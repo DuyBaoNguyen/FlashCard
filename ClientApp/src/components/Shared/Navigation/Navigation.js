@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Link, withRouter } from 'react-router-dom';
 import { Icon } from '@iconify/react';
 import userIcon from '@iconify/icons-uil/user';
-import logoutIcon from '@iconify/icons-uil/sign-out-alt';
+import logoutIcon from '@iconify/icons-uil/signout';
 import arrowDown from '@iconify/icons-uil/angle-down';
 import { connect } from 'react-redux';
 

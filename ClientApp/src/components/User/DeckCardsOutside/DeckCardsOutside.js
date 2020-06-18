@@ -28,6 +28,14 @@ class DeckCardsOutside extends Component {
     this.props.onGetDeckCardsOutside(this.deckId, '');
   }
 
+  componentDidUpdate() {
+    if (this.props.cards.length < (this.state.activePage - 1) * AMOUNT_CARDS + 1) {
+      this.setState(state => {
+        return { activePage: state.activePage - 1 };
+      });
+    }
+  }
+
   componentWillUnmount() {
     this.props.onUpdateSearchString('');
   }
@@ -46,12 +54,6 @@ class DeckCardsOutside extends Component {
 
   handleAddCard = (cardId) => {
     this.props.onAddCard(this.deckId, cardId);
-
-    if (this.props.cards.length - 1 < (this.state.activePage - 1) * AMOUNT_CARDS + 1) {
-      this.setState(state => {
-        return { activePage: state.activePage - 1 };
-      });
-    }
   }
 
   handleDeleteCard = (cardId) => {
@@ -60,7 +62,7 @@ class DeckCardsOutside extends Component {
 
   render() {
     const { cards } = this.props;
-    const { activePage } = this.state;
+    let { activePage } = this.state;
     let cardsList = <p className="text-notify">There are no cards here!</p>;
     let pagination;
 
@@ -77,6 +79,10 @@ class DeckCardsOutside extends Component {
               onDelete={this.handleDeleteCard} />
           );
         });
+
+      if (cards.length < (activePage - 1) * AMOUNT_CARDS + 1) {
+        activePage--;
+      }
 
       pagination = (
         <Pagination

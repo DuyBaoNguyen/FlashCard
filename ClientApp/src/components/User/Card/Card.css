@@ -34,9 +34,9 @@
   padding: 0px 7px;
 }
 
-.card-wrapper .card-front .card-options .remove-card-btn,
-.card-wrapper .card-back .card-options .remove-card-btn {
-  color: red;
+.card-wrapper .card-front .card-options .dropdown-item-custom,
+.card-wrapper .card-back .card-options .dropdown-item-custom {
+  min-width: 138px;
 }
 
 .card-wrapper:hover .card-options {

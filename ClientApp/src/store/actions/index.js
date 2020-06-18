@@ -19,4 +19,12 @@ export {
   updateCardsOutsideSearchString
 } from './DeckDetail';
 
+export {
+  getCards,
+  updateCardsSearchString,
+  selectCardInCards,
+  unselectCardInCards,
+  resetGetCardsLoading
+} from './Cards';
+
 export { getCardsInDeck, updateRandomCard, updateCardsInDeck, sendTestResult } from './Testing';
