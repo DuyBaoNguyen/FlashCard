@@ -24,6 +24,9 @@ class Card extends Component {
   }
 
   handleClickCard = () => {
+    if (this.props.onClick) {
+      this.props.onClick(this.props.card.id);
+    }
     this.setState(state => {
       return { isFlipped: !state.isFlipped };
     });
@@ -32,18 +35,23 @@ class Card extends Component {
   handleSpeak = (event) => {
     event.stopPropagation();
     if (!this.state.isSpeaking) {
-      speak(this.props.card.front, this.onStartSpeech, this.onEndSpeech);
+      speak(this.props.card.front, this.handleStartSpeech, this.handleEndSpeech);
     }
   }
 
-  onStartSpeech = () => {
+  handleSelectCard = (event) => {
+    event.stopPropagation();
+    this.props.onSelect(this.props.card.id);
+  }
+
+  handleStartSpeech = () => {
     this.setState({
       speakerColor: SPEAKING_SPEAKER_COLOR,
       isSpeaking: true
     });
   }
 
-  onEndSpeech = () => {
+  handleEndSpeech = () => {
     this.setState({
       speakerColor: NOT_SPEAKING_SPEAKER_COLOR,
       isSpeaking: false
@@ -88,14 +96,19 @@ class Card extends Component {
   }
 
   render() {
-    const { card, options } = this.props;
+    const { card, options, selectionIcon } = this.props;
     const { isFlipped, speakerColor } = this.state;
     return (
-      <div className="card-wrapper" onClick={() => this.props.onClick(card.id)}>
+      <div className="card-wrapper">
         <ReactCardFlip
           isFlipped={isFlipped}
           flipDirection="horizontal">
           <div className="card-front" onClick={this.handleClickCard}>
+            {selectionIcon && (
+              <div className="selectable-icon" onClick={this.handleSelectCard}>
+                {selectionIcon}
+              </div>
+            )}
             <div className="card-options">
               {this.renderOptions(options)}
             </div>
@@ -107,10 +120,15 @@ class Card extends Component {
             </div>
           </div>
           <div className="card-back" onClick={this.handleClickCard}>
-            {card.backs.map(back => back.meaning).join(' - ')}
+            {selectionIcon && (
+              <div className="selectable-icon" onClick={this.handleSelectCard}>
+                {selectionIcon}
+              </div>
+            )}
             <div className="card-options">
               {this.renderOptions(options)}
             </div>
+            {card.backs.map(back => back.meaning).join(' - ')}
           </div>
         </ReactCardFlip>
       </div>

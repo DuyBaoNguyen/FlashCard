@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { Icon } from '@iconify/react';
 import plusIcon from '@iconify/icons-uil/plus';
 import editIcon from '@iconify/icons-uil/edit';
+import removeIcon from '@iconify/icons-uil/minus-circle'
 import deleteIcon from '@iconify/icons-uil/trash-alt';
 import Pagination from 'react-js-pagination';
 import { withRouter } from 'react-router-dom';
@@ -32,6 +33,14 @@ class DeckCards extends Component {
     this.props.onGetDeckCardsInside(this.deckId);
   }
 
+  componentDidUpdate() {
+    if (this.state.activePage > 1 && this.props.cards.length < (this.state.activePage - 1) * AMOUNT_CARDS + 1) {
+      this.setState(state => {
+        return { activePage: state.activePage - 1 };
+      });
+    }
+  }
+
   componentWillUnmount() {
     this.props.onUpdateSearchString('');
   }
@@ -55,9 +64,13 @@ class DeckCards extends Component {
     this.props.onRemoveCard(this.deckId, cardId);
   }
 
+  handleDeleteCard = (cardId) => {
+    console.log('deleted');
+  };
+
   render() {
     const { cards } = this.props;
-    const { activePage } = this.state;
+    let { activePage } = this.state;
     let cardsList = <p className="text-notify">There are no cards here!</p>;
     let pagination;
 
@@ -74,18 +87,28 @@ class DeckCards extends Component {
                   type: 'link',
                   path: `/cards/${card.id}/edit`,
                   icon: <Icon icon={editIcon} color="#535353" />,
-                  label: { value: 'Edit card'}
+                  label: { value: 'Edit card' }
+                },
+                {
+                  type: 'button',
+                  icon: <Icon icon={removeIcon} color="red" />,
+                  label: { value: 'Remove card', color: 'red' },
+                  onClick: () => this.handleRemoveCard(card.id)
                 },
                 {
                   type: 'button',
                   icon: <Icon icon={deleteIcon} color="red" />,
-                  label: { value: 'Remove card', color: 'red' },
-                  onClick: () => this.handleRemoveCard(card.id)
+                  label: { value: 'Delete card', color: 'red' },
+                  onClick: () => this.handleDeleteCard(card.id)
                 }
               ]}
               onClick={this.handleClickCard} />
           );
         });
+
+      if (cards.length < (activePage - 1) * AMOUNT_CARDS + 1) {
+        activePage--;
+      }
 
       pagination = (
         <Pagination

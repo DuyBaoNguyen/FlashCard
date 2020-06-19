@@ -26,6 +26,18 @@
         min-width: 138px;
       }
     }
+    .selectable-icon {
+      position: absolute;
+      top: 12px;
+      left: 12px;
+      height: 20px;
+      border-radius: 50%;
+      transition: background-color 0.15s ease;
+      color: red;
+      &:hover {
+        background-color: #f9f9f9;
+      }
+    }
   }
   &:hover .card-options {
     display: inline-flex;

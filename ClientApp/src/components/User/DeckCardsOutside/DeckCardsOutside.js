@@ -5,10 +5,12 @@ import { withRouter } from 'react-router-dom';
 import { Icon } from '@iconify/react';
 import plusIcon from '@iconify/icons-uil/plus';
 import selectionIcon from '@iconify/icons-bi/plus-circle';
+import editIcon from '@iconify/icons-uil/edit';
+import deleteIcon from '@iconify/icons-uil/trash-alt';
 
 import Search from '../../Shared/Search/Search';
 import Button from '../../Shared/Button/Button';
-import SelectableCard from '../SelectableCard/SelectableCard';
+import Card from '../Card/Card';
 import * as actions from '../../../store/actions';
 import './DeckCardsOutside.css';
 
@@ -29,7 +31,7 @@ class DeckCardsOutside extends Component {
   }
 
   componentDidUpdate() {
-    if (this.props.cards.length < (this.state.activePage - 1) * AMOUNT_CARDS + 1) {
+    if (this.state.activePage > 1 && this.props.cards.length < (this.state.activePage - 1) * AMOUNT_CARDS + 1) {
       this.setState(state => {
         return { activePage: state.activePage - 1 };
       });
@@ -71,10 +73,24 @@ class DeckCardsOutside extends Component {
         .filter((card, index) => index >= (activePage - 1) * AMOUNT_CARDS && index <= activePage * AMOUNT_CARDS - 1)
         .map(card => {
           return (
-            <SelectableCard
-              selectionIcon={<Icon icon={selectionIcon} color="#ddd" style={{ fontSize: 20 }} />}
+            <Card
               key={card.id}
               card={card}
+              options={[
+                {
+                  type: 'link',
+                  path: `/cards/${card.id}/edit`,
+                  icon: <Icon icon={editIcon} color="#535353" />,
+                  label: { value: 'Edit card' }
+                },
+                {
+                  type: 'button',
+                  icon: <Icon icon={deleteIcon} color="red" />,
+                  label: { value: 'Delete card', color: 'red' },
+                  onClick: () => this.handleDeleteCard(card.id)
+                }
+              ]}
+              selectionIcon={<Icon icon={selectionIcon} color="#ddd" style={{ fontSize: 20 }} />}
               onSelect={this.handleAddCard}
               onDelete={this.handleDeleteCard} />
           );

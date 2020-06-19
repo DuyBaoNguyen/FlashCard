@@ -39,6 +39,23 @@
   min-width: 138px;
 }
 
+.card-wrapper .card-front .selectable-icon,
+.card-wrapper .card-back .selectable-icon {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  height: 20px;
+  border-radius: 50%;
+  -webkit-transition: background-color 0.15s ease;
+  transition: background-color 0.15s ease;
+  color: red;
+}
+
+.card-wrapper .card-front .selectable-icon:hover,
+.card-wrapper .card-back .selectable-icon:hover {
+  background-color: #f9f9f9;
+}
+
 .card-wrapper:hover .card-options {
   display: -webkit-inline-box;
   display: -ms-inline-flexbox;
