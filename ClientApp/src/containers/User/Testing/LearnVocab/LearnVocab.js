@@ -63,8 +63,8 @@ class LearnVocab extends Component {
 		let instructionFront = (
 			<div>
 				{' '}
-				Oops! Not yet! <br />
-				Just a few note to make sure you totally understand this lesson.
+				Oops! Not yet! 😅 <br />
+				Just a few note to make sure you totally understand this lesson. 😉
 				<br />
 				<br />
 				This is the front side of the card.
@@ -86,7 +86,7 @@ class LearnVocab extends Component {
 
 		let instructionBack = (
 			<div style={{ fontSize: '#20px' }}>
-				Nice!!! You have flipped the card!
+				Nice!!! You have flipped the card! 😋
 				<br />
 				<br />
 				This is the back side which displays meanings, word types, examples and
@@ -94,7 +94,7 @@ class LearnVocab extends Component {
 				<br />
 				<br />
 				Press <b style={{ color: '#9EACF4' }}>Next</b> button below to go to the
-				next card.
+				next card. 👌🏻
 			</div>
 		);
 

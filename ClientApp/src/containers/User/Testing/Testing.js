@@ -206,7 +206,7 @@ class Testing extends Component {
 					<br />
 					<br />
 					<br />
-					Good luck!
+					Good luck! 💪🏻💪🏻💪🏻
 				</p>
 				<div className="testing-button-start">
 					<button onClick={() => this.onStart()}>Start</button>

@@ -18,28 +18,6 @@ class Multiple extends Component {
 		return cardList[Math.floor(Math.random() * cardList.length)];
 	};
 
-	componentDidMount() {
-		// let { cardList } = this.props;
-		let { multipleCards } = this.state;
-		console.log(multipleCards.flat());
-
-		// console.log(multipleCards.sort(function(a, b) { return 0.5 - Math.random() }));
-		// console.log(cardList);
-		// for (let i = 0; i < 3; i++) {
-		// 	let card = this.getRandomCard(cardList);
-		// 	multipleCards.push(card.filter(Object));
-		// 	console.log(card, cardList, multipleCards);
-		// 		cardList.splice(
-		// 			cardList.findIndex((x) => x.id === card.id),
-		// 			1
-		// 		);
-		// }
-
-		this.setState({
-			multipleCards: multipleCards,
-		});
-	}
-
 	onClickRight = () => {
 		this.setState({
 			isCorrect: true,
@@ -71,10 +49,6 @@ class Multiple extends Component {
 		let rightAnswer = newCards[0].backs[0].meaning;
 		let wrongAnswer1 = newCards[1].backs[0].meaning;
 		let wrongAnswer2 = newCards[2].backs[0].meaning;
-
-		// let normalButtonStyle = { background: '#ffffff', color: '#535353' };
-		// let clickedRightButtonStyle = { display: 'none' };
-		// let clickedWrongButtonStyle = { display: 'none' };
 
 		console.log(rightAnswer, wrongAnswer1, wrongAnswer2);
 		answers.push(

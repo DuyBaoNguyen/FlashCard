@@ -20,13 +20,13 @@ class Result extends Component {
 				<br/>
 				<Animated animationIn="bounceIn" animationInDelay="0" isVisible={true}>
 					<div className="result-header">
-						Congratulation! <br />
+						Congratulation! 👏🏻👏🏻👏🏻 <br />
 						<Animated
 							animationIn="bounceIn"
 							animationInDelay="300"
 							isVisible={true}
 						>
-							You have finished the lesson!
+							You have finished the lesson! 
 						</Animated>
 					</div>
 				</Animated>

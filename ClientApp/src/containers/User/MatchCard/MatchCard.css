@@ -1,0 +1,109 @@
+.match-wrapper {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+.match-wrapper .match-container {
+  width: 726px;
+}
+
+.match-wrapper .match-container .match-back-feature {
+  margin-bottom: 10px;
+  color: #979797;
+  position: relative;
+  left: 0;
+}
+
+.match-wrapper .match-container .match-back-feature .match-back-feature-icon {
+  position: absolute;
+  left: -8px;
+  font-size: 22px;
+}
+
+.match-wrapper .match-container .match-back-feature .match-back-feature-label {
+  font-size: 14px;
+  padding-left: 18px;
+}
+
+.match-wrapper .match-result {
+  margin: 100px;
+}
+
+.match-wrapper .match-result .match-result-header {
+  color: #9EACF4;
+  width: 100%;
+  line-height: 30px;
+  font-size: 24px;
+  text-align: center;
+}
+
+.match-wrapper .match-result button {
+  width: 100%;
+  height: 53px;
+  background: #9EACF4;
+  border: none;
+  border-radius: 15px;
+  color: white;
+  -webkit-transition: 0.1s;
+  transition: 0.1s;
+}
+
+.match-wrapper .match-result button:active {
+  -webkit-transition: 0.1s;
+  transition: 0.1s;
+  -webkit-transform: translateY(10px);
+          transform: translateY(10px);
+}
+
+.match-wrapper .match-cards {
+  display: -ms-grid;
+  display: grid;
+  -ms-grid-columns: auto auto auto auto;
+      grid-template-columns: auto auto auto auto;
+}
+
+.match-wrapper .match-cards .match-card {
+  position: relative;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  width: 150px;
+  height: 130px;
+  margin: 15px;
+  background: #FFFFFF;
+  -webkit-box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+          box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+  border-radius: 15px;
+  -webkit-transition: 0.1s;
+  transition: 0.1s;
+}
+
+.match-wrapper .match-cards .match-card:hover {
+  -webkit-transition: 0.1s;
+  transition: 0.1s;
+  -webkit-transform: translateY(-10px);
+          transform: translateY(-10px);
+}
+
+.match-wrapper .match-cards .match-card p {
+  font-style: normal;
+  font-weight: bold;
+  font-size: 14px;
+  text-align: center;
+  -webkit-transition: 0.1s;
+  transition: 0.1s;
+}
+/*# sourceMappingURL=MatchCard.css.map */
