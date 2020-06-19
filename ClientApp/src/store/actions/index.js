@@ -6,14 +6,26 @@ export { createDeck, editDeck } from './Deck';
 
 export {
 	getDeck,
-	getDeckCards,
 	getDeckStatistics,
 	deleteDeck,
 	updateDeckPublicStatus,
 	selectCardInDeckDetails,
 	unselectCardInDeckDetails,
 	removeCard,
+	addCard,
+	getDeckCardsInside,
+	getDeckCardsOutside,
+	updateCardsInsideSearchString,
+	updateCardsOutsideSearchString,
 } from './DeckDetail';
+
+export {
+	getCards,
+	updateCardsSearchString,
+	selectCardInCards,
+	unselectCardInCards,
+	resetGetCardsLoading,
+} from './Cards';
 
 export {
 	getCardsInDeck,

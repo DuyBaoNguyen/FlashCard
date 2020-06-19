@@ -25,7 +25,7 @@
 .card-wrapper .card-back .card-options {
   position: absolute;
   top: 10px;
-  right: 9px;
+  left: 111px;
   display: none;
 }
 
@@ -34,13 +34,29 @@
   padding: 0px 7px;
 }
 
-.card-wrapper .card-front .card-options .remove-card-btn,
-.card-wrapper .card-back .card-options .remove-card-btn {
+.card-wrapper .card-front .card-options .dropdown-item-custom,
+.card-wrapper .card-back .card-options .dropdown-item-custom {
+  min-width: 138px;
+}
+
+.card-wrapper .card-front .selectable-icon,
+.card-wrapper .card-back .selectable-icon {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  height: 20px;
+  border-radius: 50%;
+  -webkit-transition: background-color 0.15s ease;
+  transition: background-color 0.15s ease;
   color: red;
 }
 
-.card-wrapper .card-front:hover .card-options,
-.card-wrapper .card-back:hover .card-options {
+.card-wrapper .card-front .selectable-icon:hover,
+.card-wrapper .card-back .selectable-icon:hover {
+  background-color: #f9f9f9;
+}
+
+.card-wrapper:hover .card-options {
   display: -webkit-inline-box;
   display: -ms-inline-flexbox;
   display: inline-flex;
@@ -76,8 +92,8 @@
           align-items: center;
   padding: 5px;
   border-radius: 50%;
-  -webkit-transition: background-color .2s ease;
-  transition: background-color .2s ease;
+  -webkit-transition: background-color 0.2s ease;
+  transition: background-color 0.2s ease;
 }
 
 .card-wrapper .front .utterance:hover {

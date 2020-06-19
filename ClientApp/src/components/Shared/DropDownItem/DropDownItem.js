@@ -28,7 +28,7 @@ class DropDownItem extends Component {
         <span className="dropdown-item-icon">
           {this.props.icon}
         </span>
-        <span className="dropdown-item-label">
+        <span className="dropdown-item-label" style={{ color: this.props.labelColor }}>
           {this.props.label}
         </span>
       </>

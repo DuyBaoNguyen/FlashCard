@@ -1,12 +1,8 @@
-.deck-information {
+.deck-info-wrapper {
   background: #ffffff;
   box-shadow: 0px 0px 30px rgba(0, 0, 0, 0.05);
   border-radius: 15px;
   padding: 30px;
-  height: 244px;
-  // overflow: hidden;
-  transition: height .15s ease;
-  position: relative;
   .deck-info-header {
     color: #535353;
     font-style: normal;
@@ -41,32 +37,38 @@
       }
     }
   }
-  .deck-description {
-    color: #979797;
-    font-size: 14px;
-  }
-  .deck-field {
-    display: flex;
-    justify-content: space-between;
-    margin: 20px 0 10px;
-    span {
-      font-size: 14px;
-    }
-    .deck-field-label {
+  .deck-info {
+    max-height: 500px;
+    transition: max-height 0.25s ease-in;
+    overflow: hidden;
+    width: 100%;
+    .deck-description {
       color: #979797;
+      font-size: 14px;
+      margin-top: 18px;
     }
-    .deck-field-value {
-      color: #9eacf4;
-      font-weight: bold;
+    .deck-field {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 20px;
+      span {
+        font-size: 14px;
+      }
+      .deck-field-label {
+        color: #979797;
+      }
+      .deck-field-value {
+        color: #9eacf4;
+        font-weight: bold;
+      }
+    }
+    &.collapse {
+      max-height: 0;
+      transition: max-height 0.15s ease-out;
     }
   }
   .deck-features {
-    position: absolute;
-    left: 30px;
-    bottom: 0;
-    right: 30px;
-    padding: 10px 0 30px;
-    background-color: #fff;
+    margin-top: 20px;
     display: grid;
     grid-template-columns: auto auto;
     gap: 20px;
@@ -75,8 +77,5 @@
       text-align: center;
       font-weight: 600;
     }
-  }
-  &.show-less {
-    height: 133px;
   }
 }

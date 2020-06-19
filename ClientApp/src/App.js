@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Switch, withRouter } from 'react-router-dom';
-import { Route } from 'react-router';
+import { Route, Redirect } from 'react-router';
 import Layout from './components/Shared/Layout/Layout';
 import { connect } from 'react-redux';
 
@@ -11,6 +11,8 @@ import Testing from './containers/User/Testing/Testing';
 import MatchCard from './containers/User/MatchCard/MatchCard';
 
 import DeckDetail from './containers/User/DeckDetail/DeckDetail';
+import AddCard from './containers/User/AddCard/AddCard';
+import Cards from './containers/User/Cards/Cards';
 import AuthorizeRoute from './components/api-authorization/AuthorizeRoute';
 import ApiAuthorizationRoutes from './components/api-authorization/ApiAuthorizationRoutes';
 import { ApplicationPaths } from './components/api-authorization/ApiAuthorizationConstants';
@@ -32,8 +34,12 @@ class App extends Component {
 					<AuthorizeRoute exact path="/decks/testing/:deckId/"  component={Testing} />
 					<AuthorizeRoute exact path="/decks/match/:deckId/"  component={MatchCard} />
 					<AuthorizeRoute exact path="/decks/:deckId" component={DeckDetail} />
+					<AuthorizeRoute exact path="/decks/:deckId/addcards" component={AddCard} />
+					<AuthorizeRoute exact path="/cards" component={Cards} />
 
 					<Route path={ApplicationPaths.ApiAuthorizationPrefix} component={ApiAuthorizationRoutes} />
+
+					<Redirect to="/" />
 				</Switch>
 			</Layout>
 		);

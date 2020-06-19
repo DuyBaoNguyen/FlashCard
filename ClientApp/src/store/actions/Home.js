@@ -2,8 +2,6 @@ import axios from '../../axios';
 import * as actionTypes from '../actions/actionTypes';
 import authService from '../../components/api-authorization/AuthorizeService';
 
-// tao actions
-// return action
 export const getDecksSuccess = (decks) => {
 	return {
 		type: actionTypes.GET_DECKS_SUCCESS,
@@ -17,7 +15,6 @@ export const getDecksFailed = () => {
 	};
 };
 
-// return dispatch
 export const getDecks = (name) => {
 	return (dispatch) => {
 		axios.get(`/api/decks?name=${name}`)

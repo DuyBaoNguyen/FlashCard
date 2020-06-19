@@ -17,18 +17,30 @@
     .card-options {
       position: absolute;
       top: 10px;
-      right: 9px;
+      left: 111px;
       display: none;
       .dropdown-toggler {
         padding: 0px 7px;
       }
-      .remove-card-btn {
-        color: red;
+      .dropdown-item-custom {
+        min-width: 138px;
       }
     }
-    &:hover .card-options {
-      display: inline-flex;
+    .selectable-icon {
+      position: absolute;
+      top: 12px;
+      left: 12px;
+      height: 20px;
+      border-radius: 50%;
+      transition: background-color 0.15s ease;
+      color: red;
+      &:hover {
+        background-color: #f9f9f9;
+      }
     }
+  }
+  &:hover .card-options {
+    display: inline-flex;
   }
   .card-front {
     font-size: 16px;
@@ -49,7 +61,7 @@
       align-items: center;
       padding: 5px;
       border-radius: 50%;
-      transition: background-color .2s ease;
+      transition: background-color 0.2s ease;
       &:hover {
         background-color: #f1f1f1;
       }

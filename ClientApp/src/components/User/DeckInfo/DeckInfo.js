@@ -23,13 +23,14 @@ class DeckInfo extends Component {
   }
 
   render() {
-    const { deck, updateDeckPublicStatusError, showLess } = this.props;
-    const deckInfoClasses = ['deck-information'];
+    const { deck, updateDeckPublicStatusError, showLess, profile } = this.props;
+    const deckInfoClasses = ['deck-info'];
     if (showLess) {
-      deckInfoClasses.push('show-less');
+      deckInfoClasses.push('collapse');
     }
+
     return (
-      <div className={deckInfoClasses.join(' ')}>
+      <div className="deck-info-wrapper">
         <div className="deck-info-header">
           <div className="deck-info-options">
             <DropDown
@@ -71,29 +72,29 @@ class DeckInfo extends Component {
               </DropDownItem>
             </DropDown>
           </div>
-          <p>{deck?.name}</p>
+          {deck?.name}
         </div>
-        {!showLess && (
-          <>
-            <div className="deck-description">
-              <i>{deck?.description}</i>
-            </div>
-            <div className="deck-field">
-              <span className="deck-field-label">Number of cards</span>
-              <span className="deck-field-value">{deck?.totalCards}</span>
-            </div>
-            <div className="deck-field">
-              <span className="deck-field-label">Created date</span>
-              <span className="deck-field-value">
-                {new Date(deck?.createdDate).toDateString()}
-              </span>
-            </div>
-          </>
+        <div className={deckInfoClasses.join(' ')}>
+          <div className="deck-description">
+            <i>{deck?.description}</i>
+          </div>
+          <div className="deck-field">
+            <span className="deck-field-label">Number of cards</span>
+            <span className="deck-field-value">{deck?.totalCards}</span>
+          </div>
+          <div className="deck-field">
+            <span className="deck-field-label">Created date</span>
+            <span className="deck-field-value">
+              {new Date(deck?.createdDate).toDateString()}
+            </span>
+          </div>
+        </div>
+        {profile?.role === 'user' && (
+          <div className="deck-features">
+            <Button type="link" path={`/decks/testing/${deck?.id}`}>Practice</Button>
+            <Button type="link" path={`/matchgame/${deck?.id}`}>Match game</Button>
+          </div>
         )}
-        <div className="deck-features">
-          <Button type="link" path={`/decks/testing/${deck?.id}`}>Practice</Button>
-          <Button type="link" path={`/decks/match/${deck?.id}`}>Match game</Button>
-        </div>
       </div>
     );
   }
@@ -101,6 +102,7 @@ class DeckInfo extends Component {
 
 const mapStateToProps = state => {
   return {
+    profile: state.home.profile,
     updateDeckPublicStatusError: state.deckDetail.updateDeckPublicStatusError
   };
 };

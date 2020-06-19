@@ -1,0 +1,20 @@
+.cards-wrapper {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  margin-right: -20px;
+}
+
+.cards-wrapper section {
+  overflow: visible;
+  padding-right: 20px;
+}
+
+.cards-wrapper .left-section {
+  width: 33.33%;
+}
+
+.cards-wrapper .right-section {
+  width: 66.67%;
+}
+/*# sourceMappingURL=Cards.css.map */
