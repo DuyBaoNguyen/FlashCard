@@ -92,7 +92,7 @@ class DeckInfo extends Component {
         {profile?.role === 'user' && (
           <div className="deck-features">
             <Button type="link" path={`/decks/testing/${deck?.id}`}>Practice</Button>
-            <Button type="link" path={`/matchgame/${deck?.id}`}>Match game</Button>
+            <Button type="link" path={`/decks/match/${deck?.id}`}>Match game</Button>
           </div>
         )}
       </div>
