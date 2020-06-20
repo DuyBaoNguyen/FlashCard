@@ -5,6 +5,7 @@ import editIcon from '@iconify/icons-uil/edit';
 import deleteIcon from '@iconify/icons-uil/trash-alt';
 import publicIcon from '@iconify/icons-uil/share';
 import { connect } from 'react-redux';
+import { Collapse } from 'react-collapse';
 
 import DropDown from '../../Shared/DropDown/DropDown';
 import DropDownItem from '../../Shared/DropDownItem/DropDownItem';
@@ -24,10 +25,6 @@ class DeckInfo extends Component {
 
   render() {
     const { deck, updateDeckPublicStatusError, showLess, profile } = this.props;
-    const deckInfoClasses = ['deck-info'];
-    if (showLess) {
-      deckInfoClasses.push('collapse');
-    }
 
     return (
       <div className="deck-info-wrapper">
@@ -74,10 +71,17 @@ class DeckInfo extends Component {
           </div>
           {deck?.name}
         </div>
-        <div className={deckInfoClasses.join(' ')}>
-          <div className="deck-description">
-            <i>{deck?.description}</i>
-          </div>
+        <Collapse
+          isOpened={!showLess}
+          theme={{
+            collapse: 'ReactCollapse--collapse deck-info',
+            content: 'ReactCollapse--content content'
+          }}>
+          {deck?.description && (
+            <div className="deck-description">
+              <i>{deck.description}</i>
+            </div>
+          )}
           <div className="deck-field">
             <span className="deck-field-label">Number of cards</span>
             <span className="deck-field-value">{deck?.totalCards}</span>
@@ -88,7 +92,7 @@ class DeckInfo extends Component {
               {new Date(deck?.createdDate).toDateString()}
             </span>
           </div>
-        </div>
+        </Collapse>
         {profile?.role === 'user' && (
           <div className="deck-features">
             <Button type="link" path={`/decks/testing/${deck?.id}`}>Practice</Button>
