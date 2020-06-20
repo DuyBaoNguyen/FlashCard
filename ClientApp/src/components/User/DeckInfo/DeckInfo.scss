@@ -6,7 +6,7 @@
   .deck-info-header {
     color: #535353;
     font-style: normal;
-    font-weight: bold;
+    font-weight: 600;
     font-size: 18px;
     margin-bottom: 18px;
     position: relative;
@@ -42,7 +42,7 @@
     }
   }
   .deck-info {
-    transition: height 0.1s;
+    transition: height .15s;
     .deck-description {
       color: #979797;
       font-size: 14px;
@@ -60,7 +60,7 @@
       }
       .deck-field-value {
         color: #9eacf4;
-        font-weight: bold;
+        font-weight: 500;
       }
     }
   }

@@ -65,7 +65,7 @@ class DeckCards extends Component {
   }
 
   handleDeleteCard = (cardId) => {
-    console.log('deleted');
+    this.props.onDeleteCard(cardId);
   };
 
   render() {
@@ -159,7 +159,8 @@ const mapDispatchToProps = dispatch => {
     onGetDeckCardsInside: (id, front) => dispatch(actions.getDeckCardsInside(id, front)),
     onSelectCard: (id) => dispatch(actions.selectCardInDeckDetails(id)),
     onRemoveCard: (deckId, cardId) => dispatch(actions.removeCard(deckId, cardId)),
-    onUpdateSearchString: (value) => dispatch(actions.updateCardsInsideSearchString(value))
+    onUpdateSearchString: (value) => dispatch(actions.updateCardsInsideSearchString(value)),
+    onDeleteCard: (cardId) => dispatch(actions.deleteCard(cardId))
   };
 };
 

@@ -9,7 +9,7 @@
 .deck-info-wrapper .deck-info-header {
   color: #535353;
   font-style: normal;
-  font-weight: bold;
+  font-weight: 600;
   font-size: 18px;
   margin-bottom: 18px;
   position: relative;
@@ -55,8 +55,8 @@
 }
 
 .deck-info-wrapper .deck-info {
-  -webkit-transition: height 0.1s;
-  transition: height 0.1s;
+  -webkit-transition: height .15s;
+  transition: height .15s;
 }
 
 .deck-info-wrapper .deck-info .deck-description {
@@ -85,7 +85,7 @@
 
 .deck-info-wrapper .deck-info .deck-field .deck-field-value {
   color: #9eacf4;
-  font-weight: bold;
+  font-weight: 500;
 }
 
 .deck-info-wrapper .deck-features {

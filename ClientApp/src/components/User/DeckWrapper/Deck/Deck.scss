@@ -2,7 +2,6 @@
 	.wrapper {
 		position: relative;
 		.deck-background-color {
-			// background: #95dded;
 			box-shadow: 2px 0px 8px rgba(0, 0, 0, 0.15);
 			border-radius: 15px;
 			position: relative;
@@ -42,14 +41,11 @@
 					p {
 						position: absolute;
 						margin-left: 35px;
-						// text-align: left;
-            // height: 18px;
 						font-style: normal;
-						font-weight: bold;
+						font-weight: 500;
 						font-size: 14px;
 						line-height: 32px;
 						color: #ffffff;
-						// width: 100px;
 					}
 				}
 			}
