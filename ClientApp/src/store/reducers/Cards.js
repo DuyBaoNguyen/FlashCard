@@ -6,7 +6,8 @@ const initialState = {
   loading: true,
   searchString: '',
   errors: {
-    getCardsError: false
+    getCardsError: false,
+    deleteCardError: false
   }
 };
 
@@ -18,6 +19,7 @@ export const cardsReducer = (state = initialState, action) => {
         cards: action.cards,
         loading: false,
         errors: {
+          ...state.errors,
           getCardsError: false
         }
       };
@@ -27,6 +29,7 @@ export const cardsReducer = (state = initialState, action) => {
         cards: [],
         loading: false,
         errors: {
+          ...state.errors,
           getCardsError: true
         }
       };
@@ -45,10 +48,30 @@ export const cardsReducer = (state = initialState, action) => {
         ...state,
         selectedCard: null
       };
-     case actionTypes.RESET_GET_CARDS_LOADING:
+    case actionTypes.RESET_GET_CARDS_LOADING:
       return {
         ...state,
         loading: true
+      };
+    case actionTypes.DELETE_CARD_SUCCESS:
+      const newState = {
+        ...state,
+        errors: {
+          ...state.errors,
+          deleteCardError: false
+        }
+      };
+      if (state.selectedCard && action.cardId === state.selectedCard.id) {
+        newState.selectedCard = null;
+      }
+      return newState;
+    case actionTypes.DELETE_CARD_FAIL:
+      return {
+        ...state,
+        errors: {
+          ...state.errors,
+          deleteCardError: true
+        }
       };
     default:
       return state;

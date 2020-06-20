@@ -48,3 +48,27 @@ export const resetGetCardsLoading = () => {
     type: actionTypes.RESET_GET_CARDS_LOADING
   };
 }
+
+const deleteCardSuccess = (cardId) => {
+  return {
+    type: actionTypes.DELETE_CARD_SUCCESS,
+    cardId: cardId
+  };
+};
+
+const deleteCardFail = () => {
+  return {
+    type: actionTypes.DELETE_CARD_FAIL
+  };
+};
+
+export const deleteCard = (cardId) => {
+  return dispatch => {
+    axios.delete(`/api/cards/${cardId}`)
+      .then(() => {
+        dispatch(deleteCardSuccess(cardId));
+        dispatch(getCards());
+      })
+      .catch(() => dispatch(deleteCardFail()));
+  }; 
+};

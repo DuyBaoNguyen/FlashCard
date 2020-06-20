@@ -50,8 +50,7 @@ class CardsList extends Component {
   }
 
   handleDeleteCard = (cardId) => {
-    // this.props.onRemoveCard(this.deckId, cardId);
-    console.log('deleted');
+    this.props.onDeleteCard(cardId);
   }
 
   render() {
@@ -80,7 +79,7 @@ class CardsList extends Component {
                       type: 'link',
                       path: `/cards/${card.id}/edit`,
                       icon: <Icon icon={editIcon} color="#535353" />,
-                      label: { value: 'Edit card'}
+                      label: { value: 'Edit card' }
                     },
                     {
                       type: 'button',
@@ -146,7 +145,8 @@ const mapDispatchToProps = dispatch => {
     onSelectCard: (id) => dispatch(actions.selectCardInCards(id)),
     onUnselectCard: () => dispatch(actions.unselectCardInCards()),
     onUpdateSearchString: (value) => dispatch(actions.updateCardsSearchString(value)),
-    onResetLoading: () => dispatch(actions.resetGetCardsLoading())
+    onResetLoading: () => dispatch(actions.resetGetCardsLoading()),
+    onDeleteCard: (cardId) => dispatch(actions.deleteCard(cardId))
   };
 };
 

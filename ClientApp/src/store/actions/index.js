@@ -24,7 +24,8 @@ export {
   updateCardsSearchString,
   selectCardInCards,
   unselectCardInCards,
-  resetGetCardsLoading
+  resetGetCardsLoading,
+  deleteCard
 } from './Cards';
 
 export { getCardsInDeck, updateRandomCard, updateCardsInDeck, sendTestResult } from './Testing';
