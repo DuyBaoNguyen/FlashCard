@@ -1,4 +1,9 @@
-export { getDecks, getStatistics, getProfile } from './Home';
+export { 
+  getDecks, 
+  getStatistics, 
+  getProfile,
+  resetStateInHomeReducer 
+} from './Home';
 
 export { createDeck, editDeck } from './Deck';
 
@@ -15,14 +20,14 @@ export {
   getDeckCardsOutside,
   updateCardsInsideSearchString,
   updateCardsOutsideSearchString,
+  resetStateInDeckDetailReducer
 } from './DeckDetail';
 
 export {
   getCards,
   updateCardsSearchString,
   selectCardInCards,
-  unselectCardInCards,
-  resetGetCardsLoading,
+  resetStateInCardsReducer,
   deleteCard
 } from './Cards';
 

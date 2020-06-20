@@ -2,11 +2,7 @@
   height: 160px;
 }
 
-.chart-wrapper .auto-sizer {
-  width: 100%;
-}
-
-.chart-wrapper .auto-sizer .chart {
+.chart-wrapper .chart {
   max-width: 300px;
   margin: auto;
 }

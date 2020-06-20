@@ -37,15 +37,9 @@ export const selectCardInCards = (cardId) => {
   };
 };
 
-export const unselectCardInCards = () => {
+export const resetStateInCardsReducer = () => {
   return {
-    type: actionTypes.UNSELECT_CARD_IN_CARDS
-  };
-};
-
-export const resetGetCardsLoading = () => {
-  return {
-    type: actionTypes.RESET_GET_CARDS_LOADING
+    type: actionTypes.RESET_STATE_IN_CARDS_REDUCER
   };
 }
 

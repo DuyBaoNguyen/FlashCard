@@ -210,3 +210,9 @@ export const updateCardsOutsideSearchString = (value) => {
     value: value
   };
 }
+
+export const resetStateInDeckDetailReducer = () => {
+  return {
+    type: actionTypes.RESET_STATE_IN_DECK_DETAIL_REDUCER
+  };
+};

@@ -11,6 +11,7 @@ import { withRouter } from 'react-router-dom';
 import Search from '../../Shared/Search/Search';
 import Button from '../../Shared/Button/Button';
 import Card from '../Card/Card';
+import Loading from '../../Shared/Loading/Loading';
 import * as actions from '../../../store/actions';
 import './DeckCards.css';
 
@@ -41,10 +42,6 @@ class DeckCards extends Component {
     }
   }
 
-  componentWillUnmount() {
-    this.props.onUpdateSearchString('');
-  }
-
   handleClickCard = (cardId) => {
     this.props.onSelectCard(cardId);
   }
@@ -69,42 +66,45 @@ class DeckCards extends Component {
   };
 
   render() {
-    const { cards } = this.props;
+    const { cards, loading } = this.props;
     let { activePage } = this.state;
-    let cardsList = <p className="text-notify">There are no cards here!</p>;
+    let cardsList = loading ? <Loading /> : <p className="text-notify">There are no cards here!</p>;
     let pagination;
 
-    if (cards.length > 0) {
-      cardsList = cards
-        .filter((card, index) => index >= (activePage - 1) * AMOUNT_CARDS && index <= activePage * AMOUNT_CARDS - 1)
-        .map(card => {
-          return (
-            <Card
-              key={card.id}
-              card={card}
-              options={[
-                {
-                  type: 'link',
-                  path: `/cards/${card.id}/edit`,
-                  icon: <Icon icon={editIcon} color="#535353" />,
-                  label: { value: 'Edit card' }
-                },
-                {
-                  type: 'button',
-                  icon: <Icon icon={removeIcon} color="red" />,
-                  label: { value: 'Remove card', color: 'red' },
-                  onClick: () => this.handleRemoveCard(card.id)
-                },
-                {
-                  type: 'button',
-                  icon: <Icon icon={deleteIcon} color="red" />,
-                  label: { value: 'Delete card', color: 'red' },
-                  onClick: () => this.handleDeleteCard(card.id)
-                }
-              ]}
-              onClick={this.handleClickCard} />
-          );
-        });
+    if (cards.length > 0 && !loading) {
+      cardsList = (
+        <div className="cards">
+          {cards.filter((card, index) => index >= (activePage - 1) * AMOUNT_CARDS && index <= activePage * AMOUNT_CARDS - 1)
+            .map(card => {
+              return (
+                <Card
+                  key={card.id}
+                  card={card}
+                  options={[
+                    {
+                      type: 'link',
+                      path: `/cards/${card.id}/edit`,
+                      icon: <Icon icon={editIcon} color="#535353" />,
+                      label: { value: 'Edit card' }
+                    },
+                    {
+                      type: 'button',
+                      icon: <Icon icon={removeIcon} color="red" />,
+                      label: { value: 'Remove card', color: 'red' },
+                      onClick: () => this.handleRemoveCard(card.id)
+                    },
+                    {
+                      type: 'button',
+                      icon: <Icon icon={deleteIcon} color="red" />,
+                      label: { value: 'Delete card', color: 'red' },
+                      onClick: () => this.handleDeleteCard(card.id)
+                    }
+                  ]}
+                  onClick={this.handleClickCard} />
+              );
+            })}
+        </div>
+      )
 
       if (cards.length < (activePage - 1) * AMOUNT_CARDS + 1) {
         activePage--;
@@ -141,7 +141,7 @@ class DeckCards extends Component {
               onChange={this.handleSearchCards} />
           </div>
         </div>
-        <div className="cards">{cardsList}</div>
+        {cardsList}
         <div className="cards-pagination">{pagination}</div>
       </div>
     );
@@ -150,7 +150,8 @@ class DeckCards extends Component {
 
 const mapStateToProps = state => {
   return {
-    cards: state.deckDetail.cards
+    cards: state.deckDetail.cards,
+    loading: state.deckDetail.loadings.getCardsInsideLoading
   };
 };
 

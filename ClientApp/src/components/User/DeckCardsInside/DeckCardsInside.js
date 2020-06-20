@@ -6,8 +6,10 @@ import { Icon } from '@iconify/react';
 import selectionIcon from '@iconify/icons-bi/dash-circle';
 import editIcon from '@iconify/icons-uil/edit';
 import deleteIcon from '@iconify/icons-uil/trash-alt';
+
 import Search from '../../Shared/Search/Search';
 import Card from '../Card/Card';
+import Loading from '../../Shared/Loading/Loading';
 import * as actions from '../../../store/actions';
 import './DeckCardsInside.css';
 
@@ -35,10 +37,6 @@ class DeckCardsInside extends Component {
     }
   }
 
-  componentWillUnmount() {
-    this.props.onUpdateSearchString('');
-  }
-
   handlePageChange = (pageNumber) => {
     this.setState({ activePage: pageNumber });
   }
@@ -59,38 +57,41 @@ class DeckCardsInside extends Component {
   }
 
   render() {
-    const { cards } = this.props;
+    const { cards, loading } = this.props;
     let { activePage } = this.state;
-    let cardsList = <p className="text-notify">There are no cards here!</p>;
+    let cardsList = loading ? <Loading /> : <p className="text-notify">There are no cards here!</p>;
     let pagination;
 
-    if (cards.length > 0) {
-      cardsList = cards
-        .filter((card, index) => index >= (activePage - 1) * AMOUNT_CARDS && index <= activePage * AMOUNT_CARDS - 1)
-        .map(card => {
-          return (
-            <Card
-              key={card.id}
-              card={card}
-              options={[
-                {
-                  type: 'link',
-                  path: `/cards/${card.id}/edit`,
-                  icon: <Icon icon={editIcon} color="#535353" />,
-                  label: { value: 'Edit card' }
-                },
-                {
-                  type: 'button',
-                  icon: <Icon icon={deleteIcon} color="red" />,
-                  label: { value: 'Delete card', color: 'red' },
-                  onClick: () => this.handleDeleteCard(card.id)
-                }
-              ]}
-              selectionIcon={<Icon icon={selectionIcon} color="#ddd" style={{ fontSize: 20 }} />}
-              onSelect={this.handleRemoveCard}
-              onDelete={this.handleDeleteCard} />
-          );
-        });
+    if (cards.length > 0 && !loading) {
+      cardsList = (
+        <div className="cards">
+          {cards.filter((card, index) => index >= (activePage - 1) * AMOUNT_CARDS && index <= activePage * AMOUNT_CARDS - 1)
+            .map(card => {
+              return (
+                <Card
+                  key={card.id}
+                  card={card}
+                  options={[
+                    {
+                      type: 'link',
+                      path: `/cards/${card.id}/edit`,
+                      icon: <Icon icon={editIcon} color="#535353" />,
+                      label: { value: 'Edit card' }
+                    },
+                    {
+                      type: 'button',
+                      icon: <Icon icon={deleteIcon} color="red" />,
+                      label: { value: 'Delete card', color: 'red' },
+                      onClick: () => this.handleDeleteCard(card.id)
+                    }
+                  ]}
+                  selectionIcon={<Icon icon={selectionIcon} color="#ddd" style={{ fontSize: 20 }} />}
+                  onSelect={this.handleRemoveCard}
+                  onDelete={this.handleDeleteCard} />
+              );
+            })}
+        </div>
+      );
 
       if (cards.length < (activePage - 1) * AMOUNT_CARDS + 1) {
         activePage--;
@@ -121,7 +122,7 @@ class DeckCardsInside extends Component {
           </div>
           <p>Cards in deck</p>
         </div>
-        <div className="cards">{cardsList}</div>
+        {cardsList}
         <div className="cards-pagination">{pagination}</div>
       </div>
     );
@@ -130,7 +131,8 @@ class DeckCardsInside extends Component {
 
 const mapStateToProps = state => {
   return {
-    cards: state.deckDetail.cards
+    cards: state.deckDetail.cards,
+    loading: state.deckDetail.loadings.getCardsOutsideLoading
   };
 };
 

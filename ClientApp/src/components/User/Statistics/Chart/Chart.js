@@ -25,7 +25,7 @@ const chart = props => {
 
   return (
     <div className="chart-wrapper">
-      <AutoSizer className="auto-sizer" style={{ width: '100%', height: '100%' }}>
+      <AutoSizer style={{ width: '100%', height: '100%' }}>
         {({ width, height }) => (
           <div className="chart" style={{ width: width, height: height }}>
             <ResponsiveBar
@@ -40,7 +40,7 @@ const chart = props => {
               theme={{
                 fontSize: 13,
                 fontFamily: 'inherit',
-                textColor: '#555',
+                textColor: '#808080',
                 axis: {
                   ticks: {
                     text: {

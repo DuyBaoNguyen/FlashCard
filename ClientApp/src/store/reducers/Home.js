@@ -2,12 +2,15 @@ import * as actionTypes from '../actions/actionTypes';
 import { transformStatistics } from '../../util/util';
 
 const initialState = {
-  decks: null,
+  decks: [],
   getDeckError: null,
   statistics: null,
   getStatisticsError: null,
   profile: null,
-  getProfileError: null
+  getProfileError: null,
+  loadings: {
+    getDecksLoading: true
+  }
 };
 
 export const homeReducer = (state = initialState, action) => {
@@ -16,12 +19,20 @@ export const homeReducer = (state = initialState, action) => {
       return {
         ...state,
         decks: action.decks,
+        loadings: {
+          ...state.loadings,
+          getDecksLoading: false
+        },
         getDeckError: null,
       };
     case actionTypes.GET_DECKS_FAILED:
       return {
         ...state,
-        decks: null,
+        decks: [],
+        loadings: {
+          ...state.loadings,
+          getDecksLoading: false
+        },
         getDeckError: 'Something went wrong',
       };
     case actionTypes.GET_STATISTICS_SUCCESS:
@@ -48,6 +59,11 @@ export const homeReducer = (state = initialState, action) => {
         profile: null,
         getProfileError: 'Something went wrong'
       }
+    case actionTypes.RESET_STATE_IN_HOME_REDUCER:
+      return {
+        ...initialState,
+        profile: state.profile
+      };
     default:
       return state;
   }

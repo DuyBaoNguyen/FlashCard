@@ -28,12 +28,6 @@ class CardsList extends Component {
     this.props.onGetCards();
   }
 
-  componentWillUnmount() {
-    this.props.onUpdateSearchString('');
-    this.props.onUnselectCard();
-    this.props.onResetLoading();
-  }
-
   handleClickCard = (cardId) => {
     this.props.onSelectCard(cardId);
   }
@@ -60,12 +54,6 @@ class CardsList extends Component {
     let pagination;
 
     if (cards.length > 0 && !loading) {
-      const options = [
-        {
-          type: 'link',
-
-        }
-      ];
       cardsList = (
         <div className="cards">
           {cards.filter((card, index) => index >= (activePage - 1) * AMOUNT_CARDS && index <= activePage * AMOUNT_CARDS - 1)
@@ -143,9 +131,7 @@ const mapDispatchToProps = dispatch => {
   return {
     onGetCards: (front) => dispatch(actions.getCards(front)),
     onSelectCard: (id) => dispatch(actions.selectCardInCards(id)),
-    onUnselectCard: () => dispatch(actions.unselectCardInCards()),
     onUpdateSearchString: (value) => dispatch(actions.updateCardsSearchString(value)),
-    onResetLoading: () => dispatch(actions.resetGetCardsLoading()),
     onDeleteCard: (cardId) => dispatch(actions.deleteCard(cardId))
   };
 };

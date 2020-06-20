@@ -4,10 +4,14 @@ import { connect } from 'react-redux';
 import withErrorHandler from '../../../hoc/withErrorHandler';
 import CardInfo from '../../../components/User/CardInfo/CardInfo';
 import CardsList from '../../../components/User/CardsList/CardsList';
-// import * as actions from '../../../store/actions';
+import * as actions from '../../../store/actions';
 import './Cards.css';
 
 class Cards extends Component {
+  componentWillUnmount() {
+    this.props.onResetStateInCardsReducer();
+  }
+
   render() {
     return (
       <div className="cards-wrapper">
@@ -28,4 +32,10 @@ const mapStateToProps = state => {
   };
 };
 
-export default connect(mapStateToProps)(withErrorHandler(Cards));
+const mapDispatchToProps = dispatch => {
+  return {
+    onResetStateInCardsReducer: () => dispatch(actions.resetStateInCardsReducer())
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(withErrorHandler(Cards));

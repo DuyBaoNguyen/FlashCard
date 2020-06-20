@@ -6,6 +6,7 @@ import plusIcon from '@iconify/icons-uil/plus';
 
 import Search from '../../Shared/Search/Search';
 import Button from '../../Shared/Button/Button';
+import Loading from '../../Shared/Loading/Loading';
 import * as actions from '../../../store/actions';
 import Deck from './Deck/Deck';
 
@@ -33,13 +34,18 @@ class DeckWrapper extends Component {
 	};
 
 	render() {
-		let deckList = <p className="text-notify">There are no decks here!</p>;
+		const { loading } = this.props;
+		let deckList = loading ? <Loading /> : <p className="text-notify">There are no decks here!</p>;
 		let pagination;
 
-		if (this.props.decks !== null && this.props.decks.length > 0) {
-			deckList = this.props.decks
-				.filter((deck, index) => index >= (this.state.activePage - 1) * 4 && index <= this.state.activePage * 4 - 1)
-				.map((deck, index) => <Deck key={deck.id} deck={deck} />);
+		if (this.props.decks.length > 0 && !loading) {
+			deckList = (
+				<div className="decks">
+					{this.props.decks
+						.filter((deck, index) => index >= (this.state.activePage - 1) * 4 && index <= this.state.activePage * 4 - 1)
+						.map((deck, index) => <Deck key={deck.id} deck={deck} />)}
+				</div>
+			);
 
 			pagination = (
 				<Pagination
@@ -77,7 +83,7 @@ class DeckWrapper extends Component {
 					</div>
 				</div>
 				<br />
-				<div className="decks">{deckList}</div>
+				{deckList}
 				<div className="deck-pagination">{pagination}</div>
 			</div>
 		);
@@ -87,6 +93,7 @@ class DeckWrapper extends Component {
 const mapStateToProps = (state) => {
 	return {
 		decks: state.home.decks,
+		loading: state.home.loadings.getDecksLoading
 	};
 };
 

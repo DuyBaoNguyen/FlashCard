@@ -43,16 +43,6 @@ export const cardsReducer = (state = initialState, action) => {
         ...state,
         selectedCard: state.cards.find(card => card.id === action.cardId)
       };
-    case actionTypes.UNSELECT_CARD_IN_CARDS:
-      return {
-        ...state,
-        selectedCard: null
-      };
-    case actionTypes.RESET_GET_CARDS_LOADING:
-      return {
-        ...state,
-        loading: true
-      };
     case actionTypes.DELETE_CARD_SUCCESS:
       const newState = {
         ...state,
@@ -73,6 +63,8 @@ export const cardsReducer = (state = initialState, action) => {
           deleteCardError: true
         }
       };
+    case actionTypes.RESET_STATE_IN_CARDS_REDUCER:
+      return initialState;
     default:
       return state;
   }

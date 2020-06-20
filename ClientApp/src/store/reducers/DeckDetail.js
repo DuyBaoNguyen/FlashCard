@@ -9,6 +9,10 @@ const initialState = {
   cardsInsideSearchString: '',
   cardsOutsideSearchString: '',
   selectedCard: null,
+  loadings: {
+    getCardsInsideLoading: true,
+    getCardsOutsideLoading: true,
+  },
   errors: {
     getDeckError: false,
     getStatisticsError: false,
@@ -155,6 +159,10 @@ export const deckDetailReducer = (state = initialState, action) => {
       return {
         ...state,
         cards: action.cards,
+        loadings: {
+          ...state.loadings,
+          getCardsInsideLoading: false
+        },
         errors: {
           ...state.errors,
           getCardsInsideError: false
@@ -164,6 +172,10 @@ export const deckDetailReducer = (state = initialState, action) => {
       return {
         ...state,
         cards: [],
+        loadings: {
+          ...state.loadings,
+          getCardsInsideLoading: false
+        },
         errors: {
           ...state.errors,
           getCardsInsideError: true
@@ -173,6 +185,10 @@ export const deckDetailReducer = (state = initialState, action) => {
       return {
         ...state,
         remainingCards: action.cards,
+        loadings: {
+          ...state.loadings,
+          getCardsOutsideLoading: false
+        },
         errors: {
           ...state.errors,
           getCardsOutsideError: false
@@ -182,6 +198,10 @@ export const deckDetailReducer = (state = initialState, action) => {
       return {
         ...state,
         remainingCards: [],
+        loadings: {
+          ...state.loadings,
+          getCardsOutsideLoading: false
+        },
         errors: {
           ...state.errors,
           getCardsOutsideError: true
@@ -197,6 +217,8 @@ export const deckDetailReducer = (state = initialState, action) => {
         ...state,
         cardsOutsideSearchString: action.value
       };
+    case actionTypes.RESET_STATE_IN_DECK_DETAIL_REDUCER:
+      return initialState;
     default:
       return state;
   }

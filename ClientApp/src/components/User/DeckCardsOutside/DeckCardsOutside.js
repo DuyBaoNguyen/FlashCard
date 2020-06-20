@@ -11,6 +11,7 @@ import deleteIcon from '@iconify/icons-uil/trash-alt';
 import Search from '../../Shared/Search/Search';
 import Button from '../../Shared/Button/Button';
 import Card from '../Card/Card';
+import Loading from '../../Shared/Loading/Loading';
 import * as actions from '../../../store/actions';
 import './DeckCardsOutside.css';
 
@@ -38,10 +39,6 @@ class DeckCardsOutside extends Component {
     }
   }
 
-  componentWillUnmount() {
-    this.props.onUpdateSearchString('');
-  }
-
   handlePageChange = (pageNumber) => {
     this.setState({ activePage: pageNumber });
   }
@@ -63,38 +60,41 @@ class DeckCardsOutside extends Component {
   }
 
   render() {
-    const { cards } = this.props;
+    const { cards, loading } = this.props;
     let { activePage } = this.state;
-    let cardsList = <p className="text-notify">There are no cards here!</p>;
+    let cardsList = loading ? <Loading /> : <p className="text-notify">There are no cards here!</p>;
     let pagination;
 
-    if (cards.length > 0) {
-      cardsList = cards
-        .filter((card, index) => index >= (activePage - 1) * AMOUNT_CARDS && index <= activePage * AMOUNT_CARDS - 1)
-        .map(card => {
-          return (
-            <Card
-              key={card.id}
-              card={card}
-              options={[
-                {
-                  type: 'link',
-                  path: `/cards/${card.id}/edit`,
-                  icon: <Icon icon={editIcon} color="#535353" />,
-                  label: { value: 'Edit card' }
-                },
-                {
-                  type: 'button',
-                  icon: <Icon icon={deleteIcon} color="red" />,
-                  label: { value: 'Delete card', color: 'red' },
-                  onClick: () => this.handleDeleteCard(card.id)
-                }
-              ]}
-              selectionIcon={<Icon icon={selectionIcon} color="#ddd" style={{ fontSize: 20 }} />}
-              onSelect={this.handleAddCard}
-              onDelete={this.handleDeleteCard} />
-          );
-        });
+    if (cards.length > 0 && !loading) {
+      cardsList = (
+        <div className="cards">
+          {cards.filter((card, index) => index >= (activePage - 1) * AMOUNT_CARDS && index <= activePage * AMOUNT_CARDS - 1)
+            .map(card => {
+              return (
+                <Card
+                  key={card.id}
+                  card={card}
+                  options={[
+                    {
+                      type: 'link',
+                      path: `/cards/${card.id}/edit`,
+                      icon: <Icon icon={editIcon} color="#535353" />,
+                      label: { value: 'Edit card' }
+                    },
+                    {
+                      type: 'button',
+                      icon: <Icon icon={deleteIcon} color="red" />,
+                      label: { value: 'Delete card', color: 'red' },
+                      onClick: () => this.handleDeleteCard(card.id)
+                    }
+                  ]}
+                  selectionIcon={<Icon icon={selectionIcon} color="#ddd" style={{ fontSize: 20 }} />}
+                  onSelect={this.handleAddCard}
+                  onDelete={this.handleDeleteCard} />
+              );
+            })}
+        </div>
+      );
 
       if (cards.length < (activePage - 1) * AMOUNT_CARDS + 1) {
         activePage--;
@@ -131,7 +131,7 @@ class DeckCardsOutside extends Component {
           </div>
           <p>My cards</p>
         </div>
-        <div className="cards">{cardsList}</div>
+        {cardsList}
         <div className="cards-pagination">{pagination}</div>
       </div>
     );
@@ -140,7 +140,8 @@ class DeckCardsOutside extends Component {
 
 const mapStateToProps = state => {
   return {
-    cards: state.deckDetail.remainingCards
+    cards: state.deckDetail.remainingCards,
+    loading: state.deckDetail.loadings.getCardsOutsideLoading
   };
 };
 

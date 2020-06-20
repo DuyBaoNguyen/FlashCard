@@ -22,6 +22,7 @@ const rootReducer = combineReducers({
 	cards: reducers.cardsReducer
 });
 const store = createStore(rootReducer, applyMiddleware(thunk));
+// const store = createStore(rootReducer, composeEnhancers(applyMiddleware(thunk)));
 const app = (
 	<Provider store={store}>
 		<Router basename={baseUrl} history={history}>

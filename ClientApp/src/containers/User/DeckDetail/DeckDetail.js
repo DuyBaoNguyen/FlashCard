@@ -20,7 +20,7 @@ class DeckDetail extends Component {
   }
 
   componentWillUnmount() {
-    this.props.onUnselectCard();
+    this.props.onResetStateInDeckDetailReducer();
   }
 
   handleCloseCard = () => {
@@ -79,7 +79,8 @@ const mapDispatchToProps = dispatch => {
   return {
     onGetDeck: (id) => dispatch(actions.getDeck(id)),
     onGetDeckStatistics: (id) => dispatch(actions.getDeckStatistics(id)),
-    onUnselectCard: () => dispatch(actions.unselectCardInDeckDetails())
+    onUnselectCard: () => dispatch(actions.unselectCardInDeckDetails()),
+    onResetStateInDeckDetailReducer: () => dispatch(actions.resetStateInDeckDetailReducer())
   };
 };
 

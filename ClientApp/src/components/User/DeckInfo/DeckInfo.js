@@ -89,7 +89,7 @@ class DeckInfo extends Component {
           <div className="deck-field">
             <span className="deck-field-label">Created date</span>
             <span className="deck-field-value">
-              {new Date(deck?.createdDate).toDateString()}
+              {deck?.createdDate && new Date(deck.createdDate).toDateString()}
             </span>
           </div>
         </Collapse>
