@@ -33,7 +33,7 @@ class DeckWrapper extends Component {
 	};
 
 	render() {
-		let deckList = <p style={{ color: '#535353' }}>There are no decks here!</p>;
+		let deckList = <p className="text-notify">There are no decks here!</p>;
 		let pagination;
 
 		if (this.props.decks !== null && this.props.decks.length > 0) {
