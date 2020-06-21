@@ -23,7 +23,7 @@ class Result extends Component {
 						Congratulation! 👏🏻👏🏻👏🏻 <br />
 						<Animated
 							animationIn="bounceIn"
-							animationInDelay="300"
+							animationInDelay={300}
 							isVisible={true}
 						>
 							You have finished the lesson! 

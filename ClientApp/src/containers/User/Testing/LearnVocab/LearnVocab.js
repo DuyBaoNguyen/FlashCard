@@ -110,7 +110,7 @@ class LearnVocab extends Component {
 
 		let back = this.props.currentVocab?.backs.map((back, index) => {
 			return (
-				<div className="back-card">
+				<div key={back.id} className="back-card">
 					<b style={{ color: '#9EACF4' }}>{back.meaning}</b>
 					<p style={{ fontStyle: 'italic' }}>{back.type}</p>
 					<p>{back.example}</p>

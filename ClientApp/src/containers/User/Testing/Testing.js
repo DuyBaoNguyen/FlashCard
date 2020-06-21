@@ -59,8 +59,6 @@ class Testing extends Component {
 
 		let newSucceededCardIds = [...succeededCardIds];
 		let newFailedCardIds = [...failedCardIds];
-		console.log(cardList);
-		console.log(currentVocabList);
 		let process = (
 			(this.state.savedVocab.length /
 				(currentVocabList.length + this.state.savedVocab.length - 1)) *
@@ -123,7 +121,10 @@ class Testing extends Component {
 		let formattedNewSucceededCardIds = newSucceededCardIds.filter(
 			(x) => !newFailedCardIds.includes(x)
 		);
-		let date = new Date();
+
+		const date = new Date();
+		const hours = date.getHours() - date.getTimezoneOffset() / 60;
+		date.setHours(hours);
 
 		formattedNewSucceededCardIds = this.unique(formattedNewSucceededCardIds);
 		newFailedCardIds = this.unique(newFailedCardIds);
@@ -133,7 +134,7 @@ class Testing extends Component {
 		);
 		this.props.onSendTestResult(
 			this.props.match.params.deckId,
-			date.toISOString(),
+			date,
 			formattedNewSucceededCardIds,
 			newFailedCardIds
 		);
