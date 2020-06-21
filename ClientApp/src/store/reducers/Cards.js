@@ -3,7 +3,9 @@ import * as actionTypes from '../actions/actionTypes';
 const initialState = {
   cards: [],
   selectedCard: null,
-  loading: true,
+  loadings: {
+    getCardsLoading: true
+  },
   searchString: '',
   errors: {
     getCardsError: false,
@@ -17,7 +19,10 @@ export const cardsReducer = (state = initialState, action) => {
       return {
         ...state,
         cards: action.cards,
-        loading: false,
+        loadings: {
+          ...state.loadings,
+          getCardsLoading: false
+        },
         errors: {
           ...state.errors,
           getCardsError: false
@@ -27,7 +32,10 @@ export const cardsReducer = (state = initialState, action) => {
       return {
         ...state,
         cards: [],
-        loading: false,
+        loadings: {
+          ...state.loadings,
+          getCardsLoading: false
+        },
         errors: {
           ...state.errors,
           getCardsError: true
@@ -64,7 +72,11 @@ export const cardsReducer = (state = initialState, action) => {
         }
       };
     case actionTypes.RESET_STATE_IN_CARDS_REDUCER:
-      return initialState;
+      return {
+        ...initialState,
+        cards: state.cards,
+        loadings: state.loadings
+      };
     default:
       return state;
   }

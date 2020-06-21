@@ -59,11 +59,6 @@ export const homeReducer = (state = initialState, action) => {
         profile: null,
         getProfileError: 'Something went wrong'
       }
-    case actionTypes.RESET_STATE_IN_HOME_REDUCER:
-      return {
-        ...initialState,
-        profile: state.profile
-      };
     default:
       return state;
   }

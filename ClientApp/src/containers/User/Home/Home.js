@@ -12,10 +12,6 @@ class Home extends Component {
     this.props.onGetStatistics();
   }
 
-  componentWillUnmount() {
-    this.props.onResetStateInHomeReducer();
-  }
-
   render() {
     return (
       <div className="home">
@@ -34,8 +30,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    onGetStatistics: () => dispatch(actions.getStatistics()),
-    onResetStateInHomeReducer: () => dispatch(actions.resetStateInHomeReducer())
+    onGetStatistics: () => dispatch(actions.getStatistics())
   };
 };
 

@@ -13,6 +13,7 @@ import Button from '../../Shared/Button/Button';
 import Card from '../Card/Card';
 import Loading from '../../Shared/Loading/Loading';
 import * as actions from '../../../store/actions';
+import { TIME_OUT_DURATION } from '../../../applicationConstants';
 import './DeckCardsOutside.css';
 
 const AMOUNT_CARDS = 9;
@@ -22,7 +23,8 @@ class DeckCardsOutside extends Component {
     super(props);
 
     this.state = {
-      activePage: 1
+      activePage: 1,
+      setLoading: false
     };
   }
 
@@ -37,6 +39,10 @@ class DeckCardsOutside extends Component {
         return { activePage: state.activePage - 1 };
       });
     }
+  }
+
+  componentWillUnmount() {
+    clearTimeout(this.timeoutNumber);
   }
 
   handlePageChange = (pageNumber) => {
@@ -61,9 +67,17 @@ class DeckCardsOutside extends Component {
 
   render() {
     const { cards, loading } = this.props;
-    let { activePage } = this.state;
-    let cardsList = loading ? <Loading /> : <p className="text-notify">There are no cards here!</p>;
+    let { activePage, setLoading } = this.state;
+    let cardsList = loading ? setLoading && <Loading /> : <p className="text-notify">There are no cards here!</p>;
     let pagination;
+
+    if (!setLoading && !this.timeoutNumber) {
+      this.timeoutNumber = setTimeout(() => {
+        if (this.props.loading) {
+          this.setState({ setLoading: true });
+        }
+      }, TIME_OUT_DURATION);
+    }
 
     if (cards.length > 0 && !loading) {
       cardsList = (

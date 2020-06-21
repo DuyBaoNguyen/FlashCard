@@ -1,8 +1,7 @@
 export { 
   getDecks, 
   getStatistics, 
-  getProfile,
-  resetStateInHomeReducer 
+  getProfile 
 } from './Home';
 
 export { createDeck, editDeck } from './Deck';

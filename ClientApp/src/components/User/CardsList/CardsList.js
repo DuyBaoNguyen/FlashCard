@@ -11,6 +11,7 @@ import Button from '../../Shared/Button/Button';
 import Card from '../Card/Card';
 import Loading from '../../Shared/Loading/Loading';
 import * as actions from '../../../store/actions';
+import { TIME_OUT_DURATION } from '../../../applicationConstants';
 import './CardsList.css';
 
 const AMOUNT_CARDS = 12;
@@ -20,12 +21,17 @@ class CardsList extends Component {
     super(props);
 
     this.state = {
-      activePage: 1
+      activePage: 1,
+      setLoading: false
     };
   }
 
   componentDidMount() {
     this.props.onGetCards();
+  }
+
+  componentWillUnmount() {
+    clearTimeout(this.timeoutNumber);
   }
 
   handleClickCard = (cardId) => {
@@ -49,9 +55,17 @@ class CardsList extends Component {
 
   render() {
     const { cards, loading } = this.props;
-    const { activePage } = this.state;
-    let cardsList = loading ? <Loading /> : <p className="text-notify">There are no cards here!</p>;
+    let { activePage, setLoading } = this.state;
+    let cardsList = loading ? setLoading && <Loading /> : <p className="text-notify">There are no cards here!</p>;
     let pagination;
+
+    if (!setLoading && !this.timeoutNumber) {
+      this.timeoutNumber = setTimeout(() => {
+        if (this.props.loading) {
+          this.setState({ setLoading: true });
+        }
+      }, TIME_OUT_DURATION);
+    }
 
     if (cards.length > 0 && !loading) {
       cardsList = (
@@ -123,7 +137,7 @@ class CardsList extends Component {
 const mapStateToProps = state => {
   return {
     cards: state.cards.cards,
-    loading: state.cards.loading
+    loading: state.cards.loadings.getCardsLoading
   };
 };
 

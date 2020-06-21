@@ -9,7 +9,7 @@ import Button from '../../Shared/Button/Button';
 import Loading from '../../Shared/Loading/Loading';
 import * as actions from '../../../store/actions';
 import Deck from './Deck/Deck';
-
+import { TIME_OUT_DURATION } from '../../../applicationConstants';
 import './DeckWrapper.css';
 
 class DeckWrapper extends Component {
@@ -17,6 +17,7 @@ class DeckWrapper extends Component {
 		super(props);
 		this.state = {
 			activePage: 1,
+			setLoading: false
 		};
 	}
 
@@ -28,6 +29,10 @@ class DeckWrapper extends Component {
 		this.props.onGetDecks('');
 	}
 
+	componentWillUnmount() {
+		clearTimeout(this.timeoutNumber);
+	}
+
 	handleSearchDeck = (event) => {
 		this.props.onGetDecks(event.target.value);
 		this.setState({ activePage: 1 });
@@ -35,8 +40,17 @@ class DeckWrapper extends Component {
 
 	render() {
 		const { loading } = this.props;
-		let deckList = loading ? <Loading /> : <p className="text-notify">There are no decks here!</p>;
+		const { setLoading } = this.state;
+		let deckList = loading ? setLoading && <Loading /> : <p className="text-notify">There are no decks here!</p>;
 		let pagination;
+
+		if (!setLoading && !this.timeoutNumber) {
+      this.timeoutNumber = setTimeout(() => {
+        if (this.props.loading) {
+          this.setState({ setLoading: true });
+        }
+      }, TIME_OUT_DURATION);
+    }
 
 		if (this.props.decks.length > 0 && !loading) {
 			deckList = (

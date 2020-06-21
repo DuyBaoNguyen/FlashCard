@@ -75,9 +75,3 @@ export const getProfile = () => {
 			.catch(err => dispatch(getProfileFail()));
 	};
 };
-
-export const resetStateInHomeReducer = () => {
-	return {
-		type: actionTypes.RESET_STATE_IN_HOME_REDUCER
-	};
-};
