@@ -42,7 +42,7 @@ export const checkValidity = (value, rules) => {
     }
   }
   if (rules.pattern) {
-    isValid = pattern.test(rules.pattern) && isValid;
+    isValid = rules.pattern.test(value) && isValid;
     if (!isValid) {
       message = message || 'Contains invalid character';
     }
