@@ -49,14 +49,14 @@ class DeckDetail extends Component {
     return (
       <div className="deck-detail">
         <section className="left-section">
-          <Link to={returnUrl || '/'}>
-            <div className="back-feature">
+          <div className="back-feature">
+            <Link to={returnUrl || '/'}>
               <span className="back-feature-icon">
                 <Icon icon={arrowLeftIcon} />
               </span>
               <span className="back-feature-label"> Back</span>
-            </div>
-          </Link>
+            </Link>
+          </div>
           {leftSection}
         </section>
         <section className="right-section">

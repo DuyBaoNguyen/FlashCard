@@ -34,6 +34,14 @@ class DeckCards extends Component {
 
   componentDidMount() {
     this.props.onGetDeckCardsInside(this.deckId);
+
+    if (!this.state.setLoading && !this.timeoutNumber) {
+      this.timeoutNumber = setTimeout(() => {
+        if (this.props.loading) {
+          this.setState({ setLoading: true });
+        }
+      }, TIME_OUT_DURATION);
+    }
   }
 
   componentDidUpdate() {
@@ -77,14 +85,6 @@ class DeckCards extends Component {
     let cardsList = loading ? setLoading && <Loading /> : <p className="text-notify">There are no cards here!</p>;
     let pagination;
 
-    if (!setLoading && !this.timeoutNumber) {
-      this.timeoutNumber = setTimeout(() => {
-        if (this.props.loading) {
-          this.setState({ setLoading: true });
-        }
-      }, TIME_OUT_DURATION);
-    }
-
     if (cards.length > 0 && !loading) {
       cardsList = (
         <div className="cards">
@@ -97,7 +97,7 @@ class DeckCards extends Component {
                   options={[
                     {
                       type: 'link',
-                      path: `/cards/${card.id}/edit`,
+                      path: { pathname: `/cards/${card.id}/edit`, state: { backUrl: `/decks/${this.deckId}` } },
                       icon: <Icon icon={editIcon} color="#535353" />,
                       label: { value: 'Edit card' }
                     },

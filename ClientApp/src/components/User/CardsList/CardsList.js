@@ -28,6 +28,14 @@ class CardsList extends Component {
 
   componentDidMount() {
     this.props.onGetCards();
+
+    if (!this.state.setLoading && !this.timeoutNumber) {
+      this.timeoutNumber = setTimeout(() => {
+        if (this.props.loading) {
+          this.setState({ setLoading: true });
+        }
+      }, TIME_OUT_DURATION);
+    }
   }
 
   componentWillUnmount() {
@@ -59,14 +67,6 @@ class CardsList extends Component {
     let cardsList = loading ? setLoading && <Loading /> : <p className="text-notify">There are no cards here!</p>;
     let pagination;
 
-    if (!setLoading && !this.timeoutNumber) {
-      this.timeoutNumber = setTimeout(() => {
-        if (this.props.loading) {
-          this.setState({ setLoading: true });
-        }
-      }, TIME_OUT_DURATION);
-    }
-
     if (cards.length > 0 && !loading) {
       cardsList = (
         <div className="cards">
@@ -79,7 +79,7 @@ class CardsList extends Component {
                   options={[
                     {
                       type: 'link',
-                      path: `/cards/${card.id}/edit`,
+                      path: { pathname: `/cards/${card.id}/edit`, state: { backUrl: '/cards' }},
                       icon: <Icon icon={editIcon} color="#535353" />,
                       label: { value: 'Edit card' }
                     },
@@ -118,7 +118,7 @@ class CardsList extends Component {
           <div className="cards-list-header-features">
             <Button
               type="link"
-              path={`/cards/create`}
+              path={{ pathname: `/cards/create`, state: { backUrl: '/cards'}}}
               className="cards-list-header-features-add"
               icon={<Icon icon={plusIcon} />} >
             </Button>

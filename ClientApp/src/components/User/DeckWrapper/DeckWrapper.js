@@ -27,6 +27,14 @@ class DeckWrapper extends Component {
 
 	componentDidMount() {
 		this.props.onGetDecks('');
+
+		if (!this.state.setLoading && !this.timeoutNumber) {
+			this.timeoutNumber = setTimeout(() => {
+				if (this.props.loading) {
+					this.setState({ setLoading: true });
+				}
+			}, TIME_OUT_DURATION);
+		}
 	}
 
 	componentWillUnmount() {
@@ -43,14 +51,6 @@ class DeckWrapper extends Component {
 		const { setLoading } = this.state;
 		let deckList = loading ? setLoading && <Loading /> : <p className="text-notify">There are no decks here!</p>;
 		let pagination;
-
-		if (!setLoading && !this.timeoutNumber) {
-      this.timeoutNumber = setTimeout(() => {
-        if (this.props.loading) {
-          this.setState({ setLoading: true });
-        }
-      }, TIME_OUT_DURATION);
-    }
 
 		if (this.props.decks.length > 0 && !loading) {
 			deckList = (

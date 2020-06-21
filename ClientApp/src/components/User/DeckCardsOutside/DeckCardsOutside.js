@@ -31,6 +31,14 @@ class DeckCardsOutside extends Component {
   componentDidMount() {
     this.deckId = this.props.match.params.deckId;
     this.props.onGetDeckCardsOutside(this.deckId, '');
+
+    if (!this.state.setLoading && !this.timeoutNumber) {
+      this.timeoutNumber = setTimeout(() => {
+        if (this.props.loading) {
+          this.setState({ setLoading: true });
+        }
+      }, TIME_OUT_DURATION);
+    }
   }
 
   componentDidUpdate() {
@@ -71,14 +79,6 @@ class DeckCardsOutside extends Component {
     let cardsList = loading ? setLoading && <Loading /> : <p className="text-notify">There are no cards here!</p>;
     let pagination;
 
-    if (!setLoading && !this.timeoutNumber) {
-      this.timeoutNumber = setTimeout(() => {
-        if (this.props.loading) {
-          this.setState({ setLoading: true });
-        }
-      }, TIME_OUT_DURATION);
-    }
-
     if (cards.length > 0 && !loading) {
       cardsList = (
         <div className="cards">
@@ -91,7 +91,7 @@ class DeckCardsOutside extends Component {
                   options={[
                     {
                       type: 'link',
-                      path: `/cards/${card.id}/edit`,
+                      path: { pathname: `/cards/${card.id}/edit`, state: { backUrl: `/decks/${this.deckId}/addcards` } },
                       icon: <Icon icon={editIcon} color="#535353" />,
                       label: { value: 'Edit card' }
                     },
@@ -102,7 +102,7 @@ class DeckCardsOutside extends Component {
                       onClick: () => this.handleDeleteCard(card.id)
                     }
                   ]}
-                  selectionIcon={<Icon icon={selectionIcon} color="#ddd" style={{ fontSize: 20 }} />}
+                  selectionIcon={<Icon icon={selectionIcon} style={{ fontSize: 20 }} />}
                   onSelect={this.handleAddCard}
                   onDelete={this.handleDeleteCard} />
               );
@@ -135,7 +135,7 @@ class DeckCardsOutside extends Component {
           <div className="deck-cards-outside-header-features">
             <Button
               type="link"
-              path={'/cards/create'}
+              path={{ pathname: '/cards/create', state: { backUrl: `/decks/${this.deckId}/addcards` } }}
               className="deck-cards-outside-header-features-add"
               icon={<Icon icon={plusIcon} />}>
             </Button>

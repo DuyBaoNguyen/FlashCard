@@ -31,11 +31,12 @@
       top: 12px;
       left: 12px;
       height: 20px;
+      color: #ddd;
       border-radius: 50%;
-      transition: background-color 0.15s ease;
-      color: red;
+      transition: color .1s ease-out, background-color .1s ease-out;
       &:hover {
         background-color: #f9f9f9;
+        color: #888;
       }
     }
   }

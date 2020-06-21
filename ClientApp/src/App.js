@@ -9,10 +9,11 @@ import CreateDeck from './containers/User/CreateDeck/CreateDeck';
 import EditDeck from './containers/User/EditDeck/EditDeck';
 import Testing from './containers/User/Testing/Testing';
 import MatchCard from './containers/User/MatchCard/MatchCard';
-
 import DeckDetail from './containers/User/DeckDetail/DeckDetail';
 import AddCard from './containers/User/AddCard/AddCard';
 import Cards from './containers/User/Cards/Cards';
+import CreateCard from './containers/User/CreateCard/CreateCard';
+import EditCard from './containers/User/EditCard/EditCard';
 import AuthorizeRoute from './components/api-authorization/AuthorizeRoute';
 import ApiAuthorizationRoutes from './components/api-authorization/ApiAuthorizationRoutes';
 import { ApplicationPaths } from './components/api-authorization/ApiAuthorizationConstants';
@@ -36,6 +37,8 @@ class App extends Component {
 					<AuthorizeRoute exact path="/decks/:deckId" component={DeckDetail} />
 					<AuthorizeRoute exact path="/decks/:deckId/addcards" component={AddCard} />
 					<AuthorizeRoute exact path="/cards" component={Cards} />
+					<AuthorizeRoute exact path="/cards/create" component={CreateCard} />
+					<AuthorizeRoute exact path="/cards/:cardId/edit" component={EditCard} />
 
 					<Route path={ApplicationPaths.ApiAuthorizationPrefix} component={ApiAuthorizationRoutes} />
 

@@ -19,7 +19,8 @@ const rootReducer = combineReducers({
 	deckDetail: reducers.deckDetailReducer,
 	testing: reducers.testingReducer,
 	matchCard: reducers.matchCardReducer,
-	cards: reducers.cardsReducer
+	cards: reducers.cardsReducer,
+	card: reducers.cardReducer
 });
 const store = createStore(rootReducer, applyMiddleware(thunk));
 // const store = createStore(rootReducer, composeEnhancers(applyMiddleware(thunk)));

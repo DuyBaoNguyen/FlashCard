@@ -29,6 +29,14 @@ class DeckCardsInside extends Component {
   componentDidMount() {
     this.deckId = this.props.match.params.deckId;
     this.props.onGetDeckCardsInside(this.deckId);
+
+    if (!this.state.setLoading && !this.timeoutNumber) {
+      this.timeoutNumber = setTimeout(() => {
+        if (this.props.loading) {
+          this.setState({ setLoading: true });
+        }
+      }, TIME_OUT_DURATION);
+    }
   }
 
   componentDidUpdate() {
@@ -68,14 +76,6 @@ class DeckCardsInside extends Component {
     let cardsList = loading ? setLoading && <Loading /> : <p className="text-notify">There are no cards here!</p>;
     let pagination;
 
-    if (!setLoading && !this.timeoutNumber) {
-      this.timeoutNumber = setTimeout(() => {
-        if (this.props.loading) {
-          this.setState({ setLoading: true });
-        }
-      }, TIME_OUT_DURATION);
-    }
-
     if (cards.length > 0 && !loading) {
       cardsList = (
         <div className="cards">
@@ -88,7 +88,7 @@ class DeckCardsInside extends Component {
                   options={[
                     {
                       type: 'link',
-                      path: `/cards/${card.id}/edit`,
+                      path: { pathname: `/cards/${card.id}/edit`, state: { backUrl: `/decks/${this.deckId}/addcards` } },
                       icon: <Icon icon={editIcon} color="#535353" />,
                       label: { value: 'Edit card' }
                     },
@@ -99,7 +99,7 @@ class DeckCardsInside extends Component {
                       onClick: () => this.handleDeleteCard(card.id)
                     }
                   ]}
-                  selectionIcon={<Icon icon={selectionIcon} color="#ddd" style={{ fontSize: 20 }} />}
+                  selectionIcon={<Icon icon={selectionIcon} style={{ fontSize: 20 }} />}
                   onSelect={this.handleRemoveCard}
                   onDelete={this.handleDeleteCard} />
               );

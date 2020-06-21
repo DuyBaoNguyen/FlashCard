@@ -45,15 +45,16 @@
   top: 12px;
   left: 12px;
   height: 20px;
+  color: #ddd;
   border-radius: 50%;
-  -webkit-transition: background-color 0.15s ease;
-  transition: background-color 0.15s ease;
-  color: red;
+  -webkit-transition: color .1s ease-out, background-color .1s ease-out;
+  transition: color .1s ease-out, background-color .1s ease-out;
 }
 
 .card-wrapper .card-front .selectable-icon:hover,
 .card-wrapper .card-back .selectable-icon:hover {
   background-color: #f9f9f9;
+  color: #888;
 }
 
 .card-wrapper:hover .card-options {

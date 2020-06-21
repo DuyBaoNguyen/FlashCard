@@ -1,0 +1,60 @@
+.edit-card {
+  width: 100%;
+  height: 655px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  position: relative;
+}
+
+.edit-card .card-front,
+.edit-card .card-back {
+  width: 33%;
+  height: 480px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  background: #ffffff;
+  -webkit-box-shadow: 0px 0px 30px rgba(0, 0, 0, 0.05);
+          box-shadow: 0px 0px 30px rgba(0, 0, 0, 0.05);
+  border-radius: 15px;
+}
+
+.edit-card .card-front {
+  margin-right: 10px;
+}
+
+.edit-card .card-front .add-front-btn {
+  padding-left: 30px;
+  padding-right: 30px;
+}
+
+.edit-card .card-back {
+  margin-left: 10px;
+  color: #979797;
+  font-size: 14px;
+}
+
+.edit-card .back-feature {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.edit-card .back-feature a {
+  font-size: 14px;
+  color: #979797;
+}
+/*# sourceMappingURL=EditCard.css.map */

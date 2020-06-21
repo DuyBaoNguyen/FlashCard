@@ -5,18 +5,18 @@
   margin-right: -20px;
 }
 
-.deck-detail .back-feature {
+.deck-detail .back-feature a {
   color: #979797;
   position: relative;
 }
 
-.deck-detail .back-feature .back-feature-icon {
+.deck-detail .back-feature a .back-feature-icon {
   position: absolute;
   left: -8px;
   font-size: 22px;
 }
 
-.deck-detail .back-feature .back-feature-label {
+.deck-detail .back-feature a .back-feature-label {
   font-size: 14px;
   padding-left: 18px;
 }

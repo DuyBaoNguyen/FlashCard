@@ -1,0 +1,23 @@
+.input {
+  width: 100%;
+  height: 40px;
+  display: block;
+  background: #ffffff;
+  border: 1px solid #d9d9d9;
+  border-radius: 4px;
+  padding: 10px;
+  -webkit-transition: 0.3s;
+  transition: 0.3s;
+  font-size: 15px;
+}
+
+.input:focus {
+  -webkit-transition: 0.3s;
+  transition: 0.3s;
+  border: 2px solid #9eacf4;
+}
+
+.input.invalid {
+  border: 2px solid #ff8888;
+}
+/*# sourceMappingURL=Input.css.map */

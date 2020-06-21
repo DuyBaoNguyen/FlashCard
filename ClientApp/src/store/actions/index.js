@@ -38,3 +38,8 @@ export {
 } from './Testing';
 
 export { getMatchCards, updateMatchCards } from './MatchCard';
+
+export {
+  createCard,
+  getCard
+} from './Card';
