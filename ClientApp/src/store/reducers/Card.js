@@ -2,8 +2,9 @@ import * as actionTypes from '../actions/actionTypes';
 
 const initialState = {
   card: null,
+  cardFrontFormOpened: false,
   errors: {
-    createCardError: null,
+    updateCardError: null,
     getCardError: false
   }
 };
@@ -28,22 +29,39 @@ export const cardReducer = (state = initialState, action) => {
           getCardError: true
         }
       };
-    case actionTypes.CREATE_CARD_SUCCESS:
+    case actionTypes.UPDATE_CARD_SUCCESS:
       return {
         ...state,
+        cardFrontFormOpened: false,
         errors: {
           ...state.errors,
-          createCardError: null
+          updateCardError: null
         }
       };
     case actionTypes.CREATE_CARD_FAIL:
+    case actionTypes.UPDATE_CARD_FAIL:
       return {
         ...state,
         errors: {
           ...state.errors,
-          createCardError: action.error
+          updateCardError: action.error
         }
       };
+    case actionTypes.CLEAR_UPDATE_CARD_ERROR:
+      return {
+        ...state,
+        errors: {
+          ...state.errors,
+          updateCardError: null
+        }
+      };
+    case actionTypes.TOGGLE_CARD_FRONT_FORM:
+      return {
+        ...state,
+        cardFrontFormOpened: action.opened
+      };
+    case actionTypes.RESET_STATE_IN_CARD_REDUCER:
+      return initialState;
     default:
       return state;
   }

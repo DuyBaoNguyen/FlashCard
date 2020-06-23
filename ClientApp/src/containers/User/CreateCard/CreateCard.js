@@ -1,44 +1,34 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
+import { connect } from 'react-redux';
 
 import Button from '../../../components/Shared/Button/Button';
 import CardFrontForm from '../../../components/User/CardFrontForm/CardFrontForm';
 import withErrorHandler from '../../../hoc/withErrorHandler';
+import * as actions from '../../../store/actions';
 import './CreateCard.css';
 
 class CreateCard extends Component {
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      cardFrontFormOpened: false
-    };
-  }
-
   UNSAFE_componentWillMount() {
     this.backUrl = this.props.location.state?.backUrl || '/';
   }
 
   componentDidMount() {
-    this.timeoutNumber = setTimeout(() => {
-      this.setState({ cardFrontFormOpened: true });
+    setTimeout(() => {
+      this.props.onToggleCardFrontForm(true);
     }, 0);
   }
 
-  componentWillUnmount() {
-    clearTimeout(this.timeoutNumber);
-  }
-
   handleClickAddFront = () => {
-    this.setState({ cardFrontFormOpened: true });
+    this.props.onToggleCardFrontForm(true);
   }
 
   handleCloseCardFrontForm = () => {
-    this.setState({ cardFrontFormOpened: false });
+    this.props.onToggleCardFrontForm(false);
   }
 
   render() {
-    const { cardFrontFormOpened } = this.state;
+    const { cardFrontFormOpened } = this.props;
     return (
       <div className="create-card">
         <div className="back-feature">
@@ -58,4 +48,16 @@ class CreateCard extends Component {
   }
 }
 
-export default withErrorHandler(CreateCard);
+const mapStateToProps = state => {
+  return {
+    cardFrontFormOpened: state.card.cardFrontFormOpened
+  };
+};
+
+const mapDispatchToProps = dispatch => {
+  return {
+    onToggleCardFrontForm: (opened) => dispatch(actions.toggleCardFrontForm(opened))
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(withErrorHandler(CreateCard));

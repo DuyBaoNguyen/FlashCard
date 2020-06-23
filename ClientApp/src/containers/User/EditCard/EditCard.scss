@@ -18,9 +18,43 @@
   }
   .card-front {
     margin-right: 10px;
-    .add-front-btn {
-      padding-left: 30px;
-      padding-right: 30px;
+    .front-wrapper {
+      max-width: 300px;
+      position: relative;
+      .front {
+        font-size: 22px;
+        color: #535353;
+        padding: 5px 18px;
+        border-radius: 10px;
+        cursor: pointer;
+        transition: background-color 0.3s ease-out;
+        &:hover {
+          background-color: #f2f2f2;
+        }
+      }
+      .delete-card-btn {
+        color: red;
+      }
+      .options {
+        position: absolute;
+        top: -5px;
+        right: -30px;
+        display: none;
+        border-radius: 10px;
+        padding-top: 10px;
+        height: 36px;
+        width: 36px;
+        transition: background-color .3s ease-out;
+        .dropdown-toggler {
+          padding: 0 8px 0 6px;
+        }
+        &:hover {
+          background-color: #f2f2f2;
+        }
+      }
+    }
+    &:hover .options {
+      display: block;
     }
   }
   .card-back {

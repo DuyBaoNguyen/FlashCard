@@ -65,6 +65,8 @@
 
 .card-wrapper .card-front {
   font-size: 15px;
+  text-align: center;
+  line-height: 1.5;
 }
 
 .card-wrapper .card-back {

@@ -33,7 +33,7 @@ class DeckCardsOutside extends Component {
     this.props.onGetDeckCardsOutside(this.deckId, '');
 
     if (!this.state.setLoading && !this.timeoutNumber) {
-      this.timeoutNumber = setTimeout(() => {
+      setTimeout(() => {
         if (this.props.loading) {
           this.setState({ setLoading: true });
         }
@@ -47,10 +47,6 @@ class DeckCardsOutside extends Component {
         return { activePage: state.activePage - 1 };
       });
     }
-  }
-
-  componentWillUnmount() {
-    clearTimeout(this.timeoutNumber);
   }
 
   handlePageChange = (pageNumber) => {

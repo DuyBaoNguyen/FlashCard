@@ -28,6 +28,8 @@ const withErrorHandler = (WrappedComponent) => {
             pathname: ApplicationPaths.LogOut,
             state: { local: true }
           });
+        } else if (error.response.status === 404) {
+          history.push(history.location.state?.backUrl || '/');
         }
         return Promise.reject(error);
       });

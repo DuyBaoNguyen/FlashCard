@@ -13,6 +13,10 @@ import './DeckDetail.css';
 import { connect } from 'react-redux';
 
 class DeckDetail extends Component {
+  UNSAFE_componentWillMount() {
+    this.backUrl = this.props.location.state?.backUrl || '/';
+  }
+
   componentDidMount() {
     this.deckId = this.props.match.params.deckId;
     this.props.onGetDeck(this.deckId);
@@ -28,7 +32,7 @@ class DeckDetail extends Component {
   }
 
   render() {
-    const { deck, statistics, selectedCard, returnUrl } = this.props;
+    const { deck, statistics, selectedCard } = this.props;
     let leftSection;
     if (selectedCard) {
       leftSection = (
@@ -50,7 +54,7 @@ class DeckDetail extends Component {
       <div className="deck-detail">
         <section className="left-section">
           <div className="back-feature">
-            <Link to={returnUrl || '/'}>
+            <Link to={this.backUrl}>
               <span className="back-feature-icon">
                 <Icon icon={arrowLeftIcon} />
               </span>

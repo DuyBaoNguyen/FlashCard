@@ -36,7 +36,7 @@ class DeckCards extends Component {
     this.props.onGetDeckCardsInside(this.deckId);
 
     if (!this.state.setLoading && !this.timeoutNumber) {
-      this.timeoutNumber = setTimeout(() => {
+      setTimeout(() => {
         if (this.props.loading) {
           this.setState({ setLoading: true });
         }
@@ -50,10 +50,6 @@ class DeckCards extends Component {
         return { activePage: state.activePage - 1 };
       });
     }
-  }
-
-  componentWillUnmount() {
-    clearTimeout(this.timeoutNumber);
   }
 
   handleClickCard = (cardId) => {

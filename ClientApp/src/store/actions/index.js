@@ -1,7 +1,7 @@
-export { 
-  getDecks, 
-  getStatistics, 
-  getProfile 
+export {
+  getDecks,
+  getStatistics,
+  getProfile
 } from './Home';
 
 export { createDeck, editDeck } from './Deck';
@@ -41,5 +41,9 @@ export { getMatchCards, updateMatchCards } from './MatchCard';
 
 export {
   createCard,
-  getCard
+  updateCard,
+  getCard,
+  clearUpdateCardError,
+  toggleCardFrontForm,
+  resetStateInCardReducer
 } from './Card';

@@ -36,9 +36,52 @@
   margin-right: 10px;
 }
 
-.edit-card .card-front .add-front-btn {
-  padding-left: 30px;
-  padding-right: 30px;
+.edit-card .card-front .front-wrapper {
+  max-width: 300px;
+  position: relative;
+}
+
+.edit-card .card-front .front-wrapper .front {
+  font-size: 22px;
+  color: #535353;
+  padding: 5px 18px;
+  border-radius: 10px;
+  cursor: pointer;
+  -webkit-transition: background-color 0.3s ease-out;
+  transition: background-color 0.3s ease-out;
+}
+
+.edit-card .card-front .front-wrapper .front:hover {
+  background-color: #f2f2f2;
+}
+
+.edit-card .card-front .front-wrapper .delete-card-btn {
+  color: red;
+}
+
+.edit-card .card-front .front-wrapper .options {
+  position: absolute;
+  top: -5px;
+  right: -30px;
+  display: none;
+  border-radius: 10px;
+  padding-top: 10px;
+  height: 36px;
+  width: 36px;
+  -webkit-transition: background-color .3s ease-out;
+  transition: background-color .3s ease-out;
+}
+
+.edit-card .card-front .front-wrapper .options .dropdown-toggler {
+  padding: 0 8px 0 6px;
+}
+
+.edit-card .card-front .front-wrapper .options:hover {
+  background-color: #f2f2f2;
+}
+
+.edit-card .card-front:hover .options {
+  display: block;
 }
 
 .edit-card .card-back {

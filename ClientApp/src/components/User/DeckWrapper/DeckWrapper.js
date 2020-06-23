@@ -29,16 +29,12 @@ class DeckWrapper extends Component {
 		this.props.onGetDecks('');
 
 		if (!this.state.setLoading && !this.timeoutNumber) {
-			this.timeoutNumber = setTimeout(() => {
+			setTimeout(() => {
 				if (this.props.loading) {
 					this.setState({ setLoading: true });
 				}
 			}, TIME_OUT_DURATION);
 		}
-	}
-
-	componentWillUnmount() {
-		clearTimeout(this.timeoutNumber);
 	}
 
 	handleSearchDeck = (event) => {

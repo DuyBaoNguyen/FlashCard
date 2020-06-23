@@ -35,6 +35,37 @@ class CardFrontForm extends Component {
     };
   }
 
+  static getDerivedStateFromProps(nextProps, prevState) {
+    if (nextProps.card && prevState.form.front.value === '') {
+      return {
+        ...prevState,
+        form: {
+          ...prevState.form,
+          front: {
+            ...prevState.form.front,
+            value: nextProps.card.front
+          }
+        }
+      }
+    }
+    if (nextProps.error) {
+      nextProps.onClearUpdateCardError();
+      return {
+        ...prevState,
+        form: {
+          ...prevState.form,
+          front: {
+            ...prevState.form.front,
+            valid: false,
+            error: nextProps.error.Front[0]
+          },
+          valid: false
+        }
+      };
+    }
+    return null;
+  }
+
   handleInputChange = (event) => {
     const form = this.state.form;
     const updatedForm = { ...form };
@@ -59,8 +90,18 @@ class CardFrontForm extends Component {
     this.setState({ form: updatedForm });
   }
 
-  handleSumit = () => {
-    this.props.onCreateCard(this.state.form.front.value);
+  handleSumit = (event) => {
+    const { card, onCreateCard, onUpdateCard } = this.props;
+    const { form } = this.state;
+
+    event.preventDefault();
+    if (form.valid) {
+      if (card) {
+        onUpdateCard(card.id, form.front.value);
+      } else {
+        onCreateCard(form.front.value);
+      }
+    }
   }
 
   handleClickCancel = () => {
@@ -91,7 +132,7 @@ class CardFrontForm extends Component {
                 <div className="card-front-form-header">
                   {card ? 'Edit front' : 'Create front'}
                 </div>
-                <form>
+                <form onSubmit={this.handleSumit}>
                   <div className="card-front-form-input">
                     <label>Front</label>
                     <Input
@@ -117,8 +158,7 @@ class CardFrontForm extends Component {
                     </button>
                     <button
                       className="update-btn"
-                      type="button"
-                      onClick={this.handleSumit}>
+                      type="submit">
                       {card ? 'Edit' : 'Create'}
                     </button>
                   </div>
@@ -134,13 +174,15 @@ class CardFrontForm extends Component {
 
 const mapStateToProps = state => {
   return {
-    error: state.card.errors.createCardError
+    error: state.card.errors.updateCardError
   };
 };
 
 const mapDispatchToProps = dispatch => {
   return {
-    onCreateCard: (front) => dispatch(actions.createCard(front))
+    onCreateCard: (front) => dispatch(actions.createCard(front)),
+    onUpdateCard: (cardId, front) => dispatch(actions.updateCard(cardId, front)),
+    onClearUpdateCardError: () => dispatch(actions.clearUpdateCardError())
   };
 };
 

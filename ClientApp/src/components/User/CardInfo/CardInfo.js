@@ -2,7 +2,7 @@ import React from 'react';
 import { Icon } from '@iconify/react';
 import closeIcon from '@iconify/icons-uil/multiply';
 
-import Back from './Back/Back';
+import Back from '../Back/Back';
 import './CardInfo.css';
 
 const cardInfo = props => {

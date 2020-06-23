@@ -1,22 +1,20 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, Prompt } from 'react-router-dom';
 import { connect } from 'react-redux';
+import { Icon } from '@iconify/react';
+import editIcon from '@iconify/icons-uil/edit';
+import deleteIcon from '@iconify/icons-uil/trash-alt';
+import optionIcon from '@iconify/icons-uil/ellipsis-v';
 
-import Button from '../../../components/Shared/Button/Button';
 import CardFrontForm from '../../../components/User/CardFrontForm/CardFrontForm';
 import withErrorHandler from '../../../hoc/withErrorHandler';
+import Back from '../../../components/User/Back/Back';
+import DropDown from '../../../components/Shared/DropDown/DropDown';
+import DropDownItem from '../../../components/Shared/DropDownItem/DropDownItem';
 import * as actions from '../../../store/actions';
 import './EditCard.css';
 
 class EditCard extends Component {
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      cardFrontFormOpened: false
-    };
-  }
-
   UNSAFE_componentWillMount() {
     this.backUrl = this.props.location.state?.backUrl || '/';
   }
@@ -27,32 +25,65 @@ class EditCard extends Component {
   }
 
   handleClickEditFront = () => {
-    this.setState({ cardFrontFormOpened: true });
+    this.props.onToggleCardFrontForm(true);
   }
 
   handleCloseCardFrontForm = () => {
-    this.setState({ cardFrontFormOpened: false });
+    this.props.onToggleCardFrontForm(false);
+    this.props.onClearUpdateCardError();
   }
 
+  handleDeleteCard = () => {
+
+  };
+
   render() {
-    const { card } = this.props;
-    const { cardFrontFormOpened } = this.state;
+    const { card, cardFrontFormOpened } = this.props;
 
     return (
       <div className="edit-card">
+        <Prompt
+          when={card?.backs.length === 0}
+          message="Card must have at least a back!" />
         <div className="back-feature">
           <Link to={this.backUrl || '/cards'}>
             Cancel
           </Link>
         </div>
         <div className="card-front">
-          <p>{card?.front}</p>
-          <Button className="edit-front-btn" onClick={this.handleClickEditFront}>Edit front</Button>
+          <div className="front-wrapper">
+            <span className="front" onClick={this.handleClickEditFront}>
+              {card?.front}
+            </span>
+            <span className="options">
+              <DropDown
+                right
+                postfix={<Icon icon={optionIcon} color="#979797" style={{ fontSize: 18 }} />}
+                className="dropdown-toggler">
+                <DropDownItem
+                  type="button"
+                  icon={<Icon icon={editIcon} color="#535353" />}
+                  label="Edit front"
+                  onClick={this.handleClickEditFront} />
+                <DropDownItem
+                  className="delete-card-btn"
+                  type="button"
+                  icon={<Icon icon={deleteIcon} color="red" />}
+                  label="Delete card"
+                  onClick={this.handleDeleteCard} />
+              </DropDown>
+            </span>
+          </div>
         </div>
         <div className="card-back">
-
+          {card?.backs && card.backs.map(back => {
+            return <Back key={back.id} back={back} />
+          })}
         </div>
-        <CardFrontForm isOpen={cardFrontFormOpened} onClose={this.handleCloseCardFrontForm} />
+        <CardFrontForm
+          card={card}
+          isOpen={cardFrontFormOpened}
+          onClose={this.handleCloseCardFrontForm} />
       </div>
     );
   }
@@ -60,13 +91,16 @@ class EditCard extends Component {
 
 const mapStateToProps = state => {
   return {
-    card: state.card.card
+    card: state.card.card,
+    cardFrontFormOpened: state.card.cardFrontFormOpened
   };
 };
 
 const mapDispatchToProps = dispatch => {
   return {
-    onGetCard: (cardId) => dispatch(actions.getCard(cardId))
+    onGetCard: (cardId) => dispatch(actions.getCard(cardId)),
+    onToggleCardFrontForm: (opened) => dispatch(actions.toggleCardFrontForm(opened)),
+    onClearUpdateCardError: () => dispatch(actions.clearUpdateCardError())
   };
 };
 
