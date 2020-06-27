@@ -34,4 +34,16 @@
 .dropdown .dropdown-content.right {
   right: 0;
 }
+
+.dropdown .dropdown-content.right-side {
+  top: 0;
+  left: 100%;
+  margin-top: 0;
+}
+
+.dropdown .dropdown-content.left-side {
+  top: 0;
+  right: 100%;
+  margin-top: 0;
+}
 /*# sourceMappingURL=DropDown.css.map */

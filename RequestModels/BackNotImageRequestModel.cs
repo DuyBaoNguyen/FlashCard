@@ -7,6 +7,7 @@ namespace FlashCard.RequestModels
 		[StringLength(20)]
 		public string Type { get; set; }
 
+		[Required]
 		[StringLength(200)]
 		public string Meaning { get; set; }
 

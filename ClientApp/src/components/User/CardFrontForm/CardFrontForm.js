@@ -49,7 +49,7 @@ class CardFrontForm extends Component {
       }
     }
     if (nextProps.error) {
-      nextProps.onClearUpdateCardError();
+      nextProps.onClearUpdateFrontError();
       return {
         ...prevState,
         form: {
@@ -91,13 +91,13 @@ class CardFrontForm extends Component {
   }
 
   handleSumit = (event) => {
-    const { card, onCreateCard, onUpdateCard } = this.props;
+    const { card, onCreateCard, onUpdateFront } = this.props;
     const { form } = this.state;
 
     event.preventDefault();
     if (form.valid) {
       if (card) {
-        onUpdateCard(card.id, form.front.value);
+        onUpdateFront(card.id, form.front.value);
       } else {
         onCreateCard(form.front.value);
       }
@@ -174,15 +174,15 @@ class CardFrontForm extends Component {
 
 const mapStateToProps = state => {
   return {
-    error: state.card.errors.updateCardError
+    error: state.card.errors.updateFrontError
   };
 };
 
 const mapDispatchToProps = dispatch => {
   return {
     onCreateCard: (front) => dispatch(actions.createCard(front)),
-    onUpdateCard: (cardId, front) => dispatch(actions.updateCard(cardId, front)),
-    onClearUpdateCardError: () => dispatch(actions.clearUpdateCardError())
+    onUpdateFront: (cardId, front) => dispatch(actions.updateFront(cardId, front)),
+    onClearUpdateFrontError: () => dispatch(actions.clearUpdateFrontError())
   };
 };
 

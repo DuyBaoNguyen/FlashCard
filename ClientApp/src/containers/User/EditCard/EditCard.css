@@ -38,7 +38,6 @@
 
 .edit-card .card-front .front-wrapper {
   max-width: 300px;
-  position: relative;
 }
 
 .edit-card .card-front .front-wrapper .front {
@@ -47,47 +46,78 @@
   padding: 5px 18px;
   border-radius: 10px;
   cursor: pointer;
-  -webkit-transition: background-color 0.3s ease-out;
-  transition: background-color 0.3s ease-out;
+  -webkit-transition: background-color 0.2s ease-out;
+  transition: background-color 0.2s ease-out;
 }
 
-.edit-card .card-front .front-wrapper .front:hover {
-  background-color: #f2f2f2;
+.edit-card .card-front .front-wrapper .options-dropdown {
+  display: block;
+  padding: 0 4px;
 }
 
-.edit-card .card-front .front-wrapper .delete-card-btn {
+.edit-card .card-front .front-wrapper .options-dropdown .dropdown-label {
+  padding: 5px 0;
+}
+
+.edit-card .card-front .front-wrapper .options-dropdown .delete-card-btn {
   color: red;
 }
 
-.edit-card .card-front .front-wrapper .options {
-  position: absolute;
-  top: -5px;
-  right: -30px;
-  display: none;
-  border-radius: 10px;
-  padding-top: 10px;
-  height: 36px;
-  width: 36px;
-  -webkit-transition: background-color .3s ease-out;
-  transition: background-color .3s ease-out;
-}
-
-.edit-card .card-front .front-wrapper .options .dropdown-toggler {
-  padding: 0 8px 0 6px;
-}
-
-.edit-card .card-front .front-wrapper .options:hover {
-  background-color: #f2f2f2;
-}
-
-.edit-card .card-front:hover .options {
-  display: block;
+.edit-card .card-front .front-wrapper:hover .front {
+  background-color: #f6f6f6;
 }
 
 .edit-card .card-back {
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
   margin-left: 10px;
   color: #979797;
   font-size: 14px;
+  position: relative;
+  overflow-x: visible;
+}
+
+.edit-card .card-back .back-wrapper {
+  margin: 5px 0;
+}
+
+.edit-card .card-back .back-wrapper .back-content {
+  width: 322px;
+  padding: 0 11px;
+  border-radius: 10px;
+  -webkit-transition: background-color 0.2s ease-out;
+  transition: background-color 0.2s ease-out;
+  cursor: pointer;
+}
+
+.edit-card .card-back .back-wrapper .options-dropdown {
+  display: block;
+  padding: 0 4px;
+}
+
+.edit-card .card-back .back-wrapper .options-dropdown .dropdown-label {
+  padding: 0;
+}
+
+.edit-card .card-back .back-wrapper .options-dropdown .delete-back-btn {
+  color: red;
+}
+
+.edit-card .card-back .back-wrapper:hover .back-content {
+  background-color: #f6f6f6;
+}
+
+.edit-card .card-back #upload-image-input {
+  display: none;
+}
+
+.edit-card .card-back .add-back-btn {
+  width: 300px;
+  text-align: center;
+  display: block;
+  margin-top: 15px;
 }
 
 .edit-card .back-feature {

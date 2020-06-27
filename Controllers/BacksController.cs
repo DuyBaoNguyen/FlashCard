@@ -88,11 +88,11 @@ namespace FlashCard.Controllers
 			{
 				return NotFound();
 			}
-			if (back.Image == null && (backRqModel.Meaning == null || backRqModel.Meaning.Length == 0))
-			{
-				ModelState.AddModelError("", "Card must at least have either meaning or image.");
-				return BadRequest(ModelState);
-			}
+			// if (back.Image == null && (backRqModel.Meaning == null || backRqModel.Meaning.Length == 0))
+			// {
+			// 	ModelState.AddModelError("", "Card must at least have either meaning or image.");
+			// 	return BadRequest(ModelState);
+			// }
 
 			back.Type = backRqModel.Type == null || backRqModel.Type.Trim().Length == 0
 				? null : backRqModel.Type.Trim().ToLower();
@@ -122,10 +122,10 @@ namespace FlashCard.Controllers
 			{
 				return NotFound();
 			}
-			if (back.Meaning == null && image == null)
-			{
-				ModelState.AddModelError("", "Card must at least have either meaning or image.");
-			}
+			// if (back.Meaning == null && image == null)
+			// {
+			// 	ModelState.AddModelError("", "Card must at least have either meaning or image.");
+			// }
 			if (image != null)
 			{
 				if (image.Length > 5242880)
@@ -137,11 +137,15 @@ namespace FlashCard.Controllers
 					ModelState.AddModelError("Image",
 						"Accepted images that images are with an extension of .png, .jpg, .jpeg or .bmp.");
 				}
+				if (!ModelState.IsValid)
+				{
+					return BadRequest(ModelState);
+				}
 			}
-			if (!ModelState.IsValid)
-			{
-				return BadRequest(ModelState);
-			}
+			// if (!ModelState.IsValid)
+			// {
+			// 	return BadRequest(ModelState);
+			// }
 
 			var oldImageName = back.Image;
 			var imageName = await imageService.UploadImage(image, ImageType.Image);

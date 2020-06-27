@@ -1,5 +1,6 @@
 import * as actionTypes from './actionTypes';
 import axios from '../../axios';
+import history from '../../history';
 
 const getCardsSuccess = (cards) => {
   return {
@@ -61,8 +62,12 @@ export const deleteCard = (cardId) => {
     axios.delete(`/api/cards/${cardId}`)
       .then(() => {
         dispatch(deleteCardSuccess(cardId));
-        dispatch(getCards());
+        if (history.location.pathname.search(/^\/cards\/\d+\/edit$/) > -1) {
+          history.replace(history.location.state.backUrl || '/');
+        } else {
+          dispatch(getCards());
+        }
       })
       .catch(() => dispatch(deleteCardFail()));
-  }; 
+  };
 };

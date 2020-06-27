@@ -1,7 +1,8 @@
 .back {
   width: 100%;
   max-width: 300px;
-  margin: 10px 0;
+  padding: 10px 0;
+  overflow: auto;
 }
 
 .back img {
@@ -31,5 +32,6 @@
 .back .back-example {
   color: #979797;
   line-height: 1.5;
+  margin-bottom: 0;
 }
 /*# sourceMappingURL=Back.css.map */

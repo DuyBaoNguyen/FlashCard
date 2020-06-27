@@ -106,16 +106,20 @@ namespace FlashCard.Controllers
 					ModelState.AddModelError("Image",
 						"Accepted images that images are with an extension of .png, .jpg, .jpeg or .bmp.");
 				}
+				if (!ModelState.IsValid)
+				{
+					return BadRequest(ModelState);
+				}
 			}
-			if ((backRqModel.Meaning == null || backRqModel.Meaning.Length == 0)
-				&& (backRqModel.Image == null || backRqModel.Image.Length == 0))
-			{
-				ModelState.AddModelError("", "Card must at least have either meaning or image.");
-			}
-			if (!ModelState.IsValid)
-			{
-				return BadRequest(ModelState);
-			}
+			// if ((backRqModel.Meaning == null || backRqModel.Meaning.Length == 0)
+			// 	&& (backRqModel.Image == null || backRqModel.Image.Length == 0))
+			// {
+			// 	ModelState.AddModelError("", "Card must at least have either meaning or image.");
+			// }
+			// if (!ModelState.IsValid)
+			// {
+			// 	return BadRequest(ModelState);
+			// }
 
 			var userId = UserUtil.GetUserId(User);
 			var admin = await userManager.GetAdmin();

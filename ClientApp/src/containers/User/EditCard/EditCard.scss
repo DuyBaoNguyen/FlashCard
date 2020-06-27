@@ -20,47 +20,68 @@
     margin-right: 10px;
     .front-wrapper {
       max-width: 300px;
-      position: relative;
       .front {
         font-size: 22px;
         color: #535353;
         padding: 5px 18px;
         border-radius: 10px;
         cursor: pointer;
-        transition: background-color 0.3s ease-out;
-        &:hover {
-          background-color: #f2f2f2;
+        transition: background-color 0.2s ease-out;
+      }
+      .options-dropdown {
+        display: block;
+        padding: 0 4px;
+        .dropdown-label {
+          padding: 5px 0;
+        }
+        .delete-card-btn {
+          color: red;
         }
       }
-      .delete-card-btn {
-        color: red;
+      &:hover .front {
+        background-color: #f6f6f6;
       }
-      .options {
-        position: absolute;
-        top: -5px;
-        right: -30px;
-        display: none;
-        border-radius: 10px;
-        padding-top: 10px;
-        height: 36px;
-        width: 36px;
-        transition: background-color .3s ease-out;
-        .dropdown-toggler {
-          padding: 0 8px 0 6px;
-        }
-        &:hover {
-          background-color: #f2f2f2;
-        }
-      }
-    }
-    &:hover .options {
-      display: block;
     }
   }
   .card-back {
+    flex-direction: column;
     margin-left: 10px;
     color: #979797;
     font-size: 14px;
+    position: relative;
+    overflow-x: visible;
+    .back-wrapper {
+      margin: 5px 0;
+      .back-content {
+        width: 322px;
+        padding: 0 11px;
+        border-radius: 10px;
+        transition: background-color 0.2s ease-out;
+        cursor: pointer;
+      }
+      .options-dropdown {
+        display: block;
+        padding: 0 4px;
+        .dropdown-label {
+          padding: 0;
+        }
+        .delete-back-btn {
+          color: red;
+        }
+      }
+      &:hover .back-content {
+        background-color: #f6f6f6;
+      }
+    }
+    #upload-image-input {
+      display: none;
+    }
+    .add-back-btn {
+      width: 300px;
+      text-align: center;
+      display: block;
+      margin-top: 15px;
+    }
   }
   .back-feature {
     position: absolute;

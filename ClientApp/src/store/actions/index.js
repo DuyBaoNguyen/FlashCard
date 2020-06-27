@@ -41,9 +41,18 @@ export { getMatchCards, updateMatchCards } from './MatchCard';
 
 export {
   createCard,
-  updateCard,
+  updateFront,
   getCard,
-  clearUpdateCardError,
+  clearUpdateFrontError,
   toggleCardFrontForm,
-  resetStateInCardReducer
+  toggleCardBackForm,
+  resetStateInCardReducer,
+  selectBack,
+  unselectBack,
+  updateBack,
+  deleteBack,
+  createBack,
+  deleteImage,
+  updateImage,
+  clearUpdateBackError
 } from './Card';

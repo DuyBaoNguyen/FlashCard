@@ -1,7 +1,8 @@
 .back {
   width: 100%;
   max-width: 300px;
-  margin: 10px 0;
+  padding: 10px 0;
+  overflow: auto;
   img {
     float: right;
     border-radius: 15px;
@@ -25,5 +26,6 @@
   .back-example {
     color: #979797;
     line-height: 1.5;
+    margin-bottom: 0;
   }
 }

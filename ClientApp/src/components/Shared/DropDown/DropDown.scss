@@ -27,5 +27,15 @@
     &.right {
       right: 0;
     }
+    &.right-side {
+      top: 0;
+      left: 100%;
+      margin-top: 0;
+    }
+    &.left-side {
+      top: 0;
+      right: 100%;
+      margin-top: 0;
+    }
   }
 }
