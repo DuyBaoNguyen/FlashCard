@@ -49,7 +49,6 @@
           align-items: center;
   padding: 5px;
   border-radius: 50%;
-  background-color: #eee;
   color: #979797;
   cursor: pointer;
   -webkit-transition: color .15s ease-out, background-color .15s ease-out;
@@ -57,7 +56,7 @@
 }
 
 .card-info .card .close-btn:hover {
-  background-color: #ddd;
+  background-color: #eee;
   color: #646464;
 }
 
