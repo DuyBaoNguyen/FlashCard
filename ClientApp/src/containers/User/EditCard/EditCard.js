@@ -33,6 +33,9 @@ class EditCard extends Component {
   }
 
   componentWillUnmount() {
+    if (this.props.card.backs.length === 0) {
+      this.props.onDeleteCard(this.props.card.id);
+    }
     this.props.onResetStateInCardReducer();
   }
 
@@ -89,10 +92,10 @@ class EditCard extends Component {
 
     return (
       <div className="edit-card">
-        <Prompt
+        {/* <Prompt
           when={card?.backs.length === 0}
           message="Card must have at least a back!"
-           />
+           /> */}
         <div className="back-feature">
           <Link to={this.backUrl || '/cards'}>
             Back
