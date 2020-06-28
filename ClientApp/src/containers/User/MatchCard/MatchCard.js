@@ -122,7 +122,9 @@ class MatchCard extends Component {
 			<div className="match-result">
 				<Animated animationIn="bounceIn" animationInDelay="0" isVisible={true}>
 					<p className="match-result-header" style={{ fontSize: '40px' }}>
-						👏🏻👏🏻👏🏻
+						<span role="img" aria-label="clap">👏🏻</span>
+						<span role="img" aria-label="clap">👏🏻</span>
+						<span role="img" aria-label="clap">👏🏻</span>
 					</p>
 				</Animated>
 				<Animated

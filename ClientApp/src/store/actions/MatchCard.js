@@ -1,5 +1,4 @@
 import axios from '../../axios';
-import ReactCardFlip from 'react-card-flip';
 import * as actionTypes from '../actions/actionTypes';
 
 const getMatchCardsSuccess = (cardList) => {

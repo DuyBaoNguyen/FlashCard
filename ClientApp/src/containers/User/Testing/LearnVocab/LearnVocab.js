@@ -86,7 +86,8 @@ class LearnVocab extends Component {
 
 		let instructionBack = (
 			<div style={{ fontSize: '#20px' }}>
-				Nice!!! You have flipped the card! 😋
+				Nice!!! You have flipped the card!
+				<span role="img" aria-label="">😋</span>
 				<br />
 				<br />
 				This is the back side which displays meanings, word types, examples and

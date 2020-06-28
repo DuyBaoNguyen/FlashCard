@@ -20,7 +20,11 @@ class Result extends Component {
 				<br/>
 				<Animated animationIn="bounceIn" animationInDelay="0" isVisible={true}>
 					<div className="result-header">
-						Congratulation! 👏🏻👏🏻👏🏻 <br />
+						Congratulation! 
+						<span role="img" aria-label="clap">👏🏻</span>
+						<span role="img" aria-label="clap">👏🏻</span>
+						<span role="img" aria-label="clap">👏🏻</span>
+						<br />
 						<Animated
 							animationIn="bounceIn"
 							animationInDelay={300}
