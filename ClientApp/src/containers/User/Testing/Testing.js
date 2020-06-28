@@ -122,9 +122,10 @@ class Testing extends Component {
 			(x) => !newFailedCardIds.includes(x)
 		);
 
-		const date = new Date();
-		const hours = date.getHours() - date.getTimezoneOffset() / 60;
-		date.setHours(hours);
+		let date = new Date();
+		const hours = date.getTimezoneOffset() / 60;
+		const minutes = date.getTimezoneOffset() % 60;
+		date = new Date(date.getTime() - hours * 3600000 - minutes * 60000);
 
 		formattedNewSucceededCardIds = this.unique(formattedNewSucceededCardIds);
 		newFailedCardIds = this.unique(newFailedCardIds);
