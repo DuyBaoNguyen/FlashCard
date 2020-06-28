@@ -54,7 +54,7 @@ class Navigation extends Component {
           <DropDown
             label={`Hi, ${name}!`}
             right
-            postfix={<Icon icon={arrowDown} style={{ fontSize: 20 }} />}
+            postfix={<Icon icon={arrowDown} color="#fff" style={{ fontSize: 20 }} />}
             className="navigation-options">
             <DropDownItem
               type="link"

@@ -66,7 +66,7 @@ class Card extends Component {
       <DropDown
         right
         mouseLeaveToClose
-        postfix={<Icon icon={optionIcon} color="#979797" style={{ fontSize: 20 }} />}
+        postfix={<Icon icon={optionIcon} style={{ fontSize: 20 }} />}
         className="dropdown-toggler">
         {options.map((option, index) => {
           if (option.type === 'link') {

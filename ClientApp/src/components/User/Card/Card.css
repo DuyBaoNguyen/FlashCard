@@ -18,25 +18,26 @@
   cursor: pointer;
   -webkit-box-shadow: 0px 3px 10px rgba(0, 0, 0, 0.06);
           box-shadow: 0px 3px 10px rgba(0, 0, 0, 0.06);
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
 }
 
 .card-wrapper .card-front .card-options,
 .card-wrapper .card-back .card-options {
   position: absolute;
-  top: 10px;
-  left: 111px;
+  top: 3px;
+  left: 124px;
   display: none;
 }
 
 .card-wrapper .card-front .card-options .dropdown-toggler,
 .card-wrapper .card-back .card-options .dropdown-toggler {
-  padding: 0px 7px;
+  height: 28px;
+  padding-right: 12px;
 }
 
 .card-wrapper .card-front .card-options .dropdown-item-custom,
 .card-wrapper .card-back .card-options .dropdown-item-custom {
-  min-width: 138px;
+  min-width: 140px;
+  line-height: normal;
 }
 
 .card-wrapper .card-front .selectable-icon,
@@ -47,8 +48,8 @@
   height: 20px;
   color: #ddd;
   border-radius: 50%;
-  -webkit-transition: color .1s ease-out, background-color .1s ease-out;
-  transition: color .1s ease-out, background-color .1s ease-out;
+  -webkit-transition: color 0.1s ease-out, background-color 0.1s ease-out;
+  transition: color 0.1s ease-out, background-color 0.1s ease-out;
 }
 
 .card-wrapper .card-front .selectable-icon:hover,

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Link, Prompt } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { Icon } from '@iconify/react';
 import editIcon from '@iconify/icons-uil/edit';

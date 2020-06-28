@@ -8,25 +8,30 @@
 
 .dropdown .dropdown-label {
   position: relative;
-  padding-right: 22px;
+  padding: 4px 0;
   cursor: pointer;
 }
 
 .dropdown .dropdown-label .postfix {
-  position: absolute;
-  right: 0;
+  color: #979797;
+  vertical-align: middle;
+  -webkit-transition: color 0.2s ease-out;
+  transition: color 0.2s ease-out;
+}
+
+.dropdown .dropdown-label .postfix:hover {
+  color: #535353;
 }
 
 .dropdown .dropdown-content {
   position: absolute;
   top: 100%;
-  margin-top: 4px;
   min-width: 120px;
-  padding: 10px 0;
+  padding: 8px;
   background-color: white;
   -webkit-box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.15);
           box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.15);
-  border-radius: 6px;
+  border-radius: 10px;
   z-index: 1000;
   cursor: auto;
 }

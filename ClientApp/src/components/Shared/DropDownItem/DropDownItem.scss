@@ -1,18 +1,18 @@
 .dropdown-item {
   display: block;
-  position: relative;
   user-select: none;
   color: #535353;
-  padding: 8px 17px 8px 15px;
+  padding: 8px 9px 5px 7px;
+  border-radius: 6px;
   text-align: left;
   .dropdown-item-icon {
-    position: absolute;
+    vertical-align: middle;
     font-size: 17px;
   }
   .dropdown-item-label {
     font-size: 14px;
     white-space: nowrap;
-    padding-left: 26px;
+    padding-left: 10px;
   }
   &.dropdown-item-hover {
     cursor: pointer;
@@ -25,6 +25,6 @@
 .dropdown-item-line {
   display: block;
   height: 1px;
-  margin: 10px 15px;
+  margin: 8px 9px 8px 7px;
   background-color: #eee;
 }
