@@ -6,6 +6,7 @@ import editIcon from '@iconify/icons-uil/edit';
 import deleteIcon from '@iconify/icons-uil/trash-alt';
 import uploadImageIcon from '@iconify/icons-uil/image-upload';
 import deleteImageIcon from '@iconify/icons-uil/image-slash';
+import backIcon from '@iconify/icons-uil/angle-left';
 
 import CardFrontForm from '../../../components/User/CardFrontForm/CardFrontForm';
 import CardBackForm from '../../../components/User/CardBackForm/CardBackForm';
@@ -99,7 +100,13 @@ class EditCard extends Component {
            /> */}
         <div className="back-feature">
           <Link to={this.backUrl || '/cards'}>
-            Back
+            <span className="back-feature-icon">
+              <Icon icon={backIcon} />
+            </span>
+            <span className="back-feature-label"> Back</span>
+          </Link>
+          <Link to={{ pathname: '/cards/create', state: { backUrl: this.backUrl } }}>
+            Create card
           </Link>
         </div>
         <div className="card-front">

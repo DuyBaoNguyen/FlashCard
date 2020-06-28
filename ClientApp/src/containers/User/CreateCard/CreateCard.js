@@ -19,6 +19,10 @@ class CreateCard extends Component {
     }, 0);
   }
 
+  componentWillUnmount() {
+    this.props.onResetStateInCardReducer();
+  }
+
   handleClickAddFront = () => {
     this.props.onToggleCardFrontForm(true);
   }
@@ -56,7 +60,8 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    onToggleCardFrontForm: (opened) => dispatch(actions.toggleCardFrontForm(opened))
+    onToggleCardFrontForm: (opened) => dispatch(actions.toggleCardFrontForm(opened)),
+    onResetStateInCardReducer: () => dispatch(actions.resetStateInCardReducer())
   };
 };
 

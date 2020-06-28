@@ -87,9 +87,25 @@
     position: absolute;
     top: 0;
     left: 0;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    font-size: 14px;
     a {
-      font-size: 14px;
       color: #979797;
+      transition: color 0.15s ease-out;
+      .back-feature-icon {
+        position: absolute;
+        top: -1px;
+        left: -8px;
+        font-size: 22px;
+      }
+      .back-feature-label {
+        padding-left: 18px;
+      }
+      &:hover {
+        color: #757575;
+      }
     }
   }
 }

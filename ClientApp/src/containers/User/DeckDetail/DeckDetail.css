@@ -12,6 +12,7 @@
 
 .deck-detail .back-feature a .back-feature-icon {
   position: absolute;
+  top: -1px;
   left: -8px;
   font-size: 22px;
 }

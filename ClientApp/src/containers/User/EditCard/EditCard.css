@@ -124,10 +124,34 @@
   position: absolute;
   top: 0;
   left: 0;
+  width: 100%;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  font-size: 14px;
 }
 
 .edit-card .back-feature a {
-  font-size: 14px;
   color: #979797;
+  -webkit-transition: color 0.15s ease-out;
+  transition: color 0.15s ease-out;
+}
+
+.edit-card .back-feature a .back-feature-icon {
+  position: absolute;
+  top: -1px;
+  left: -8px;
+  font-size: 22px;
+}
+
+.edit-card .back-feature a .back-feature-label {
+  padding-left: 18px;
+}
+
+.edit-card .back-feature a:hover {
+  color: #757575;
 }
 /*# sourceMappingURL=EditCard.css.map */
