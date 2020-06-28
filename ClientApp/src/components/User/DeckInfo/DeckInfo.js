@@ -41,7 +41,7 @@ class DeckInfo extends Component {
                   pathname: `/decks/${deck?.id}/edit`,
                   backUrl: `/decks/${deck?.id}`
                 }}
-                icon={<Icon icon={editIcon} color="#535353" />}
+                icon={<Icon icon={editIcon} color="#646464" />}
                 label="Edit deck" />
               <DropDownItem
                 className="delete-deck-btn"
@@ -52,7 +52,7 @@ class DeckInfo extends Component {
               <DropDownItem type="line" />
               <DropDownItem
                 className="public-deck"
-                icon={<Icon icon={publicIcon} color="#535353" />}
+                icon={<Icon icon={publicIcon} color="#646464" />}
                 label={(
                   <>
                     Public

@@ -28,10 +28,13 @@
       align-items: center;
       padding: 5px;
       border-radius: 50%;
+      background-color: #eee;
+      color: #979797;
       cursor: pointer;
-      transition: background-color 0.2s ease;
+      transition: color .15s ease-out, background-color .15s ease-out;
       &:hover {
-        background-color: #eee;
+        background-color: #ddd;
+        color: #646464;
       }
     }
     .text-notify {

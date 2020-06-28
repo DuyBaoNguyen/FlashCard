@@ -116,7 +116,7 @@ class EditCard extends Component {
               className="options-dropdown">
               <DropDownItem
                 type="button"
-                icon={<Icon icon={editIcon} color="#535353" />}
+                icon={<Icon icon={editIcon} color="#646464" />}
                 label="Edit front"
                 onClick={this.handleEditFront} />
               <DropDownItem
@@ -144,7 +144,7 @@ class EditCard extends Component {
                   className="options-dropdown">
                   <DropDownItem
                     type="button"
-                    icon={<Icon icon={editIcon} color="#535353" />}
+                    icon={<Icon icon={editIcon} color="#646464" />}
                     label="Edit back"
                     onClick={() => this.handleEditBack(back.id)} />
                   <DropDownItem
@@ -156,13 +156,13 @@ class EditCard extends Component {
                   <DropDownItem type="line" />
                   <DropDownItem
                     type="button"
-                    icon={<Icon icon={uploadImageIcon} color="#535353" />}
+                    icon={<Icon icon={uploadImageIcon} color="#646464" />}
                     label={back.imageUrl ? "Change image" : "Upload Image"}
                     onClick={() => this.handleUploadImage(back.id)} />
                   {back.imageUrl && (
                     <DropDownItem
                       type="button"
-                      icon={<Icon icon={deleteImageIcon} color="#535353" />}
+                      icon={<Icon icon={deleteImageIcon} color="#646464" />}
                       label="Delete image"
                       onClick={() => this.handleDeleteImage(back.id)} />
                   )}

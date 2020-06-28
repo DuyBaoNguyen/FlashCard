@@ -88,7 +88,7 @@ class DeckCardsOutside extends Component {
                     {
                       type: 'link',
                       path: { pathname: `/cards/${card.id}/edit`, state: { backUrl: `/decks/${this.deckId}/addcards` } },
-                      icon: <Icon icon={editIcon} color="#535353" />,
+                      icon: <Icon icon={editIcon} color="#646464" />,
                       label: { value: 'Edit card' }
                     },
                     {

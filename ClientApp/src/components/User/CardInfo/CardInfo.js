@@ -32,7 +32,7 @@ const cardInfo = props => {
         {back}
         {!unableClose && (
           <span className="close-btn" onClick={closed}>
-            <Icon icon={closeIcon} color="#979797" style={{ fontSize: 16 }} />
+            <Icon icon={closeIcon} style={{ fontSize: 16 }} />
           </span>
         )}
       </div>

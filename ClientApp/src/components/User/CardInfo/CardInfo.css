@@ -49,13 +49,16 @@
           align-items: center;
   padding: 5px;
   border-radius: 50%;
+  background-color: #eee;
+  color: #979797;
   cursor: pointer;
-  -webkit-transition: background-color 0.2s ease;
-  transition: background-color 0.2s ease;
+  -webkit-transition: color .15s ease-out, background-color .15s ease-out;
+  transition: color .15s ease-out, background-color .15s ease-out;
 }
 
 .card-info .card .close-btn:hover {
-  background-color: #eee;
+  background-color: #ddd;
+  color: #646464;
 }
 
 .card-info .card .text-notify {
