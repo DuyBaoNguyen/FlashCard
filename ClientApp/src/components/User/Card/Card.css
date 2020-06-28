@@ -48,8 +48,8 @@
   height: 20px;
   color: #ddd;
   border-radius: 50%;
-  -webkit-transition: color 0.1s ease-out, background-color 0.1s ease-out;
-  transition: color 0.1s ease-out, background-color 0.1s ease-out;
+  -webkit-transition: color 0.15s ease-out, background-color 0.15s ease-out;
+  transition: color 0.15s ease-out, background-color 0.15s ease-out;
 }
 
 .card-wrapper .card-front .selectable-icon:hover,

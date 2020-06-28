@@ -15,8 +15,8 @@
 .dropdown .dropdown-label .postfix {
   color: #979797;
   vertical-align: middle;
-  -webkit-transition: color 0.2s ease-out;
-  transition: color 0.2s ease-out;
+  -webkit-transition: color 0.15s ease-out;
+  transition: color 0.15s ease-out;
 }
 
 .dropdown .dropdown-label .postfix:hover {

@@ -33,7 +33,7 @@ class DeckInfo extends Component {
             <DropDown
               right
               changeable={deck?.public}
-              postfix={<Icon icon={optionIcon} color="#979797" style={{ fontSize: 20 }} />}
+              postfix={<Icon icon={optionIcon} style={{ fontSize: 20 }} />}
               className="deck-info-dropdown">
               <DropDownItem
                 type="link"
