@@ -191,6 +191,7 @@ class CardBackForm extends Component {
 
   handleRemoveImage = (event) => {
     event.stopPropagation();
+
     this.backImage.current.src = null;
     const updatedForm = { ...this.state.form };
     const imageState = {
@@ -200,6 +201,8 @@ class CardBackForm extends Component {
     updatedForm.image = imageState;
 
     this.setState({ form: updatedForm });
+
+    this.backImageInput.current.value = null;
   }
 
   render() {

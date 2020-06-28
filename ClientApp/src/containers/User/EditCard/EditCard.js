@@ -84,6 +84,7 @@ class EditCard extends Component {
     if (event.target.files.length > 0) {
       const { card, selectedBack, onUpdateImage } = this.props;
       onUpdateImage(card.id, selectedBack.id, event.target.files[0]);
+      event.target.value = null;
     }
   }
 
