@@ -18,6 +18,7 @@ namespace FlashCard.Util
 				Theme = d.Theme,
 				Public = d.Public,
 				Approved = d.Approved,
+				Completed = d.Completed,
 				CreatedDate = d.CreatedDate,
 				LastModifiedDate = d.LastModifiedDate,
 				LastTestedTime = d.Tests
@@ -75,13 +76,16 @@ namespace FlashCard.Util
 			{
 				Id = c.Id,
 				Front = c.Front,
+				Remembered = c.Remembered,
+				FromPublic = c.OwnerId != c.AuthorId,
 				Backs = c.Backs.Where(b => !b.Public || b.Approved).Select(b => new BackDto()
 				{
 					Id = b.Id,
 					Type = b.Type,
 					Meaning = b.Meaning,
 					Example = b.Example,
-					ImageUrl = b.Image != null ? Path.Combine(imageBaseUrl, b.Image) : b.Image
+					ImageUrl = b.Image != null ? Path.Combine(imageBaseUrl, b.Image) : b.Image,
+					FromPublic = c.OwnerId != b.AuthorId
 				})
 			});
 		}

@@ -7,12 +7,6 @@ namespace FlashCard.Dto
 		public string Meaning { get; set; }
 		public string Example { get; set; }
 		public string ImageUrl { get; set; }
-		// public bool Public { get; set; }
-		// public bool Approved { get; set; }
-		// public DateTime CreatedDate { get; set; }
-		// public DateTime LastModifiedDate { get; set; }
-		// public int? SourceId { get; set; }
-		// public PersonDto Owner { get; set; }
-		// public PersonDto Author { get; set; }
+		public bool FromPublic { get; set; }
 	}
 }

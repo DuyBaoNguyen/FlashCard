@@ -1,4 +1,5 @@
 using System.Linq;
+using System.Threading.Tasks;
 using FlashCard.Contracts;
 using FlashCard.Data;
 using FlashCard.Models;
@@ -110,6 +111,26 @@ namespace FlashCard.Repositories
 				.Where(sd => sd.UserId == userId)
 				.Select(sd => sd.DeckId);
 			return dbContext.Decks.Where(d => d.Approved && querySharedDeckIds.Contains(d.Id));
+		}
+
+		public IQueryable<Deck> QueryByCardIdsIncludesCardAssignmentsAndCard(int[] cardIds)
+		{
+			var queryDeckIds = dbContext.CardAssignments
+				.Where(ca => cardIds.Contains(ca.CardId))
+				.Select(ca => ca.DeckId)
+				.Distinct();
+			return dbContext.Decks
+				.Include(d => d.CardAssignments)
+					.ThenInclude(ca => ca.Card)
+				.Where(d => queryDeckIds.Contains(d.Id));
+		}
+
+		public async Task LoadCards(Deck deck)
+		{
+			foreach (var cardAssignment in deck.CardAssignments)
+			{
+				await dbContext.Entry(cardAssignment).Reference(ca => ca.Card).LoadAsync();
+			}
 		}
 	}
 }

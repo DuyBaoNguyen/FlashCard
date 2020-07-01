@@ -150,6 +150,7 @@ namespace FlashCard.Controllers
 				Description = deckRqModel.Description == null || deckRqModel.Description.Trim().Length == 0
 					? null : deckRqModel.Description.Trim(),
 				Theme = deckRqModel.Theme,
+				Completed = true,
 				CreatedDate = now,
 				LastModifiedDate = now,
 				OwnerId = userId,
@@ -275,6 +276,12 @@ namespace FlashCard.Controllers
 			}
 
 			deck.CardAssignments.Add(new CardAssignment() { Card = card });
+
+			if (deck.Completed && !card.Remembered)
+			{
+				deck.Completed = false;
+			}
+			
 			await repository.SaveChangesAsync();
 
 			return NoContent();
@@ -309,6 +316,16 @@ namespace FlashCard.Controllers
 			if (cardAssignment != null)
 			{
 				deck.CardAssignments.Remove(cardAssignment);
+
+				if (!deck.Completed)
+				{
+					await repository.Deck.LoadCards(deck);
+					if (deck.CardAssignments.All(ca => ca.Card.Remembered))
+					{
+						deck.Completed = true;
+					}
+				}
+
 				await repository.SaveChangesAsync();
 			}
 
@@ -372,7 +389,7 @@ namespace FlashCard.Controllers
 
 			var newTest = new Test()
 			{
-				DateTime = testRqModel.DateTime.Value,
+				DateTime = testRqModel.DateTime,
 				Deck = deck,
 				Taker = user,
 				TestedCards = new List<TestedCard>()
@@ -390,6 +407,9 @@ namespace FlashCard.Controllers
 					Card = card,
 					Failed = false
 				});
+
+				card.Remembered = true;
+				card.LastPracticedDate = testRqModel.DateTime;
 			}
 			foreach (var card in failedCards)
 			{
@@ -398,11 +418,23 @@ namespace FlashCard.Controllers
 					Card = card,
 					Failed = true
 				});
+				card.LastPracticedDate = testRqModel.DateTime;
 			}
 
 			newTest.Score = (float)succeededCards.Count / (succeededCards.Count + failedCards.Count);
 
 			repository.Test.Create(newTest);
+			await repository.SaveChangesAsync();
+
+			var decks = await repository.Deck
+				.QueryByCardIdsIncludesCardAssignmentsAndCard(testRqModel.SucceededCardIds)
+				.ToListAsync();
+			foreach (var updatedDeck in decks) {
+				if (updatedDeck.CardAssignments.All(ca => ca.Card.Remembered))
+				{
+					updatedDeck.Completed = true;
+				}
+			}
 			await repository.SaveChangesAsync();
 
 			return Ok();

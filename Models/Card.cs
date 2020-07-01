@@ -16,11 +16,16 @@ namespace FlashCard.Models
 
 		public bool Approved { get; set; }
 
+		public bool Remembered { get; set; }
+
 		[DataType(DataType.DateTime)]
 		public DateTime CreatedDate { get; set; }
 
 		[DataType(DataType.DateTime)]
 		public DateTime LastModifiedDate { get; set; }
+
+		[DataType(DataType.DateTime)]
+		public DateTime? LastPracticedDate { get; set; }
 
 		public int? SourceId { get; set; }
 

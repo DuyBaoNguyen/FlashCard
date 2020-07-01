@@ -1,4 +1,5 @@
 using System.Linq;
+using System.Threading.Tasks;
 using FlashCard.Models;
 
 namespace FlashCard.Contracts
@@ -20,5 +21,7 @@ namespace FlashCard.Contracts
 		IQueryable<Deck> QueryByBeingApprovedAndNotAdmin(string adminId);
 		IQueryable<Deck> QueryByIdAndBeingApprovedAndNotAdmin(string adminId, int deckId);
 		IQueryable<Deck> QueryByBeingShared(string userId);
+		IQueryable<Deck> QueryByCardIdsIncludesCardAssignmentsAndCard(int[] cardIds);
+		Task LoadCards(Deck deck);
 	}
 }

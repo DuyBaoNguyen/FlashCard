@@ -17,12 +17,13 @@ namespace FlashCard.Models
 
 		[Required]
 		[StringLength(7)]
-		[RegularExpression(@"^#[a-f0-9]{6}$")]
 		public string Theme { get; set; }
 
 		public bool Public { get; set; }
 
 		public bool Approved { get; set; }
+
+		public bool Completed { get; set; }
 
 		[DataType(DataType.DateTime)]
 		public DateTime CreatedDate { get; set; }
