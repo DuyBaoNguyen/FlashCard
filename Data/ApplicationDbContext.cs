@@ -30,6 +30,7 @@ namespace FlashCard.Data
 		public DbSet<Card> Cards { get; set; }
 		public DbSet<Back> Backs { get; set; }
 		public DbSet<SharedDeck> SharedDecks { get; set; }
+		public DbSet<SharedCard> SharedCards { get; set; }
 		public DbSet<CardAssignment> CardAssignments { get; set; }
 		public DbSet<Test> Tests { get; set; }
 		public DbSet<TestedCard> TestedCards { get; set; }
@@ -57,15 +58,18 @@ namespace FlashCard.Data
 			builder.Entity<Back>().ToTable("Back");
 			builder.Entity<CardAssignment>().ToTable("CardAssignment");
 			builder.Entity<SharedDeck>().ToTable("SharedDeck");
+			builder.Entity<SharedCard>().ToTable("SharedCard");
 			builder.Entity<Test>().ToTable("Test");
 			builder.Entity<TestedCard>().ToTable("TestedCard");
 			builder.Entity<Match>().ToTable("Match");
 			builder.Entity<MatchedCard>().ToTable("MatchedCard");
 
 			builder.Entity<ApplicationUser>(u => u.Property(t => t.PasswordHash).HasColumnName("Password"));
+			builder.Entity<Deck>(d => d.Property(t => t.Completed).HasDefaultValue(true));
 
 			builder.Entity<CardAssignment>().HasKey(c => new { c.CardId, c.DeckId });
 			builder.Entity<SharedDeck>().HasKey(s => new { s.DeckId, s.UserId });
+			builder.Entity<SharedCard>().HasKey(s => new { s.CardId, s.UserId });
 			builder.Entity<TestedCard>().HasKey(f => new { f.CardId, f.TestId });
 			builder.Entity<MatchedCard>().HasKey(m => new { m.CardId, m.MatchId });
 
