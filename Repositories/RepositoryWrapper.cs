@@ -13,6 +13,8 @@ namespace FlashCard.Repositories
 		private readonly ITestRepository test = null;
 		private readonly IMatchRepository match = null;
 		private readonly IUserRepository user = null;
+		private readonly ISharedDeckRepository sharedDeck = null;
+		private readonly ISharedCardRepository sharedCard = null;
 
 		public IDeckRepository Deck
 		{
@@ -83,6 +85,30 @@ namespace FlashCard.Repositories
 					return new UserRepository(dbContext);
 				}
 				return user;
+			}
+		}
+
+		public ISharedDeckRepository SharedDeck
+		{
+			get
+			{
+				if (sharedDeck == null)
+				{
+					return new SharedDeckRepository(dbContext);
+				}
+				return sharedDeck;
+			}
+		}
+
+		public ISharedCardRepository SharedCard
+		{
+			get
+			{
+				if (sharedCard == null)
+				{
+					return new SharedCardRepository(dbContext);
+				}
+				return sharedCard;
 			}
 		}
 

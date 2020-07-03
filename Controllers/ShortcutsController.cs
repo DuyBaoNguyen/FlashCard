@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net.Mime;
 using System.Threading.Tasks;
 using FlashCard.Contracts;
@@ -31,8 +33,29 @@ namespace FlashCard.Controllers
 			var sharedDecks = await repository.Deck
 				.QueryByBeingShared(userId)
 				.AsNoTracking()
-				.MapToDeckDto()
+				.MapToDeckDto(userId)
 				.ToListAsync();
+
+			var now = DateTime.Now;
+			foreach (var deck in sharedDecks)
+			{
+				if (deck.LastTestedTime != null) {
+					deck.LastTestedTime = DateTimeUtil.GetDuration(DateTime.Parse(deck.LastTestedTime), now);
+				}
+				if (deck.Owner.Id != userId)
+				{
+					var sharedDeck = await repository.SharedDeck
+						.QueryByUserIdAndDeckId(userId, deck.Id)
+						.FirstOrDefaultAsync();
+					deck.Completed = sharedDeck?.Completed ?? false;
+
+					var sharedCards = await repository.SharedCard
+						.QueryByUserIdAndDeckId(userId, deck.Id)
+						.ToListAsync();
+					deck.TotalSucceededCards = sharedCards.Count(s => s.Remembered);
+					deck.TotalFailedCards = deck.TotalCards - deck.TotalSucceededCards;
+				}
+			}
 
 			return sharedDecks;
 		}

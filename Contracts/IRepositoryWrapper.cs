@@ -10,6 +10,8 @@ namespace FlashCard.Contracts
 		ITestRepository Test { get; }
 		IMatchRepository Match { get; }
 		IUserRepository User { get; }
+		ISharedDeckRepository SharedDeck { get; }
+		ISharedCardRepository SharedCard { get; }
 		Task<int> SaveChangesAsync();
 	}
 }

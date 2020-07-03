@@ -18,5 +18,7 @@ namespace FlashCard.Dto
 		public PersonDto Owner { get; set; }
 		public PersonDto Author { get; set; }
 		public int TotalCards { get; set; }
+		public int TotalSucceededCards { get; set; }
+		public int TotalFailedCards { get; set; }
 	}
 }

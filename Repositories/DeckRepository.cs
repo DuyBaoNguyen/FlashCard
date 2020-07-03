@@ -108,7 +108,7 @@ namespace FlashCard.Repositories
 		public IQueryable<Deck> QueryByBeingShared(string userId)
 		{
 			var querySharedDeckIds = dbContext.SharedDecks
-				.Where(sd => sd.UserId == userId)
+				.Where(sd => sd.UserId == userId && sd.Pinned)
 				.Select(sd => sd.DeckId);
 			return dbContext.Decks.Where(d => d.Approved && querySharedDeckIds.Contains(d.Id));
 		}

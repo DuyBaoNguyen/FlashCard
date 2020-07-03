@@ -127,9 +127,16 @@ namespace FlashCard.Controllers
 
 			if (!publicDeck.SharedDecks.Any(sd => sd.UserId == userId))
 			{
-				publicDeck.SharedDecks.Add(new SharedDeck() { UserId = userId });
-				await repository.SaveChangesAsync();
+				publicDeck.SharedDecks.Add(new SharedDeck() { UserId = userId, Pinned = true });
 			}
+			else
+			{
+				var sharedDeck = await repository.SharedDeck
+					.QueryByUserIdAndDeckId(userId, publicDeck.Id)
+					.FirstOrDefaultAsync();
+				sharedDeck.Pinned = true;
+			}
+			await repository.SaveChangesAsync();
 
 			return CreatedAtAction("GetDeck", "Decks", new { Id = id },
 				new { Message = "Created Successfully.", Id = id });

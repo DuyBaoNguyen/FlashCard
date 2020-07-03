@@ -8,7 +8,7 @@ namespace FlashCard.Util
 {
     public static class Mapper
 	{
-		public static IQueryable<DeckDto> MapToDeckDto(this IQueryable<Deck> query)
+		public static IQueryable<DeckDto> MapToDeckDto(this IQueryable<Deck> query, string takerId = null)
 		{
 			return query.Select(d => new DeckDto()
 			{
@@ -23,7 +23,7 @@ namespace FlashCard.Util
 				LastModifiedDate = d.LastModifiedDate,
 				LastTestedTime = d.Tests
 					.OrderByDescending(d => d.DateTime)
-					.FirstOrDefault().DateTime
+					.FirstOrDefault(t => takerId != null ? t.TakerId == takerId : t.TakerId == d.OwnerId).DateTime
 					.ToString(),
 				FromPublic = d.OwnerId != d.AuthorId,
 				Owner = new PersonDto()
@@ -40,7 +40,9 @@ namespace FlashCard.Util
 						Email = d.Author.Email
 					}
 					: null,
-				TotalCards = d.CardAssignments.Count
+				TotalCards = d.CardAssignments.Count,
+				TotalSucceededCards = d.CardAssignments.Count(ca => ca.Card.Remembered),
+				TotalFailedCards = d.CardAssignments.Count(ca => !ca.Card.Remembered)
 			});
 		}
 

@@ -65,12 +65,29 @@ namespace FlashCard.Controllers
 			var deck = await repository.Deck
 				.QueryByIdCheckingSharedDeck(userId, id)
 				.AsNoTracking()
-				.MapToDeckDto()
+				.MapToDeckDto(userId)
 				.FirstOrDefaultAsync();
 
 			if (deck == null)
 			{
 				return NotFound();
+			}
+
+			if (deck.LastTestedTime != null) {
+				deck.LastTestedTime = DateTimeUtil.GetDuration(DateTime.Parse(deck.LastTestedTime), DateTime.Now);
+			}
+			if (deck.Owner.Id != userId)
+			{
+				var sharedDeck = await repository.SharedDeck
+					.QueryByUserIdAndDeckId(userId, deck.Id)
+					.FirstOrDefaultAsync();
+				deck.Completed = sharedDeck?.Completed ?? false;
+
+				var sharedCards = await repository.SharedCard
+					.QueryByUserIdAndDeckId(userId, deck.Id)
+					.ToListAsync();
+				deck.TotalSucceededCards = sharedCards.Count(s => s.Remembered);
+				deck.TotalFailedCards = deck.TotalCards - deck.TotalSucceededCards;
 			}
 
 			return deck;
