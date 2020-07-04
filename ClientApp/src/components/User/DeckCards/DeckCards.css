@@ -96,6 +96,10 @@
   margin-right: 10px;
 }
 
+.deck-cards-wrapper .deck-cards-header .deck-cards-header-features .deck-card-header-features-filter {
+  margin-right: 10px;
+}
+
 .deck-cards-wrapper .deck-cards-header .deck-cards-header-features .deck-cards-header-features-search {
   width: 175px;
   background: white;

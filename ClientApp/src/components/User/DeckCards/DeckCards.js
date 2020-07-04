@@ -10,6 +10,7 @@ import { withRouter } from 'react-router-dom';
 
 import Search from '../../Shared/Search/Search';
 import Button from '../../Shared/Button/Button';
+import Filter from '../../Shared/Filter/Filter';
 import Card from '../Card/Card';
 import Loading from '../../Shared/Loading/Loading';
 import * as actions from '../../../store/actions';
@@ -146,6 +147,11 @@ class DeckCards extends Component {
               className="deck-cards-header-features-add"
               icon={<Icon icon={plusIcon} />} >
             </Button>
+            <Filter className="deck-card-header-features-filter">
+              <option value="all">All</option>
+              <option value="remembered">Remembered</option>
+              <option value="not-remembered">Not remembered</option>
+            </Filter>
             <Search
               placeholder="Search..."
               onChange={this.handleSearchCards} />
