@@ -12,6 +12,11 @@ namespace FlashCard.Repositories
 
         }
 
+        public IQueryable<SharedDeck> QueryByUserId(string userId)
+        {
+            return dbContext.SharedDecks.Where(s => s.UserId == userId);
+        }
+
         public IQueryable<SharedDeck> QueryByUserIdAndDeckId(string userId, int deckId)
         {
             return dbContext.SharedDecks.Where(s => s.UserId == userId && s.DeckId == deckId);

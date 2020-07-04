@@ -115,6 +115,18 @@ namespace FlashCard.Controllers
 				.MapToCardDto(imageService.BackImageBaseUrl)
 				.ToListAsync();
 
+			if (deck.OwnerId != userId)
+			{
+				var sharedCards = await repository.SharedCard
+					.QueryByUserIdAndDeckId(userId, deck.Id)
+					.ToListAsync();
+				
+				foreach (var card in cards)
+				{
+					card.Remembered = sharedCards.FirstOrDefault(s => s.CardId == card.Id)?.Remembered ?? false;
+				}
+			}
+
 			return cards;
 		}
 
@@ -382,7 +394,7 @@ namespace FlashCard.Controllers
 		public async Task<IActionResult> SubmitTest(int id, TestRequestModel testRqModel)
 		{
 			var user = await userManager.GetUser(User);
-			// Admin can't sumbit test
+			// Admin can't submit test
 			if (await userManager.IsInRoleAsync(user, Roles.Administrator))
 			{
 				return Ok();
@@ -424,8 +436,11 @@ namespace FlashCard.Controllers
 					Failed = false
 				});
 
-				card.Remembered = true;
-				card.LastPracticedDate = testRqModel.DateTime;
+				if (deck.OwnerId == user.Id)
+				{
+					card.Remembered = true;
+					card.LastPracticedDate = testRqModel.DateTime;
+				}
 			}
 			foreach (var card in failedCards)
 			{
@@ -434,23 +449,104 @@ namespace FlashCard.Controllers
 					Card = card,
 					Failed = true
 				});
-				card.LastPracticedDate = testRqModel.DateTime;
+
+				if (deck.OwnerId == user.Id)
+				{
+					card.LastPracticedDate = testRqModel.DateTime;
+				}
 			}
 
 			newTest.Score = (float)succeededCards.Count / (succeededCards.Count + failedCards.Count);
 
 			repository.Test.Create(newTest);
-			await repository.SaveChangesAsync();
 
-			var decks = await repository.Deck
-				.QueryByCardIdsIncludesCardAssignmentsAndCard(testRqModel.SucceededCardIds)
-				.ToListAsync();
-			foreach (var updatedDeck in decks) {
-				if (updatedDeck.CardAssignments.All(ca => ca.Card.Remembered))
+			if (deck.OwnerId != user.Id)
+			{
+				var sharedDeck = await repository.SharedDeck
+					.QueryByUserIdAndDeckId(user.Id, deck.Id)
+					.FirstOrDefaultAsync();
+
+				if (sharedDeck == null)
 				{
-					updatedDeck.Completed = true;
+					var newSharedDeck = new SharedDeck
+					{
+						UserId = user.Id,
+						DeckId = deck.Id,
+					};
+					repository.SharedDeck.Create(newSharedDeck);
+				}
+
+				var sharedCards = await repository.SharedCard
+					.QueryByUserIdAndDeckId(user.Id, deck.Id)
+					.ToListAsync();
+				
+				foreach (var cardId in testRqModel.SucceededCardIds)
+				{
+					var sharedCard = sharedCards.FirstOrDefault(s => s.CardId == cardId);
+
+					if (sharedCard != null)
+					{
+						sharedCard.Remembered = true;
+						sharedCard.LastPracticedDate = testRqModel.DateTime;
+					}
+					else
+					{
+						var newSharedCard = new SharedCard
+						{
+							UserId = user.Id,
+							CardId = cardId,
+							Remembered = true,
+							LastPracticedDate = testRqModel.DateTime
+						};
+						repository.SharedCard.Create(newSharedCard);
+					}
+				}
+				foreach (var cardId in testRqModel.FailedCardIds)
+				{
+					var sharedCard = sharedCards.FirstOrDefault(s => s.CardId == cardId);
+
+					if (sharedCard != null)
+					{
+						sharedCard.LastPracticedDate = testRqModel.DateTime;
+					}
+					else
+					{
+						var newSharedCard = new SharedCard
+						{
+							UserId = user.Id,
+							CardId = cardId,
+							LastPracticedDate = testRqModel.DateTime
+						};
+						repository.SharedCard.Create(newSharedCard);
+					}
 				}
 			}
+
+			await repository.SaveChangesAsync();
+
+			if (deck.OwnerId == user.Id)
+			{
+				var decks = await repository.Deck
+					.QueryByCardIdsIncludesCardAssignmentsAndCard(testRqModel.SucceededCardIds)
+					.ToListAsync();
+				foreach (var updatedDeck in decks) {
+					updatedDeck.Completed = !updatedDeck.CardAssignments.Any(ca => !ca.Card.Remembered);
+				}
+			} 
+			else 
+			{
+				var sharedDecks = await repository.SharedDeck
+					.QueryByUserId(user.Id)
+					.ToListAsync();
+				foreach (var sharedDeck in sharedDecks)
+				{
+					var sharedCards = await repository.SharedCard
+						.QueryByUserIdAndDeckId(user.Id, sharedDeck.DeckId)
+						.ToListAsync();
+					sharedDeck.Completed = !sharedCards.Any(s => !s.Remembered);
+				}
+			}
+
 			await repository.SaveChangesAsync();
 
 			return Ok();
