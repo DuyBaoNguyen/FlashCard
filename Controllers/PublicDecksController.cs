@@ -112,6 +112,7 @@ namespace FlashCard.Controllers
 
 		[HttpPost("{id}/shortcuts")]
 		[ProducesResponseType(201)]
+		[ProducesResponseType(400)]
 		[ProducesResponseType(404)]
 		public async Task<IActionResult> GetShortcutFromDeck(int id)
 		{
@@ -123,6 +124,10 @@ namespace FlashCard.Controllers
 			if (publicDeck == null)
 			{
 				return NotFound();
+			}
+			if (publicDeck.OwnerId == userId)
+			{
+				return BadRequest();
 			}
 
 			if (!publicDeck.SharedDecks.Any(sd => sd.UserId == userId))
