@@ -6,7 +6,7 @@ namespace FlashCard.RequestModels
 	{
 		[Required]
 		[StringLength(100)]
-		[RegularExpression("[a-zA-Z0-9 ]+")]
+		[RegularExpression(@"[\w ]+", ErrorMessage = "This field only contains alphanumeric characters, underscores or spaces.")]
 		public string Name { get; set; }
 
 		[StringLength(500)]
