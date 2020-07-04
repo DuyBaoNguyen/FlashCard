@@ -76,6 +76,12 @@ class DeckCards extends Component {
     this.props.onDeleteCard(cardId);
   };
 
+  handleFilteredValueChange = (event) => {
+    this.props.onSetCardsInsideFilteredValue(event.target.value);
+    this.props.onFilterCardsInside(event.target.value);
+    this.setState({ activePage: 1 });
+  }
+
   render() {
     const { cards, loading } = this.props;
     let { activePage, setLoading } = this.state;
@@ -90,6 +96,7 @@ class DeckCards extends Component {
               return (
                 <Card
                   key={card.id}
+                  displayStatus
                   card={card}
                   options={[
                     {
@@ -147,10 +154,12 @@ class DeckCards extends Component {
               className="deck-cards-header-features-add"
               icon={<Icon icon={plusIcon} />} >
             </Button>
-            <Filter className="deck-card-header-features-filter">
+            <Filter 
+              className="deck-card-header-features-filter"
+              onChange={this.handleFilteredValueChange}>
               <option value="all">All</option>
               <option value="remembered">Remembered</option>
-              <option value="not-remembered">Not remembered</option>
+              <option value="not remembered">Not remembered</option>
             </Filter>
             <Search
               placeholder="Search..."
@@ -177,7 +186,9 @@ const mapDispatchToProps = dispatch => {
     onSelectCard: (id) => dispatch(actions.selectCardInDeckDetails(id)),
     onRemoveCard: (deckId, cardId) => dispatch(actions.removeCard(deckId, cardId)),
     onUpdateSearchString: (value) => dispatch(actions.updateCardsInsideSearchString(value)),
-    onDeleteCard: (cardId) => dispatch(actions.deleteCard(cardId))
+    onDeleteCard: (cardId) => dispatch(actions.deleteCard(cardId)),
+    onFilterCardsInside: (filteredValue) => dispatch(actions.filterCardsInside(filteredValue)),
+    onSetCardsInsideFilteredValue: (filteredValue) => dispatch(actions.setCardsInsideFilteredValue(filteredValue))
   };
 };
 

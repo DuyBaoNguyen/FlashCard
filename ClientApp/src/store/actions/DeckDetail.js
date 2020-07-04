@@ -188,6 +188,20 @@ const getDeckCardsOutsidesFail = () => {
   };
 };
 
+export const setCardsInsideFilteredValue = (filteredValue) => {
+  return {
+    type: actionTypes.SET_CARDS_INSIDE_FILTERED_VALUE,
+    filteredValue: filteredValue
+  };
+};
+
+export const filterCardsInside = (filteredValue) => {
+  return {
+    type: actionTypes.FILTER_CARDS_INSIDE,
+    filteredValue: filteredValue
+  };
+};
+
 export const getDeckCardsOutside = (deckId, front) => {
   return (dispatch, getState) => {
     const { cardsOutsideSearchString } = getState().deckDetail;

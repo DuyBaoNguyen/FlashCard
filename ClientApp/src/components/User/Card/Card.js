@@ -97,7 +97,7 @@ class Card extends Component {
   }
 
   render() {
-    const { card, options, selectionIcon } = this.props;
+    const { card, options, selectionIcon, displayStatus } = this.props;
     const { isFlipped, speakerColor } = this.state;
     return (
       <div className="card-wrapper">
@@ -105,6 +105,9 @@ class Card extends Component {
           isFlipped={isFlipped}
           flipDirection="horizontal">
           <div className="card-front" onClick={this.handleClickCard}>
+            {displayStatus && card.remembered && (
+              <span className="status-badge">Remembered</span>
+            )}
             {selectionIcon && (
               <div className="selectable-icon" onClick={this.handleSelectCard}>
                 {selectionIcon}
@@ -121,6 +124,9 @@ class Card extends Component {
             </div>
           </div>
           <div className="card-back" onClick={this.handleClickCard}>
+            {displayStatus && card.remembered && (
+              <span className="status-badge">Remembered</span>
+            )}
             {selectionIcon && (
               <div className="selectable-icon" onClick={this.handleSelectCard}>
                 {selectionIcon}

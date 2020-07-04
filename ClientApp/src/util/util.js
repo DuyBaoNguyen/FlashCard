@@ -5,6 +5,17 @@ export function transformStatistics(statistics) {
   return statistics;
 }
 
+export const filterCards = (source, filteredValue) => {
+  switch (filteredValue) {
+    case 'remembered':
+      return source.filter(card => card.remembered);
+    case 'not-remembered':
+      return source.filter(card => !card.remembered);
+    default:
+      return [...source];
+  }
+};
+
 export const checkValidity = (value, rules) => {
   let isValid = true;
   let message = null;

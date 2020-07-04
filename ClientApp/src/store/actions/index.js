@@ -17,6 +17,8 @@ export {
   addCard,
   getDeckCardsInside,
   getDeckCardsOutside,
+  filterCardsInside,
+  setCardsInsideFilteredValue,
   updateCardsInsideSearchString,
   updateCardsOutsideSearchString,
   resetStateInDeckDetailReducer

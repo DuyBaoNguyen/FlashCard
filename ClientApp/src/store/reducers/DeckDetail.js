@@ -1,11 +1,16 @@
 import * as actionTypes from '../actions/actionTypes';
 import { transformStatistics } from '../../util/util';
+import * as utils from '../../util/util';
 
 const initialState = {
   deck: null,
   statistics: null,
   cards: [],
+  originalCards: [],
   remainingCards: [],
+  filteredValues: {
+    cardsFilteredValue: ''
+  },
   cardsInsideSearchString: '',
   cardsOutsideSearchString: '',
   selectedCard: null,
@@ -158,7 +163,8 @@ export const deckDetailReducer = (state = initialState, action) => {
     case actionTypes.GET_DECK_CARDS_INSIDE_SUCCESS:
       return {
         ...state,
-        cards: action.cards,
+        cards: utils.filterCards(action.cards, state.filteredValues.cardsFilteredValue),
+        originalCards: action.cards,
         loadings: {
           ...state.loadings,
           getCardsInsideLoading: false
@@ -172,6 +178,7 @@ export const deckDetailReducer = (state = initialState, action) => {
       return {
         ...state,
         cards: [],
+        originalCards: [],
         loadings: {
           ...state.loadings,
           getCardsInsideLoading: false
@@ -206,6 +213,19 @@ export const deckDetailReducer = (state = initialState, action) => {
           ...state.errors,
           getCardsOutsideError: true
         }
+      };
+    case actionTypes.SET_CARDS_INSIDE_FILTERED_VALUE:
+      return {
+        ...state,
+        filteredValues: {
+          ...state.filteredValues,
+          cardsFilteredValue: action.filteredValue
+        }
+      };
+    case actionTypes.FILTER_CARDS_INSIDE:
+      return {
+        ...state,
+        cards: utils.filterCards(state.originalCards, action.filteredValue)
       };
     case actionTypes.UPDATE_CARDS_INSIDE_SEARCH_STRING:
       return {
