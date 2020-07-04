@@ -9,7 +9,7 @@ export const filterCards = (source, filteredValue) => {
   switch (filteredValue) {
     case 'remembered':
       return source.filter(card => card.remembered);
-    case 'not-remembered':
+    case 'not remembered':
       return source.filter(card => !card.remembered);
     default:
       return [...source];
