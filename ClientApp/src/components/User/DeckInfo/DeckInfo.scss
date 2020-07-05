@@ -46,12 +46,13 @@
     .deck-description {
       color: #aaa;
       font-size: 14px;
-      padding-bottom: 15px;
+      padding-bottom: 16px;
+      line-height: 1.4;
     }
     .deck-field {
       display: flex;
       justify-content: space-between;
-      padding-bottom: 15px;
+      padding-bottom: 16px;
       span {
         font-size: 14px;
       }

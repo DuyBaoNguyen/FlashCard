@@ -89,7 +89,7 @@ class DeckInfo extends Component {
           <div className="deck-field">
             <span className="deck-field-label">
               <span className="deck-field-icon">
-                <Icon icon={cardIcon} color="#aaa" style={{ fontSize: 20 }} />
+                <Icon icon={cardIcon} color="#aaa" style={{ fontSize: 18 }} />
               </span>
               Number of cards
             </span>
@@ -98,7 +98,7 @@ class DeckInfo extends Component {
           <div className="deck-field">
             <span className="deck-field-label">
               <span className="deck-field-icon">
-                <Icon icon={succeededCardIcon} color="#aaa" style={{ fontSize: 20 }} />
+                <Icon icon={succeededCardIcon} color="#aaa" style={{ fontSize: 18 }} />
               </span>
               Remembered cards
             </span>
@@ -107,7 +107,7 @@ class DeckInfo extends Component {
           <div className="deck-field">
             <span className="deck-field-label">
               <span className="deck-field-icon">
-                <Icon icon={failedCardIcon} color="#aaa" style={{ fontSize: 20 }} />
+                <Icon icon={failedCardIcon} color="#aaa" style={{ fontSize: 18 }} />
               </span>
               Not remembered cards
             </span>
@@ -116,7 +116,7 @@ class DeckInfo extends Component {
           <div className="deck-field">
             <span className="deck-field-label">
               <span className="deck-field-icon">
-                <Icon icon={createdDateIcon} color="#aaa" style={{ fontSize: 20 }} />
+                <Icon icon={createdDateIcon} color="#aaa" style={{ fontSize: 18 }} />
               </span>
               Created date
             </span>
