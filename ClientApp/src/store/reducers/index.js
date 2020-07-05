@@ -4,3 +4,4 @@ export { testingReducer } from './Testing';
 export { matchCardReducer } from './MatchCard';
 export { cardsReducer } from './Cards';
 export { cardReducer } from './Card';
+export { usersManagementReducer } from './UsersManagement';

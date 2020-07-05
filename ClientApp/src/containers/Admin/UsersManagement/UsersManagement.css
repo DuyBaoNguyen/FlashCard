@@ -1,36 +1,10 @@
-.add-cards {
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  -ms-flex-wrap: wrap;
-      flex-wrap: wrap;
-  margin-right: -20px;
-}
-
-.add-cards .back-feature {
-  color: #979797;
-  position: relative;
-}
-
-.add-cards .back-feature .back-feature-label {
-  font-size: 14px;
-}
-
-.add-cards section {
-  overflow: visible;
-  padding-right: 20px;
-}
-
-.add-cards .top-section {
+.users-wrapper {
   width: 100%;
-  margin-bottom: 20px;
-}
-
-.add-cards .left-section {
-  width: 50%;
-}
-
-.add-cards .right-section {
-  width: 50%;
+  display: -ms-grid;
+  display: grid;
+  -ms-grid-columns: 35% 75%;
+      grid-template-columns: 35% 75%;
+  -webkit-column-gap: 20px;
+          column-gap: 20px;
 }
 /*# sourceMappingURL=UsersManagement.css.map */
