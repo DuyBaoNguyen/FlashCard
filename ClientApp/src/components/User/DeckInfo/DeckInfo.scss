@@ -44,24 +44,31 @@
   .deck-info {
     transition: height .15s;
     .deck-description {
-      color: #979797;
+      color: #aaa;
       font-size: 14px;
-      padding-bottom: 18px;
+      padding-bottom: 15px;
     }
     .deck-field {
       display: flex;
       justify-content: space-between;
-      padding-bottom: 20px;
+      padding-bottom: 15px;
       span {
         font-size: 14px;
       }
       .deck-field-label {
         color: #979797;
+        .deck-field-icon {
+          vertical-align: middle;
+          margin-right: 10px;
+        }
       }
       .deck-field-value {
         color: #9eacf4;
         font-weight: 500;
       }
+    }
+    .deck-field:last-child {
+      padding-bottom: 18px;
     }
   }
   .deck-features {

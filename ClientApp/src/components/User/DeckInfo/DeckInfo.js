@@ -4,6 +4,10 @@ import optionIcon from '@iconify/icons-uil/ellipsis-h';
 import editIcon from '@iconify/icons-uil/edit';
 import deleteIcon from '@iconify/icons-uil/trash-alt';
 import publicIcon from '@iconify/icons-uil/share';
+import cardIcon from '@iconify/icons-mdi/credit-card-outline';
+import succeededCardIcon from '@iconify/icons-mdi/credit-card-check-outline';
+import failedCardIcon from '@iconify/icons-mdi/credit-card-remove-outline';
+import createdDateIcon from '@iconify/icons-uil/calendar-alt';
 import { connect } from 'react-redux';
 import { Collapse } from 'react-collapse';
 
@@ -83,11 +87,39 @@ class DeckInfo extends Component {
             </div>
           )}
           <div className="deck-field">
-            <span className="deck-field-label">Number of cards</span>
+            <span className="deck-field-label">
+              <span className="deck-field-icon">
+                <Icon icon={cardIcon} color="#aaa" style={{ fontSize: 20 }} />
+              </span>
+              Number of cards
+            </span>
             <span className="deck-field-value">{deck?.totalCards}</span>
           </div>
           <div className="deck-field">
-            <span className="deck-field-label">Created date</span>
+            <span className="deck-field-label">
+              <span className="deck-field-icon">
+                <Icon icon={succeededCardIcon} color="#aaa" style={{ fontSize: 20 }} />
+              </span>
+              Remembered cards
+            </span>
+            <span className="deck-field-value">{deck?.totalSucceededCards}</span>
+          </div>
+          <div className="deck-field">
+            <span className="deck-field-label">
+              <span className="deck-field-icon">
+                <Icon icon={failedCardIcon} color="#aaa" style={{ fontSize: 20 }} />
+              </span>
+              Not remembered cards
+            </span>
+            <span className="deck-field-value">{deck?.totalFailedCards}</span>
+          </div>
+          <div className="deck-field">
+            <span className="deck-field-label">
+              <span className="deck-field-icon">
+                <Icon icon={createdDateIcon} color="#aaa" style={{ fontSize: 20 }} />
+              </span>
+              Created date
+            </span>
             <span className="deck-field-value">
               {deck?.createdDate && new Date(deck.createdDate).toDateString()}
             </span>
