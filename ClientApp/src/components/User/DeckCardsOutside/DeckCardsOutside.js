@@ -10,6 +10,7 @@ import deleteIcon from '@iconify/icons-uil/trash-alt';
 
 import Search from '../../Shared/Search/Search';
 import Button from '../../Shared/Button/Button';
+import Filter from '../../Shared/Filter/Filter';
 import Card from '../Card/Card';
 import Loading from '../../Shared/Loading/Loading';
 import * as actions from '../../../store/actions';
@@ -67,6 +68,12 @@ class DeckCardsOutside extends Component {
 
   handleDeleteCard = (cardId) => {
     this.props.onDeleteCard(cardId);
+  }
+
+  handleFilteredValueChange = (event) => {
+    this.props.onSetCardsOutsideFilteredValue(event.target.value);
+    this.props.onFilterCardsOutside(event.target.value);
+    this.setState({ activePage: 1 });
   }
 
   render() {
@@ -128,6 +135,7 @@ class DeckCardsOutside extends Component {
     return (
       <div className="deck-cards-outside-wrapper">
         <div className="deck-cards-outside-header">
+          <p>My cards</p>
           <div className="deck-cards-outside-header-features">
             <Button
               type="link"
@@ -135,11 +143,17 @@ class DeckCardsOutside extends Component {
               className="deck-cards-outside-header-features-add"
               icon={<Icon icon={plusIcon} />}>
             </Button>
+            <Filter
+              className="deck-cards-outside-header-features-filter"
+              onChange={this.handleFilteredValueChange}>
+              <option value="all">All</option>
+              <option value="remembered">Remembered</option>
+              <option value="not remembered">Not remembered</option>
+            </Filter>
             <Search
               placeholder="Search..."
               onChange={this.handleSearchCards} />
           </div>
-          <p>My cards</p>
         </div>
         {cardsList}
         <div className="cards-pagination">{pagination}</div>
@@ -160,7 +174,9 @@ const mapDispatchToProps = dispatch => {
     onGetDeckCardsOutside: (deckId, front) => dispatch(actions.getDeckCardsOutside(deckId, front)),
     onAddCard: (deckId, cardId) => dispatch(actions.addCard(deckId, cardId)),
     onUpdateSearchString: (value) => dispatch(actions.updateCardsOutsideSearchString(value)),
-    onDeleteCard: (cardId) => dispatch(actions.deleteCard(cardId))
+    onDeleteCard: (cardId) => dispatch(actions.deleteCard(cardId)),
+    onFilterCardsOutside: (filteredValue) => dispatch(actions.filterCardsOutside(filteredValue)),
+    onSetCardsOutsideFilteredValue: (filteredValue) => dispatch(actions.setCardsOutsideFilteredValue(filteredValue))
   };
 };
 

@@ -21,11 +21,11 @@ class AddCard extends Component {
     return (
       <div className="add-cards">
         <section className="top-section">
-          <Link to={`/decks/${this.deckId}`}>
-            <div className="back-feature">
+          <div className="back-feature">
+            <Link to={`/decks/${this.deckId}`}>
               <span className="back-feature-label">Done</span>
-            </div>
-          </Link>
+            </Link>
+          </div>
         </section>
         <section className="left-section">
           <DeckCardsInside />

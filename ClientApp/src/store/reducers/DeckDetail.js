@@ -7,8 +7,10 @@ const initialState = {
   cards: [],
   originalCards: [],
   remainingCards: [],
+  originalRemainingCards: [],
   filteredValues: {
-    cardsFilteredValue: ''
+    cardsFilteredValue: '',
+    remainingCardsFilteredValue: ''
   },
   cardsInsideSearchString: '',
   cardsOutsideSearchString: '',
@@ -190,7 +192,8 @@ export const deckDetailReducer = (state = initialState, action) => {
     case actionTypes.GET_DECK_CARDS_OUTSIDE_SUCCESS:
       return {
         ...state,
-        remainingCards: action.cards,
+        remainingCards: utils.filterCards(action.cards, state.filteredValues.remainingCardsFilteredValue),
+        originalRemainingCards: action.cards,
         loadings: {
           ...state.loadings,
           getCardsOutsideLoading: false
@@ -204,6 +207,7 @@ export const deckDetailReducer = (state = initialState, action) => {
       return {
         ...state,
         remainingCards: [],
+        originalRemainingCards: [],
         loadings: {
           ...state.loadings,
           getCardsOutsideLoading: false
@@ -225,6 +229,19 @@ export const deckDetailReducer = (state = initialState, action) => {
       return {
         ...state,
         cards: utils.filterCards(state.originalCards, action.filteredValue)
+      };
+    case actionTypes.SET_CARDS_OUTSIDE_FILTERED_VALUE:
+      return {
+        ...state,
+        filteredValues: {
+          ...state.filteredValues,
+          remainingCardsFilteredValue: action.filteredValue
+        }
+      };
+    case actionTypes.FILTER_CARDS_OUTSIDE:
+      return {
+        ...state,
+        remainingCards: utils.filterCards(state.originalRemainingCards, action.filteredValue)
       };
     case actionTypes.UPDATE_CARDS_INSIDE_SEARCH_STRING:
       return {

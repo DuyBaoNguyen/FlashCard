@@ -8,12 +8,17 @@
 }
 
 .add-cards .back-feature {
-  color: #979797;
-  position: relative;
+  font-size: 14px;
 }
 
-.add-cards .back-feature .back-feature-label {
-  font-size: 14px;
+.add-cards .back-feature a {
+  color: #979797;
+  -webkit-transition: color 0.15s ease-out;
+  transition: color 0.15s ease-out;
+}
+
+.add-cards .back-feature a:hover {
+  color: #757575;
 }
 
 .add-cards section {

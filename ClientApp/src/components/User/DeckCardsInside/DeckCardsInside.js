@@ -8,6 +8,7 @@ import editIcon from '@iconify/icons-uil/edit';
 import deleteIcon from '@iconify/icons-uil/trash-alt';
 
 import Search from '../../Shared/Search/Search';
+import Filter from '../../Shared/Filter/Filter';
 import Card from '../Card/Card';
 import Loading from '../../Shared/Loading/Loading';
 import * as actions from '../../../store/actions';
@@ -64,6 +65,12 @@ class DeckCardsInside extends Component {
 
   handleDeleteCard = (cardId) => {
     this.props.onDeleteCard(cardId);
+  }
+
+  handleFilteredValueChange = (event) => {
+    this.props.onSetCardsInsideFilteredValue(event.target.value);
+    this.props.onFilterCardsInside(event.target.value);
+    this.setState({ activePage: 1 });
   }
 
   render() {
@@ -125,12 +132,19 @@ class DeckCardsInside extends Component {
     return (
       <div className="deck-cards-inside-wrapper">
         <div className="deck-cards-inside-header">
+          <p>Cards in deck</p>
           <div className="deck-cards-inside-header-features">
+            <Filter
+              className="deck-cards-inside-header-features-filter"
+              onChange={this.handleFilteredValueChange}>
+              <option value="all">All</option>
+              <option value="remembered">Remembered</option>
+              <option value="not remembered">Not remembered</option>
+            </Filter>
             <Search
               placeholder="Search..."
               onChange={this.handleSearchCards} />
           </div>
-          <p>Cards in deck</p>
         </div>
         {cardsList}
         <div className="cards-pagination">{pagination}</div>
@@ -151,7 +165,9 @@ const mapDispatchToProps = dispatch => {
     onGetDeckCardsInside: (deckId, front) => dispatch(actions.getDeckCardsInside(deckId, front)),
     onRemoveCard: (deckId, cardId) => dispatch(actions.removeCard(deckId, cardId)),
     onUpdateSearchString: (value) => dispatch(actions.updateCardsInsideSearchString(value)),
-    onDeleteCard: (cardId) => dispatch(actions.deleteCard(cardId))
+    onDeleteCard: (cardId) => dispatch(actions.deleteCard(cardId)),
+    onFilterCardsInside: (filteredValue) => dispatch(actions.filterCardsInside(filteredValue)),
+    onSetCardsInsideFilteredValue: (filteredValue) => dispatch(actions.setCardsInsideFilteredValue(filteredValue))
   };
 };
 

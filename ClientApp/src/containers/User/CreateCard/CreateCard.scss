@@ -32,9 +32,13 @@
     position: absolute;
     top: 0;
     left: 0;
+    font-size: 14px;
     a {
-      font-size: 14px;
       color: #979797;
+      transition: color 0.15s ease-out;
+      &:hover {
+        color: #757575;
+      }
     }
   }
 }

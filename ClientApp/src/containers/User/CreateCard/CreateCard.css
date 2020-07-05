@@ -51,10 +51,16 @@
   position: absolute;
   top: 0;
   left: 0;
+  font-size: 14px;
 }
 
 .create-card .back-feature a {
-  font-size: 14px;
   color: #979797;
+  -webkit-transition: color 0.15s ease-out;
+  transition: color 0.15s ease-out;
+}
+
+.create-card .back-feature a:hover {
+  color: #757575;
 }
 /*# sourceMappingURL=CreateCard.css.map */

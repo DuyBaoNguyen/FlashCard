@@ -5,21 +5,30 @@
   margin-right: -20px;
 }
 
+.deck-detail .back-feature {
+  font-size: 14px;
+}
+
 .deck-detail .back-feature a {
   color: #979797;
+  -webkit-transition: color 0.15s ease-out;
+  transition: color 0.15s ease-out;
   position: relative;
 }
 
 .deck-detail .back-feature a .back-feature-icon {
   position: absolute;
-  top: -1px;
+  top: -2px;
   left: -8px;
   font-size: 22px;
 }
 
 .deck-detail .back-feature a .back-feature-label {
-  font-size: 14px;
   padding-left: 18px;
+}
+
+.deck-detail .back-feature a:hover {
+  color: #757575;
 }
 
 .deck-detail section {

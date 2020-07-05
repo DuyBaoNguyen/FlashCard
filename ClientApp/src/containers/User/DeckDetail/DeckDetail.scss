@@ -1,18 +1,24 @@
 .deck-detail {
   display: flex;
   margin-right: -20px;
-  .back-feature a {
-    color: #979797;
-    position: relative;
-    .back-feature-icon {
-      position: absolute;
-      top: -1px;
-      left: -8px;
-      font-size: 22px;
-    }
-    .back-feature-label {
-      font-size: 14px;
-      padding-left: 18px;
+  .back-feature {
+    font-size: 14px;
+    a {
+      color: #979797;
+      transition: color 0.15s ease-out;
+      position: relative;
+      .back-feature-icon {
+        position: absolute;
+        top: -2px;
+        left: -8px;
+        font-size: 22px;
+      }
+      .back-feature-label {
+        padding-left: 18px;
+      }
+      &:hover {
+        color: #757575;
+      }
     }
   }
   section {

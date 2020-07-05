@@ -3,10 +3,13 @@
   flex-wrap: wrap;
   margin-right: -20px;
   .back-feature {
-    color: #979797;
-    position: relative;
-    .back-feature-label {
-      font-size: 14px;
+    font-size: 14px;
+    a {
+      color: #979797;
+      transition: color 0.15s ease-out;
+      &:hover {
+        color: #757575;
+      }
     }
   }
   section {
