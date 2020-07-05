@@ -8,6 +8,7 @@ import Pagination from 'react-js-pagination';
 
 import Search from '../../Shared/Search/Search';
 import Button from '../../Shared/Button/Button';
+import Filter from '../../Shared/Filter/Filter';
 import Card from '../Card/Card';
 import Loading from '../../Shared/Loading/Loading';
 import * as actions from '../../../store/actions';
@@ -57,6 +58,12 @@ class CardsList extends Component {
     this.props.onDeleteCard(cardId);
   }
 
+  handleFilteredValueChange = (event) => {
+    this.props.onSetCardsFilteredValue(event.target.value);
+    this.props.onFilterCards(event.target.value);
+    this.setState({ activePage: 1 });
+  }
+
   render() {
     const { cards, loading } = this.props;
     let { activePage, setLoading } = this.state;
@@ -71,6 +78,7 @@ class CardsList extends Component {
               return (
                 <Card
                   key={card.id}
+                  displayStatus
                   card={card}
                   options={[
                     {
@@ -118,6 +126,13 @@ class CardsList extends Component {
               className="cards-list-header-features-add"
               icon={<Icon icon={plusIcon} />} >
             </Button>
+            <Filter 
+              className="cards-list-header-features-filter"
+              onChange={this.handleFilteredValueChange}>
+              <option value="all">All</option>
+              <option value="remembered">Remembered</option>
+              <option value="not remembered">Not remembered</option>
+            </Filter>
             <Search
               placeholder="Search..."
               onChange={this.handleSearchCards} />
@@ -142,7 +157,9 @@ const mapDispatchToProps = dispatch => {
     onGetCards: (front) => dispatch(actions.getCards(front)),
     onSelectCard: (id) => dispatch(actions.selectCardInCards(id)),
     onUpdateSearchString: (value) => dispatch(actions.updateCardsSearchString(value)),
-    onDeleteCard: (cardId) => dispatch(actions.deleteCard(cardId))
+    onDeleteCard: (cardId) => dispatch(actions.deleteCard(cardId)),
+    onFilterCards: (filteredValue) => dispatch(actions.filterCards(filteredValue)),
+    onSetCardsFilteredValue: (filteredValue) => dispatch(actions.setCardsFilteredValue(filteredValue))
   };
 };
 

@@ -35,24 +35,35 @@
   list-style-type: none;
 }
 
-.cards-list-wrapper .cards-pagination .pagination li {
+.cards-list-wrapper .cards-pagination .pagination .pagination-item {
   display: inline-block;
   font-size: 14px;
-  margin-left: 10px;
-  margin-right: 10px;
-  padding: 2px;
+  margin-left: 5px;
+  margin-right: 5px;
+  text-decoration: none;
+  background: #fff;
+  border-radius: 4px;
+  width: 24px;
+  height: 24px;
+  line-height: 24px;
+  text-align: center;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
+  cursor: pointer;
 }
 
-.cards-list-wrapper .cards-pagination .pagination li a {
-  color: rgba(0, 0, 0, 0.65);
+.cards-list-wrapper .cards-pagination .pagination .pagination-item a {
+  color: #757575;
+}
+
+.cards-list-wrapper .cards-pagination .pagination .pagination-item:hover {
+  background-color: #f5f5f5;
 }
 
 .cards-list-wrapper .cards-pagination .pagination .pagination-item-active {
-  text-decoration: none;
-  background: #9eacf4;
-  border-radius: 4px;
-  width: 22.22px;
-  text-align: center;
+  background: #9eacf4 !important;
 }
 
 .cards-list-wrapper .cards-pagination .pagination .pagination-item-active a {
@@ -93,6 +104,10 @@
 }
 
 .cards-list-wrapper .cards-list-header .cards-list-header-features .cards-list-header-features-add {
+  margin-right: 10px;
+}
+
+.cards-list-wrapper .cards-list-header .cards-list-header-features .cards-list-header-features-filter {
   margin-right: 10px;
 }
 

@@ -71,3 +71,17 @@ export const deleteCard = (cardId) => {
       .catch(() => dispatch(deleteCardFail()));
   };
 };
+
+export const setCardsFilteredValue = (filteredValue) => {
+  return {
+    type: actionTypes.SET_CARDS_FILTERED_VALUE,
+    filteredValue: filteredValue
+  };
+};
+
+export const filterCards = (filteredValue) => {
+  return {
+    type: actionTypes.FILTER_CARDS,
+    filteredValue: filteredValue
+  };
+};

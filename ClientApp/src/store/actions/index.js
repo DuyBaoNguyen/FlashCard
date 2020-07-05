@@ -32,6 +32,8 @@ export {
 	selectCardInCards,
 	resetStateInCardsReducer,
 	deleteCard,
+	filterCards,
+	setCardsFilteredValue
 } from './Cards';
 
 export {

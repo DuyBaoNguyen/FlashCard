@@ -1,11 +1,14 @@
 import * as actionTypes from '../actions/actionTypes';
+import * as utils from '../../util/util';
 
 const initialState = {
   cards: [],
+  originalCards: [],
   selectedCard: null,
   loadings: {
     getCardsLoading: true
   },
+  filteredValue: '',
   searchString: '',
   errors: {
     getCardsError: false,
@@ -18,7 +21,8 @@ export const cardsReducer = (state = initialState, action) => {
     case actionTypes.GET_CARDS_SUCCESS:
       return {
         ...state,
-        cards: action.cards,
+        cards: utils.filterCards(action.cards, state.filteredValue),
+        originalCards: action.cards,
         loadings: {
           ...state.loadings,
           getCardsLoading: false
@@ -32,6 +36,7 @@ export const cardsReducer = (state = initialState, action) => {
       return {
         ...state,
         cards: [],
+        originalCards: [],
         loadings: {
           ...state.loadings,
           getCardsLoading: false
@@ -76,6 +81,16 @@ export const cardsReducer = (state = initialState, action) => {
         ...initialState,
         cards: state.cards,
         loadings: state.loadings
+      };
+    case actionTypes.SET_CARDS_FILTERED_VALUE:
+      return {
+        ...state,
+        filteredValue: action.filteredValue
+      };
+    case actionTypes.FILTER_CARDS:
+      return {
+        ...state,
+        cards: utils.filterCards(state.originalCards, action.filteredValue)
       };
     default:
       return state;
