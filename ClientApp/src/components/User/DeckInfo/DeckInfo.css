@@ -62,7 +62,8 @@
 .deck-info-wrapper .deck-info .deck-description {
   color: #aaa;
   font-size: 14px;
-  padding-bottom: 15px;
+  padding-bottom: 16px;
+  line-height: 1.4;
 }
 
 .deck-info-wrapper .deck-info .deck-field {
@@ -72,7 +73,7 @@
   -webkit-box-pack: justify;
       -ms-flex-pack: justify;
           justify-content: space-between;
-  padding-bottom: 15px;
+  padding-bottom: 16px;
 }
 
 .deck-info-wrapper .deck-info .deck-field span {

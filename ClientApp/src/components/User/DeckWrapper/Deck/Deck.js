@@ -1,8 +1,10 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { Icon } from '@iconify/react';
-import layerGroup from '@iconify/icons-uil/layer-group';
-import clock from '@iconify/icons-uil/clock';
+import clockIcon from '@iconify/icons-uil/clock';
+import cardIcon from '@iconify/icons-mdi/credit-card-outline';
+import succeededCardIcon from '@iconify/icons-mdi/credit-card-check-outline';
+import failedCardIcon from '@iconify/icons-mdi/credit-card-remove-outline';
 
 import './Deck.css';
 
@@ -16,19 +18,35 @@ class Deck extends Component {
               <div className="deck-name">{this.props.deck.name}</div>
               <div className="deck-description">{this.props.deck.description}</div>
               <div className="deck-info">
-                <div className="deck-info-value">
+                {/* <div className="deck-info-value">
                   <Icon
                     icon={layerGroup}
                     style={{ color: '#ffffff', fontSize: '24px' }}
                   />
                   <p>{this.props.deck.totalCards}</p>
-                </div>
+                </div> */}
                 {this.props.deck.lastTestedTime !== null && (
-                  <div className="deck-info-value">
-                    <Icon icon={clock} style={{ color: '#ffffff', fontSize: '24px' }} />
-                    <p>{this.props.deck.lastTestedTime}</p>
+                  <div className="deck-info-value-container">
+                    <div className="deck-info-value">
+                      <Icon icon={clockIcon} style={{ color: '#ffffff', fontSize: '24px' }} />
+                      <p>{this.props.deck.lastTestedTime}</p>
+                    </div>
                   </div>
                 )}
+                <div className="deck-info-value-container">
+                  <div className="deck-info-value">
+                    <Icon icon={cardIcon} style={{ color: '#ffffff', fontSize: '24px' }} />
+                    <p>{this.props.deck.totalCards}</p>
+                  </div>
+                  <div className="deck-info-value">
+                    <Icon icon={succeededCardIcon} style={{ color: '#ffffff', fontSize: '24px' }} />
+                    <p>{this.props.deck.totalSucceededCards}</p>
+                  </div>
+                  <div className="deck-info-value">
+                    <Icon icon={failedCardIcon} style={{ color: '#ffffff', fontSize: '24px' }} />
+                    <p>{this.props.deck.totalFailedCards}</p>
+                  </div>
+                </div>
               </div>
             </div>
             <div className="deck-background-white-1"></div>
