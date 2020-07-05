@@ -75,3 +75,17 @@ export const getProfile = () => {
 			.catch(err => dispatch(getProfileFail()));
 	};
 };
+
+export const setDecksFilteredValue = (filteredValue) => {
+  return {
+    type: actionTypes.SET_DECKS_FILTERED_VALUE,
+    filteredValue: filteredValue
+  };
+};
+
+export const filterDecks = (filteredValue) => {
+  return {
+    type: actionTypes.FILTER_DECKS,
+    filteredValue: filteredValue
+  };
+};

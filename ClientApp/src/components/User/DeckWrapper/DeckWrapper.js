@@ -6,6 +6,7 @@ import plusIcon from '@iconify/icons-uil/plus';
 
 import Search from '../../Shared/Search/Search';
 import Button from '../../Shared/Button/Button';
+import Filter from '../../Shared/Filter/Filter';
 import Loading from '../../Shared/Loading/Loading';
 import * as actions from '../../../store/actions';
 import Deck from './Deck/Deck';
@@ -41,6 +42,12 @@ class DeckWrapper extends Component {
 		this.props.onGetDecks(event.target.value);
 		this.setState({ activePage: 1 });
 	};
+
+	handleFilteredValueChange = (event) => {
+		this.props.onSetDecksFilteredValue(event.target.value);
+		this.props.onFilterDecks(event.target.value);
+		this.setState({ activePage: 1 });
+	}
 
 	render() {
 		const { loading } = this.props;
@@ -86,9 +93,16 @@ class DeckWrapper extends Component {
 							path="/createdeck"
 							icon={<Icon icon={plusIcon} />}>
 						</Button>
+						<Filter
+							className="deck-header-features-filter"
+							onChange={this.handleFilteredValueChange}>
+							<option value="all">All</option>
+							<option value="completed">Completed</option>
+							<option value="not completed">Not completed</option>
+						</Filter>
 						<Search
 							placeholder="Search..."
-							onChange={(event) => this.handleSearchDeck(event)}
+							onChange={this.handleSearchDeck}
 						/>
 					</div>
 				</div>
@@ -110,6 +124,8 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
 	return {
 		onGetDecks: (name) => dispatch(actions.getDecks(name)),
+		onFilterDecks: (filteredValue) => dispatch(actions.filterDecks(filteredValue)),
+		onSetDecksFilteredValue: (filteredValue) => dispatch(actions.setDecksFilteredValue(filteredValue))
 	};
 };
 

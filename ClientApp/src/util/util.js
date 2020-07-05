@@ -16,6 +16,17 @@ export const filterCards = (source, filteredValue) => {
   }
 };
 
+export const filterDecks = (source, filteredValue) => {
+  switch (filteredValue) {
+    case 'completed':
+      return source.filter(deck => deck.completed);
+    case 'not completed':
+      return source.filter(deck => !deck.completed);
+    default:
+      return [...source];
+  }
+};
+
 export const checkValidity = (value, rules) => {
   let isValid = true;
   let message = null;

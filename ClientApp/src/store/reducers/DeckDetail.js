@@ -1,5 +1,4 @@
 import * as actionTypes from '../actions/actionTypes';
-import { transformStatistics } from '../../util/util';
 import * as utils from '../../util/util';
 
 const initialState = {
@@ -53,7 +52,7 @@ export const deckDetailReducer = (state = initialState, action) => {
     case actionTypes.GET_DECK_STATISTICS_SUCCESS:
       return {
         ...state,
-        statistics: transformStatistics(action.statistics),
+        statistics: utils.transformStatistics(action.statistics),
         errors: {
           ...state.errors,
           getStatisticsError: false

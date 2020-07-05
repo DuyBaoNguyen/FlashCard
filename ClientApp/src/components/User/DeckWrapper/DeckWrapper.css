@@ -108,6 +108,10 @@
   margin-right: 10px;
 }
 
+.deck-wrapper .deck-header .deck-header-features .deck-header-features-filter {
+  margin-right: 10px;
+}
+
 .deck-wrapper .deck-header .deck-header-features .deck-header-features-search {
   width: 175px;
   background: white;

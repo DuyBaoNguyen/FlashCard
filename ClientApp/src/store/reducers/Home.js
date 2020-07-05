@@ -1,8 +1,9 @@
 import * as actionTypes from '../actions/actionTypes';
-import { transformStatistics } from '../../util/util';
+import * as utils from '../../util/util';
 
 const initialState = {
   decks: [],
+  originalDecks: [],
   getDeckError: null,
   statistics: null,
   getStatisticsError: null,
@@ -10,6 +11,9 @@ const initialState = {
   getProfileError: null,
   loadings: {
     getDecksLoading: true
+  },
+  filteredValues: {
+    decksFilteredValue: ''
   }
 };
 
@@ -18,7 +22,8 @@ export const homeReducer = (state = initialState, action) => {
     case actionTypes.GET_DECKS_SUCCESS:
       return {
         ...state,
-        decks: action.decks,
+        decks: utils.filterDecks(action.decks, state.filteredValues.decksFilteredValue),
+        originalDecks: action.decks,
         loadings: {
           ...state.loadings,
           getDecksLoading: false
@@ -29,6 +34,7 @@ export const homeReducer = (state = initialState, action) => {
       return {
         ...state,
         decks: [],
+        originalDecks: [],
         loadings: {
           ...state.loadings,
           getDecksLoading: false
@@ -38,7 +44,7 @@ export const homeReducer = (state = initialState, action) => {
     case actionTypes.GET_STATISTICS_SUCCESS:
       return {
         ...state,
-        statistics: transformStatistics(action.statistics),
+        statistics: utils.transformStatistics(action.statistics),
         getStatisticsError: null
       }
     case actionTypes.GET_STATISTICS_FAIL:
@@ -59,6 +65,19 @@ export const homeReducer = (state = initialState, action) => {
         profile: null,
         getProfileError: 'Something went wrong'
       }
+    case actionTypes.SET_DECKS_FILTERED_VALUE:
+      return {
+        ...state,
+        filteredValues: {
+          ...state.filteredValues,
+          decksFilteredValue: action.filteredValue
+        }
+      };
+    case actionTypes.FILTER_DECKS:
+      return {
+        ...state,
+        decks: utils.filterDecks(state.originalDecks, action.filteredValue)
+      };
     default:
       return state;
   }

@@ -1,4 +1,10 @@
-export { getDecks, getStatistics, getProfile } from './Home';
+export {
+	getDecks,
+	getStatistics,
+	getProfile,
+	setDecksFilteredValue,
+	filterDecks
+} from './Home';
 
 export { createDeck, editDeck } from './Deck';
 
