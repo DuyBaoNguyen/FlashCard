@@ -41,6 +41,20 @@
   color: #ffffff;
 }
 
+.deck .wrapper .deck-background-color .status-badge {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  font-size: 11px;
+  font-weight: 500;
+  line-height: 16px;
+  color: white;
+  background-color: #82e782;
+  padding: 1px 8px;
+  border-radius: 7px;
+  border: 1px solid #fff;
+}
+
 .deck .wrapper .deck-background-color .deck-info {
   width: 100%;
   position: absolute;
@@ -70,6 +84,14 @@
   font-size: 14px;
   line-height: 32px;
   color: #ffffff;
+}
+
+.deck .wrapper .deck-background-color .deck-info .deck-info-value-container .deck-info-value p .completed-badge {
+  font-size: 12px;
+  margin-left: 30px;
+  border: 1px solid;
+  border-radius: 5px;
+  padding: 2px 8px;
 }
 
 .deck .wrapper .deck-background-white-1 {

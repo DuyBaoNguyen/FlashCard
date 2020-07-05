@@ -18,13 +18,6 @@ class Deck extends Component {
               <div className="deck-name">{this.props.deck.name}</div>
               <div className="deck-description">{this.props.deck.description}</div>
               <div className="deck-info">
-                {/* <div className="deck-info-value">
-                  <Icon
-                    icon={layerGroup}
-                    style={{ color: '#ffffff', fontSize: '24px' }}
-                  />
-                  <p>{this.props.deck.totalCards}</p>
-                </div> */}
                 {this.props.deck.lastTestedTime !== null && (
                   <div className="deck-info-value-container">
                     <div className="deck-info-value">
@@ -36,16 +29,27 @@ class Deck extends Component {
                 <div className="deck-info-value-container">
                   <div className="deck-info-value">
                     <Icon icon={cardIcon} style={{ color: '#ffffff', fontSize: '24px' }} />
-                    <p>{this.props.deck.totalCards}</p>
+                    <p>
+                      {this.props.deck.totalCards}
+                      {this.props.deck.completed && (
+                        <span className="completed-badge">
+                          {this.props.deck.completed && ("Completed")}
+                        </span>
+                      )}
+                    </p>
                   </div>
-                  <div className="deck-info-value">
-                    <Icon icon={succeededCardIcon} style={{ color: '#ffffff', fontSize: '24px' }} />
-                    <p>{this.props.deck.totalSucceededCards}</p>
-                  </div>
-                  <div className="deck-info-value">
-                    <Icon icon={failedCardIcon} style={{ color: '#ffffff', fontSize: '24px' }} />
-                    <p>{this.props.deck.totalFailedCards}</p>
-                  </div>
+                  {!this.props.deck.completed && (
+                    <>
+                      <div className="deck-info-value">
+                        <Icon icon={succeededCardIcon} style={{ color: '#ffffff', fontSize: '24px' }} />
+                        <p>{this.props.deck.totalSucceededCards}</p>
+                      </div>
+                      <div className="deck-info-value">
+                        <Icon icon={failedCardIcon} style={{ color: '#ffffff', fontSize: '24px' }} />
+                        <p>{this.props.deck.totalFailedCards}</p>
+                      </div>
+                    </>
+                  )}
                 </div>
               </div>
             </div>
