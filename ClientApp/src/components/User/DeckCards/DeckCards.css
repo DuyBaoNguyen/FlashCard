@@ -40,8 +40,6 @@
   font-size: 14px;
   margin-left: 5px;
   margin-right: 5px;
-  -webkit-transition: background-color .15s ease-out;
-  transition: background-color .15s ease-out;
   text-decoration: none;
   background: #fff;
   border-radius: 4px;

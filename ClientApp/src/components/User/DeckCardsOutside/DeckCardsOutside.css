@@ -35,24 +35,31 @@
   list-style-type: none;
 }
 
-.deck-cards-outside-wrapper .cards-pagination .pagination li {
+.deck-cards-outside-wrapper .cards-pagination .pagination .pagination-item {
   display: inline-block;
   font-size: 14px;
-  margin-left: 10px;
-  margin-right: 10px;
-  padding: 2px;
+  margin-left: 5px;
+  margin-right: 5px;
+  text-decoration: none;
+  background: #fff;
+  border-radius: 4px;
+  width: 24px;
+  height: 24px;
+  line-height: 24px;
+  text-align: center;
+  cursor: pointer;
 }
 
-.deck-cards-outside-wrapper .cards-pagination .pagination li a {
-  color: rgba(0, 0, 0, 0.65);
+.deck-cards-outside-wrapper .cards-pagination .pagination .pagination-item a {
+  color: #757575;
+}
+
+.deck-cards-outside-wrapper .cards-pagination .pagination .pagination-item:hover {
+  background-color: #f5f5f5;
 }
 
 .deck-cards-outside-wrapper .cards-pagination .pagination .pagination-item-active {
-  text-decoration: none;
-  background: #9eacf4;
-  border-radius: 4px;
-  width: 22.22px;
-  text-align: center;
+  background: #9eacf4 !important;
 }
 
 .deck-cards-outside-wrapper .cards-pagination .pagination .pagination-item-active a {
