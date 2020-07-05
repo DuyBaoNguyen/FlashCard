@@ -14,6 +14,9 @@ import AddCard from './containers/User/AddCard/AddCard';
 import Cards from './containers/User/Cards/Cards';
 import CreateCard from './containers/User/CreateCard/CreateCard';
 import EditCard from './containers/User/EditCard/EditCard';
+
+import UsersManagement from './containers/Admin/UsersManagement/UsersManagement';
+
 import AuthorizeRoute from './components/api-authorization/AuthorizeRoute';
 import ApiAuthorizationRoutes from './components/api-authorization/ApiAuthorizationRoutes';
 import { ApplicationPaths } from './components/api-authorization/ApiAuthorizationConstants';
@@ -40,9 +43,13 @@ class App extends Component {
 					<AuthorizeRoute exact path="/cards/create" component={CreateCard} />
 					<AuthorizeRoute exact path="/cards/:cardId/edit" component={EditCard} />
 
+					
+					{/* Admin management */}
+					<AuthorizeRoute exact path="/admin/users" component={UsersManagement} />
+
 					<Route path={ApplicationPaths.ApiAuthorizationPrefix} component={ApiAuthorizationRoutes} />
 
-					<Redirect to="/" />
+					{/* <Redirect to="/" /> */}
 				</Switch>
 			</Layout>
 		);
