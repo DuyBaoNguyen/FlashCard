@@ -55,15 +55,21 @@
 }
 
 .deck-info-wrapper .deck-info {
-  -webkit-transition: height .15s;
-  transition: height .15s;
+  -webkit-transition: height 0.15s;
+  transition: height 0.15s;
 }
 
 .deck-info-wrapper .deck-info .deck-description {
   color: #aaa;
   font-size: 14px;
-  padding-bottom: 16px;
+  font-style: italic;
+  margin-bottom: 16px;
   line-height: 1.4;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .deck-info-wrapper .deck-info .deck-field {

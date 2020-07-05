@@ -82,8 +82,8 @@ class DeckInfo extends Component {
             content: 'ReactCollapse--content content'
           }}>
           {deck?.description && (
-            <div className="deck-description">
-              <i>{deck.description}</i>
+            <div className="deck-description" title={deck.description}>
+              {deck.description}
             </div>
           )}
           <div className="deck-field">

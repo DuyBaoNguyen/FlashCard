@@ -31,14 +31,18 @@
 }
 
 .deck .wrapper .deck-background-color .deck-description {
-  height: 54px;
+  width: 100%;
   font-style: italic;
   font-weight: normal;
   font-size: 14px;
   line-height: 25px;
   margin-top: 18px;
-  margin-bottom: 15px;
   color: #ffffff;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .deck .wrapper .deck-background-color .status-badge {
@@ -63,7 +67,7 @@
 }
 
 .deck .wrapper .deck-background-color .deck-info .deck-info-value-container {
-  margin-top: 10px;
+  margin-top: 8px;
 }
 
 .deck .wrapper .deck-background-color .deck-info .deck-info-value-container .deck-info-value {
