@@ -2,9 +2,22 @@
   width: 100%;
   display: -ms-grid;
   display: grid;
-  -ms-grid-columns: 35% 75%;
-      grid-template-columns: 35% 75%;
+  -ms-grid-columns: auto auto;
+      grid-template-columns: auto auto;
   -webkit-column-gap: 20px;
           column-gap: 20px;
+}
+
+.users-wrapper .users-blank {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+.users-wrapper .users-blank p {
+  color: #979797;
 }
 /*# sourceMappingURL=UsersManagement.css.map */

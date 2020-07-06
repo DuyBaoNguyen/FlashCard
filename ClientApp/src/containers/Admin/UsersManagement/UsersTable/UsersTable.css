@@ -1,10 +1,60 @@
 .users-table-wrapper {
+  width: 400px;
   height: 85vh;
   background: #FFFFFF;
   -webkit-box-shadow: 0px 0px 30px rgba(0, 0, 0, 0.05);
           box-shadow: 0px 0px 30px rgba(0, 0, 0, 0.05);
   border-radius: 15px;
   padding: 30px;
+}
+
+.users-table-wrapper .users-table-pagination {
+  bottom: 100px;
+  width: 100%;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+.users-table-wrapper .users-table-pagination .pagination {
+  list-style-type: none;
+}
+
+.users-table-wrapper .users-table-pagination .pagination .pagination-item {
+  display: inline-block;
+  font-size: 14px;
+  margin-left: 5px;
+  margin-right: 5px;
+  text-decoration: none;
+  background: #fff;
+  border-radius: 4px;
+  width: 24px;
+  height: 24px;
+  line-height: 24px;
+  text-align: center;
+  cursor: pointer;
+}
+
+.users-table-wrapper .users-table-pagination .pagination .pagination-item a {
+  color: #757575;
+}
+
+.users-table-wrapper .users-table-pagination .pagination .pagination-item:hover {
+  background-color: #f5f5f5;
+}
+
+.users-table-wrapper .users-table-pagination .pagination .pagination-item-active {
+  background: #9eacf4 !important;
+}
+
+.users-table-wrapper .users-table-pagination .pagination .pagination-item-active a {
+  color: white;
 }
 
 .users-table-wrapper .users-table-title {
@@ -18,7 +68,7 @@
   -webkit-box-align: center;
       -ms-flex-align: center;
           align-items: center;
-  color: #9EACF4;
+  color: #9eacf4;
   margin-bottom: 20px;
 }
 
@@ -41,7 +91,7 @@
 
 .users-table-wrapper .users-table th {
   height: 40px;
-  background: #9EACF4;
+  background: #9eacf4;
   color: white;
   border-collapse: collapse;
   padding-left: 15px;
@@ -56,6 +106,14 @@
   font-size: 14px;
   line-height: 32px;
   color: #979797;
+  -webkit-transition: 0.3s;
+  transition: 0.3s;
+}
+
+.users-table-wrapper .users-table td:hover {
+  -webkit-transition: 0.3s;
+  transition: 0.3s;
+  color: #9eacf4;
 }
 
 .users-table-wrapper .users-table tr:nth-child(even) {

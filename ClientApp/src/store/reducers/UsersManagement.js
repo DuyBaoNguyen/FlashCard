@@ -20,6 +20,11 @@ export const usersManagementReducer = (state = initialState, action) => {
 				usersList: [],
 				getUsersError: 'Get users list failed!',
 			};
+		case actionTypes.SET_CURRENT_USER:
+			return {
+				...state,
+				currentUser: action.currentUser,
+			};
 		default:
 			return state;
 	}
