@@ -3,7 +3,7 @@ export {
 	getStatistics,
 	getProfile,
 	setDecksFilteredValue,
-	filterDecks
+	filterDecks,
 } from './Home';
 
 export { createDeck, editDeck } from './Deck';
@@ -35,7 +35,7 @@ export {
 	resetStateInCardsReducer,
 	deleteCard,
 	filterCards,
-	setCardsFilteredValue
+	setCardsFilteredValue,
 } from './Cards';
 
 export {
@@ -65,4 +65,4 @@ export {
 	clearUpdateBackError,
 } from './Card';
 
-export { getUsers } from './UsersManagement';
+export { getUsers, setCurrentUser } from './UsersManagement';

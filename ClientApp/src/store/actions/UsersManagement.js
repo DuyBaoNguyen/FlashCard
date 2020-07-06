@@ -15,11 +15,17 @@ const getUsersFail = () => {
 };
 
 export const getUsers = () => {
-  alert('Ye');
 	return (dispatch) => {
 		axios
 			.get(`/api/admin/users`)
 			.then((res) => dispatch(getUsersSuccess(res.data)))
 			.catch((err) => dispatch(getUsersFail()));
+	};
+};
+
+export const setCurrentUser = (currentUser) => {
+	return {
+		type: actionTypes.SET_CURRENT_USER,
+		currentUser: currentUser,
 	};
 };

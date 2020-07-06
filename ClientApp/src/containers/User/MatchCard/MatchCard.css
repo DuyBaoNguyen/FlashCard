@@ -37,7 +37,7 @@
 }
 
 .match-wrapper .match-result .match-result-header {
-  color: #9EACF4;
+  color: #9eacf4;
   width: 100%;
   line-height: 30px;
   font-size: 24px;
@@ -47,7 +47,7 @@
 .match-wrapper .match-result button {
   width: 100%;
   height: 53px;
-  background: #9EACF4;
+  background: #9eacf4;
   border: none;
   border-radius: 15px;
   color: white;

@@ -94,3 +94,4 @@ export const SET_CARDS_FILTERED_VALUE = 'SET_CARDS_FILTERED_VALUE';
 // Admin users management
 export const GET_USERS_SUCCESS = 'GET_USERS_SUCCESS';
 export const GET_USERS_FAIL = 'GET_USERS_FAIL';
+export const SET_CURRENT_USER = 'SET_CURRENT_USER';

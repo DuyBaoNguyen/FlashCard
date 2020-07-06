@@ -94,7 +94,7 @@ class LearnVocab extends Component {
 				images of the card.
 				<br />
 				<br />
-				Press <b style={{ color: '#9EACF4' }}>Next</b> button below to go to the
+				Press <b style={{ color: '#9eacf4' }}>Next</b> button below to go to the
 				next card. 👌🏻
 			</div>
 		);
@@ -112,7 +112,7 @@ class LearnVocab extends Component {
 		let back = this.props.currentVocab?.backs.map((back, index) => {
 			return (
 				<div key={back.id} className="back-card">
-					<b style={{ color: '#9EACF4' }}>{back.meaning}</b>
+					<b style={{ color: '#9eacf4' }}>{back.meaning}</b>
 					<p style={{ fontStyle: 'italic' }}>{back.type}</p>
 					<p>{back.example}</p>
 				</div>

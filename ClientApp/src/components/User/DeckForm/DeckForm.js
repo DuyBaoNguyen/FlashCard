@@ -15,7 +15,7 @@ class DeckForm extends Component {
 			description: null,
 			theme: '#95dded'
 		};
-		this.themes = ['#95dded', '#9fcbf5', '#ffb1b1', '#fdd39d', '#b7eb8f', '#ebaaea'];
+		this.themes = ['#95dded', '#9eacf4', '#ffb1b1', '#fdd39d', '#b7eb8f', '#ebaaea'];
 	}
 
 	static getDerivedStateFromProps(props, state) {

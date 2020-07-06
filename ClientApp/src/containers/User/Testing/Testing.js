@@ -198,10 +198,10 @@ class Testing extends Component {
 		let startButton = (
 			<div className="testing-instruction">
 				<p>
-					Press <b style={{ color: '#9EACF4' }}>Start</b> button below to start
+					Press <b style={{ color: '#9eacf4' }}>Start</b> button below to start
 					the lesson.
 					<br />
-					Once you start, please <b style={{ color: '#9EACF4' }}>
+					Once you start, please <b style={{ color: '#9eacf4' }}>
 						don't quit{' '}
 					</b>{' '}
 					because the result will only be submitted when you finish the lesson.

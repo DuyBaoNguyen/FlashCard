@@ -3,6 +3,8 @@ import { connect } from 'react-redux';
 import withErrorHandler from '../../../hoc/withErrorHandler';
 import * as actions from '../../../store/actions/index';
 import UsersTable from './UsersTable/UsersTable';
+import UserInfo from './UserInfo/UserInfo';
+
 import './UsersManagement.css';
 
 class UsersManagement extends Component {
@@ -13,14 +15,21 @@ class UsersManagement extends Component {
 			hasError: false,
 		};
 	}
-	componentWillUnmount() {
-		this.onGetUsers();
+	componentWillMount() {
+		this.props.onGetUsers();
 	}
 
 	render() {
 		return (
 			<div className="users-wrapper">
-				<UsersTable users={this.props.userList} />
+				<UsersTable />
+				{this.props.currentUser !== null ? (
+					<UserInfo />
+				) : (
+					<div className="users-blank">
+						<p>Select user to view information</p>
+					</div>
+				)}
 			</div>
 		);
 	}
@@ -29,6 +38,7 @@ class UsersManagement extends Component {
 const mapStateToProps = (state) => {
 	return {
 		usersList: state.usersmanagement.usersList,
+		currentUser: state.usersmanagement.currentUser,
 	};
 };
 

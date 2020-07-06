@@ -1,6 +1,14 @@
 .users-wrapper {
   width: 100%;
   display: grid;
-  grid-template-columns: 35% 75%;
+  grid-template-columns: auto auto;
   column-gap: 20px;
+  .users-blank {
+    display: flex;
+    // justify-content: center;
+    align-items: center;
+    p {
+      color: #979797;
+    }
+  }
 }
