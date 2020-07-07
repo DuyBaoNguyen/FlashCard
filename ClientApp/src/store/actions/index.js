@@ -65,4 +65,9 @@ export {
 	clearUpdateBackError,
 } from './Card';
 
-export { getUsers, setCurrentUser } from './UsersManagement';
+export {
+	getUsers,
+	setCurrentUser,
+	getCurrentUser,
+	deleteCurrentUser,
+} from './UsersManagement';

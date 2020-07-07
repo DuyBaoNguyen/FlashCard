@@ -1,6 +1,68 @@
 .profile-wrapper {
   position: relative;
   height: auto;
+  display: -ms-grid;
+  display: grid;
+  -ms-grid-columns: 450px auto;
+      grid-template-columns: 450px auto;
+  -webkit-column-gap: 20px;
+          column-gap: 20px;
+}
+
+.profile-wrapper .profile-info-panel {
+  background: #FFFFFF;
+  -webkit-box-shadow: 0px 0px 30px rgba(0, 0, 0, 0.05);
+          box-shadow: 0px 0px 30px rgba(0, 0, 0, 0.05);
+  border-radius: 15px;
+  padding: 30px;
+  display: -ms-grid;
+  display: grid;
+  row-gap: 20px;
+}
+
+.profile-wrapper .profile-info-panel .profile-button {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: end;
+      -ms-flex-pack: end;
+          justify-content: flex-end;
+}
+
+.profile-wrapper .profile-info-panel .profile-button .profile-button-delete {
+  width: 150px;
+  background-color: #FE656D;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+}
+
+.profile-wrapper .profile-info-panel .profile-info {
+  display: -ms-grid;
+  display: grid;
+  -ms-grid-columns: auto auto;
+      grid-template-columns: auto auto;
+}
+
+.profile-wrapper .profile-info-panel .profile-info .profile-info-title {
+  font-style: normal;
+  font-weight: normal;
+  font-size: 14px;
+  color: #979797;
+}
+
+.profile-wrapper .profile-info-panel .profile-info .profile-info-content {
+  font-style: normal;
+  font-weight: bold;
+  font-size: 14px;
+  text-align: right;
+  color: #9EACF4;
+}
+
+.profile-wrapper .profile-avatar {
   background: #FFFFFF;
   -webkit-box-shadow: 0px 0px 30px rgba(0, 0, 0, 0.05);
           box-shadow: 0px 0px 30px rgba(0, 0, 0, 0.05);

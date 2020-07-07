@@ -3,6 +3,7 @@ import * as actionTypes from '../actions/actionTypes';
 const initialState = {
 	usersList: [],
 	currentUser: null,
+	currentUserData: null,
 	getUsersError: null,
 };
 
@@ -25,6 +26,23 @@ export const usersManagementReducer = (state = initialState, action) => {
 				...state,
 				currentUser: action.currentUser,
 			};
+		case actionTypes.GET_CURRENT_USER_SUCCESS:
+			return {
+				...state,
+				currentUserData: action.currentUserData,
+				getUsersError: null,
+			};
+		case actionTypes.GET_CURRENT_USER_FAIL:
+			return {
+				...state,
+				currentUserData: null,
+				getUsersError: 'Get current user failed!',
+			};
+			case actionTypes.DELETE_CURRENT_USER:
+				return {
+					...state,
+					currentUserData: null,
+				};
 		default:
 			return state;
 	}

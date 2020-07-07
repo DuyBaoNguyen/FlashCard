@@ -29,3 +29,34 @@ export const setCurrentUser = (currentUser) => {
 		currentUser: currentUser,
 	};
 };
+
+const getCurrentUserSuccess = (currentUserData) => {
+	return {
+		type: actionTypes.GET_CURRENT_USER_SUCCESS,
+		currentUserData: currentUserData,
+	};
+};
+
+const getCurrentUserFail = () => {
+	return {
+		type: actionTypes.GET_CURRENT_USER_FAIL,
+	};
+};
+
+export const getCurrentUser = (currentUser) => {
+	return (dispatch) => {
+		axios
+			.get(`/api/admin/users/${currentUser}`)
+			.then((res) => dispatch(getCurrentUserSuccess(res.data)))
+			.catch((err) => dispatch(getCurrentUserFail()));
+	};
+};
+
+export const deleteCurrentUser = (currentUser) => {
+	return (dispatch) => {
+		axios
+			.delete(`/api/admin/users/${currentUser}`)
+			.then((res) => dispatch(getCurrentUserSuccess(res.data)))
+			.catch((err) => dispatch(getCurrentUserFail()));
+	};
+};
