@@ -70,4 +70,5 @@ export {
 	setCurrentUser,
 	getCurrentUser,
 	deleteCurrentUser,
+	getCurrentUserDecks,
 } from './UsersManagement';

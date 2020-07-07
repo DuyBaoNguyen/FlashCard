@@ -4,6 +4,8 @@ import withErrorHandler from '../../../../hoc/withErrorHandler';
 import * as actions from '../../../../store/actions/index';
 
 import Profile from './Profile/Profile';
+import Decks from './Decks/Decks';
+
 import './UserInfo.css';
 
 class UserInfo extends Component {
@@ -14,10 +16,24 @@ class UserInfo extends Component {
 		};
 	}
 
+	componentWillMount() {
+		this.props.onGetCurrentUser(this.props.currentUser);
+		this.props.onGetCurrentUserDecks(this.props.currentUser);
+	}
+
 	onChangePage = (param) => {
 		this.setState({
 			activePage: param,
 		});
+	};
+
+	userTabs = () => {
+		if (this.state.activePage === 1) {
+			return <Profile />;
+		}
+		if (this.state.activePage === 2) {
+			return <Decks />;
+		}
 	};
 
 	handlePageChange(pageNumber) {
@@ -25,6 +41,7 @@ class UserInfo extends Component {
 	}
 
 	render() {
+		let activePage = this.userTabs();
 		return (
 			<div className="user-info-wrapper">
 				<ul className="user-info-menu">
@@ -54,7 +71,8 @@ class UserInfo extends Component {
 					</li>
 				</ul>
 				<div className="user-panel">
-					<Profile />
+					{activePage}
+					{/* <Profile/> */}
 				</div>
 			</div>
 		);
@@ -64,12 +82,19 @@ class UserInfo extends Component {
 const mapStateToProps = (state) => {
 	return {
 		usersList: state.usersmanagement.usersList,
+		currentUser: state.usersmanagement.currentUser,
+		currentUserData: state.usersmanagement.currentUserData,
+		currentUserDecks: state.usersmanagement.currentUserDecks,
+
 	};
 };
 
 const mapDispatchToProps = (dispatch) => {
 	return {
-		onGetUsers: () => dispatch(actions.getUsers()),
+		onGetCurrentUser: (currentUser) =>
+			dispatch(actions.getCurrentUser(currentUser)),
+		onGetCurrentUserDecks: (currentUser) =>
+			dispatch(actions.getCurrentUserDecks(currentUser)),
 	};
 };
 

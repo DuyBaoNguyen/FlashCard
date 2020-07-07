@@ -60,3 +60,25 @@ export const deleteCurrentUser = (currentUser) => {
 			.catch((err) => dispatch(getCurrentUserFail()));
 	};
 };
+
+const getCurrentUserDecksSuccess = (currentUserDecks) => {
+	return {
+		type: actionTypes.GET_CURRENT_USER_DECKS_SUCCESS,
+		currentUserDecks: currentUserDecks,
+	};
+};
+
+const getCurrentUserDecksFail = () => {
+	return {
+		type: actionTypes.GET_CURRENT_USER_DECKS_FAIL,
+	};
+};
+
+export const getCurrentUserDecks = (currentUser) => {
+	return (dispatch) => {
+		axios
+			.get(`/api/admin/users/${currentUser}/decks`)
+			.then((res) => dispatch(getCurrentUserDecksSuccess(res.data)))
+			.catch((err) => dispatch(getCurrentUserDecksFail()));
+	};
+};

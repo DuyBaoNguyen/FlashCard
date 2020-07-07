@@ -13,11 +13,15 @@ class Profile extends Component {
 		};
 	}
 
+	// componentDidMount() {
+	// 	this.props.onGetCurrentUser(this.props.currentUser);
+	// }
+
 	onClickDeleteUser = (param) => {
 		this.props.onDeleteCurrentUser(param);
-	}
+	};
+	
 	render() {
-		this.props.onGetCurrentUser(this.props.currentUser);
 		return (
 			<div className="profile-wrapper">
 				<div className="profile-info-panel">
@@ -41,7 +45,12 @@ class Profile extends Component {
 					</div>
 
 					<div className="profile-button">
-						<Button className="profile-button-delete" onClick={() => this.onClickDeleteUser(this.props.currentUser)}>Delete this user</Button>
+						<Button
+							className="profile-button-delete"
+							onClick={() => this.onClickDeleteUser(this.props.currentUser)}
+						>
+							Delete this user
+						</Button>
 					</div>
 				</div>
 				<div className="profile-avatar">Avatar here</div>
@@ -59,8 +68,6 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
 	return {
-		onGetCurrentUser: (currentUser) =>
-			dispatch(actions.getCurrentUser(currentUser)),
 		onDeleteCurrentUser: (currentUser) =>
 			dispatch(actions.deleteCurrentUser(currentUser)),
 	};

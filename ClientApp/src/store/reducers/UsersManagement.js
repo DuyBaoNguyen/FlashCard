@@ -4,6 +4,7 @@ const initialState = {
 	usersList: [],
 	currentUser: null,
 	currentUserData: null,
+	currentUserDecks: [],
 	getUsersError: null,
 };
 
@@ -38,11 +39,23 @@ export const usersManagementReducer = (state = initialState, action) => {
 				currentUserData: null,
 				getUsersError: 'Get current user failed!',
 			};
-			case actionTypes.DELETE_CURRENT_USER:
-				return {
-					...state,
-					currentUserData: null,
-				};
+		case actionTypes.DELETE_CURRENT_USER:
+			return {
+				...state,
+				currentUserData: null,
+			};
+		case actionTypes.GET_CURRENT_USER_DECKS_SUCCESS:
+			return {
+				...state,
+				currentUserDecks: action.currentUserDecks,
+				getUsersError: null,
+			};
+		case actionTypes.GET_CURRENT_USER_DECKS_FAIL:
+			return {
+				...state,
+				currentUserDecks: null,
+				getUsersError: 'Get current user decks failed!',
+			};
 		default:
 			return state;
 	}
