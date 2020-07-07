@@ -39,7 +39,9 @@ class Navigation extends Component {
 
   render() {
     let navigation;
+
     if (this.state.isAuthenticated) {
+      const { profile } = this.props;
       const name = this.props.profile?.displayName || 'User';
       const logoutPath = {
         pathname: ApplicationPaths.LogOut,
@@ -50,7 +52,14 @@ class Navigation extends Component {
         <ul className="navigation-items">
           <NavigationItem to="/" exact label="Home" />
           <NavigationItem to="/cards" label="My cards" />
-          <NavigationItem to="/market" label="Market" />
+          {profile?.role === 'user' && (
+            <NavigationItem to="/market" label="Market" />
+          )}
+          {profile?.role === 'administrator' && (
+            <>
+              <NavigationItem to="/admin/users" label="Users" />
+            </>
+          )}
           <DropDown
             label={`Hi, ${name}!`}
             right
