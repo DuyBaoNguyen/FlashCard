@@ -11,6 +11,7 @@ const navigationItem = props => {
         exact={props.exact}
         activeClassName="active">
         {props.label}
+        <span className="navigation-label">{props.label}</span>
       </NavLink>
     </li>
   );
