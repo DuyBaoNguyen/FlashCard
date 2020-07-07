@@ -73,22 +73,23 @@ namespace FlashCard.Repositories
 				.Where(c => c.OwnerId == userId && fronts.Contains(c.Front.ToLower()));
 		}
 
-		public IQueryable<Card> QueryByDeckId(int deckId, string front)
+		public IQueryable<Card> QueryByDeckId(int deckId, string front, bool? remembered)
 		{
 			var queryCardIds = dbContext.CardAssignments
 				.Where(ca => ca.DeckId == deckId)
 				.Select(ca => ca.CardId);
+			var queryCards = dbContext.Cards.Where(c => queryCardIds.Contains(c.Id));
 
-			if (front == null || front.Length == 0)
+			if (front != null && front.Length > 0)
 			{
-				return dbContext.Cards
-					.Where(c => queryCardIds.Contains(c.Id))
-					.OrderBy(c => c.Front);
+				queryCards = queryCards.Where(c => c.Front.ToLower().Contains(front.ToLower()));
+			}
+			if (remembered != null)
+			{
+				queryCards = queryCards.Where(c => c.Remembered == remembered.Value);
 			}
 
-			return dbContext.Cards
-					.Where(c => queryCardIds.Contains(c.Id) && c.Front.ToLower().Contains(front.ToLower()))
-					.OrderBy(c => c.Front);
+			return queryCards.OrderBy(c => c.Front);
 		}
 
 		public IQueryable<Card> QueryByDeckIdIncludesBacks(int deckId)

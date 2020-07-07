@@ -363,7 +363,8 @@ namespace FlashCard.Controllers
 		[HttpGet("{id}/test/cards")]
 		[ProducesResponseType(200)]
 		[ProducesResponseType(404)]
-		public async Task<ActionResult<IEnumerable<CardDto>>> GetTestedCardsRandom(int id, int amount = -1)
+		public async Task<ActionResult<IEnumerable<CardDto>>> GetTestedCardsRandom(int id, int amount = -1,
+			bool? remembered = null)
 		{
 			var userId = UserUtil.GetUserId(User);
 			var deck = await repository.Deck
@@ -377,7 +378,7 @@ namespace FlashCard.Controllers
 			}
 
 			var cards = await repository.Card
-				.QueryByDeckId(id)
+				.QueryByDeckId(id, null, remembered)
 				.AsNoTracking()
 				.MapToCardDto(imageService.BackImageBaseUrl)
 				.ToListAsync();
