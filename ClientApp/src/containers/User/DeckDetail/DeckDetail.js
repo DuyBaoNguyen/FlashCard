@@ -32,8 +32,14 @@ class DeckDetail extends Component {
   }
 
   render() {
-    const { deck, statistics, selectedCard } = this.props;
+    const {
+      deck,
+      percentPracticedCardsStatistics,
+      amountRememberedCardsStatistics,
+      selectedCard
+    } = this.props;
     let leftSection;
+    
     if (selectedCard) {
       leftSection = (
         <>
@@ -45,7 +51,9 @@ class DeckDetail extends Component {
       leftSection = (
         <>
           <DeckInfo deck={deck} />
-          <Statistics data={statistics} />
+          <Statistics
+            percentPracticedCardsChartData={percentPracticedCardsStatistics}
+            amountRememberedCardsChartData={amountRememberedCardsStatistics} />
         </>
       );
     }
@@ -74,7 +82,8 @@ class DeckDetail extends Component {
 const mapStateToProps = state => {
   return {
     deck: state.deckDetail.deck,
-    statistics: state.deckDetail.statistics,
+    percentPracticedCardsStatistics: state.deckDetail.percentPracticedCardsStatistics,
+    amountRememberedCardsStatistics: state.deckDetail.amountRememberedCardsStatistics,
     selectedCard: state.deckDetail.selectedCard
   };
 };

@@ -2,7 +2,7 @@ import React from 'react';
 import { ResponsiveBar } from '@nivo/bar'
 import { AutoSizer } from 'react-virtualized';
 
-import './Chart.css';
+import './PercentPracticedCardsChart.css';
 
 const tempData = [
   { day: "Mon", gradePointAverage: 0 },
@@ -17,7 +17,7 @@ const tempData = [
 const isToday = ({ indexValue }) => indexValue === new Date().toString().substr(0, 3);
 const getColor = bar => isToday(bar) ? '#ffb922' : '#eee';
 
-const chart = props => {
+const percentPracticedCardsChart = props => {
   const data = props.data || tempData;
   for (let item of data) {
     item.gradePointAverage = item.gradePointAverage || 1;
@@ -75,4 +75,4 @@ const chart = props => {
   )
 };
 
-export default chart;
+export default percentPracticedCardsChart;

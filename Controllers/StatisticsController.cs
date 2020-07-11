@@ -37,9 +37,28 @@ namespace FlashCard.Controllers
 				.AsNoTracking()
 				.ToListAsync();
 			var groups = tests.GroupBy(t => t.DateTime.Date).ToDictionary(g => g.Key);
+
+			var queryRememberedCards = repository.Card
+				.QueryByFirstRememberedDate(userId, dates)
+				.AsNoTracking()
+				.Select(c => new { FirstRememberedDate = c.FirstRememberedDate.Value.Date, Front = c.Front })
+				.Union( 
+					repository.SharedCard
+						.QueryByFirstRememberedDate(userId, dates)
+						.AsNoTracking()
+						.Select(sc => new { FirstRememberedDate = sc.FirstRememberedDate.Value.Date, Front = sc.Card.Front })
+				);
+
+			var rememberedCards = await queryRememberedCards.Distinct().ToListAsync();
+			var rememberedCardsGroups = rememberedCards
+				.GroupBy(c => c.FirstRememberedDate)
+				.ToDictionary(g => g.Key);
+
 			var statistics = dates.Select(d =>
 			{
 				var tests = groups.ContainsKey(d) ? groups[d] : null;
+				var rememberedCards = rememberedCardsGroups.ContainsKey(d) ? rememberedCardsGroups[d] : null;
+
 				return new
 				{
 					DateTime = d,
@@ -49,7 +68,8 @@ namespace FlashCard.Controllers
 						? tests.Sum(t => t.TestedCards.Where(tc => tc.Failed).Count()) : 0,
 					GradePointAverage = tests == null || tests.Count() == 0
 						? 0 : Math.Round(tests.Average(t => t.Score) * 100, 0),
-					Tests = tests != null ? tests.Take(amountTests).MapToTestDto() : null
+					Tests = tests != null ? tests.Take(amountTests).MapToTestDto() : null,
+					RememberedCards = rememberedCards != null ? rememberedCards.Select(t => t.Front) : null
 				};
 			});
 

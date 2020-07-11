@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using FlashCard.Contracts;
 using FlashCard.Data;
@@ -142,6 +143,24 @@ namespace FlashCard.Repositories
 			return dbContext.Cards
 				.Include(c => c.Backs)
 				.Where(c => c.Approved);
+		}
+
+		public IQueryable<Card> QueryByFirstRememberedDate(string userId, int deckId, DateTime[] dates)
+		{
+			var queryCardIds = dbContext.CardAssignments
+				.Where(c => c.DeckId == deckId)
+				.Select(c => c.CardId);
+
+			return dbContext.Cards
+				.Where(c => c.OwnerId == userId && c.FirstRememberedDate != null &&
+					queryCardIds.Contains(c.Id) && dates.Contains(c.FirstRememberedDate.Value.Date));
+		}
+
+		public IQueryable<Card> QueryByFirstRememberedDate(string userId, DateTime[] dates)
+		{
+			return dbContext.Cards
+				.Where(c => c.OwnerId == userId && c.FirstRememberedDate != null &&
+					dates.Contains(c.FirstRememberedDate.Value.Date));
 		}
 	}
 }

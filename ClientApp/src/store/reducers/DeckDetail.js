@@ -4,6 +4,8 @@ import * as utils from '../../util/util';
 const initialState = {
   deck: null,
   statistics: null,
+  percentPracticedCardsStatistics: null,
+  amountRememberedCardsStatistics: null,
   cards: [],
   originalCards: [],
   remainingCards: [],
@@ -54,7 +56,9 @@ export const deckDetailReducer = (state = initialState, action) => {
     case actionTypes.GET_DECK_STATISTICS_SUCCESS:
       return {
         ...state,
-        statistics: utils.transformStatistics(action.statistics),
+        statistics: action.statistics,
+        percentPracticedCardsStatistics: utils.transformPercentPracticedCardsStatistics(action.statistics),
+        amountRememberedCardsStatistics: utils.transformAmountRememberedCardsStatistics(action.statistics),
         errors: {
           ...state.errors,
           getStatisticsError: false
@@ -64,6 +68,8 @@ export const deckDetailReducer = (state = initialState, action) => {
       return {
         ...state,
         statistics: null,
+        percentPracticedCardsStatistics: null,
+        amountRememberedCardsStatistics: null,
         errors: {
           ...state.errors,
           getStatisticsError: true
