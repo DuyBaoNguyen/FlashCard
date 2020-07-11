@@ -85,7 +85,7 @@
           transform: translate(calc(-50% + 5px));
 }
 
-.statistics-wrapper:hover .charts-container .control-btn {
+.statistics-wrapper .charts-container:hover .control-btn {
   opacity: 1;
 }
 /*# sourceMappingURL=Statistics.css.map */

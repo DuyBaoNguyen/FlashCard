@@ -7,6 +7,7 @@ import Statistics from '../../../components/User/Statistics/Statistics';
 import DeckInfo from '../../../components/User/DeckInfo/DeckInfo';
 import DeckCards from '../../../components/User/DeckCards/DeckCards';
 import CardInfo from '../../../components/User/CardInfo/CardInfo';
+import PracticeOptions from '../../../components/User/PracticeOptions/PracticeOptions';
 import withErrorHandler from '../../../hoc/withErrorHandler';
 import * as actions from '../../../store/actions/index';
 import './DeckDetail.css';
@@ -31,32 +32,18 @@ class DeckDetail extends Component {
     this.props.onUnselectCard();
   }
 
+  handleClosePracticeOptions = () => {
+    this.props.onSetPracticeOptionsOpen(false);
+  }
+
   render() {
     const {
       deck,
       percentPracticedCardsStatistics,
       amountRememberedCardsStatistics,
-      selectedCard
+      selectedCard,
+      practiceOptionsOpen
     } = this.props;
-    let leftSection;
-    
-    if (selectedCard) {
-      leftSection = (
-        <>
-          <DeckInfo deck={deck} showLess />
-          <CardInfo card={selectedCard} closed={this.handleCloseCard} />
-        </>
-      );
-    } else {
-      leftSection = (
-        <>
-          <DeckInfo deck={deck} />
-          <Statistics
-            percentPracticedCardsChartData={percentPracticedCardsStatistics}
-            amountRememberedCardsChartData={amountRememberedCardsStatistics} />
-        </>
-      );
-    }
 
     return (
       <div className="deck-detail">
@@ -69,11 +56,21 @@ class DeckDetail extends Component {
               <span className="back-feature-label"> Back</span>
             </Link>
           </div>
-          {leftSection}
+          <DeckInfo deck={deck} showLess={!!selectedCard} />
+          {selectedCard && (
+            <CardInfo card={selectedCard} closed={this.handleCloseCard} />
+          )}
+          <Statistics
+            className={selectedCard ? "statistics-hidden" : null}
+            percentPracticedCardsChartData={percentPracticedCardsStatistics}
+            amountRememberedCardsChartData={amountRememberedCardsStatistics} />
         </section>
         <section className="right-section">
           <DeckCards />
         </section>
+        <PracticeOptions
+          isOpen={practiceOptionsOpen}
+          onClose={this.handleClosePracticeOptions} />
       </div>
     );
   }
@@ -84,7 +81,8 @@ const mapStateToProps = state => {
     deck: state.deckDetail.deck,
     percentPracticedCardsStatistics: state.deckDetail.percentPracticedCardsStatistics,
     amountRememberedCardsStatistics: state.deckDetail.amountRememberedCardsStatistics,
-    selectedCard: state.deckDetail.selectedCard
+    selectedCard: state.deckDetail.selectedCard,
+    practiceOptionsOpen: state.deckDetail.practiceOptionsOpen
   };
 };
 
@@ -93,7 +91,8 @@ const mapDispatchToProps = dispatch => {
     onGetDeck: (id) => dispatch(actions.getDeck(id)),
     onGetDeckStatistics: (id) => dispatch(actions.getDeckStatistics(id)),
     onUnselectCard: () => dispatch(actions.unselectCardInDeckDetails()),
-    onResetStateInDeckDetailReducer: () => dispatch(actions.resetStateInDeckDetailReducer())
+    onResetStateInDeckDetailReducer: () => dispatch(actions.resetStateInDeckDetailReducer()),
+    onSetPracticeOptionsOpen: (value) => dispatch(actions.setPracticeOptionsOpen(value))
   };
 };
 

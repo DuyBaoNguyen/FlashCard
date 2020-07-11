@@ -1,0 +1,45 @@
+.option-button {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  width: 100%;
+  height: 50px;
+  background-color: #9eacf4;
+  border: none;
+  border-radius: 15px;
+  font-size: 16px;
+  text-align: center;
+  color: white;
+  -webkit-transition: 0.3s;
+  transition: 0.3s;
+  cursor: pointer;
+}
+
+.option-button .icon {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  font-size: 16px;
+  color: white;
+  margin-right: 10px;
+}
+
+.option-button:hover {
+  -webkit-transition: 0.3s;
+  transition: 0.3s;
+  background-color: #b0bdff;
+}
+
+.button-only-icon .icon {
+  margin-right: 0;
+}
+/*# sourceMappingURL=OptionButton.css.map */

@@ -1,7 +1,7 @@
 import axios from '../../axios';
 import * as actionTypes from '../actions/actionTypes';
 
-const getCardsInDeckSuccess = (cardList) => {
+export const getCardsInDeckSuccess = (cardList) => {
 	return {
 		type: actionTypes.GET_CARDS_IN_DECK_SUCCESS,
 		cardList: cardList,
@@ -14,10 +14,10 @@ const getCardsInDeckFail = () => {
 	};
 };
 
-export const getCardsInDeck = (id) => {
+export const getCardsInDeck = (id, remembered) => {
 	return (dispatch) => {
 		axios
-			.get(`/api/decks/${id}/cards`)
+			.get(`/api/decks/${id}/test/cards?remembered=${remembered}`)
 			.then((res) => dispatch(getCardsInDeckSuccess(res.data)))
 			.catch((err) => dispatch(getCardsInDeckFail()));
 	};
@@ -57,7 +57,6 @@ export const sendTestResult = (
 	succeededCardIds,
 	failedCardIds
 ) => {
-	console.log(`id: ${id}`);
 	return (dispatch) => {
 		axios
 			.post(`/api/decks/${id}/test`, {

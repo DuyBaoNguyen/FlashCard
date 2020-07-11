@@ -113,7 +113,7 @@
   gap: 20px;
 }
 
-.deck-info-wrapper .deck-features a {
+.deck-info-wrapper .deck-features a, .deck-info-wrapper .deck-features button {
   display: block;
   text-align: center;
   font-weight: 600;

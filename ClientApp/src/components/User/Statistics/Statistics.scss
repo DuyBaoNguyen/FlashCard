@@ -50,8 +50,8 @@
     &.right {
       transform: translate(calc(-50% + 5px));
     }
-  }
-  &:hover .charts-container .control-btn {
-    opacity: 1;
+    &:hover .control-btn {
+      opacity: 1;
+    }
   }
 }

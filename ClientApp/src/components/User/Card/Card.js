@@ -27,9 +27,11 @@ class Card extends Component {
     if (this.props.onClick) {
       this.props.onClick(this.props.card.id);
     }
-    this.setState(state => {
-      return { isFlipped: !state.isFlipped };
-    });
+    if (!this.props.notFliped) {
+      this.setState(state => {
+        return { isFlipped: !state.isFlipped };
+      });
+    }
   }
 
   handleSpeak = (event) => {
@@ -97,14 +99,28 @@ class Card extends Component {
   }
 
   render() {
-    const { card, options, selectionIcon, displayStatus } = this.props;
+    const {
+      card,
+      options,
+      selectionIcon,
+      displayStatus,
+      notFliped,
+      notSpeaker,
+      selected
+    } = this.props;
     const { isFlipped, speakerColor } = this.state;
+
+    const cardFrontClasses = ['card-front'];
+    if (selected) {
+      cardFrontClasses.push('card-front-selected')
+    }
+
     return (
       <div className="card-wrapper">
         <ReactCardFlip
-          isFlipped={isFlipped}
+          isFlipped={isFlipped && !notFliped}
           flipDirection="horizontal">
-          <div className="card-front" onClick={this.handleClickCard}>
+          <div className={cardFrontClasses.join(' ')} onClick={this.handleClickCard}>
             {displayStatus && card.remembered && (
               <span className="status-badge">Remembered</span>
             )}
@@ -118,9 +134,11 @@ class Card extends Component {
             </div>
             <div className="front">
               {card.front}
-              <div className="utterance" onClick={this.handleSpeak}>
-                <Icon icon={volumeIcon} color={speakerColor} style={{ fontSize: 20 }} />
-              </div>
+              {!notSpeaker && (
+                <div className="utterance" onClick={this.handleSpeak}>
+                  <Icon icon={volumeIcon} color={speakerColor} style={{ fontSize: 20 }} />
+                </div>
+              )}
             </div>
           </div>
           <div className="card-back" onClick={this.handleClickCard}>

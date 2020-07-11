@@ -21,6 +21,7 @@ const initialState = {
     getCardsInsideLoading: true,
     getCardsOutsideLoading: true,
   },
+  practiceOptionsOpen: false,
   errors: {
     getDeckError: false,
     getStatisticsError: false,
@@ -258,6 +259,11 @@ export const deckDetailReducer = (state = initialState, action) => {
       return {
         ...state,
         cardsOutsideSearchString: action.value
+      };
+    case actionTypes.SET_PRACTICE_OPTIONS_OPEN:
+      return {
+        ...state,
+        practiceOptionsOpen: action.value
       };
     case actionTypes.RESET_STATE_IN_DECK_DETAIL_REDUCER:
       return initialState;

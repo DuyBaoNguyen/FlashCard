@@ -46,6 +46,10 @@
   margin-top: 20px;
 }
 
+.deck-detail .left-section .statistics-hidden {
+  display: none;
+}
+
 .deck-detail .right-section {
   width: 66.67%;
 }
