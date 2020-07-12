@@ -5,3 +5,4 @@ export { matchCardReducer } from './MatchCard';
 export { cardsReducer } from './Cards';
 export { cardReducer } from './Card';
 export { usersManagementReducer } from './UsersManagement';
+export { userDeckDetailReducer } from './UserDeckDetail';

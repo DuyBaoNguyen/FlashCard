@@ -75,3 +75,13 @@ export {
 	getCurrentUserDecks,
 	getCurrentUserCards
 } from './UsersManagement';
+
+export {
+	getUserDeck,
+	getUserDeckCards,
+	selectUserDeckCard,
+	unselectUserDeckCard,
+	resetStateInUserDeckDetailReducer,
+	deleteUserCard,
+	deleteUserDeck
+} from './UserDeckDetail';

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 
-import Profile from './Profile/Profile';
-import Decks from './Decks/Decks';
+import Profile from '../../../../components/Admin/Profile/Profile';
+import UserDecks from '../../../../components/Admin/UserDecks/UserDecks';
 
 import './UserInfo.css';
 
@@ -24,7 +24,7 @@ class UserInfo extends Component {
 			return <Profile />;
 		}
 		if (this.state.activePage === 2) {
-			return <Decks />;
+			return <UserDecks />;
 		}
 	};
 

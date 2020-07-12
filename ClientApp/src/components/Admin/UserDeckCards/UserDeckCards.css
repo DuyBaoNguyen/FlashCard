@@ -1,0 +1,95 @@
+.user-deck-cards-wrapper {
+  background: #ffffff;
+  -webkit-box-shadow: 0px 0px 30px rgba(0, 0, 0, 0.05);
+          box-shadow: 0px 0px 30px rgba(0, 0, 0, 0.05);
+  border-radius: 15px;
+  padding: 30px;
+  width: 100%;
+  height: 655px;
+}
+
+.user-deck-cards-wrapper .cards {
+  min-height: 428px;
+  display: -ms-grid;
+  display: grid;
+  -ms-grid-columns: (1fr)[4];
+      grid-template-columns: repeat(4, 1fr);
+  -ms-grid-rows: (1fr)[3];
+      grid-template-rows: repeat(3, 1fr);
+  gap: 17px 30px;
+}
+
+.user-deck-cards-wrapper .cards-pagination {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+.user-deck-cards-wrapper .cards-pagination .pagination {
+  list-style-type: none;
+  padding-left: 0;
+}
+
+.user-deck-cards-wrapper .cards-pagination .pagination .pagination-item {
+  display: inline-block;
+  font-size: 14px;
+  margin-left: 5px;
+  margin-right: 5px;
+  text-decoration: none;
+  background: #fff;
+  border-radius: 4px;
+  width: 24px;
+  height: 24px;
+  line-height: 24px;
+  text-align: center;
+  cursor: pointer;
+}
+
+.user-deck-cards-wrapper .cards-pagination .pagination .pagination-item a {
+  color: #757575;
+}
+
+.user-deck-cards-wrapper .cards-pagination .pagination .pagination-item:hover {
+  background-color: #f5f5f5;
+}
+
+.user-deck-cards-wrapper .cards-pagination .pagination .pagination-item-active {
+  background: #9eacf4 !important;
+}
+
+.user-deck-cards-wrapper .cards-pagination .pagination .pagination-item-active a {
+  color: white;
+}
+
+.user-deck-cards-wrapper .user-deck-cards-header {
+  color: #535353;
+  font-style: normal;
+  font-weight: 600;
+  font-size: 18px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: start;
+      -ms-flex-pack: start;
+          justify-content: flex-start;
+  margin-bottom: 10px;
+}
+
+.user-deck-cards-wrapper .user-deck-cards-header p {
+  text-align: left;
+  width: 20%;
+}
+
+.user-deck-cards-wrapper .text-notify {
+  font-size: 15px;
+  color: #979797;
+  font-size: #979797;
+  white-space: nowrap;
+}
+/*# sourceMappingURL=UserDeckCards.css.map */
