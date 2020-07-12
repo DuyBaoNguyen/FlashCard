@@ -77,3 +77,13 @@ export {
 } from './UsersManagement';
 
 export { getPublicCards, selectPublicCard } from './Market.js';
+
+export {
+	getUserDeck,
+	getUserDeckCards,
+	selectUserDeckCard,
+	unselectUserDeckCard,
+	resetStateInUserDeckDetailReducer,
+	deleteUserCard,
+	deleteUserDeck
+} from './UserDeckDetail';

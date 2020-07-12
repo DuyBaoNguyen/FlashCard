@@ -16,6 +16,7 @@ import CreateCard from './containers/User/CreateCard/CreateCard';
 import EditCard from './containers/User/EditCard/EditCard';
 import Market from './containers/User/Market/Market';
 import UsersManagement from './containers/Admin/UsersManagement/UsersManagement';
+import UserDeckDetail from './containers/Admin/UserDeckDetail/UserDeckDetail';
 
 import AuthorizeRoute from './components/api-authorization/AuthorizeRoute';
 import ApiAuthorizationRoutes from './components/api-authorization/ApiAuthorizationRoutes';
@@ -48,10 +49,11 @@ class App extends Component {
 					
 					{/* Admin management */}
 					<AuthorizeRoute exact path="/admin/users" component={UsersManagement} />
+					<AuthorizeRoute exact path="/admin/users/:userId/decks/:deckId" component={UserDeckDetail} />
 
 					<Route path={ApplicationPaths.ApiAuthorizationPrefix} component={ApiAuthorizationRoutes} />
 
-					{/* <Redirect to="/" /> */}
+					<Redirect to="/" />
 				</Switch>
 			</Layout>
 		);
