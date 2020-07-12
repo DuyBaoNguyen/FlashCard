@@ -69,8 +69,9 @@ export {
 
 export {
 	getUsers,
-	setCurrentUser,
+	setCurrentUserId,
 	getCurrentUser,
 	deleteCurrentUser,
 	getCurrentUserDecks,
+	getCurrentUserCards
 } from './UsersManagement';

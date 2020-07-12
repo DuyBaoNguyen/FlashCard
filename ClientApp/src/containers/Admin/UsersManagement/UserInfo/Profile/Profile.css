@@ -1,23 +1,19 @@
 .profile-wrapper {
-  position: relative;
-  height: auto;
-  display: -ms-grid;
-  display: grid;
-  -ms-grid-columns: 450px auto;
-      grid-template-columns: 450px auto;
-  -webkit-column-gap: 20px;
-          column-gap: 20px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  width: 100%;
 }
 
 .profile-wrapper .profile-info-panel {
+  -webkit-box-flex: 1;
+      -ms-flex: 1;
+          flex: 1;
   background: #FFFFFF;
   -webkit-box-shadow: 0px 0px 30px rgba(0, 0, 0, 0.05);
           box-shadow: 0px 0px 30px rgba(0, 0, 0, 0.05);
   border-radius: 15px;
   padding: 30px;
-  display: -ms-grid;
-  display: grid;
-  row-gap: 20px;
 }
 
 .profile-wrapper .profile-info-panel .profile-button {
@@ -41,10 +37,12 @@
 }
 
 .profile-wrapper .profile-info-panel .profile-info {
-  display: -ms-grid;
-  display: grid;
-  -ms-grid-columns: auto auto;
-      grid-template-columns: auto auto;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
 }
 
 .profile-wrapper .profile-info-panel .profile-info .profile-info-title {
@@ -52,21 +50,49 @@
   font-weight: normal;
   font-size: 14px;
   color: #979797;
+  margin-bottom: 20px;
 }
 
 .profile-wrapper .profile-info-panel .profile-info .profile-info-content {
   font-style: normal;
-  font-weight: bold;
+  font-weight: 500;
   font-size: 14px;
   text-align: right;
   color: #9EACF4;
+  margin-bottom: 20px;
 }
 
 .profile-wrapper .profile-avatar {
+  width: 167px;
   background: #FFFFFF;
   -webkit-box-shadow: 0px 0px 30px rgba(0, 0, 0, 0.05);
           box-shadow: 0px 0px 30px rgba(0, 0, 0, 0.05);
   border-radius: 15px;
   padding: 30px;
+  margin-left: 20px;
+}
+
+.profile-wrapper .profile-avatar img {
+  border-radius: 50%;
+}
+
+.profile-wrapper .profile-avatar .fake-picture {
+  width: 100%;
+  height: 100%;
+  border: 1px solid #eee;
+  border-radius: 50%;
+  background-color: #fafafa;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  font-size: 32px;
+  font-weight: 300;
+  color: #979797;
 }
 /*# sourceMappingURL=Profile.css.map */
