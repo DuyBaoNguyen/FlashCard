@@ -4,83 +4,110 @@ import * as actionTypes from '../actions/actionTypes';
 const getUsersSuccess = (usersList) => {
 	return {
 		type: actionTypes.GET_USERS_SUCCESS,
-		usersList: usersList,
+		usersList: usersList
 	};
 };
 
 const getUsersFail = () => {
 	return {
-		type: actionTypes.GET_USERS_FAIL,
+		type: actionTypes.GET_USERS_FAIL
 	};
 };
 
 export const getUsers = () => {
 	return (dispatch) => {
-		axios
-			.get(`/api/admin/users`)
+		axios.get('/api/admin/users')
 			.then((res) => dispatch(getUsersSuccess(res.data)))
-			.catch((err) => dispatch(getUsersFail()));
+			.catch(() => dispatch(getUsersFail()));
 	};
 };
 
-export const setCurrentUser = (currentUser) => {
-	getCurrentUser(currentUser);
-	getCurrentUserDecks(currentUser);
+export const setCurrentUserId = (currentUserId) => {
 	return {
-		type: actionTypes.SET_CURRENT_USER,
-		currentUser: currentUser,
+		type: actionTypes.SET_CURRENT_USER_ID,
+		currentUserId: currentUserId
 	};
 };
 
-const getCurrentUserSuccess = (currentUserData) => {
+const getCurrentUserSuccess = (currentUser) => {
 	return {
 		type: actionTypes.GET_CURRENT_USER_SUCCESS,
-		currentUserData: currentUserData,
+		currentUser: currentUser
 	};
 };
 
 const getCurrentUserFail = () => {
 	return {
-		type: actionTypes.GET_CURRENT_USER_FAIL,
+		type: actionTypes.GET_CURRENT_USER_FAIL
 	};
 };
 
-export const getCurrentUser = (currentUser) => {
+export const getCurrentUser = (currentUserId) => {
 	return (dispatch) => {
-		axios
-			.get(`/api/admin/users/${currentUser}`)
+		axios.get(`/api/admin/users/${currentUserId}`)
 			.then((res) => dispatch(getCurrentUserSuccess(res.data)))
-			.catch((err) => dispatch(getCurrentUserFail()));
+			.catch(() => dispatch(getCurrentUserFail()));
 	};
 };
 
-export const deleteCurrentUser = (currentUser) => {
+const deleteCurrentUserSuccess = () => {
+	return {
+		type: actionTypes.DELETE_CURRENT_USER_SUCCESS
+	};
+};
+
+const deleteCurrentUserFail = () => {
+	return {
+		type: actionTypes.DELETE_CURRENT_USER_FAIL
+	};
+};
+
+export const deleteCurrentUser = (currentUserId) => {
 	return (dispatch) => {
-		axios
-			.delete(`/api/admin/users/${currentUser}`)
-			.then((res) => dispatch(getCurrentUserSuccess(res.data)))
-			.catch((err) => dispatch(getCurrentUserFail()));
+		axios.delete(`/api/admin/users/${currentUserId}`)
+			.then(() => dispatch(deleteCurrentUserSuccess()))
+			.catch(() => dispatch(deleteCurrentUserFail()))
 	};
 };
 
 const getCurrentUserDecksSuccess = (currentUserDecks) => {
 	return {
 		type: actionTypes.GET_CURRENT_USER_DECKS_SUCCESS,
-		currentUserDecks: currentUserDecks,
+		currentUserDecks: currentUserDecks
 	};
 };
 
 const getCurrentUserDecksFail = () => {
 	return {
-		type: actionTypes.GET_CURRENT_USER_DECKS_FAIL,
+		type: actionTypes.GET_CURRENT_USER_DECKS_FAIL
 	};
 };
 
-export const getCurrentUserDecks = (currentUser) => {
+export const getCurrentUserDecks = (currentUserId) => {
 	return (dispatch) => {
-		axios
-			.get(`/api/admin/users/${currentUser}/decks`)
+		axios.get(`/api/admin/users/${currentUserId}/decks`)
 			.then((res) => dispatch(getCurrentUserDecksSuccess(res.data)))
-			.catch((err) => dispatch(getCurrentUserDecksFail()));
+			.catch(() => dispatch(getCurrentUserDecksFail()));
+	};
+};
+
+const getCurrentUserCardsSuccess = (currentUserCards) => {
+	return {
+		type: actionTypes.GET_CURRENT_USER_CARDS_SUCCESS,
+		currentUserCards: currentUserCards
+	};
+};
+
+const getCurrentUserCardsFail = () => {
+	return {
+		type: actionTypes.GET_CURRENT_USER_CARDS_FAIL
+	};
+};
+
+export const getCurrentUserCards = (currentUserId) => {
+	return (dispatch) => {
+		axios.get(`/api/admin/users/${currentUserId}/cards`)
+			.then((res) => dispatch(getCurrentUserCardsSuccess(res.data)))
+			.catch(() => dispatch(getCurrentUserCardsFail()));
 	};
 };

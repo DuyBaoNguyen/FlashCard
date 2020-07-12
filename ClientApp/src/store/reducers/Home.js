@@ -6,6 +6,8 @@ const initialState = {
   originalDecks: [],
   getDeckError: null,
   statistics: null,
+  percentPracticedCardsStatistics: null,
+  amountRememberedCardsStatistics: null,
   getStatisticsError: null,
   profile: null,
   getProfileError: null,
@@ -44,13 +46,17 @@ export const homeReducer = (state = initialState, action) => {
     case actionTypes.GET_STATISTICS_SUCCESS:
       return {
         ...state,
-        statistics: utils.transformStatistics(action.statistics),
+        statistics: action.statistics,
+        percentPracticedCardsStatistics: utils.transformPercentPracticedCardsStatistics(action.statistics),
+        amountRememberedCardsStatistics: utils.transformAmountRememberedCardsStatistics(action.statistics),
         getStatisticsError: null
       }
     case actionTypes.GET_STATISTICS_FAIL:
       return {
         ...state,
         statistics: null,
+        percentPracticedCardsStatistics: null,
+        amountRememberedCardsStatistics: null,
         getStatisticsError: 'Something went wrong'
       }
     case actionTypes.GET_PROFILE_SUCCESS:

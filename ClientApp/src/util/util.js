@@ -1,8 +1,19 @@
-export function transformStatistics(statistics) {
-  for (let item of statistics) {
-    item.day = new Date(item.dateTime).toString().substr(0, 3);
-  }
-  return statistics;
+export function transformPercentPracticedCardsStatistics(statistics) {
+  return statistics.map(item => {
+    return {
+      day: new Date(item.dateTime).toString().substr(0, 3),
+      gradePointAverage: item.gradePointAverage
+    };
+  });
+}
+
+export function transformAmountRememberedCardsStatistics(statistics) {
+  return statistics.map(item => {
+    return {
+      day: new Date(item.dateTime).toString().substr(0, 3),
+      amount: item.rememberedCards ? item.rememberedCards.length : 0
+    };
+  });
 }
 
 export const filterCards = (source, filteredValue) => {

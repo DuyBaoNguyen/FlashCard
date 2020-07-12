@@ -84,6 +84,17 @@
   line-height: 1.5;
 }
 
+.card-wrapper .card-front.card-front-selected::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border-radius: 15px;
+  border: 2px solid #9eacf4;
+}
+
 .card-wrapper .card-back {
   font-size: 15px;
 }

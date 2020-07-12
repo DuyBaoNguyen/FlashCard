@@ -15,7 +15,9 @@ class Home extends Component {
   render() {
     return (
       <div className="home">
-        <Statistics data={this.props.statistics} />
+        <Statistics 
+          percentPracticedCardsChartData={this.props.percentPracticedCardsStatistics} 
+          amountRememberedCardsChartData={this.props.amountRememberedCardsStatistics} />
         <DeckWrapper className="deck-wrapper" />
       </div>
     );
@@ -24,7 +26,8 @@ class Home extends Component {
 
 const mapStateToProps = (state) => {
   return {
-    statistics: state.home.statistics
+    percentPracticedCardsStatistics: state.home.percentPracticedCardsStatistics,
+    amountRememberedCardsStatistics: state.home.amountRememberedCardsStatistics
   };
 };
 

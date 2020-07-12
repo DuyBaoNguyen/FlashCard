@@ -25,6 +25,9 @@ namespace FlashCard.Models
 		public DateTime LastModifiedDate { get; set; }
 
 		[DataType(DataType.DateTime)]
+		public DateTime? FirstRememberedDate { get; set; }
+
+		[DataType(DataType.DateTime)]
 		public DateTime? LastPracticedDate { get; set; }
 
 		public int? SourceId { get; set; }

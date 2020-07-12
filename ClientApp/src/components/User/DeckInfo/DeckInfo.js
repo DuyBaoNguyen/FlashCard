@@ -27,6 +27,10 @@ class DeckInfo extends Component {
     this.props.onUpdateDeckPublicStatus(this.props.deck.id, event.target.checked);
   }
 
+  handleClickPractice = () => {
+    this.props.onSetPracticeOptionsOpen(true);
+  }
+
   render() {
     const { deck, updateDeckPublicStatusError, showLess, profile } = this.props;
 
@@ -127,7 +131,7 @@ class DeckInfo extends Component {
         </Collapse>
         {profile?.role === 'user' && (
           <div className="deck-features">
-            <Button type="link" path={`/decks/testing/${deck?.id}`}>Practice</Button>
+            <Button type="button" onClick={this.handleClickPractice}>Practice</Button>
             <Button type="link" path={`/decks/match/${deck?.id}`}>Match game</Button>
           </div>
         )}
@@ -146,7 +150,8 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
   return {
     onDeleteDeck: (id) => dispatch(actions.deleteDeck(id)),
-    onUpdateDeckPublicStatus: (id, value) => dispatch(actions.updateDeckPublicStatus(id, value))
+    onUpdateDeckPublicStatus: (id, value) => dispatch(actions.updateDeckPublicStatus(id, value)),
+    onSetPracticeOptionsOpen: (value) => dispatch(actions.setPracticeOptionsOpen(value))
   };
 };
 

@@ -19,9 +19,11 @@ class UsersTable extends Component {
 		this.setState({ activePage: pageNumber });
 	}
 
-	onClickUser = (id) => {
-		this.props.onSetCurrentUser(id);
-		// this.props.onGetCurrentUserDecks(this.props.currentUser);
+	onClickUser = (userId) => {
+		this.props.onSetCurrentUserId(userId);
+		this.props.onGetCurrentUser(userId);
+		this.props.onGetCurrenctUserDecks(userId);
+		this.props.onGetCurrenctUserCards(userId);
 	};
 
 	render() {
@@ -44,7 +46,7 @@ class UsersTable extends Component {
 
 		let users = this.props.usersList.map((user, index) => {
 			return (
-				<tr onClick={() => this.onClickUser(user.id)}>
+				<tr key={user.id} onClick={() => this.onClickUser(user.id)}>
 					<td className="users-table-width-small">{index + 1}</td>
 					<td className="users-table-width-medium">{user.name}</td>
 					<td className="users-table-width-large">{user.email}</td>
@@ -54,15 +56,19 @@ class UsersTable extends Component {
 
 		return (
 			<div className="users-table-wrapper">
-				<div className="users-table-title">Users Management</div>
+				<div className="users-table-title">Users</div>
 				<div className="users-table">
 					<table>
-						<tr className="users-table-header">
-							<th className="users-table-width-small first-cell">No.</th>
-							<th className="users-table-width-medium">Name</th>
-							<th className="users-table-width-large last-cell">Email</th>
-						</tr>
-						{users}
+						<thead>
+							<tr className="users-table-header">
+								<th className="users-table-width-small first-cell">No.</th>
+								<th className="users-table-width-medium">Name</th>
+								<th className="users-table-width-large last-cell">Email</th>
+							</tr>
+						</thead>
+						<tbody>
+							{users}
+						</tbody>
 					</table>
 				</div>
 				<div className="users-table-pagination">{pagination}</div>
@@ -83,9 +89,10 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
 	return {
 		onGetUsers: () => dispatch(actions.getUsers()),
-		onSetCurrentUser: (id) => dispatch(actions.setCurrentUser(id)),
-		// onGetCurrentUserDecks: (currentUser) =>
-		// 	dispatch(actions.getCurrentUserDecks(currentUser)),
+		onSetCurrentUserId: (id) => dispatch(actions.setCurrentUserId(id)),
+		onGetCurrentUser: (userId) => dispatch(actions.getCurrentUser(userId)),
+		onGetCurrenctUserDecks: (userId) => dispatch(actions.getCurrentUserDecks(userId)),
+		onGetCurrenctUserCards: (userId) => dispatch(actions.getCurrentUserCards(userId))
 	};
 };
 

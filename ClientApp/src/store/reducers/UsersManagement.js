@@ -2,10 +2,17 @@ import * as actionTypes from '../actions/actionTypes';
 
 const initialState = {
 	usersList: [],
+	currentUserId: null,
 	currentUser: null,
-	currentUserData: null,
 	currentUserDecks: [],
-	getUsersError: null,
+	currentUserCards: [],
+	errors: {
+		getUsersError: false,
+		getCurrentUserError: false,
+		getCurrentUserDecksError: false,
+		getCurrentUserCardsError: false,
+		deleteCurrentUserError: false
+	}
 };
 
 export const usersManagementReducer = (state = initialState, action) => {
@@ -14,47 +21,98 @@ export const usersManagementReducer = (state = initialState, action) => {
 			return {
 				...state,
 				usersList: action.usersList,
-				getUsersError: null,
+				errors: {
+					...state.errors,
+					getUsersError: false
+				}
 			};
 		case actionTypes.GET_USERS_FAIL:
 			return {
 				...state,
 				usersList: [],
-				getUsersError: 'Get users list failed!',
+				errors: {
+					...state.errors,
+					getUsersError: true
+				}
 			};
-		case actionTypes.SET_CURRENT_USER:
+		case actionTypes.SET_CURRENT_USER_ID:
 			return {
 				...state,
-				currentUser: action.currentUser,
+				currentUserId: action.currentUserId
 			};
 		case actionTypes.GET_CURRENT_USER_SUCCESS:
 			return {
 				...state,
-				currentUserData: action.currentUserData,
-				getUsersError: null,
+				currentUser: action.currentUser,
+				errors: {
+					...state.errors,
+					getCurrentUserError: false
+				}
 			};
 		case actionTypes.GET_CURRENT_USER_FAIL:
 			return {
 				...state,
-				currentUserData: null,
-				getUsersError: 'Get current user failed!',
+				currentUser: null,
+				errors: {
+					...state.errors,
+					getCurrentUserError: true
+				}
 			};
-		case actionTypes.DELETE_CURRENT_USER:
+		case actionTypes.DELETE_CURRENT_USER_SUCCESS:
 			return {
 				...state,
-				currentUserData: null,
+				currentUserId: null,
+				currentUser: null,
+				currentUserDecks: [],
+				currentUserCards: [],
+				errors: {
+					...state.errors,
+					deleteCurrentUserError: false
+				}
+			};
+		case actionTypes.DELETE_CURRENT_USER_FAIL:
+			return {
+				...state,
+				errors: {
+					...state.errors,
+					deleteCurrentUserError: true
+				}
 			};
 		case actionTypes.GET_CURRENT_USER_DECKS_SUCCESS:
 			return {
 				...state,
 				currentUserDecks: action.currentUserDecks,
-				getUsersError: null,
+				errors: {
+					...state.errors,
+					getCurrentUserDecksError: false
+				}
 			};
 		case actionTypes.GET_CURRENT_USER_DECKS_FAIL:
 			return {
 				...state,
-				currentUserDecks: null,
-				getUsersError: 'Get current user decks failed!',
+				currentUserDecks: [],
+				errors: {
+					...state.errors,
+					getCurrentUserDecksError: true
+				}
+			};
+		case actionTypes.GET_CURRENT_USER_CARDS_SUCCESS:
+			return {
+				...state,
+				currentUserCards: action.currentUserCards,
+				errors: {
+					...state.errors,
+					getCurrentUserCardsError: false
+				}
+			};
+		case actionTypes.GET_CURRENT_USER_CARDS_FAIL:
+			return {
+				...state,
+				currentUserCards: [],
+				errors: {
+					...state.errors,
+					getCurrentUserCardsError: true
+				}
 			};
 		default:
 			return state;

@@ -244,3 +244,10 @@ export const resetStateInDeckDetailReducer = () => {
     type: actionTypes.RESET_STATE_IN_DECK_DETAIL_REDUCER
   };
 };
+
+export const setPracticeOptionsOpen = (value) => {
+  return {
+    type: actionTypes.SET_PRACTICE_OPTIONS_OPEN,
+    value: value
+  };
+};

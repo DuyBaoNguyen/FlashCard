@@ -8,6 +8,7 @@ import * as actions from '../../../store/actions';
 import withErrorHandler from '../../../hoc/withErrorHandler';
 import './Testing.css';
 import Multiple from './Multiple/Multiple';
+import { PracticeMode } from '../../../applicationConstants';
 
 class Testing extends Component {
 	constructor(props) {
@@ -33,8 +34,17 @@ class Testing extends Component {
 		return cardList[Math.floor(Math.random() * cardList.length)];
 	};
 
-	componentWillMount() {
-		this.props.onGetCardsInDeck(this.props.match.params.deckId);
+	UNSAFE_componentWillMount() {
+		const { location, history, match, onGetCardsInDeck, cardList } = this.props;
+
+		if (!location.state?.practiceMode) {
+			history.push(`/decks/${match.params.deckId}`);
+		} else if (location.state.practiceMode !== PracticeMode.Custom) {
+			const notRememberedCardsMode = location.state.practiceMode === PracticeMode.NotRememberedCards ? false : '';
+			onGetCardsInDeck(match.params.deckId, notRememberedCardsMode);
+		} else if (cardList.length === 0) {
+			history.push(`/decks/${match.params.deckId}`);
+		}
 	}
 
 	isDisplayMultipleQuestion = () => {
@@ -236,7 +246,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
 	return {
-		onGetCardsInDeck: (id) => dispatch(actions.getCardsInDeck(id)),
+		onGetCardsInDeck: (id, remembered) => dispatch(actions.getCardsInDeck(id, remembered)),
 		onUpdateRandomCard: (currentVocab) =>
 			dispatch(actions.updateRandomCard(currentVocab)),
 		onUpdateCardsInDeck: (currentVocabList) =>

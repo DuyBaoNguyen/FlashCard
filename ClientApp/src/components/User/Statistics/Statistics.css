@@ -8,12 +8,84 @@
   height: -webkit-fit-content;
   height: -moz-fit-content;
   height: fit-content;
+  overflow: hidden;
 }
 
 .statistics-wrapper .statistics-header {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+.statistics-wrapper .statistics-header .header {
   color: #535353;
   font-style: normal;
   font-weight: 600;
   font-size: 18px;
+}
+
+.statistics-wrapper .statistics-header .chart-name {
+  color: #aaa;
+  font-weight: normal;
+  font-size: 14px;
+  margin-bottom: 18px;
+}
+
+.statistics-wrapper .charts-container {
+  width: calc(200% + 50px);
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  padding-right: 30px;
+  position: relative;
+  -webkit-transition: -webkit-transform 0.2s ease-out;
+  transition: -webkit-transform 0.2s ease-out;
+  transition: transform 0.2s ease-out;
+  transition: transform 0.2s ease-out, -webkit-transform 0.2s ease-out;
+}
+
+.statistics-wrapper .charts-container .chart-content {
+  width: calc(50% - 10px);
+}
+
+.statistics-wrapper .charts-container .control-btn {
+  position: absolute;
+  top: 50%;
+  left: calc(50% - 15px);
+  -webkit-transform: translate(-50%, -50%);
+          transform: translate(-50%, -50%);
+  width: 32px;
+  height: 32px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  opacity: 0;
+  cursor: pointer;
+  -webkit-transition: opacity 0.15s ease;
+  transition: opacity 0.15s ease;
+}
+
+.statistics-wrapper .charts-container.right {
+  -webkit-transform: translate(calc(-50% + 5px));
+          transform: translate(calc(-50% + 5px));
+}
+
+.statistics-wrapper .charts-container:hover .control-btn {
+  opacity: 1;
 }
 /*# sourceMappingURL=Statistics.css.map */

@@ -10,5 +10,6 @@ namespace FlashCard.Dto
 		public DeckWithNameDto Deck { get; set; }
 		public IEnumerable<string> SucceededCards { get; set; }
 		public IEnumerable<string> FailedCards { get; set; }
+		// public IEnumerable<CardDto> FirstRememberedCards { get; set; }
 	}
 }

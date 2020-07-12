@@ -383,6 +383,18 @@ namespace FlashCard.Controllers
 				.MapToCardDto(imageService.BackImageBaseUrl)
 				.ToListAsync();
 
+			if (deck.OwnerId != userId)
+			{
+				var sharedCards = await repository.SharedCard
+					.QueryByUserIdAndDeckId(userId, deck.Id)
+					.ToListAsync();
+				
+				foreach (var card in cards)
+				{
+					card.Remembered = sharedCards.FirstOrDefault(s => s.CardId == card.Id)?.Remembered ?? false;
+				}
+			}
+
 			amount = amount < 0 || amount > cards.Count ? cards.Count : amount;
 
 			return Ok(cards.TakeRandom(amount));
@@ -439,6 +451,10 @@ namespace FlashCard.Controllers
 
 				if (deck.OwnerId == user.Id)
 				{
+					if (!card.Remembered)
+					{
+						card.FirstRememberedDate = testRqModel.DateTime;
+					}
 					card.Remembered = true;
 					card.LastPracticedDate = testRqModel.DateTime;
 				}
@@ -487,6 +503,10 @@ namespace FlashCard.Controllers
 
 					if (sharedCard != null)
 					{
+						if (!sharedCard.Remembered)
+						{
+							sharedCard.FirstRememberedDate = testRqModel.DateTime;
+						}
 						sharedCard.Remembered = true;
 						sharedCard.LastPracticedDate = testRqModel.DateTime;
 					}
@@ -497,6 +517,7 @@ namespace FlashCard.Controllers
 							UserId = user.Id,
 							CardId = cardId,
 							Remembered = true,
+							FirstRememberedDate = testRqModel.DateTime,
 							LastPracticedDate = testRqModel.DateTime
 						};
 						repository.SharedCard.Create(newSharedCard);
@@ -671,9 +692,27 @@ namespace FlashCard.Controllers
 				.AsNoTracking()
 				.ToListAsync();
 			var groups = tests.GroupBy(t => t.DateTime.Date).ToDictionary(g => g.Key);
+
+			var queryRememberedCards = deck.OwnerId == userId 
+				? repository.Card
+					.QueryByFirstRememberedDate(userId, deck.Id, dates)
+					.AsNoTracking()
+					.Select(c => new { FirstRememberedDate = c.FirstRememberedDate.Value.Date, Front = c.Front })
+				: repository.SharedCard
+					.QueryByFirstRememberedDate(userId, deck.Id, dates)
+					.AsNoTracking()
+					.Select(sc => new { FirstRememberedDate = sc.FirstRememberedDate.Value.Date, Front = sc.Card.Front });
+
+			var rememberedCards = await queryRememberedCards.ToListAsync();
+			var rememberedCardsGroups = rememberedCards
+				.GroupBy(c => c.FirstRememberedDate)
+				.ToDictionary(g => g.Key);
+
 			var statistics = dates.Select(d =>
 			{
 				var tests = groups.ContainsKey(d) ? groups[d] : null;
+				var rememberedCards = rememberedCardsGroups.ContainsKey(d) ? rememberedCardsGroups[d] : null;
+
 				return new
 				{
 					DateTime = d,
@@ -683,7 +722,8 @@ namespace FlashCard.Controllers
 						? tests.Sum(t => t.TestedCards.Where(tc => tc.Failed).Count()) : 0,
 					GradePointAverage = tests == null || tests.Count() == 0
 						? 0 : Math.Round(tests.Average(t => t.Score) * 100, 0),
-					Tests = tests != null ? tests.Take(amountTests).MapToTestDto() : null
+					Tests = tests != null ? tests.Take(amountTests).MapToTestDto() : null,
+					RememberedCards = rememberedCards != null ? rememberedCards.Select(t => t.Front) : null
 				};
 			});
 

@@ -13,13 +13,9 @@ class Decks extends Component {
 		};
 	}
 
-	componentDidMount() {
-		// this.props.onGetCurrentUserDecks(this.props.currentUser);
-	}
-
 	render() {
 		let decks = this.props.currentUserDecks.map((deck, index) => {
-			return <Deck className="profile-deck" deck={deck} />;
+			return <Deck key={deck.id} className="profile-deck" deck={deck} />;
 		});
 		return <div className="profile-decks-wrapper">{decks}</div>;
 	}
@@ -27,7 +23,7 @@ class Decks extends Component {
 
 const mapStateToProps = (state) => {
 	return {
-		currentUser: state.usersmanagement.currentUser,
+		currentUserId: state.usersmanagement.currentUserId,
 		currentUserDecks: state.usersmanagement.currentUserDecks,
 	};
 };

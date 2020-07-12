@@ -18,7 +18,7 @@ class Result extends Component {
 		return (
 			<div className="result-wrapper">
 				<br/>
-				<Animated animationIn="bounceIn" animationInDelay="0" isVisible={true}>
+				<Animated animationIn="bounceIn" animationInDelay={0} isVisible={true}>
 					<div className="result-header">
 						Congratulation! 
 						<span role="img" aria-label="clap">👏🏻</span>

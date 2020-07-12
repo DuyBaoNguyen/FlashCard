@@ -26,6 +26,7 @@ export {
 	updateCardsInsideSearchString,
 	updateCardsOutsideSearchString,
 	resetStateInDeckDetailReducer,
+	setPracticeOptionsOpen
 } from './DeckDetail';
 
 export {
@@ -43,6 +44,7 @@ export {
 	updateRandomCard,
 	updateCardsInDeck,
 	sendTestResult,
+	getCardsInDeckSuccess
 } from './Testing';
 
 export { getMatchCards, updateMatchCards } from './MatchCard';
@@ -67,8 +69,9 @@ export {
 
 export {
 	getUsers,
-	setCurrentUser,
+	setCurrentUserId,
 	getCurrentUser,
 	deleteCurrentUser,
 	getCurrentUserDecks,
+	getCurrentUserCards
 } from './UsersManagement';

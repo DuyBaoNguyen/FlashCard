@@ -157,7 +157,12 @@ namespace FlashCard.Util
 					Name = t.Deck.Name
 				},
 				SucceededCards = t.TestedCards.Where(tc => !tc.Failed).Select(tc => tc.Card.Front),
-				FailedCards = t.TestedCards.Where(tc => tc.Failed).Select(tc => tc.Card.Front)
+				FailedCards = t.TestedCards.Where(tc => tc.Failed).Select(tc => tc.Card.Front),
+				// FirstRememberedCards = t.TestedCards
+				// 	.Where(tc => tc.Card.FirstRememberedDate?.Day == t.DateTime.Day &&
+				// 		tc.Card.FirstRememberedDate?.Month == t.DateTime.Month &&
+				// 		tc.Card.FirstRememberedDate?.Year == t.DateTime.Year)
+				// 	.Select(tc => new CardDto())
 			});
 		}
 

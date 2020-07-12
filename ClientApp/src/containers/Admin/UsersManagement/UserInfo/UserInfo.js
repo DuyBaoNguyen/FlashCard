@@ -1,7 +1,4 @@
 import React, { Component } from 'react';
-import { connect } from 'react-redux';
-import withErrorHandler from '../../../../hoc/withErrorHandler';
-import * as actions from '../../../../store/actions/index';
 
 import Profile from './Profile/Profile';
 import Decks from './Decks/Decks';
@@ -14,11 +11,6 @@ class UserInfo extends Component {
 		this.state = {
 			activePage: 1,
 		};
-	}
-
-	componentWillMount() {
-		this.props.onGetCurrentUser(this.props.currentUser);
-		// this.props.onGetCurrentUserDecks(this.props.currentUser);
 	}
 
 	onChangePage = (param) => {
@@ -72,33 +64,10 @@ class UserInfo extends Component {
 				</ul>
 				<div className="user-panel">
 					{activePage}
-					{/* <Profile/> */}
 				</div>
 			</div>
 		);
 	}
 }
 
-const mapStateToProps = (state) => {
-	return {
-		usersList: state.usersmanagement.usersList,
-		currentUser: state.usersmanagement.currentUser,
-		currentUserData: state.usersmanagement.currentUserData,
-		currentUserDecks: state.usersmanagement.currentUserDecks,
-
-	};
-};
-
-const mapDispatchToProps = (dispatch) => {
-	return {
-		onGetCurrentUser: (currentUser) =>
-			dispatch(actions.getCurrentUser(currentUser)),
-		onGetCurrentUserDecks: (currentUser) =>
-			dispatch(actions.getCurrentUserDecks(currentUser)),
-	};
-};
-
-export default connect(
-	mapStateToProps,
-	mapDispatchToProps
-)(withErrorHandler(UserInfo));
+export default UserInfo;
