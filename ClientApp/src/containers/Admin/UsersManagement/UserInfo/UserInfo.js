@@ -18,7 +18,7 @@ class UserInfo extends Component {
 
 	componentWillMount() {
 		this.props.onGetCurrentUser(this.props.currentUser);
-		this.props.onGetCurrentUserDecks(this.props.currentUser);
+		// this.props.onGetCurrentUserDecks(this.props.currentUser);
 	}
 
 	onChangePage = (param) => {

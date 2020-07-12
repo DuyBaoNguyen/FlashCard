@@ -24,6 +24,8 @@ export const getUsers = () => {
 };
 
 export const setCurrentUser = (currentUser) => {
+	getCurrentUser(currentUser);
+	getCurrentUserDecks(currentUser);
 	return {
 		type: actionTypes.SET_CURRENT_USER,
 		currentUser: currentUser,

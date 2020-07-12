@@ -21,6 +21,7 @@ class UsersTable extends Component {
 
 	onClickUser = (id) => {
 		this.props.onSetCurrentUser(id);
+		// this.props.onGetCurrentUserDecks(this.props.currentUser);
 	};
 
 	render() {
@@ -74,6 +75,8 @@ const mapStateToProps = (state) => {
 	return {
 		usersList: state.usersmanagement.usersList,
 		currentUser: state.usersmanagement.currentUser,
+		currentUserData: state.usersmanagement.currentUserData,
+		currentUserDecks: state.usersmanagement.currentUserDecks,
 	};
 };
 
@@ -81,6 +84,8 @@ const mapDispatchToProps = (dispatch) => {
 	return {
 		onGetUsers: () => dispatch(actions.getUsers()),
 		onSetCurrentUser: (id) => dispatch(actions.setCurrentUser(id)),
+		// onGetCurrentUserDecks: (currentUser) =>
+		// 	dispatch(actions.getCurrentUserDecks(currentUser)),
 	};
 };
 
