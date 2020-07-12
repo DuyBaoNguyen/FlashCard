@@ -1,0 +1,34 @@
+.market-wrapper {
+  width: 100%;
+  height: calc(100vh - 96px);
+  background: #FFFFFF;
+  box-shadow: 0px 0px 30px rgba(0, 0, 0, 0.05);
+  border-radius: 15px;
+  padding: 30px;
+  // .user-panel {
+  //   position: relative;
+  // }
+
+  .market-menu {
+    margin-top: 0;
+    padding: 0;
+
+    li {
+      cursor: -webkit-pointer;
+      cursor: pointer;
+      list-style-type: none;
+      display: inline-block;
+      margin-right: 20px;
+      font-style: normal;
+      font-weight: normal;
+      font-size: 14px;
+      color: #979797;
+    }
+
+    .market-page-active {
+      color: #9eacf4;
+      padding-bottom: 5px;
+      border-bottom: 1px solid #9eacf4;
+    }
+  }
+}

@@ -26,7 +26,7 @@ export {
 	updateCardsInsideSearchString,
 	updateCardsOutsideSearchString,
 	resetStateInDeckDetailReducer,
-	setPracticeOptionsOpen
+	setPracticeOptionsOpen,
 } from './DeckDetail';
 
 export {
@@ -44,7 +44,7 @@ export {
 	updateRandomCard,
 	updateCardsInDeck,
 	sendTestResult,
-	getCardsInDeckSuccess
+	getCardsInDeckSuccess,
 } from './Testing';
 
 export { getMatchCards, updateMatchCards } from './MatchCard';
@@ -73,5 +73,7 @@ export {
 	getCurrentUser,
 	deleteCurrentUser,
 	getCurrentUserDecks,
-	getCurrentUserCards
+	getCurrentUserCards,
 } from './UsersManagement';
+
+export { getPublicCards, selectPublicCard } from './Market.js';

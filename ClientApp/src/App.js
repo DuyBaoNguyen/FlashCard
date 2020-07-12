@@ -14,7 +14,7 @@ import AddCard from './containers/User/AddCard/AddCard';
 import Cards from './containers/User/Cards/Cards';
 import CreateCard from './containers/User/CreateCard/CreateCard';
 import EditCard from './containers/User/EditCard/EditCard';
-
+import Market from './containers/User/Market/Market';
 import UsersManagement from './containers/Admin/UsersManagement/UsersManagement';
 
 import AuthorizeRoute from './components/api-authorization/AuthorizeRoute';
@@ -42,6 +42,8 @@ class App extends Component {
 					<AuthorizeRoute exact path="/cards" component={Cards} />
 					<AuthorizeRoute exact path="/cards/create" component={CreateCard} />
 					<AuthorizeRoute exact path="/cards/:cardId/edit" component={EditCard} />
+					<AuthorizeRoute exact path="/market" component={Market} />
+
 
 					
 					{/* Admin management */}

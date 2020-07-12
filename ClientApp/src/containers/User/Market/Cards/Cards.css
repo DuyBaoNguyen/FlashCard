@@ -1,0 +1,86 @@
+.market-cards-list-wrapper {
+  width: 100%;
+  height: 655px;
+}
+
+.market-cards-list-wrapper .market-cards-list-header {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: end;
+      -ms-flex-pack: end;
+          justify-content: flex-end;
+}
+
+.market-cards-list-wrapper .cards {
+  width: 100%;
+  margin-top: 15px;
+  margin-bottom: 10px;
+  display: -ms-grid;
+  display: grid;
+  -ms-grid-columns: auto auto auto auto auto auto;
+      grid-template-columns: auto auto auto auto auto auto;
+  -webkit-column-gap: 30px;
+          column-gap: 30px;
+  row-gap: 10px;
+}
+
+.market-cards-list-wrapper .cards .card-wrapper {
+  width: 150px;
+}
+
+.market-cards-list-wrapper .cards .card-wrapper .card-front {
+  height: 150px;
+}
+
+.market-cards-list-wrapper .cards .card-wrapper .card-back {
+  height: 150px;
+}
+
+.market-cards-list-wrapper .cards-pagination {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+.market-cards-list-wrapper .cards-pagination .pagination {
+  list-style-type: none;
+}
+
+.market-cards-list-wrapper .cards-pagination .pagination .pagination-item {
+  display: inline-block;
+  font-size: 14px;
+  margin-left: 5px;
+  margin-right: 5px;
+  text-decoration: none;
+  background: #fff;
+  border-radius: 4px;
+  width: 24px;
+  height: 24px;
+  line-height: 24px;
+  text-align: center;
+  cursor: pointer;
+}
+
+.market-cards-list-wrapper .cards-pagination .pagination .pagination-item a {
+  color: #757575;
+}
+
+.market-cards-list-wrapper .cards-pagination .pagination .pagination-item:hover {
+  background-color: #f5f5f5;
+}
+
+.market-cards-list-wrapper .cards-pagination .pagination .pagination-item-active {
+  background: #9eacf4 !important;
+}
+
+.market-cards-list-wrapper .cards-pagination .pagination .pagination-item-active a {
+  color: white;
+}
+/*# sourceMappingURL=Cards.css.map */
