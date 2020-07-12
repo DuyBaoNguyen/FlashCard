@@ -84,6 +84,15 @@ export const homeReducer = (state = initialState, action) => {
         ...state,
         decks: utils.filterDecks(state.originalDecks, action.filteredValue)
       };
+      case actionTypes.UPDATE_NAME_SUCCESS:
+        return {
+          ...state,
+        };
+      case actionTypes.UPDATE_NAME_FAIL:
+        return {
+          ...state,
+          getDeckError: 'Change name failed!',
+        };
     default:
       return state;
   }

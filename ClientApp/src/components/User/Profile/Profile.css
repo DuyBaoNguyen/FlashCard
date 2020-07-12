@@ -1,0 +1,151 @@
+.home-profile-wrapper {
+  background: #ffffff;
+  -webkit-box-shadow: 0px 0px 30px rgba(0, 0, 0, 0.05);
+          box-shadow: 0px 0px 30px rgba(0, 0, 0, 0.05);
+  border-radius: 15px;
+  padding: 30px;
+  width: 100%;
+  height: 150px;
+  position: relative;
+  margin-bottom: 20px;
+  display: -ms-grid;
+  display: grid;
+  -ms-grid-columns: auto auto;
+      grid-template-columns: auto auto;
+  -webkit-column-gap: 30px;
+          column-gap: 30px;
+}
+
+.home-profile-wrapper #upload-image-input {
+  display: none;
+}
+
+.home-profile-wrapper .deck-form-input {
+  display: -ms-grid;
+  display: grid;
+}
+
+.home-profile-wrapper .deck-form-input label {
+  margin-bottom: 20px;
+  height: 8px;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 22px;
+  color: #979797;
+}
+
+.home-profile-wrapper .deck-form-input input {
+  width: 100%;
+  height: 25px;
+  background: #ffffff;
+  border: 1px solid #d9d9d9;
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+  border-radius: 4px;
+  padding: 10px;
+  -webkit-transition: 0.3s;
+  transition: 0.3s;
+}
+
+.home-profile-wrapper .deck-form-input input:focus {
+  -webkit-transition: 0.3s;
+  transition: 0.3s;
+  border: 2px solid #9eacf4;
+}
+
+.home-profile-wrapper .deck-form-button {
+  margin-top: 15px;
+  display: -ms-grid;
+  display: grid;
+  -ms-grid-columns: auto auto;
+      grid-template-columns: auto auto;
+  -webkit-column-gap: 10px;
+          column-gap: 10px;
+}
+
+.home-profile-wrapper .deck-form-button .deck-form-button-cancel {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  width: 100%;
+  height: 30px;
+  border: none;
+  -webkit-box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.05);
+          box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.05);
+  background: #ffffff;
+  font-style: normal;
+  font-size: 14px;
+  line-height: 28px;
+  color: #979797;
+  cursor: pointer;
+}
+
+.home-profile-wrapper .deck-form-button .deck-form-button-create {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  width: 100%;
+  height: 30px;
+  border: none;
+  -webkit-box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.05);
+          box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.05);
+  background: #9eacf4;
+  font-style: normal;
+  font-size: 14px;
+  line-height: 28px;
+  color: #ffffff;
+  cursor: pointer;
+}
+
+.home-profile-wrapper .deck-form-button button {
+  -webkit-transition: 0.1s;
+  transition: 0.1s;
+}
+
+.home-profile-wrapper .deck-form-button button:active {
+  -webkit-transition: 0.1s;
+  transition: 0.1s;
+  -webkit-transform: translateY(10px);
+          transform: translateY(10px);
+}
+
+.home-profile-wrapper .home-profile-avatar {
+  height: 96px;
+  width: 96px;
+  background-color: #9EACF4;
+  border-radius: 15px;
+}
+
+.home-profile-wrapper .home-profile-info {
+  width: 300px;
+}
+
+.home-profile-wrapper .home-profile-info .home-profile-info-name {
+  font-style: normal;
+  font-weight: bold;
+  font-size: 18px;
+  line-height: 32px;
+  color: #9EACF4;
+}
+
+.home-profile-wrapper .home-profile-info .home-profile-info-email {
+  font-style: normal;
+  font-weight: normal;
+  font-size: 14px;
+  line-height: 32px;
+  color: #979797;
+}
+/*# sourceMappingURL=Profile.css.map */

@@ -4,6 +4,8 @@ export {
 	getProfile,
 	setDecksFilteredValue,
 	filterDecks,
+	updateName,
+	updateAvatar,
 } from './Home';
 
 export { createDeck, editDeck } from './Deck';
