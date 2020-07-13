@@ -57,3 +57,24 @@ export const downloadPublicCard = (id) => {
 			.catch((err) => dispatch(downloadPublicCardFail()));
 	};
 };
+
+const getAdminPublicDecksSuccess = () => {
+	return {
+		type: actionTypes.GET_ADMIN_PUBLIC_DECKS_SUCCESS,
+	};
+};
+
+const getAdminPublicDecksFail = () => {
+	return {
+		type: actionTypes.GET_ADMIN_PUBLIC_DECKS_FAIL,
+	};
+};
+
+export const getAdminPublicDecks = () => {
+	return (dispatch) => {
+		axios
+			.get(`/api/PublicDecks`)
+			.then((res) => dispatch(getAdminPublicDecksSuccess(res.data)))
+			.catch((err) => dispatch(getAdminPublicDecksFail()));
+	};
+};

@@ -78,7 +78,7 @@ export {
 	getCurrentUserCards,
 } from './UsersManagement';
 
-export { getPublicCards, selectPublicCard, downloadPublicCard } from './Market.js';
+export { getPublicCards, selectPublicCard, downloadPublicCard, getAdminPublicDecks } from './Market.js';
 
 export {
 	getUserDeck,

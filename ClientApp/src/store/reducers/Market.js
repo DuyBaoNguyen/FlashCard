@@ -4,6 +4,7 @@ const initialState = {
 	cardList: [],
 	getCardsError: null,
 	selectedCard: null,
+	adminPublicDecks: [],
 };
 
 export const marketReducer = (state = initialState, action) => {
@@ -34,6 +35,15 @@ export const marketReducer = (state = initialState, action) => {
 				...state,
 			};
 		case actionTypes.DOWNLOAD_PUBLIC_CARD_FAIL:
+			return {
+				...state,
+			};
+		case actionTypes.GET_ADMIN_PUBLIC_DECKS_SUCCESS:
+			return {
+				...state,
+				adminPublicDecks: action.adminPublicDecks
+			};
+		case actionTypes.GET_ADMIN_PUBLIC_DECKS_FAIL:
 			return {
 				...state,
 			};

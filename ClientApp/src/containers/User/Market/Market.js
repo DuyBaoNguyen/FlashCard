@@ -24,7 +24,7 @@ class Market extends Component {
 			return <Cards />;
 		}
 		if (this.state.activePage === 2) {
-			// return <Decks />;
+			return <Decks />;
 		}
 	};
 
