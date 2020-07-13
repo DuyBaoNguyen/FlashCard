@@ -18,7 +18,7 @@ import Loading from '../../../../components/Shared/Loading/Loading';
 import { TIME_OUT_DURATION } from '../../../../applicationConstants';
 import './Cards.css';
 
-const AMOUNT_CARDS = 18;
+const AMOUNT_CARDS = 12;
 
 class Cards extends Component {
 	constructor(props) {
@@ -82,12 +82,15 @@ class Cards extends Component {
 						)
 						.map((card) => {
 							return (
-								<Card
+								<div className=''>
+									<Card
 									key={card.id}
 									displayStatus
 									card={card}
 									onClick={this.handleClickCard}
 								/>
+								<Button className='cards-button-download' onClick={() => this.props.onDownloadPublicCard(card.id)}>Download</Button>
+								</div>
 							);
 						})}
 				</div>
@@ -135,6 +138,7 @@ const mapDispatchToProps = (dispatch) => {
 		onSelectCard: (id) => dispatch(actions.selectPublicCard(id)),
 		onUpdateSearchString: (value) =>
 			dispatch(actions.updateCardsSearchString(value)),
+			onDownloadPublicCard: (id) => dispatch(actions.downloadPublicCard(id))
 	};
 };
 

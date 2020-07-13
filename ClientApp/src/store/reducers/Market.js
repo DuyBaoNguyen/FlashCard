@@ -29,6 +29,14 @@ export const marketReducer = (state = initialState, action) => {
 				...state,
 				selectedCard: null,
 			};
+		case actionTypes.DOWNLOAD_PUBLIC_CARD_SUCCESS:
+			return {
+				...state,
+			};
+		case actionTypes.DOWNLOAD_PUBLIC_CARD_FAIL:
+			return {
+				...state,
+			};
 		default:
 			return state;
 	}

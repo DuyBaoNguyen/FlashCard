@@ -8,12 +8,18 @@
 
   .cards {
     width: 100%;
-    margin-top: 15px;
+    margin-top: 30px;
     margin-bottom: 10px;
     display: grid;
     grid-template-columns: auto auto auto auto auto auto;
     column-gap: 30px;
-    row-gap: 10px;
+    row-gap: 40px;
+    .cards-button-download {
+      display: flex;
+      justify-content: center;
+      margin-top: 10px;
+      width: 95%;
+    }
     .card-wrapper {
       width: 150px;
       .card-front {
@@ -25,6 +31,7 @@
     }
   }
   .cards-pagination {
+    margin-top: 40px;
     display: flex;
     justify-content: center;
     align-items: center;

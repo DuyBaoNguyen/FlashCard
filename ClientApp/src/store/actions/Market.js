@@ -25,14 +25,35 @@ export const getPublicCards = (front) => {
 };
 
 export const selectPublicCard = (cardId) => {
-  return {
-    type: actionTypes.SELECT_PUBLIC_CARD,
-    cardId: cardId
-  };
-}
+	return {
+		type: actionTypes.SELECT_PUBLIC_CARD,
+		cardId: cardId,
+	};
+};
 
 export const unselectPublicCard = () => {
-  return {
-    type: actionTypes.UNSELECT_PUBLIC_CARD
-  };
-}
+	return {
+		type: actionTypes.UNSELECT_PUBLIC_CARD,
+	};
+};
+
+const downloadPublicCardSuccess = () => {
+	return {
+		type: actionTypes.DOWNLOAD_PUBLIC_CARD_SUCCESS,
+	};
+};
+
+const downloadPublicCardFail = () => {
+	return {
+		type: actionTypes.DOWNLOAD_PUBLIC_CARD_FAIL,
+	};
+};
+
+export const downloadPublicCard = (id) => {
+	return (dispatch) => {
+		axios
+			.put(`/api/DownloadedCards/${id}`)
+			.then((res) => dispatch(downloadPublicCardSuccess(res.data)))
+			.catch((err) => dispatch(downloadPublicCardFail()));
+	};
+};

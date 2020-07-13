@@ -14,7 +14,7 @@
 
 .market-cards-list-wrapper .cards {
   width: 100%;
-  margin-top: 15px;
+  margin-top: 30px;
   margin-bottom: 10px;
   display: -ms-grid;
   display: grid;
@@ -22,7 +22,18 @@
       grid-template-columns: auto auto auto auto auto auto;
   -webkit-column-gap: 30px;
           column-gap: 30px;
-  row-gap: 10px;
+  row-gap: 40px;
+}
+
+.market-cards-list-wrapper .cards .cards-button-download {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  margin-top: 10px;
+  width: 95%;
 }
 
 .market-cards-list-wrapper .cards .card-wrapper {
@@ -38,6 +49,7 @@
 }
 
 .market-cards-list-wrapper .cards-pagination {
+  margin-top: 40px;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
