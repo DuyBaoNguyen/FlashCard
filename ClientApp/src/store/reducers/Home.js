@@ -4,18 +4,23 @@ import * as utils from '../../util/util';
 const initialState = {
   decks: [],
   originalDecks: [],
-  getDeckError: null,
   statistics: null,
   percentPracticedCardsStatistics: null,
   amountRememberedCardsStatistics: null,
-  getStatisticsError: null,
   profile: null,
-  getProfileError: null,
+  nameUpdatingFormOpened: false,
   loadings: {
     getDecksLoading: true
   },
   filteredValues: {
     decksFilteredValue: ''
+  },
+  errors: {
+    getDeckError: false,
+    getStatisticsError: false,
+    getProfileError: false,
+    updateCurrentUserNameError: null,
+    updateCurrentUserPictureError: false
   }
 };
 
@@ -30,7 +35,10 @@ export const homeReducer = (state = initialState, action) => {
           ...state.loadings,
           getDecksLoading: false
         },
-        getDeckError: null,
+        errors: {
+          ...state.errors,
+          getDeckError: false
+        }
       };
     case actionTypes.GET_DECKS_FAILED:
       return {
@@ -41,7 +49,10 @@ export const homeReducer = (state = initialState, action) => {
           ...state.loadings,
           getDecksLoading: false
         },
-        getDeckError: 'Something went wrong',
+        errors: {
+          ...state.errors,
+          getDeckError: true
+        }
       };
     case actionTypes.GET_STATISTICS_SUCCESS:
       return {
@@ -49,7 +60,10 @@ export const homeReducer = (state = initialState, action) => {
         statistics: action.statistics,
         percentPracticedCardsStatistics: utils.transformPercentPracticedCardsStatistics(action.statistics),
         amountRememberedCardsStatistics: utils.transformAmountRememberedCardsStatistics(action.statistics),
-        getStatisticsError: null
+        errors: {
+          ...state.errors,
+          getStatisticsError: false
+        }
       }
     case actionTypes.GET_STATISTICS_FAIL:
       return {
@@ -57,19 +71,28 @@ export const homeReducer = (state = initialState, action) => {
         statistics: null,
         percentPracticedCardsStatistics: null,
         amountRememberedCardsStatistics: null,
-        getStatisticsError: 'Something went wrong'
+        errors: {
+          ...state.errors,
+          getStatisticsError: true
+        }
       }
     case actionTypes.GET_PROFILE_SUCCESS:
       return {
         ...state,
         profile: action.profile,
-        getProfileError: null
+        errors: {
+          ...state.errors,
+          getProfileError: false
+        }
       }
     case actionTypes.GET_PROFILE_FAIL:
       return {
         ...state,
         profile: null,
-        getProfileError: 'Something went wrong'
+        errors: {
+          ...state.errors,
+          getProfileError: true
+        }
       }
     case actionTypes.SET_DECKS_FILTERED_VALUE:
       return {
@@ -84,15 +107,51 @@ export const homeReducer = (state = initialState, action) => {
         ...state,
         decks: utils.filterDecks(state.originalDecks, action.filteredValue)
       };
-      case actionTypes.UPDATE_NAME_SUCCESS:
-        return {
-          ...state,
-        };
-      case actionTypes.UPDATE_NAME_FAIL:
-        return {
-          ...state,
-          getDeckError: 'Change name failed!',
-        };
+    case actionTypes.UPDATE_CURRENT_USER_NAME_SUCCESS:
+      return {
+        ...state,
+        errors: {
+          ...state.errors,
+          updateCurrentUserNameError: null
+        }
+      };
+    case actionTypes.UPDATE_CURRENT_USER_NAME_FAIL:
+      return {
+        ...state,
+        errors: {
+          ...state.errors,
+          updateCurrentUserNameError: action.error
+        }
+      };
+    case actionTypes.UPDATE_CURRENT_USER_PICTURE_SUCCESS:
+      return {
+        ...state,
+        errors: {
+          ...state.errors,
+          updateCurrentUserPictureError: false
+        }
+      };
+    case actionTypes.UPDATE_CURRENT_USER_PICTURE_FAIL:
+      return {
+        ...state,
+        errors: {
+          ...state.errors,
+          updateCurrentUserPictureError: true
+        }
+      };
+    case actionTypes.TOGGLE_NAME_UPDATING_FORM:
+      return {
+        ...state,
+        nameUpdatingFormOpened: action.value
+      };
+    case actionTypes.CLEAR_UPDATE_CURRENT_USER_NAME_ERROR:
+      return {
+        ...state,
+        errors: {
+          ...state.errors,
+          updateCurrentUserNameError: null
+        }
+      };
     default:
       return state;
   }

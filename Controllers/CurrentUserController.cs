@@ -72,11 +72,11 @@ namespace FlashCard.Controllers
 			{
 				if (picture.Length > 5242880)
 				{
-					ModelState.AddModelError("Image", "File is not exceeded 5MB.");
+					ModelState.AddModelError("Picture", "File is not exceeded 5MB.");
 				}
 				if (!ImageUtil.CheckExtensions(picture))
 				{
-					ModelState.AddModelError("Image",
+					ModelState.AddModelError("Picture",
 						"Accepted images that images are with an extension of .png, .jpg, .jpeg or .bmp.");
 				}
 				if (!ModelState.IsValid)

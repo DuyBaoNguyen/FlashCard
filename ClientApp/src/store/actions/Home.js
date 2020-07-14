@@ -93,53 +93,70 @@ export const filterDecks = (filteredValue) => {
 	};
 };
 
-export const updateNameSuccess = () => {
+export const updateCurrentUserNameSuccess = () => {
 	return {
-		type: actionTypes.UPDATE_NAME_SUCCESS,
+		type: actionTypes.UPDATE_CURRENT_USER_NAME_SUCCESS,
 	};
 };
 
-export const updateNameFail = () => {
+export const updateCurrentUserNameFail = (error) => {
 	return {
-		type: actionTypes.UPDATE_NAME_FAIL,
+		type: actionTypes.UPDATE_CURRENT_USER_NAME_FAIL,
+		error: error
 	};
 };
 
-export const updateName = (displayName) => {
+export const updateCurrentUserName = (displayName) => {
 	return (dispatch) => {
-		axios
-			.put('/api/currentuser', {
-				displayName: displayName,
+		axios.put('/api/currentuser', { displayName: displayName, })
+			.then(() => {
+				dispatch(updateCurrentUserNameSuccess());
+				dispatch(toggleNameUpdatingForm(false));
+				dispatch(getProfile());
 			})
-			.then((res) => {
-				dispatch(updateNameSuccess());
-			})
-			.catch((err) => dispatch(updateNameFail()));
+			.catch((err) => {
+				if (err.response.status === 400) {
+					dispatch(updateCurrentUserNameFail(err.response.data))
+				}
+			});
 	};
 };
 
-const updateAvatarSuccess = () => {
+const updateCurrentUserPictureSuccess = () => {
 	return {
-		type: actionTypes.UPDATE_AVATAR_SUCCESS,
+		type: actionTypes.UPDATE_CURRENT_USER_PICTURE_SUCCESS
 	};
 };
 
-const updateAvatarFail = () => {
+const updateCurrentUserPictureFail = () => {
 	return {
-		type: actionTypes.UPDATE_AVATAR_FAIL,
+		type: actionTypes.UPDATE_CURRENT_USER_PICTURE_FAIL
 	};
 };
 
-export const updateAvatar = (image) => {
+export const updateCurrentUserPicture = (picture) => {
 	return (dispatch) => {
 		const formData = new FormData();
-		formData.append('image', image);
+		formData.append('picture', picture);
 
-		axios
-			.put(`/api/currentuser/picture`, formData)
+		axios.put(`/api/currentuser/picture`, formData)
 			.then(() => {
-				dispatch(updateAvatarSuccess());
+				dispatch(updateCurrentUserPictureSuccess());
+				dispatch(getProfile());
 			})
-			.catch(() => dispatch(updateAvatarFail()));
+			.catch(() => dispatch(updateCurrentUserPictureFail()));
+	};
+};
+
+export const toggleNameUpdatingForm = (value) => {
+	return {
+		type: actionTypes.TOGGLE_NAME_UPDATING_FORM,
+		value: value
+	};
+};
+
+export const clearUpdateCurrentUserNameError = () => {
+	return {
+		type: actionTypes.CLEAR_UPDATE_CURRENT_USER_NAME_ERROR
 	};
 };

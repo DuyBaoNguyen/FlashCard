@@ -320,7 +320,7 @@ class CardBackForm extends Component {
                     <button
                       className="update-btn"
                       type="submit">
-                      {back ? 'Edit' : 'Create'}
+                      {back ? 'Update' : 'Create'}
                     </button>
                   </div>
                 </form>

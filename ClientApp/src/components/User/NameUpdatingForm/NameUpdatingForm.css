@@ -1,4 +1,4 @@
-.card-front-form .card-front-form-wrapper {
+.name-updating-form .name-updating-form-wrapper {
   position: fixed;
   top: 50%;
   left: 50%;
@@ -13,18 +13,18 @@
   z-index: 200;
 }
 
-.card-front-form .card-front-form-wrapper .card-front-form-header {
+.name-updating-form .name-updating-form-wrapper .name-updating-form-header {
   font-weight: 600;
   font-size: 24px;
   color: #535353;
   margin-bottom: 20px;
 }
 
-.card-front-form .card-front-form-wrapper .card-front-form-input {
+.name-updating-form .name-updating-form-wrapper .name-updating-form-input {
   margin-bottom: 20px;
 }
 
-.card-front-form .card-front-form-wrapper .card-front-form-input label {
+.name-updating-form .name-updating-form-wrapper .name-updating-form-input label {
   display: block;
   margin-bottom: 8px;
   font-weight: 500;
@@ -32,14 +32,14 @@
   color: #979797;
 }
 
-.card-front-form .card-front-form-wrapper .card-front-form-features {
+.name-updating-form .name-updating-form-wrapper .name-updating-form-features {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
 }
 
-.card-front-form .card-front-form-wrapper .card-front-form-features .cancel-btn,
-.card-front-form .card-front-form-wrapper .card-front-form-features .update-btn {
+.name-updating-form .name-updating-form-wrapper .name-updating-form-features .cancel-btn,
+.name-updating-form .name-updating-form-wrapper .name-updating-form-features .update-btn {
   -webkit-box-flex: 1;
       -ms-flex: 1;
           flex: 1;
@@ -50,7 +50,7 @@
   cursor: pointer;
 }
 
-.card-front-form .card-front-form-wrapper .card-front-form-features .cancel-btn {
+.name-updating-form .name-updating-form-wrapper .name-updating-form-features .cancel-btn {
   background-color: #fff;
   color: #979797;
   -webkit-box-shadow: 0px 3px 12px rgba(0, 0, 0, 0.06);
@@ -58,30 +58,30 @@
   margin-right: 5px;
 }
 
-.card-front-form .card-front-form-wrapper .card-front-form-features .update-btn {
+.name-updating-form .name-updating-form-wrapper .name-updating-form-features .update-btn {
   background-color: #9eacf4;
   color: #fff;
   margin-left: 5px;
 }
 
-.card-front-form .card-front-form-wrapper .error-notification {
+.name-updating-form .name-updating-form-wrapper .error-notification {
   font-size: 13px;
   color: red;
   font-style: italic;
   margin-top: 5px;
 }
 
-.card-front-form .card-front-form-open {
-  -webkit-animation: openCardFrontForm 0.2s ease-out forwards;
-          animation: openCardFrontForm 0.2s ease-out forwards;
+.name-updating-form .name-updating-form-open {
+  -webkit-animation: openNameUpdatingForm 0.2s ease-out forwards;
+          animation: openNameUpdatingForm 0.2s ease-out forwards;
 }
 
-.card-front-form .card-front-form-close {
-  -webkit-animation: closeCardFrontForm 0.2s ease-out forwards;
-          animation: closeCardFrontForm 0.2s ease-out forwards;
+.name-updating-form .name-updating-form-close {
+  -webkit-animation: closeNameUpdatingForm 0.2s ease-out forwards;
+          animation: closeNameUpdatingForm 0.2s ease-out forwards;
 }
 
-@-webkit-keyframes openCardFrontForm {
+@-webkit-keyframes openNameUpdatingForm {
   0% {
     opacity: 0;
     -webkit-transform: translate(-50%, -100%);
@@ -94,7 +94,7 @@
   }
 }
 
-@keyframes openCardFrontForm {
+@keyframes openNameUpdatingForm {
   0% {
     opacity: 0;
     -webkit-transform: translate(-50%, -100%);
@@ -107,25 +107,7 @@
   }
 }
 
-@-webkit-keyframes closeCardFrontForm {
-  0% {
-    opacity: 1;
-    -webkit-transform: translate(-50%, -150px);
-            transform: translate(-50%, -150px);
-  }
-  50% {
-    opacity: 0;
-    -webkit-transform: translate(-50%, -80%);
-            transform: translate(-50%, -80%);
-  }
-  100% {
-    opacity: 0;
-    -webkit-transform: translate(-50%, -100%);
-            transform: translate(-50%, -100%);
-  }
-}
-
-@keyframes closeCardFrontForm {
+@-webkit-keyframes closeNameUpdatingForm {
   0% {
     opacity: 1;
     -webkit-transform: translate(-50%, -150px);
@@ -142,4 +124,22 @@
             transform: translate(-50%, -100%);
   }
 }
-/*# sourceMappingURL=CardFrontForm.css.map */
+
+@keyframes closeNameUpdatingForm {
+  0% {
+    opacity: 1;
+    -webkit-transform: translate(-50%, -150px);
+            transform: translate(-50%, -150px);
+  }
+  50% {
+    opacity: 0;
+    -webkit-transform: translate(-50%, -80%);
+            transform: translate(-50%, -80%);
+  }
+  100% {
+    opacity: 0;
+    -webkit-transform: translate(-50%, -100%);
+            transform: translate(-50%, -100%);
+  }
+}
+/*# sourceMappingURL=NameUpdatingForm.css.map */

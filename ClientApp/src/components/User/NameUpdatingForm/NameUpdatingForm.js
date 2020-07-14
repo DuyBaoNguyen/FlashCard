@@ -6,7 +6,7 @@ import BackDrop from '../../Shared/BackDrop/BackDrop';
 import Input from '../../Shared/Input/Input';
 import * as actions from '../../../store/actions';
 import * as util from '../../../util/util';
-import './CardFrontForm.css';
+import './NameUpdatingForm.css';
 
 const animationDuration = {
   enter: 200,
@@ -14,7 +14,7 @@ const animationDuration = {
 };
 
 const initialForm = {
-  front: {
+  displayName: {
     value: '',
     valid: true,
     validation: {
@@ -26,38 +26,34 @@ const initialForm = {
   valid: true
 };
 
-class CardFrontForm extends Component {
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      form: initialForm
-    };
-  }
+class NameUpdatingForm extends Component {
+  state = {
+    form: initialForm
+  };
 
   static getDerivedStateFromProps(nextProps, prevState) {
-    if (nextProps.card && prevState.form.front.value === '') {
+    if (nextProps.profile && prevState.form.displayName.value === '') {
       return {
         ...prevState,
         form: {
           ...prevState.form,
-          front: {
-            ...prevState.form.front,
-            value: nextProps.card.front
+          displayName: {
+            ...prevState.form.displayName,
+            value: nextProps.profile.displayName
           }
         }
       }
     }
     if (nextProps.error) {
-      nextProps.onClearUpdateFrontError();
+      nextProps.onClearUpdateCurrentUserNameError();
       return {
         ...prevState,
         form: {
           ...prevState.form,
-          front: {
-            ...prevState.form.front,
+          displayName: {
+            ...prevState.form.displayName,
             valid: false,
-            error: nextProps.error.Front[0]
+            error: nextProps.error.displayName[0]
           },
           valid: false
         }
@@ -91,16 +87,9 @@ class CardFrontForm extends Component {
   }
 
   handleSumit = (event) => {
-    const { card, onCreateCard, onUpdateFront } = this.props;
-    const { form } = this.state;
-
     event.preventDefault();
-    if (form.valid) {
-      if (card) {
-        onUpdateFront(card.id, form.front.value);
-      } else {
-        onCreateCard(form.front.value);
-      }
+    if (this.state.form.valid) {
+      this.props.onUpdateCurrentUserName(this.state.form.displayName.value);
     }
   }
 
@@ -110,11 +99,11 @@ class CardFrontForm extends Component {
   }
 
   render() {
-    const { card, onClose, isOpen } = this.props;
+    const { profile, onClose, isOpen } = this.props;
     const { form } = this.state;
 
     return (
-      <div className="card-front-form">
+      <div className="name-updating-form">
         <BackDrop isOpen={isOpen} onClick={onClose} />
         <Transition
           mountOnEnter
@@ -122,44 +111,40 @@ class CardFrontForm extends Component {
           in={isOpen}
           timeout={animationDuration}>
           {state => {
-            const cardFormClasses = [
-              'card-front-form-wrapper',
-              state === 'entering' ? 'card-front-form-open' : (state === 'exiting' ? 'card-front-form-close' : null)
+            const nameUpdatingFormClasses = [
+              'name-updating-form-wrapper',
+              state === 'entering' ? 'name-updating-form-open' : (state === 'exiting' ? 'name-updating-form-close' : null)
             ];
 
             return (
-              <div className={cardFormClasses.join(' ')}>
-                <div className="card-front-form-header">
-                  {card ? 'Edit front' : 'Create front'}
-                </div>
+              <div className={nameUpdatingFormClasses.join(' ')}>
+                <div className="name-updating-form-header">Edit display name</div>
                 <form onSubmit={this.handleSumit}>
-                  <div className="card-front-form-input">
-                    <label>Front</label>
+                  <div className="name-updating-form-input">
+                    <label>Name</label>
                     <Input
-                      name="front"
-                      defaultValue={card?.front}
+                      name="displayName"
+                      defaultValue={profile?.displayName}
                       autoComplete="off"
                       autoFocus
-                      touched={form.front.touched}
-                      valid={form.front.valid}
+                      touched={form.displayName.touched}
+                      valid={form.displayName.valid}
                       onChange={this.handleInputChange} />
-                    {!form.front.valid && (
+                    {!form.displayName.valid && (
                       <div className="error-notification">
-                        {form.front.error}
+                        {form.displayName.error}
                       </div>
                     )}
                   </div>
-                  <div className="card-front-form-features">
+                  <div className="name-updating-form-features">
                     <button
                       className="cancel-btn"
                       type="button"
                       onClick={this.handleClickCancel}>
                       Cancel
                     </button>
-                    <button
-                      className="update-btn"
-                      type="submit">
-                      {card ? 'Update' : 'Create'}
+                    <button className="update-btn" type="submit">
+                      Update
                     </button>
                   </div>
                 </form>
@@ -174,16 +159,15 @@ class CardFrontForm extends Component {
 
 const mapStateToProps = state => {
   return {
-    error: state.card.errors.updateFrontError
+    error: state.home.errors.updateCurrentUserNameError
   };
 };
 
 const mapDispatchToProps = dispatch => {
   return {
-    onCreateCard: (front) => dispatch(actions.createCard(front)),
-    onUpdateFront: (cardId, front) => dispatch(actions.updateFront(cardId, front)),
-    onClearUpdateFrontError: () => dispatch(actions.clearUpdateFrontError())
+    onUpdateCurrentUserName: (displayName) => dispatch(actions.updateCurrentUserName(displayName)),
+    onClearUpdateCurrentUserNameError: () => dispatch(actions.clearUpdateCurrentUserNameError())
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(CardFrontForm);
+export default connect(mapStateToProps, mapDispatchToProps)(NameUpdatingForm);

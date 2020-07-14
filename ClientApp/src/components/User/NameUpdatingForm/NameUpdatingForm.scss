@@ -1,5 +1,5 @@
-.card-front-form {
-  .card-front-form-wrapper {
+.name-updating-form {
+  .name-updating-form-wrapper {
     position: fixed;
     top: 50%;
     left: 50%;
@@ -10,13 +10,13 @@
     border-radius: 15px;
     padding: 30px;
     z-index: 200;
-    .card-front-form-header {
+    .name-updating-form-header {
       font-weight: 600;
       font-size: 24px;
       color: #535353;
       margin-bottom: 20px;
     }
-    .card-front-form-input {
+    .name-updating-form-input {
       margin-bottom: 20px;
       label {
         display: block;
@@ -26,7 +26,7 @@
         color: #979797;
       }
     }
-    .card-front-form-features {
+    .name-updating-form-features {
       display: flex;
       .cancel-btn,
       .update-btn {
@@ -56,15 +56,15 @@
       margin-top: 5px;
     }
   }
-  .card-front-form-open {
-    animation: openCardFrontForm 0.2s ease-out forwards;
+  .name-updating-form-open {
+    animation: openNameUpdatingForm 0.2s ease-out forwards;
   }
-  .card-front-form-close {
-    animation: closeCardFrontForm 0.2s ease-out forwards;
+  .name-updating-form-close {
+    animation: closeNameUpdatingForm 0.2s ease-out forwards;
   }
 }
 
-@keyframes openCardFrontForm {
+@keyframes openNameUpdatingForm {
   0% {
     opacity: 0;
     transform: translate(-50%, -100%);
@@ -75,7 +75,7 @@
   }
 }
 
-@keyframes closeCardFrontForm {
+@keyframes closeNameUpdatingForm {
   0% {
     opacity: 1;
     transform: translate(-50%, -150px);
