@@ -80,3 +80,25 @@ export const getAdminPublicDecks = () => {
 			.catch((err) => dispatch(getAdminPublicDecksFail()));
 	};
 };
+
+const downloadAdminPublicDeckSuccess = (adminPublicDecks) => {
+	return {
+		type: actionTypes.DOWNLOAD_ADMIN_PUBLIC_DECK_SUCCESS,
+	};
+};
+
+const downloadAdminPublicDeckFail = () => {
+	return {
+		type: actionTypes.DOWNLOAD_ADMIN_PUBLIC_DECK_FAIL,
+	};
+};
+
+export const downloadAdminPublicDeck = (id) => {
+	return (dispatch) => {
+		axios
+			.put(`/api/DownloadedDecks/${id}`)
+			// .then((res) => console.log(res))
+			.then((res) => dispatch(downloadAdminPublicDeckSuccess(res.data)))
+			.catch((err) => dispatch(downloadAdminPublicDeckFail()));
+	};
+};
