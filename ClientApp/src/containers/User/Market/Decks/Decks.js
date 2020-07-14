@@ -17,6 +17,7 @@ class Decks extends Component {
 	}
 
 	render() {
+		console.log(this.props.adminPublicDecks);
 		return <div className="market-decks-wrapper">asdas</div>;
 	}
 }

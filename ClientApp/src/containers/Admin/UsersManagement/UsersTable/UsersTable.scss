@@ -68,11 +68,11 @@
       border-collapse: collapse;
 
       .first-cell {
-        border-top-left-radius: 15px;
+        border-top-left-radius: 10px;
       }
 
       .last-cell {
-        border-top-right-radius: 15px;
+        border-top-right-radius: 10px;
       }
     }
 
@@ -113,10 +113,10 @@
 
     tr:last-child {
       td:first-child {
-        border-bottom-left-radius: 15px;
+        border-bottom-left-radius: 10px;
       }
       td:last-child {
-        border-bottom-right-radius: 15px;
+        border-bottom-right-radius: 10px;
       }
     }
 

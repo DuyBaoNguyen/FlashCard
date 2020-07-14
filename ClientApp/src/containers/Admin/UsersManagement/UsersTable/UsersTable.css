@@ -78,11 +78,11 @@
 }
 
 .users-table-wrapper .users-table table .first-cell {
-  border-top-left-radius: 15px;
+  border-top-left-radius: 10px;
 }
 
 .users-table-wrapper .users-table table .last-cell {
-  border-top-right-radius: 15px;
+  border-top-right-radius: 10px;
 }
 
 .users-table-wrapper .users-table th {
@@ -122,11 +122,11 @@
 }
 
 .users-table-wrapper .users-table tr:last-child td:first-child {
-  border-bottom-left-radius: 15px;
+  border-bottom-left-radius: 10px;
 }
 
 .users-table-wrapper .users-table tr:last-child td:last-child {
-  border-bottom-right-radius: 15px;
+  border-bottom-right-radius: 10px;
 }
 
 .users-table-wrapper .users-table .users-table-width-small {
