@@ -11,22 +11,22 @@ import './Profile.css';
 
 class Profile extends Component {
 	state = {
-    deletingConfirmOpen: false
-  };
+		deletingConfirmOpen: false
+	};
 
 	handleDeleteCurrentUser = () => {
 		const { onDeleteCurrentUser, currentUserId } = this.props;
 		onDeleteCurrentUser(currentUserId);
-    this.setState({ deletingConfirmOpen: false });
+		this.setState({ deletingConfirmOpen: false });
 	};
 
 	handleOpenDeletingConfirm = () => {
-    this.setState({ deletingConfirmOpen: true });
-  }
+		this.setState({ deletingConfirmOpen: true });
+	}
 
-  handleCloseDeletingConfirm = () => {
-    this.setState({ deletingConfirmOpen: false });
-  }
+	handleCloseDeletingConfirm = () => {
+		this.setState({ deletingConfirmOpen: false });
+	}
 
 	render() {
 		const { currentUser } = this.props;
@@ -57,26 +57,28 @@ class Profile extends Component {
 						</Button>
 					</div>
 				</div>
-				<div className="profile-avatar">
-					{currentUser.pictureUrl
-						? (
-							<img src={currentUser.pictureUrl} alt="user_picture" width="107" height="107" />
-						)
-						: (
-							<div className="fake-picture">
-								{currentUser.name.substr(0, 1)}
-							</div>
-						)
-					}
+				<div className="profile-picture">
+					<div className="picture-wrapper">
+						{currentUser.pictureUrl
+							? (
+								<img src={currentUser.pictureUrl} alt="user_picture" width="99" height="99" />
+							)
+							: (
+								<div className="fake-picture">
+									{currentUser.name.substr(0, 1)}
+								</div>
+							)
+						}
+					</div>
 				</div>
 				<Confirm
-          isOpen={deletingConfirmOpen}
-          header="Delete"
-          message="Are you sure you want to delete this user?"
-          confirmColor="#fe656d"
-          onCancel={this.handleCloseDeletingConfirm}
-          onConfirm={this.handleDeleteCurrentUser}>
-        </Confirm>
+					isOpen={deletingConfirmOpen}
+					header="Delete"
+					message="Are you sure you want to delete this user?"
+					confirmColor="#fe656d"
+					onCancel={this.handleCloseDeletingConfirm}
+					onConfirm={this.handleDeleteCurrentUser}>
+				</Confirm>
 			</div>
 		);
 	}

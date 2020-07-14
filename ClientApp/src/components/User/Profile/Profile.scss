@@ -11,84 +11,6 @@
     display: none;
   }
 
-  // .deck-form-input {
-  //   display: grid;
-
-  //   label {
-  //     margin-bottom: 20px;
-  //     height: 8px;
-  //     font-style: normal;
-  //     font-weight: 500;
-  //     font-size: 14px;
-  //     line-height: 22px;
-  //     color: #979797;
-  //   }
-
-  //   input {
-  //     width: 100%;
-  //     height: 25px;
-  //     background: #ffffff;
-  //     border: 1px solid #d9d9d9;
-  //     box-sizing: border-box;
-  //     border-radius: 4px;
-  //     padding: 10px;
-  //     transition: 0.3s;
-
-  //     &:focus {
-  //       transition: 0.3s;
-  //       border: 2px solid #9eacf4;
-  //     }
-  //   }
-  // }
-
-  // .deck-form-button {
-  //   margin-top: 15px;
-  //   display: grid;
-  //   grid-template-columns: auto auto;
-  //   column-gap: 10px;
-
-  //   .deck-form-button-cancel {
-  //     display: flex;
-  //     justify-content: center;
-  //     align-items: center;
-  //     width: 100%;
-  //     height: 30px;
-  //     border: none;
-  //     box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.05);
-  //     background: #ffffff;
-  //     font-style: normal;
-  //     font-size: 14px;
-  //     line-height: 28px;
-  //     color: #979797;
-  //     cursor: pointer;
-  //   }
-
-  //   .deck-form-button-create {
-  //     display: flex;
-  //     justify-content: center;
-  //     align-items: center;
-  //     width: 100%;
-  //     height: 30px;
-  //     border: none;
-  //     box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.05);
-  //     background: #9eacf4;
-  //     font-style: normal;
-  //     font-size: 14px;
-  //     line-height: 28px;
-  //     color: #ffffff;
-  //     cursor: pointer;
-  //   }
-
-  //   button {
-  //     transition: 0.1s;
-  //   }
-
-  //   button:active {
-  //     transition: 0.1s;
-  //     transform: translateY(10px);
-  //   }
-  // }
-
   .home-profile-picture {
     height: 96px;
     width: 96px;
@@ -108,7 +30,7 @@
       width: 88px;
       height: 88px;
       border-radius: 50%;
-      background-color: #fafafa;
+      background-color: #f5f5f5;
       display: flex;
       justify-content: center;
       align-items: center;

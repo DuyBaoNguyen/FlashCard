@@ -44,7 +44,7 @@ class Profile extends Component {
 						)
 						: (
 							<div className="fake-picture">
-								{profile?.name.substr(0, 1)}
+								{profile?.displayName.substr(0, 1)}
 							</div>
 						)
 					}
