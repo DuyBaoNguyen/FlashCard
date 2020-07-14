@@ -41,11 +41,13 @@ export const marketReducer = (state = initialState, action) => {
 		case actionTypes.GET_ADMIN_PUBLIC_DECKS_SUCCESS:
 			return {
 				...state,
-				adminPublicDecks: action.adminPublicDecks
+				adminPublicDecks: action.adminPublicDecks,
 			};
 		case actionTypes.GET_ADMIN_PUBLIC_DECKS_FAIL:
 			return {
 				...state,
+				adminPublicDecks: [],
+				getCardsError: 'Get public cards failed!',
 			};
 		default:
 			return state;

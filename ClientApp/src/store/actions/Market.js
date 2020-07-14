@@ -58,9 +58,10 @@ export const downloadPublicCard = (id) => {
 	};
 };
 
-const getAdminPublicDecksSuccess = () => {
+const getAdminPublicDecksSuccess = (adminPublicDecks) => {
 	return {
 		type: actionTypes.GET_ADMIN_PUBLIC_DECKS_SUCCESS,
+		adminPublicDecks: adminPublicDecks,
 	};
 };
 
@@ -74,6 +75,7 @@ export const getAdminPublicDecks = () => {
 	return (dispatch) => {
 		axios
 			.get(`/api/PublicDecks`)
+			// .then((res) => console.log(res))
 			.then((res) => dispatch(getAdminPublicDecksSuccess(res.data)))
 			.catch((err) => dispatch(getAdminPublicDecksFail()));
 	};

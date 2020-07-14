@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import withErrorHandler from '../../../../hoc/withErrorHandler';
 import * as actions from '../../../../store/actions/index';
+import Pagination from 'react-js-pagination';
+import Deck from './Deck/Deck';
 import './Decks.css';
 
 class Decks extends Component {
@@ -16,8 +18,49 @@ class Decks extends Component {
 		this.props.onGetAdminPublicDecks();
 	}
 
+	handlePageChange(pageNumber) {
+		this.setState({ activePage: pageNumber });
+	}
+
 	render() {
-		return <div className="market-decks-wrapper">asdas</div>;
+		let pagination = (
+			<Pagination
+				hideFirstLastPages
+				prevPageText="<"
+				nextPageText=">"
+				activePage={this.state.activePage}
+				itemsCountPerPage={4}
+				totalItemsCount={
+					this.props.adminPublicDecks !== null
+						? this.props.adminPublicDecks.length
+						: null
+				}
+				pageRangeDisplayed={5}
+				onChange={this.handlePageChange.bind(this)}
+				activeClass="pagination-item-active"
+				itemClass="pagination-item"
+			/>
+		);
+		let deckList = (
+			<div className="decks">
+				{this.props.adminPublicDecks
+					.filter(
+						(deck, index) =>
+							index >= (this.state.activePage - 1) * 4 &&
+							index <= this.state.activePage * 4 - 1
+					)
+					.map((deck, index) => (
+						<Deck key={deck.id} deck={deck} />
+					))}
+			</div>
+		);
+		return (
+			<>
+				{' '}
+				<div className="market-decks-wrapper">{deckList}</div>
+				<div className="deck-pagination">{pagination}</div>
+			</>
+		);
 	}
 }
 
