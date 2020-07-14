@@ -1,0 +1,39 @@
+.confirm-wrapper {
+  .confirm {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 450px;
+    background: #ffffff;
+    box-shadow: 0px 0px 30px rgba(0, 0, 0, 0.05);
+    border-radius: 15px;
+    padding: 30px;
+    z-index: 200;
+    .confirm-header {
+      font-weight: 600;
+      font-size: 18px;
+      color: #535353;
+      margin-bottom: 20px;
+    }
+    .confirm-message {
+      font-size: 14px;
+      color: #979797;
+      margin-bottom: 40px;
+    }
+    .confirm-features {
+      display: flex;
+      .cancel-btn {
+        background-color: #fff;
+        color: #979797;
+        box-shadow: 0px 3px 12px rgba(0, 0, 0, 0.06);
+        margin-right: 5px;
+      }
+      .confirm-btn {
+        background-color: #9eacf4;
+        color: #fff;
+        margin-left: 5px;
+      }
+    }
+  }
+}

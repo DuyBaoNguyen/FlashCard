@@ -11,6 +11,7 @@ import Button from '../../Shared/Button/Button';
 import Filter from '../../Shared/Filter/Filter';
 import Card from '../Card/Card';
 import Loading from '../../Shared/Loading/Loading';
+import Confirm from '../../Shared/Confirm/Confirm';
 import * as actions from '../../../store/actions';
 import { TIME_OUT_DURATION } from '../../../applicationConstants';
 import './CardsList.css';
@@ -23,7 +24,8 @@ class CardsList extends Component {
 
     this.state = {
       activePage: 1,
-      setLoading: false
+      setLoading: false,
+      deletedCardId: null
     };
   }
 
@@ -54,8 +56,9 @@ class CardsList extends Component {
     this.setState({ activePage: 1 });
   }
 
-  handleDeleteCard = (cardId) => {
-    this.props.onDeleteCard(cardId);
+  handleDeleteCard = () => {
+    this.props.onDeleteCard(this.state.deletedCardId);
+    this.setState({ deletedCardId: null });
   }
 
   handleFilteredValueChange = (event) => {
@@ -64,9 +67,17 @@ class CardsList extends Component {
     this.setState({ activePage: 1 });
   }
 
+  handleOpenDeletingConfirm = (cardId) => {
+    this.setState({ deletedCardId: cardId });
+  }
+
+  handleCloseDeletingConfirm = () => {
+    this.setState({ deletedCardId: null });
+  }
+
   render() {
     const { cards, loading } = this.props;
-    let { activePage, setLoading } = this.state;
+    let { activePage, setLoading, deletedCardId } = this.state;
     let cardsList = loading ? setLoading && <Loading /> : <p className="text-notify">There are no cards here!</p>;
     let pagination;
 
@@ -83,7 +94,7 @@ class CardsList extends Component {
                   options={[
                     {
                       type: 'link',
-                      path: { pathname: `/cards/${card.id}/edit`, state: { backUrl: '/cards' }},
+                      path: { pathname: `/cards/${card.id}/edit`, state: { backUrl: '/cards' } },
                       icon: <Icon icon={editIcon} color="#646464" />,
                       label: { value: 'Edit card' }
                     },
@@ -91,7 +102,7 @@ class CardsList extends Component {
                       type: 'button',
                       icon: <Icon icon={deleteIcon} color="red" />,
                       label: { value: 'Delete card', color: 'red' },
-                      onClick: () => this.handleDeleteCard(card.id)
+                      onClick: () => this.handleOpenDeletingConfirm(card.id)
                     }
                   ]}
                   onClick={this.handleClickCard} />
@@ -122,11 +133,11 @@ class CardsList extends Component {
           <div className="cards-list-header-features">
             <Button
               type="link"
-              path={{ pathname: `/cards/create`, state: { backUrl: '/cards'}}}
+              path={{ pathname: `/cards/create`, state: { backUrl: '/cards' } }}
               className="cards-list-header-features-add"
               icon={<Icon icon={plusIcon} />} >
             </Button>
-            <Filter 
+            <Filter
               className="cards-list-header-features-filter"
               onChange={this.handleFilteredValueChange}>
               <option value="all">All</option>
@@ -140,6 +151,15 @@ class CardsList extends Component {
         </div>
         {cardsList}
         <div className="cards-pagination">{pagination}</div>
+        <Confirm
+          isOpen={!!deletedCardId}
+          header="Delete"
+          message="Are you sure you want to delete this card?"
+          confirmLabel="Delete"
+          confirmColor="#fe656d"
+          onCancel={this.handleCloseDeletingConfirm}
+          onConfirm={this.handleDeleteCard}>
+        </Confirm>
       </div>
     );
   }

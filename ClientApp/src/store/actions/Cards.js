@@ -1,6 +1,7 @@
 import * as actionTypes from './actionTypes';
 import axios from '../../axios';
 import history from '../../history';
+import * as actions from './index';
 
 const getCardsSuccess = (cards) => {
   return {
@@ -64,7 +65,17 @@ export const deleteCard = (cardId) => {
         dispatch(deleteCardSuccess(cardId));
         if (history.location.pathname.search(/^\/cards\/\d+\/edit$/) > -1) {
           history.replace(history.location.state.backUrl || '/');
-        } else {
+        } else if (history.location.pathname.search(/^\/decks\/\d+$/) > -1) {
+          const deckId = /\d+/.exec(history.location.pathname)[0];
+          dispatch(actions.getDeck(deckId));
+          dispatch(actions.getDeckCardsInside(deckId));
+          dispatch(actions.getDeckStatistics(deckId));
+        } else if (history.location.pathname.search(/^\/decks\/\d+\/addcards$/) > -1) {
+          const deckId = /\d+/.exec(history.location.pathname)[0];
+          dispatch(actions.getDeckCardsInside(deckId));
+          dispatch(actions.getDeckCardsOutside(deckId));
+        } 
+        else {
           dispatch(getCards());
         }
       })

@@ -15,6 +15,7 @@ import Back from '../../../components/User/Back/Back';
 import DropDown from '../../../components/Shared/DropDown/DropDown';
 import DropDownItem from '../../../components/Shared/DropDownItem/DropDownItem';
 import Button from '../../../components/Shared/Button/Button';
+import Confirm from '../../../components/Shared/Confirm/Confirm';
 import * as actions from '../../../store/actions';
 import './EditCard.css';
 
@@ -22,6 +23,11 @@ class EditCard extends Component {
   constructor(props) {
     super(props);
     this.uploadImageInput = React.createRef();
+    this.state = {
+      cardDeletingConfirmOpen: false,
+      deletedBackId: null,
+      deletedImageBackId: null
+    };
   }
 
   UNSAFE_componentWillMount() {
@@ -62,14 +68,17 @@ class EditCard extends Component {
 
   handleDeleteCard = () => {
     this.props.onDeleteCard(this.props.card.id);
+    this.setState({ cardDeletingConfirmOpen: false });
   }
 
-  handleDeleteBack = (backId) => {
-    this.props.onDeleteBack(this.props.card.id, backId);
+  handleDeleteBack = () => {
+    this.props.onDeleteBack(this.props.card.id, this.state.deletedBackId);
+    this.setState({ deletedBackId: null });
   }
 
-  handleDeleteImage = (backId) => {
-    this.props.onDeleteImage(this.props.card.id, backId);
+  handleDeleteImage = () => {
+    this.props.onDeleteImage(this.props.card.id, this.state.deletedImageBackId);
+    this.setState({ deletedImageBackId: null });
   }
 
   handleAddBack = () => {
@@ -82,7 +91,6 @@ class EditCard extends Component {
   }
 
   handleImageChange = (event) => {
-    // Edit here
     if (event.target.files.length > 0) {
       const { card, selectedBack, onUpdateImage } = this.props;
       onUpdateImage(card.id, selectedBack.id, event.target.files[0]);
@@ -90,15 +98,36 @@ class EditCard extends Component {
     }
   }
 
+  handleOpenCardDeletingConfirm = () => {
+    this.setState({ cardDeletingConfirmOpen: true });
+  }
+
+  handleCloseCardDeletingConfirm = () => {
+    this.setState({ cardDeletingConfirmOpen: false });
+  }
+
+  handleOpenBackDeletingConfirm = (backId) => {
+    this.setState({ deletedBackId: backId });
+  }
+
+  handleCloseBackDeletingConfirm = () => {
+    this.setState({ deletedBackId: null });
+  }
+
+  handleOpenBackImageDeletingConfirm = (backId) => {
+    this.setState({ deletedImageBackId: backId });
+  }
+
+  handleCloseBackImageDeletingConfirm = () => {
+    this.setState({ deletedImageBackId: null });
+  }
+
   render() {
     const { card, cardFrontFormOpened, selectedBack, cardBackFormOpened } = this.props;
+    const { cardDeletingConfirmOpen, deletedBackId, deletedImageBackId } = this.state;
 
     return (
       <div className="edit-card">
-        {/* <Prompt
-          when={card?.backs.length === 0}
-          message="Card must have at least a back!"
-           /> */}
         <div className="back-feature">
           <Link to={this.backUrl || '/cards'}>
             <span className="back-feature-icon">
@@ -132,7 +161,7 @@ class EditCard extends Component {
                 type="button"
                 icon={<Icon icon={deleteIcon} color="red" />}
                 label="Delete card"
-                onClick={this.handleDeleteCard} />
+                onClick={this.handleOpenCardDeletingConfirm} />
             </DropDown>
           </div>
         </div>
@@ -153,26 +182,26 @@ class EditCard extends Component {
                   <DropDownItem
                     type="button"
                     icon={<Icon icon={editIcon} color="#646464" />}
-                    label="Edit back"
+                    label="Edit fact"
                     onClick={() => this.handleEditBack(back.id)} />
                   <DropDownItem
                     className="delete-back-btn"
                     type="button"
                     icon={<Icon icon={deleteIcon} color="red" />}
-                    label="Delete back"
-                    onClick={() => this.handleDeleteBack(back.id)} />
+                    label="Delete fact"
+                    onClick={() => this.handleOpenBackDeletingConfirm(back.id)} />
                   <DropDownItem type="line" />
                   <DropDownItem
                     type="button"
                     icon={<Icon icon={uploadImageIcon} color="#646464" />}
-                    label={back.imageUrl ? "Change image" : "Upload Image"}
+                    label={back.imageUrl ? "Change image" : "Upload image"}
                     onClick={() => this.handleUploadImage(back.id)} />
                   {back.imageUrl && (
                     <DropDownItem
                       type="button"
                       icon={<Icon icon={deleteImageIcon} color="#646464" />}
                       label="Delete image"
-                      onClick={() => this.handleDeleteImage(back.id)} />
+                      onClick={() => this.handleOpenBackImageDeletingConfirm(back.id)} />
                   )}
                 </DropDown>
               </div>
@@ -201,6 +230,33 @@ class EditCard extends Component {
           back={selectedBack}
           isOpen={cardBackFormOpened}
           onClose={this.handleCloseCardBackForm} />
+        <Confirm
+          isOpen={cardDeletingConfirmOpen}
+          header="Delete"
+          message="Are you sure you want to delete this card?"
+          confirmLabel="Delete"
+          confirmColor="#fe656d"
+          onCancel={this.handleCloseCardDeletingConfirm}
+          onConfirm={this.handleDeleteCard}>
+        </Confirm>
+        <Confirm
+          isOpen={!!deletedBackId}
+          header="Delete"
+          message="Are you sure you want to delete this back?"
+          confirmLabel="Delete"
+          confirmColor="#fe656d"
+          onCancel={this.handleCloseBackDeletingConfirm}
+          onConfirm={this.handleDeleteBack}>
+        </Confirm>
+        <Confirm
+          isOpen={!!deletedImageBackId}
+          header="Delete"
+          message="Are you sure you want to delete the image of this fact?"
+          confirmLabel="Delete"
+          confirmColor="#fe656d"
+          onCancel={this.handleCloseBackImageDeletingConfirm}
+          onConfirm={this.handleDeleteImage}>
+        </Confirm>
       </div>
     );
   }

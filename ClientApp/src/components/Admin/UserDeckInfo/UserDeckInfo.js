@@ -8,16 +8,32 @@ import { connect } from 'react-redux';
 import { Collapse } from 'react-collapse';
 
 import Button from '../../Shared/Button/Button';
+import Confirm from '../../Shared/Confirm/Confirm';
 import * as actions from '../../../store/actions';
 import './UserDeckInfo.css';
 
 class UserDeckInfo extends Component {
+  state = {
+    deletingConfirmOpen: false
+  };
+
   handleDeleteDeck = () => {
-    this.props.onDeleteDeck(this.props.match.params.userId, this.props.match.params.deckId);
+    const { onDeleteDeck, match } = this.props;
+    onDeleteDeck(match.params.userId, match.params.deckId);
+    this.setState({ deletingConfirmOpen: false });
+  }
+
+  handleOpenDeletingConfirm = () => {
+    this.setState({ deletingConfirmOpen: true });
+  }
+
+  handleCloseDeletingConfirm = () => {
+    this.setState({ deletingConfirmOpen: false });
   }
 
   render() {
     const { deck, showLess } = this.props;
+    const { deletingConfirmOpen } = this.state;
 
     return (
       <div className="user-deck-info-wrapper">
@@ -71,9 +87,17 @@ class UserDeckInfo extends Component {
         <Button
           type="button"
           className="delete-btn"
-          onClick={this.handleDeleteDeck}>
-          Delete
+          onClick={this.handleOpenDeletingConfirm}>
+          Delete this deck
         </Button>
+        <Confirm
+          isOpen={deletingConfirmOpen}
+          header="Delete"
+          message="Are you sure you want to delete this deck?"
+          confirmColor="#fe656d"
+          onCancel={this.handleCloseDeletingConfirm}
+          onConfirm={this.handleDeleteDeck}>
+        </Confirm>
       </div>
     );
   }

@@ -15,12 +15,18 @@ import DropDown from '../../Shared/DropDown/DropDown';
 import DropDownItem from '../../Shared/DropDownItem/DropDownItem';
 import Button from '../../Shared/Button/Button';
 import Switch from '../../Shared/Switch/Switch';
+import Confirm from '../../Shared/Confirm/Confirm';
 import * as actions from '../../../store/actions';
 import './DeckInfo.css';
 
 class DeckInfo extends Component {
+  state = {
+    deletingConfirmOpen: false
+  };
+
   handleDeleteDeck = () => {
     this.props.onDeleteDeck(this.props.deck.id);
+    this.setState({ deletingConfirmOpen: false });
   }
 
   handleChangePublic = (event) => {
@@ -31,8 +37,17 @@ class DeckInfo extends Component {
     this.props.onSetPracticeOptionsOpen(true);
   }
 
+  handleOpenDeletingConfirm = () => {
+    this.setState({ deletingConfirmOpen: true });
+  }
+
+  handleCloseDeletingConfirm = () => {
+    this.setState({ deletingConfirmOpen: false });
+  }
+
   render() {
     const { deck, updateDeckPublicStatusError, showLess, profile } = this.props;
+    const { deletingConfirmOpen } = this.state;
 
     return (
       <div className="deck-info-wrapper">
@@ -56,7 +71,7 @@ class DeckInfo extends Component {
                 type="button"
                 icon={<Icon icon={deleteIcon} color="red" />}
                 label="Delete this deck"
-                onClick={this.handleDeleteDeck} />
+                onClick={this.handleOpenDeletingConfirm} />
               <DropDownItem type="line" />
               <DropDownItem
                 className="public-deck"
@@ -135,6 +150,15 @@ class DeckInfo extends Component {
             <Button type="link" path={`/decks/match/${deck?.id}`}>Match game</Button>
           </div>
         )}
+        <Confirm
+          isOpen={deletingConfirmOpen}
+          header="Delete"
+          message="Are you sure you want to delete this deck?"
+          confirmLabel="Delete"
+          confirmColor="#fe656d"
+          onCancel={this.handleCloseDeletingConfirm}
+          onConfirm={this.handleDeleteDeck}>
+        </Confirm>
       </div>
     );
   }

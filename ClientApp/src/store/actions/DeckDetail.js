@@ -120,10 +120,14 @@ export const removeCard = (deckId, cardId) => {
   return dispatch => {
     axios.delete(`/api/decks/${deckId}/cards/${cardId}`)
       .then(res => {
+        if (history.location.pathname.search(/^\/decks\/\d+$/) > -1) {
+          dispatch(getDeck(deckId));
+          dispatch(getDeckStatistics(deckId));
+        } else {
+          dispatch(getDeckCardsOutside(deckId));
+        }
         dispatch(removeCardSuccess(cardId));
-        dispatch(getDeck(deckId));
         dispatch(getDeckCardsInside(deckId));
-        dispatch(getDeckCardsOutside(deckId));
       })
       .catch(err => dispatch(removeCardFail()));
   };
