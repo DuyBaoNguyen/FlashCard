@@ -1,13 +1,21 @@
 .home {
-  display: -ms-inline-grid;
-  display: inline-grid;
-  -ms-grid-columns: 30% 70%;
-      grid-template-columns: 30% 70%;
-  grid-gap: 20px;
-  width: 100%;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  margin-right: -20px;
+  margin-bottom: 20px;
 }
 
-.home .deck-wrapper {
-  grid-column: span 2;
+.home section {
+  overflow: visible;
+  padding-right: 20px;
+}
+
+.home .left-section {
+  width: 33.33%;
+}
+
+.home .right-section {
+  width: 66.67%;
 }
 /*# sourceMappingURL=Home.css.map */

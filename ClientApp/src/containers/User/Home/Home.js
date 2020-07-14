@@ -7,6 +7,7 @@ import Profile from '../../../components/User/Profile/Profile';
 
 import Statistics from '../../../components/User/Statistics/Statistics';
 import DeckWrapper from '../../../components/User/DeckWrapper/DeckWrapper';
+import { Roles } from '../../../applicationConstants';
 import './Home.css';
 
 class Home extends Component {
@@ -15,22 +16,25 @@ class Home extends Component {
 	}
 
 	render() {
+		const { 
+			profile,
+			percentPracticedCardsStatistics,
+			amountRememberedCardsStatistics
+		} = this.props;
+
 		return (
 			<div className="home">
-				<div className="home-left">
-					<Profile profile={this.props.profile}/>
-					<Statistics
-						percentPracticedCardsChartData={
-							this.props.percentPracticedCardsStatistics
-						}
-						amountRememberedCardsChartData={
-							this.props.amountRememberedCardsStatistics
-						}
-					/>
-				</div>
-				<div className="home-right">
+				<section className="left-section">
+					<Profile profile={profile} />
+					{profile?.role === Roles.User && (
+						<Statistics
+						percentPracticedCardsChartData={percentPracticedCardsStatistics}
+						amountRememberedCardsChartData={amountRememberedCardsStatistics} />
+					)}
+				</section>
+				<section className="right-section">
 					<DeckWrapper className="deck-wrapper" />
-				</div>
+				</section>
 			</div>
 		);
 	}
@@ -38,7 +42,7 @@ class Home extends Component {
 
 const mapStateToProps = (state) => {
 	return {
-    profile: state.home.profile,
+		profile: state.home.profile,
 		percentPracticedCardsStatistics: state.home.percentPracticedCardsStatistics,
 		amountRememberedCardsStatistics: state.home.amountRememberedCardsStatistics,
 	};
@@ -46,7 +50,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
 	return {
-    onGetProfile: () => dispatch(actions.getProfile()),
+		onGetProfile: () => dispatch(actions.getProfile()),
 		onGetStatistics: () => dispatch(actions.getStatistics()),
 	};
 };

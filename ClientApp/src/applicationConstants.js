@@ -7,3 +7,8 @@ export const PracticeMode = {
   NotRememberedCards: 'Not Remembered Cards',
   Custom: 'Custom'
 };
+
+export const Roles =  {
+  Admin: 'administrator',
+  User: 'user'
+};

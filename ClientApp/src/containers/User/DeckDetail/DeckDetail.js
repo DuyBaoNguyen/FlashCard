@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { Icon } from '@iconify/react';
 import arrowLeftIcon from '@iconify/icons-uil/angle-left';
@@ -9,9 +10,9 @@ import DeckCards from '../../../components/User/DeckCards/DeckCards';
 import CardInfo from '../../../components/User/CardInfo/CardInfo';
 import PracticeOptions from '../../../components/User/PracticeOptions/PracticeOptions';
 import withErrorHandler from '../../../hoc/withErrorHandler';
+import { Roles } from '../../../applicationConstants';
 import * as actions from '../../../store/actions/index';
 import './DeckDetail.css';
-import { connect } from 'react-redux';
 
 class DeckDetail extends Component {
   UNSAFE_componentWillMount() {
@@ -38,6 +39,7 @@ class DeckDetail extends Component {
 
   render() {
     const {
+      profile,
       deck,
       percentPracticedCardsStatistics,
       amountRememberedCardsStatistics,
@@ -60,10 +62,12 @@ class DeckDetail extends Component {
           {selectedCard && (
             <CardInfo card={selectedCard} closed={this.handleCloseCard} />
           )}
-          <Statistics
-            className={selectedCard ? "statistics-hidden" : null}
-            percentPracticedCardsChartData={percentPracticedCardsStatistics}
-            amountRememberedCardsChartData={amountRememberedCardsStatistics} />
+          {profile?.role === Roles.User && (
+            <Statistics
+              className={selectedCard ? "statistics-hidden" : null}
+              percentPracticedCardsChartData={percentPracticedCardsStatistics}
+              amountRememberedCardsChartData={amountRememberedCardsStatistics} />
+          )}
         </section>
         <section className="right-section">
           <DeckCards />
@@ -78,6 +82,7 @@ class DeckDetail extends Component {
 
 const mapStateToProps = state => {
   return {
+    profile: state.home.profile,
     deck: state.deckDetail.deck,
     percentPracticedCardsStatistics: state.deckDetail.percentPracticedCardsStatistics,
     amountRememberedCardsStatistics: state.deckDetail.amountRememberedCardsStatistics,

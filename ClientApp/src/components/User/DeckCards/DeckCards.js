@@ -15,7 +15,7 @@ import Card from '../Card/Card';
 import Loading from '../../Shared/Loading/Loading';
 import Confirm from '../../Shared/Confirm/Confirm';
 import * as actions from '../../../store/actions';
-import { TIME_OUT_DURATION } from '../../../applicationConstants';
+import { TIME_OUT_DURATION, Roles } from '../../../applicationConstants';
 import './DeckCards.css';
 
 const AMOUNT_CARDS = 12;
@@ -104,7 +104,7 @@ class DeckCards extends Component {
   }
 
   render() {
-    const { cards, loading } = this.props;
+    const { profile, cards, loading } = this.props;
     let { activePage, setLoading, deletedCardId, removedCardId } = this.state;
     let cardsList = loading ? setLoading && <Loading /> : <p className="text-notify">There are no cards here!</p>;
     let pagination;
@@ -175,13 +175,15 @@ class DeckCards extends Component {
               className="deck-cards-header-features-add"
               icon={<Icon icon={plusIcon} />} >
             </Button>
-            <Filter
-              className="deck-card-header-features-filter"
-              onChange={this.handleFilteredValueChange}>
-              <option value="all">All</option>
-              <option value="remembered">Remembered</option>
-              <option value="not remembered">Not remembered</option>
-            </Filter>
+            {profile?.role === Roles.User && (
+              <Filter
+                className="deck-card-header-features-filter"
+                onChange={this.handleFilteredValueChange}>
+                <option value="all">All</option>
+                <option value="remembered">Remembered</option>
+                <option value="not remembered">Not remembered</option>
+              </Filter>
+            )}
             <Search
               placeholder="Search..."
               onChange={this.handleSearchCards} />
@@ -214,6 +216,7 @@ class DeckCards extends Component {
 
 const mapStateToProps = state => {
   return {
+    profile: state.home.profile,
     cards: state.deckDetail.cards,
     loading: state.deckDetail.loadings.getCardsInsideLoading
   };

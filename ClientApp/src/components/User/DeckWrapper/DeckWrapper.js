@@ -10,7 +10,7 @@ import Filter from '../../Shared/Filter/Filter';
 import Loading from '../../Shared/Loading/Loading';
 import * as actions from '../../../store/actions';
 import Deck from './Deck/Deck';
-import { TIME_OUT_DURATION } from '../../../applicationConstants';
+import { TIME_OUT_DURATION, Roles } from '../../../applicationConstants';
 import './DeckWrapper.css';
 
 class DeckWrapper extends Component {
@@ -50,7 +50,7 @@ class DeckWrapper extends Component {
 	}
 
 	render() {
-		const { loading } = this.props;
+		const { loading, profile } = this.props;
 		const { setLoading } = this.state;
 		let deckList = loading ? setLoading && <Loading /> : <p className="text-notify">There are no decks here!</p>;
 		let pagination;
@@ -93,13 +93,15 @@ class DeckWrapper extends Component {
 							path="/createdeck"
 							icon={<Icon icon={plusIcon} />}>
 						</Button>
-						<Filter
-							className="deck-header-features-filter"
-							onChange={this.handleFilteredValueChange}>
-							<option value="all">All</option>
-							<option value="completed">Completed</option>
-							<option value="not completed">Not completed</option>
-						</Filter>
+						{profile?.role === Roles.User && (
+							<Filter
+								className="deck-header-features-filter"
+								onChange={this.handleFilteredValueChange}>
+								<option value="all">All</option>
+								<option value="completed">Completed</option>
+								<option value="not completed">Not completed</option>
+							</Filter>
+						)}
 						<Search
 							placeholder="Search..."
 							onChange={this.handleSearchDeck}
@@ -116,6 +118,7 @@ class DeckWrapper extends Component {
 
 const mapStateToProps = (state) => {
 	return {
+		profile: state.home.profile,
 		decks: state.home.decks,
 		loading: state.home.loadings.getDecksLoading
 	};

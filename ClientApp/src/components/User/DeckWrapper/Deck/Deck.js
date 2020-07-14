@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { Icon } from '@iconify/react';
 import clockIcon from '@iconify/icons-uil/clock';
@@ -6,23 +7,26 @@ import cardIcon from '@iconify/icons-mdi/credit-card-outline';
 import succeededCardIcon from '@iconify/icons-mdi/credit-card-check-outline';
 import failedCardIcon from '@iconify/icons-mdi/credit-card-remove-outline';
 
+import { Roles } from '../../../../applicationConstants';
 import './Deck.css';
 
 class Deck extends Component {
   render() {
+    const { deck, profile } = this.props;
+
     return (
       <div className="deck">
-        <Link to={`/decks/${this.props.deck.id}`}>
+        <Link to={`/decks/${deck.id}`}>
           <div className="wrapper">
-            <div className="deck-background-color" style={{ background: this.props.deck.theme }}>
-              <div className="deck-name">{this.props.deck.name}</div>
-              <div className="deck-description">{this.props.deck.description}</div>
+            <div className="deck-background-color" style={{ background: deck.theme }}>
+              <div className="deck-name">{deck.name}</div>
+              <div className="deck-description">{deck.description}</div>
               <div className="deck-info">
-                {this.props.deck.lastTestedTime !== null && (
+                {profile?.role === Roles.User && deck.lastTestedTime !== null && (
                   <div className="deck-info-value-container">
                     <div className="deck-info-value">
                       <Icon icon={clockIcon} style={{ color: '#ffffff', fontSize: '24px' }} />
-                      <p>{this.props.deck.lastTestedTime}</p>
+                      <p>{deck.lastTestedTime}</p>
                     </div>
                   </div>
                 )}
@@ -30,23 +34,23 @@ class Deck extends Component {
                   <div className="deck-info-value">
                     <Icon icon={cardIcon} style={{ color: '#ffffff', fontSize: '24px' }} />
                     <p>
-                      {this.props.deck.totalCards}
-                      {this.props.deck.completed && (
+                      {deck.totalCards}
+                      {profile?.role === Roles.User && deck.completed && (
                         <span className="completed-badge">
-                          {this.props.deck.completed && ("Completed")}
+                          {deck.completed && ("Completed")}
                         </span>
                       )}
                     </p>
                   </div>
-                  {!this.props.deck.completed && (
+                  {profile?.role === Roles.User && !deck.completed && (
                     <>
                       <div className="deck-info-value">
                         <Icon icon={succeededCardIcon} style={{ color: '#ffffff', fontSize: '24px' }} />
-                        <p>{this.props.deck.totalSucceededCards}</p>
+                        <p>{deck.totalSucceededCards}</p>
                       </div>
                       <div className="deck-info-value">
                         <Icon icon={failedCardIcon} style={{ color: '#ffffff', fontSize: '24px' }} />
-                        <p>{this.props.deck.totalFailedCards}</p>
+                        <p>{deck.totalFailedCards}</p>
                       </div>
                     </>
                   )}
@@ -62,4 +66,10 @@ class Deck extends Component {
   }
 }
 
-export default Deck;
+const mapStateToProps = state => {
+  return {
+    profile: state.home.profile
+  };
+};
+
+export default connect(mapStateToProps)(Deck);

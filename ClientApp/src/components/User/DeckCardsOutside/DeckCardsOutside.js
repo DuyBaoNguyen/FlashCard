@@ -14,8 +14,8 @@ import Filter from '../../Shared/Filter/Filter';
 import Card from '../Card/Card';
 import Loading from '../../Shared/Loading/Loading';
 import Confirm from '../../Shared/Confirm/Confirm';
+import { TIME_OUT_DURATION, Roles } from '../../../applicationConstants';
 import * as actions from '../../../store/actions';
-import { TIME_OUT_DURATION } from '../../../applicationConstants';
 import './DeckCardsOutside.css';
 
 const AMOUNT_CARDS = 9;
@@ -88,7 +88,7 @@ class DeckCardsOutside extends Component {
   }
 
   render() {
-    const { cards, loading } = this.props;
+    const { cards, loading, profile } = this.props;
     let { activePage, setLoading, deletedCardId } = this.state;
     let cardsList = loading ? setLoading && <Loading /> : <p className="text-notify">There are no cards here!</p>;
     let pagination;
@@ -154,13 +154,15 @@ class DeckCardsOutside extends Component {
               className="deck-cards-outside-header-features-add"
               icon={<Icon icon={plusIcon} />}>
             </Button>
-            <Filter
-              className="deck-cards-outside-header-features-filter"
-              onChange={this.handleFilteredValueChange}>
-              <option value="all">All</option>
-              <option value="remembered">Remembered</option>
-              <option value="not remembered">Not remembered</option>
-            </Filter>
+            {profile?.role === Roles.User && (
+              <Filter
+                className="deck-cards-outside-header-features-filter"
+                onChange={this.handleFilteredValueChange}>
+                <option value="all">All</option>
+                <option value="remembered">Remembered</option>
+                <option value="not remembered">Not remembered</option>
+              </Filter>
+            )}
             <Search
               placeholder="Search..."
               onChange={this.handleSearchCards} />
@@ -184,6 +186,7 @@ class DeckCardsOutside extends Component {
 
 const mapStateToProps = state => {
   return {
+    profile: state.home.profile,
     cards: state.deckDetail.remainingCards,
     loading: state.deckDetail.loadings.getCardsOutsideLoading
   };

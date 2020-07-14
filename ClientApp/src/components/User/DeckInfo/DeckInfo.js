@@ -16,6 +16,7 @@ import DropDownItem from '../../Shared/DropDownItem/DropDownItem';
 import Button from '../../Shared/Button/Button';
 import Switch from '../../Shared/Switch/Switch';
 import Confirm from '../../Shared/Confirm/Confirm';
+import { Roles } from '../../../applicationConstants';
 import * as actions from '../../../store/actions';
 import './DeckInfo.css';
 
@@ -114,24 +115,28 @@ class DeckInfo extends Component {
             </span>
             <span className="deck-field-value">{deck?.totalCards}</span>
           </div>
-          <div className="deck-field">
-            <span className="deck-field-label">
-              <span className="deck-field-icon">
-                <Icon icon={succeededCardIcon} color="#aaa" style={{ fontSize: 18 }} />
-              </span>
-              Remembered cards
-            </span>
-            <span className="deck-field-value">{deck?.totalSucceededCards}</span>
-          </div>
-          <div className="deck-field">
-            <span className="deck-field-label">
-              <span className="deck-field-icon">
-                <Icon icon={failedCardIcon} color="#aaa" style={{ fontSize: 18 }} />
-              </span>
-              Not remembered cards
-            </span>
-            <span className="deck-field-value">{deck?.totalFailedCards}</span>
-          </div>
+          {profile?.role === Roles.User && (
+            <>
+              <div className="deck-field">
+                <span className="deck-field-label">
+                  <span className="deck-field-icon">
+                    <Icon icon={succeededCardIcon} color="#aaa" style={{ fontSize: 18 }} />
+                  </span>
+                    Remembered cards
+                  </span>
+                <span className="deck-field-value">{deck?.totalSucceededCards}</span>
+              </div>
+              <div className="deck-field">
+                <span className="deck-field-label">
+                  <span className="deck-field-icon">
+                    <Icon icon={failedCardIcon} color="#aaa" style={{ fontSize: 18 }} />
+                  </span>
+                    Not remembered cards
+                  </span>
+                <span className="deck-field-value">{deck?.totalFailedCards}</span>
+              </div>
+            </>
+          )}
           <div className="deck-field">
             <span className="deck-field-label">
               <span className="deck-field-icon">

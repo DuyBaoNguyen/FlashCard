@@ -12,8 +12,8 @@ import Filter from '../../Shared/Filter/Filter';
 import Card from '../Card/Card';
 import Loading from '../../Shared/Loading/Loading';
 import Confirm from '../../Shared/Confirm/Confirm';
+import { TIME_OUT_DURATION, Roles } from '../../../applicationConstants';
 import * as actions from '../../../store/actions';
-import { TIME_OUT_DURATION } from '../../../applicationConstants';
 import './CardsList.css';
 
 const AMOUNT_CARDS = 12;
@@ -76,7 +76,7 @@ class CardsList extends Component {
   }
 
   render() {
-    const { cards, loading } = this.props;
+    const { cards, loading, profile } = this.props;
     let { activePage, setLoading, deletedCardId } = this.state;
     let cardsList = loading ? setLoading && <Loading /> : <p className="text-notify">There are no cards here!</p>;
     let pagination;
@@ -137,13 +137,15 @@ class CardsList extends Component {
               className="cards-list-header-features-add"
               icon={<Icon icon={plusIcon} />} >
             </Button>
-            <Filter
-              className="cards-list-header-features-filter"
-              onChange={this.handleFilteredValueChange}>
-              <option value="all">All</option>
-              <option value="remembered">Remembered</option>
-              <option value="not remembered">Not remembered</option>
-            </Filter>
+            {profile?.role === Roles.User && (
+              <Filter
+                className="cards-list-header-features-filter"
+                onChange={this.handleFilteredValueChange}>
+                <option value="all">All</option>
+                <option value="remembered">Remembered</option>
+                <option value="not remembered">Not remembered</option>
+              </Filter>
+            )}
             <Search
               placeholder="Search..."
               onChange={this.handleSearchCards} />
@@ -167,6 +169,7 @@ class CardsList extends Component {
 
 const mapStateToProps = state => {
   return {
+    profile: state.home.profile,
     cards: state.cards.cards,
     loading: state.cards.loadings.getCardsLoading
   };
