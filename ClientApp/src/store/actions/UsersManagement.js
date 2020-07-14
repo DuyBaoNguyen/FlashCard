@@ -17,7 +17,17 @@ const getUsersFail = () => {
 export const getUsers = () => {
 	return (dispatch) => {
 		axios.get('/api/admin/users')
-			.then((res) => dispatch(getUsersSuccess(res.data)))
+			.then((res) => {
+				dispatch(getUsersSuccess(res.data));
+
+				const firstUserId = res.data[0]?.id;
+				if (firstUserId) {
+					dispatch(setCurrentUserId(firstUserId));
+					dispatch(getCurrentUser(firstUserId));
+					dispatch(getCurrentUserDecks(firstUserId));
+					dispatch(getCurrentUserCards(firstUserId));
+				}
+			})
 			.catch(() => dispatch(getUsersFail()));
 	};
 };

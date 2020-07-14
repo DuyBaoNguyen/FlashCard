@@ -11,6 +11,7 @@ import Search from '../../Shared/Search/Search';
 import Filter from '../../Shared/Filter/Filter';
 import Card from '../Card/Card';
 import Loading from '../../Shared/Loading/Loading';
+import Confirm from '../../Shared/Confirm/Confirm';
 import * as actions from '../../../store/actions';
 import { TIME_OUT_DURATION } from '../../../applicationConstants';
 import './DeckCardsInside.css';
@@ -23,7 +24,8 @@ class DeckCardsInside extends Component {
 
     this.state = {
       activePage: 1,
-      setLoading: false
+      setLoading: false,
+      deletedCardId: null
     };
   }
 
@@ -63,8 +65,9 @@ class DeckCardsInside extends Component {
     this.props.onRemoveCard(this.deckId, cardId);
   }
 
-  handleDeleteCard = (cardId) => {
-    this.props.onDeleteCard(cardId);
+  handleDeleteCard = () => {
+    this.props.onDeleteCard(this.state.deletedCardId);
+    this.setState({ deletedCardId: null });
   }
 
   handleFilteredValueChange = (event) => {
@@ -73,9 +76,17 @@ class DeckCardsInside extends Component {
     this.setState({ activePage: 1 });
   }
 
+  handleOpenDeletingConfirm = (cardId) => {
+    this.setState({ deletedCardId: cardId });
+  }
+
+  handleCloseDeletingConfirm = () => {
+    this.setState({ deletedCardId: null });
+  }
+
   render() {
     const { cards, loading } = this.props;
-    let { activePage, setLoading } = this.state;
+    let { activePage, setLoading, deletedCardId } = this.state;
     let cardsList = loading ? setLoading && <Loading /> : <p className="text-notify">There are no cards here!</p>;
     let pagination;
 
@@ -99,7 +110,7 @@ class DeckCardsInside extends Component {
                       type: 'button',
                       icon: <Icon icon={deleteIcon} color="red" />,
                       label: { value: 'Delete card', color: 'red' },
-                      onClick: () => this.handleDeleteCard(card.id)
+                      onClick: () => this.handleOpenDeletingConfirm(card.id)
                     }
                   ]}
                   selectionIcon={<Icon icon={selectionIcon} style={{ fontSize: 20 }} />}
@@ -148,6 +159,15 @@ class DeckCardsInside extends Component {
         </div>
         {cardsList}
         <div className="cards-pagination">{pagination}</div>
+        <Confirm
+          isOpen={!!deletedCardId}
+          header="Delete"
+          message="Are you sure you want to delete this card?"
+          confirmLabel="Delete"
+          confirmColor="#fe656d"
+          onCancel={this.handleCloseDeletingConfirm}
+          onConfirm={this.handleDeleteCard}>
+        </Confirm>
       </div>
     );
   }

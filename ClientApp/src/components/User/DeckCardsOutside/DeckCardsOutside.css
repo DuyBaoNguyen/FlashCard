@@ -38,6 +38,7 @@
 
 .deck-cards-outside-wrapper .cards-pagination .pagination {
   list-style-type: none;
+  padding-left: 0;
 }
 
 .deck-cards-outside-wrapper .cards-pagination .pagination .pagination-item {

@@ -13,6 +13,7 @@ import Button from '../../Shared/Button/Button';
 import Filter from '../../Shared/Filter/Filter';
 import Card from '../Card/Card';
 import Loading from '../../Shared/Loading/Loading';
+import Confirm from '../../Shared/Confirm/Confirm';
 import * as actions from '../../../store/actions';
 import { TIME_OUT_DURATION } from '../../../applicationConstants';
 import './DeckCards.css';
@@ -25,7 +26,9 @@ class DeckCards extends Component {
 
     this.state = {
       activePage: 1,
-      setLoading: false
+      setLoading: false,
+      deletedCardId: null,
+      removedCardId: null
     };
   }
 
@@ -68,12 +71,14 @@ class DeckCards extends Component {
     this.setState({ activePage: 1 });
   }
 
-  handleRemoveCard = (cardId) => {
-    this.props.onRemoveCard(this.deckId, cardId);
+  handleRemoveCard = () => {
+    this.props.onRemoveCard(this.deckId, this.state.removedCardId);
+    this.setState({ removedCardId: null });
   }
 
-  handleDeleteCard = (cardId) => {
-    this.props.onDeleteCard(cardId);
+  handleDeleteCard = () => {
+    this.props.onDeleteCard(this.state.deletedCardId);
+    this.setState({ deletedCardId: null });
   };
 
   handleFilteredValueChange = (event) => {
@@ -82,9 +87,25 @@ class DeckCards extends Component {
     this.setState({ activePage: 1 });
   }
 
+  handleOpenDeletingConfirm = (cardId) => {
+    this.setState({ deletedCardId: cardId });
+  }
+
+  handleCloseDeletingConfirm = () => {
+    this.setState({ deletedCardId: null });
+  }
+
+  handleOpenRemovingConfirm = (cardId) => {
+    this.setState({ removedCardId: cardId });
+  }
+
+  handleCloseRemovingConfirm = () => {
+    this.setState({ removedCardId: null });
+  }
+
   render() {
     const { cards, loading } = this.props;
-    let { activePage, setLoading } = this.state;
+    let { activePage, setLoading, deletedCardId, removedCardId } = this.state;
     let cardsList = loading ? setLoading && <Loading /> : <p className="text-notify">There are no cards here!</p>;
     let pagination;
 
@@ -109,13 +130,13 @@ class DeckCards extends Component {
                       type: 'button',
                       icon: <Icon icon={removeIcon} color="red" />,
                       label: { value: 'Remove card', color: 'red' },
-                      onClick: () => this.handleRemoveCard(card.id)
+                      onClick: () => this.handleOpenRemovingConfirm(card.id)
                     },
                     {
                       type: 'button',
                       icon: <Icon icon={deleteIcon} color="red" />,
                       label: { value: 'Delete card', color: 'red' },
-                      onClick: () => this.handleDeleteCard(card.id)
+                      onClick: () => this.handleOpenDeletingConfirm(card.id)
                     }
                   ]}
                   onClick={this.handleClickCard} />
@@ -154,7 +175,7 @@ class DeckCards extends Component {
               className="deck-cards-header-features-add"
               icon={<Icon icon={plusIcon} />} >
             </Button>
-            <Filter 
+            <Filter
               className="deck-card-header-features-filter"
               onChange={this.handleFilteredValueChange}>
               <option value="all">All</option>
@@ -168,6 +189,24 @@ class DeckCards extends Component {
         </div>
         {cardsList}
         <div className="cards-pagination">{pagination}</div>
+        <Confirm
+          isOpen={!!deletedCardId}
+          header="Delete"
+          message="Are you sure you want to delete this card?"
+          confirmLabel="Delete"
+          confirmColor="#fe656d"
+          onCancel={this.handleCloseDeletingConfirm}
+          onConfirm={this.handleDeleteCard}>
+        </Confirm>
+        <Confirm
+          isOpen={!!removedCardId}
+          header="Remove"
+          message="Are you sure you want to remove this card from deck?"
+          confirmLabel="Remove"
+          confirmColor="#fe656d"
+          onCancel={this.handleCloseRemovingConfirm}
+          onConfirm={this.handleRemoveCard}>
+        </Confirm>
       </div>
     );
   }

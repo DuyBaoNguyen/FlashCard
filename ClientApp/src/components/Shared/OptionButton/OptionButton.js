@@ -14,7 +14,7 @@ const optionButton = props => {
 
   if (props.type === 'link') {
     return (
-      <Link to={props.path} className={classes.join(' ')}>
+      <Link to={props.path} className={classes.join(' ')} style={props.style}>
         {!!props.icon && (
           <span className="icon">
             {props.icon}
@@ -25,7 +25,7 @@ const optionButton = props => {
     );
   }
   return (
-    <button className={classes.join(' ')} onClick={props.onClick}>
+    <button className={classes.join(' ')} onClick={props.onClick} style={props.style}>
       {!!props.icon && (
         <span className="icon">
           {props.icon}
