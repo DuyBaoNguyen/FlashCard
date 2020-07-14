@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { Icon } from '@iconify/react';
+import deleteIcon from '@iconify/icons-uil/trash-alt';
 
 import withErrorHandler from '../../../hoc/withErrorHandler';
 import * as actions from '../../../store/actions/index';
@@ -38,6 +40,7 @@ class Profile extends Component {
 					<div className="profile-button">
 						<Button
 							className="profile-button-delete"
+							icon={<Icon icon={deleteIcon} />}
 							onClick={() => this.onClickDeleteUser(this.props.currentUserId)}
 						>
 							Delete this user

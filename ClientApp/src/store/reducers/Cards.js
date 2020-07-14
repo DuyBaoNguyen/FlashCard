@@ -56,6 +56,11 @@ export const cardsReducer = (state = initialState, action) => {
         ...state,
         selectedCard: state.cards.find(card => card.id === action.cardId)
       };
+    case actionTypes.CHECK_TO_UNSELECT_CARD_IN_CARDS:
+      return {
+        ...state,
+        selectedCard: state.selectedCard?.id === action.cardId ? null : state.selectedCard
+      };
     case actionTypes.DELETE_CARD_SUCCESS:
       const newState = {
         ...state,

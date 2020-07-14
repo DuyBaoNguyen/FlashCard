@@ -39,6 +39,13 @@ export const selectCardInCards = (cardId) => {
   };
 };
 
+export const checkToUnselectCardInCards = (cardId) => {
+  return {
+    type: actionTypes.CHECK_TO_UNSELECT_CARD_IN_CARDS,
+    cardId: cardId
+  };
+};
+
 export const resetStateInCardsReducer = () => {
   return {
     type: actionTypes.RESET_STATE_IN_CARDS_REDUCER
@@ -70,6 +77,7 @@ export const deleteCard = (cardId) => {
           dispatch(actions.getDeck(deckId));
           dispatch(actions.getDeckCardsInside(deckId));
           dispatch(actions.getDeckStatistics(deckId));
+          dispatch(actions.checkToUnselectCardInDeckDetails(cardId))
         } else if (history.location.pathname.search(/^\/decks\/\d+\/addcards$/) > -1) {
           const deckId = /\d+/.exec(history.location.pathname)[0];
           dispatch(actions.getDeckCardsInside(deckId));
@@ -77,6 +85,7 @@ export const deleteCard = (cardId) => {
         } 
         else {
           dispatch(getCards());
+          dispatch(checkToUnselectCardInCards(cardId))
         }
       })
       .catch(() => dispatch(deleteCardFail()));

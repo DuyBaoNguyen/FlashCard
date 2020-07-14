@@ -1,5 +1,4 @@
 .users-table-wrapper {
-  width: 400px;
   height: calc(100vh - 96px);
   background: #ffffff;
   -webkit-box-shadow: 0px 0px 30px rgba(0, 0, 0, 0.05);
@@ -116,6 +115,18 @@
 
 .users-table-wrapper .users-table tr:hover td {
   color: #9eacf4;
+}
+
+.users-table-wrapper .users-table tr.active td {
+  color: #9eacf4;
+}
+
+.users-table-wrapper .users-table tr:last-child td:first-child {
+  border-bottom-left-radius: 15px;
+}
+
+.users-table-wrapper .users-table tr:last-child td:last-child {
+  border-bottom-right-radius: 15px;
 }
 
 .users-table-wrapper .users-table .users-table-width-small {

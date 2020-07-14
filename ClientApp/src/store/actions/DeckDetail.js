@@ -103,6 +103,13 @@ export const unselectCardInDeckDetails = () => {
   };
 }
 
+export const checkToUnselectCardInDeckDetails = (cardId) => {
+  return {
+    type: actionTypes.CHECK_TO_UNSELECT_CARD_IN_DECK_DETAILS,
+    cardId: cardId
+  };
+}
+
 const removeCardSuccess = (cardId) => {
   return {
     type: actionTypes.REMOVE_CARD_SUCCESS,

@@ -61,7 +61,7 @@ class UserDeckCards extends Component {
 
   handleDeleteCard = () => {
     const { match, onDeleteCard } = this.props;
-    onDeleteCard(match.params.userId, match.params.deckId, this.state.deletedCardId);
+    onDeleteCard(match.params.userId, this.state.deletedCardId);
     this.setState({ deletedCardId: null });
   };
 

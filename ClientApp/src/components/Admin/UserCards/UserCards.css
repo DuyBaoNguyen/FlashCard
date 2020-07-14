@@ -1,14 +1,15 @@
-.profile-decks-wrapper .profile-decks {
+.user-cards-wrapper .cards {
   min-height: 428px;
   display: -ms-grid;
   display: grid;
-  -ms-grid-columns: (1fr)[2];
-      grid-template-columns: repeat(2, 1fr);
-  gap: 30px;
-  padding-right: 10px;
+  -ms-grid-columns: (1fr)[4];
+      grid-template-columns: repeat(4, 1fr);
+  -ms-grid-rows: (1fr)[3];
+      grid-template-rows: repeat(3, 1fr);
+  gap: 19px 19px;
 }
 
-.profile-decks-wrapper .decks-pagination {
+.user-cards-wrapper .cards-pagination {
   position: absolute;
   left: 0;
   bottom: 6px;
@@ -24,12 +25,12 @@
           align-items: center;
 }
 
-.profile-decks-wrapper .decks-pagination .pagination {
+.user-cards-wrapper .cards-pagination .pagination {
   list-style-type: none;
   padding-left: 0;
 }
 
-.profile-decks-wrapper .decks-pagination .pagination .pagination-item {
+.user-cards-wrapper .cards-pagination .pagination .pagination-item {
   display: inline-block;
   font-size: 14px;
   margin-left: 5px;
@@ -44,26 +45,26 @@
   cursor: pointer;
 }
 
-.profile-decks-wrapper .decks-pagination .pagination .pagination-item a {
+.user-cards-wrapper .cards-pagination .pagination .pagination-item a {
   color: #757575;
 }
 
-.profile-decks-wrapper .decks-pagination .pagination .pagination-item:hover {
+.user-cards-wrapper .cards-pagination .pagination .pagination-item:hover {
   background-color: #f5f5f5;
 }
 
-.profile-decks-wrapper .decks-pagination .pagination .pagination-item-active {
+.user-cards-wrapper .cards-pagination .pagination .pagination-item-active {
   background: #9eacf4 !important;
 }
 
-.profile-decks-wrapper .decks-pagination .pagination .pagination-item-active a {
+.user-cards-wrapper .cards-pagination .pagination .pagination-item-active a {
   color: white;
 }
 
-.profile-decks-wrapper .text-notify {
+.user-cards-wrapper .text-notify {
   font-size: 15px;
   color: #979797;
   font-size: #979797;
   white-space: nowrap;
 }
-/*# sourceMappingURL=UserDecks.css.map */
+/*# sourceMappingURL=UserCards.css.map */

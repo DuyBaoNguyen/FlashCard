@@ -1,5 +1,4 @@
 .users-table-wrapper {
-  width: 400px;
   height: calc(100vh - 96px);
   background: #ffffff;
   box-shadow: 0px 0px 30px rgba(0, 0, 0, 0.05);
@@ -106,6 +105,19 @@
 
     tr:hover td {
       color: #9eacf4;
+    }
+
+    tr.active td {
+      color: #9eacf4;
+    }
+
+    tr:last-child {
+      td:first-child {
+        border-bottom-left-radius: 15px;
+      }
+      td:last-child {
+        border-bottom-right-radius: 15px;
+      }
     }
 
     .users-table-width-small {

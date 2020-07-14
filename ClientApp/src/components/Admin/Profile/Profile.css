@@ -26,14 +26,12 @@
 }
 
 .profile-wrapper .profile-info-panel .profile-button .profile-button-delete {
-  width: 150px;
   background-color: #FE656D;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
-  -webkit-box-pack: center;
-      -ms-flex-pack: center;
-          justify-content: center;
+  padding-left: 15px;
+  padding-right: 15px;
 }
 
 .profile-wrapper .profile-info-panel .profile-info {

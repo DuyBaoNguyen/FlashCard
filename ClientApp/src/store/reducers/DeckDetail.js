@@ -132,6 +132,11 @@ export const deckDetailReducer = (state = initialState, action) => {
         ...state,
         selectedCard: null
       };
+    case actionTypes.CHECK_TO_UNSELECT_CARD_IN_DECK_DETAILS:
+      return {
+        ...state,
+        selectedCard: state.selectedCard?.id === action.cardId ? null : state.selectedCard
+      };
     case actionTypes.REMOVE_CARD_SUCCESS:
       if (state.selectedCard && state.selectedCard.id === action.cardId) {
         return {

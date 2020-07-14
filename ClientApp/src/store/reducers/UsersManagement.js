@@ -6,6 +6,7 @@ const initialState = {
 	currentUser: null,
 	currentUserDecks: [],
 	currentUserCards: [],
+	selectedCard: null,
 	errors: {
 		getUsersError: false,
 		getCurrentUserError: false,
@@ -113,6 +114,21 @@ export const usersManagementReducer = (state = initialState, action) => {
 					...state.errors,
 					getCurrentUserCardsError: true
 				}
+			};
+		case actionTypes.SELECT_USER_CARD:
+			return {
+				...state,
+				selectedCard: state.currentUserCards.find(card => card.id === action.cardId)
+			};
+		case actionTypes.UNSELECT_USER_CARD:
+			return {
+				...state,
+				selectedCard: null
+			};
+		case actionTypes.CHECK_TO_UNSELECT_USER_CARD:
+			return {
+				...state,
+				selectedCard: state.selectedCard?.id === action.cardId ? null : state.selectedCard
 			};
 		default:
 			return state;

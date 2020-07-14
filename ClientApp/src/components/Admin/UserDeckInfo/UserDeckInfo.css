@@ -16,10 +16,12 @@
 }
 
 .user-deck-info-wrapper .delete-btn {
-  width: 150px;
   background-color: #fe656d;
-  display: block;
-  text-align: center;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  padding-left: 15px;
+  padding-right: 15px;
 }
 
 .user-deck-info-wrapper .deck-info {
@@ -74,7 +76,6 @@
   color: #aaa;
   font-size: 13px;
   font-weight: 400;
-  font-style: italic;
   margin-top: 5px;
 }
 

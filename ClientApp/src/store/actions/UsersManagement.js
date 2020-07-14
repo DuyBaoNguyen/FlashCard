@@ -121,3 +121,23 @@ export const getCurrentUserCards = (currentUserId) => {
 			.catch(() => dispatch(getCurrentUserCardsFail()));
 	};
 };
+
+export const selectUserCard = (cardId) => {
+	return {
+		type: actionTypes.SELECT_USER_CARD,
+		cardId: cardId
+	};
+};
+
+export const unselectUserCard = () => {
+	return {
+		type: actionTypes.UNSELECT_USER_CARD
+	};
+};
+
+export const checkToUnselectUserCard = (cardId) => {
+	return {
+		type: actionTypes.CHECK_TO_UNSELECT_USER_CARD,
+		cardId: cardId
+	};
+};

@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 
 import Profile from '../../../../components/Admin/Profile/Profile';
 import UserDecks from '../../../../components/Admin/UserDecks/UserDecks';
+import UserCards from '../../../../components/Admin/UserCards/UserCards';
 
 import './UserInfo.css';
 
@@ -25,6 +26,9 @@ class UserInfo extends Component {
 		}
 		if (this.state.activePage === 2) {
 			return <UserDecks />;
+		}
+		if (this.state.activePage === 3) {
+			return <UserCards />;
 		}
 	};
 

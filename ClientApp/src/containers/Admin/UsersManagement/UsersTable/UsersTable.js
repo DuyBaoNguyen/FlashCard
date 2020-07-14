@@ -10,8 +10,7 @@ class UsersTable extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			activePage: 1,
-			userId: null,
+			activePage: 1
 		};
 	}
 
@@ -27,6 +26,7 @@ class UsersTable extends Component {
 	};
 
 	render() {
+		const { currentUserId } = this.props;
 		let pagination = (
 			<Pagination
 				hideFirstLastPages
@@ -46,7 +46,10 @@ class UsersTable extends Component {
 
 		let users = this.props.usersList.map((user, index) => {
 			return (
-				<tr key={user.id} onClick={() => this.onClickUser(user.id)}>
+				<tr 
+					key={user.id} 
+					className={user.id === currentUserId ? 'active' : null}
+					onClick={() => this.onClickUser(user.id)}>
 					<td className="users-table-width-small">{index + 1}</td>
 					<td className="users-table-width-medium">{user.name}</td>
 					<td className="users-table-width-large">{user.email}</td>
@@ -80,6 +83,7 @@ class UsersTable extends Component {
 const mapStateToProps = (state) => {
 	return {
 		usersList: state.usersmanagement.usersList,
+		currentUserId: state.usersmanagement.currentUserId,
 		currentUser: state.usersmanagement.currentUser,
 		currentUserData: state.usersmanagement.currentUserData,
 		currentUserDecks: state.usersmanagement.currentUserDecks,

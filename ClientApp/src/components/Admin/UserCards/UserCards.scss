@@ -1,12 +1,12 @@
-.profile-decks-wrapper {
-  .profile-decks {
+.user-cards-wrapper {
+  .cards {
     min-height: 428px;
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 30px;
-    padding-right: 10px;
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: repeat(3, 1fr);
+    gap: 19px 19px;
   }
-  .decks-pagination {
+  .cards-pagination {
     position: absolute;
     left: 0;
     bottom: 6px;

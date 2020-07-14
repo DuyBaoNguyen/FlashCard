@@ -12,10 +12,10 @@
     position: relative;
   }
   .delete-btn {
-    width: 150px;
     background-color: #fe656d;
-    display: block;
-    text-align: center;
+    display: flex;
+    padding-left: 15px;
+    padding-right: 15px;
   }
   .deck-info {
     transition: height 0.15s;
@@ -54,7 +54,6 @@
           color: #aaa;
           font-size: 13px;
           font-weight: 400;
-          font-style: italic;
           margin-top: 5px;
         }
       }

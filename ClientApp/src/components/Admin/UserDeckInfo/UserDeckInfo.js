@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import { Icon } from '@iconify/react';
 import cardIcon from '@iconify/icons-mdi/credit-card-outline';
+import deleteIcon from '@iconify/icons-uil/trash-alt';
 import createdDateIcon from '@iconify/icons-uil/calendar-alt';
 import ownerIcon from '@iconify/icons-uil/user';
 import { connect } from 'react-redux';
@@ -86,6 +87,7 @@ class UserDeckInfo extends Component {
         </Collapse>
         <Button
           type="button"
+          icon={<Icon icon={deleteIcon} />}
           className="delete-btn"
           onClick={this.handleOpenDeletingConfirm}>
           Delete this deck

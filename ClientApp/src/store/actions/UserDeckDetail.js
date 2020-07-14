@@ -77,13 +77,20 @@ const deleteUserCardFail = () => {
   };
 };
 
-export const deleteUserCard = (userId, deckId, cardId) => {
+export const deleteUserCard = (userId, cardId) => {
   return dispatch => {
     axios.delete(`/api/admin/users/${userId}/cards/${cardId}`)
       .then(() => {
         dispatch(deleteUserCardSuccess(cardId));
-        dispatch(getUserDeck(userId, deckId));
-        dispatch(getUserDeckCards(userId, deckId));
+        if (history.location.pathname.search(/^\/admin\/users\/[\da-zA-Z-]{36}\/decks\/\d+$/) > -1) {
+          const segments = history.location.pathname.split('/');
+          const deckId = segments[segments.length - 1];
+
+          dispatch(getUserDeck(userId, deckId));
+          dispatch(getUserDeckCards(userId, deckId));
+        } else {
+          dispatch(actions.checkToUnselectUserCard(cardId));
+        }
         dispatch(actions.getCurrentUserCards(userId));
       })
       .catch(() => dispatch(deleteUserCardFail()));

@@ -17,6 +17,7 @@ export {
 	updateDeckPublicStatus,
 	selectCardInDeckDetails,
 	unselectCardInDeckDetails,
+	checkToUnselectCardInDeckDetails,
 	removeCard,
 	addCard,
 	getDeckCardsInside,
@@ -76,6 +77,9 @@ export {
 	deleteCurrentUser,
 	getCurrentUserDecks,
 	getCurrentUserCards,
+	selectUserCard,
+	unselectUserCard,
+	checkToUnselectUserCard
 } from './UsersManagement';
 
 export { getPublicCards, selectPublicCard, downloadPublicCard, getAdminPublicDecks } from './Market.js';
