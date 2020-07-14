@@ -12,9 +12,15 @@ namespace FlashCard.Repositories
 
 		}
 
-		public IQueryable<ApplicationUser> QueryByBeingNotAdmin(string adminId)
+		public IQueryable<ApplicationUser> QueryByBeingNotAdmin(string adminId, string search)
 		{
-			return dbContext.Users.Where(u => u.Id != adminId);
+			var queryUsers = dbContext.Users.Where(u => u.Id != adminId);
+
+			if (search != null && search.Trim().Length > 0)
+			{
+				queryUsers.Where(u => u.Name.Contains(search) || u.Email.Contains(search));
+			}
+			return queryUsers.OrderBy(u => u.Name);
 		}
 
 		public IQueryable<ApplicationUser> QueryByIdAndNotAdmin(string adminId, string userId)
