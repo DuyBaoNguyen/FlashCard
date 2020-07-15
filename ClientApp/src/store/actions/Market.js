@@ -102,3 +102,26 @@ export const downloadAdminPublicDeck = (id) => {
 			.catch((err) => dispatch(downloadAdminPublicDeckFail()));
 	};
 };
+
+const getUsersPublicDecksSuccess = (usersPublicDecks) => {
+	return {
+		type: actionTypes.GET_USERS_PUBLIC_DECKS_SUCCESS,
+		usersPublicDecks: usersPublicDecks,
+	};
+};
+
+const getUsersPublicDecksFail = () => {
+	return {
+		type: actionTypes.GET_USERS_PUBLIC_DECKS_SUCCESS,
+	};
+};
+
+export const getUsersPublicDecks = () => {
+	return (dispatch) => {
+		axios
+			.get(`​/api​/UserPublicDecks`)
+			// .then((res) => console.log(res))
+			.then((res) => dispatch(getUsersPublicDecksSuccess(res.data)))
+			.catch((err) => dispatch(getUsersPublicDecksFail()));
+	};
+};

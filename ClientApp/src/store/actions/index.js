@@ -82,7 +82,7 @@ export {
 	checkToUnselectUserCard
 } from './UsersManagement';
 
-export { getPublicCards, selectPublicCard, downloadPublicCard, getAdminPublicDecks, downloadAdminPublicDeck } from './Market.js';
+export { getPublicCards, selectPublicCard, downloadPublicCard, getAdminPublicDecks, downloadAdminPublicDeck, getUsersPublicDecks } from './Market.js';
 
 export {
 	getUserDeck,

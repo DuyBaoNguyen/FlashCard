@@ -5,6 +5,7 @@ const initialState = {
 	getCardsError: null,
 	selectedCard: null,
 	adminPublicDecks: [],
+	usersPublicDecks: [],
 };
 
 export const marketReducer = (state = initialState, action) => {
@@ -49,16 +50,27 @@ export const marketReducer = (state = initialState, action) => {
 				adminPublicDecks: [],
 				getCardsError: 'Get public cards failed!',
 			};
-			case actionTypes.DOWNLOAD_ADMIN_PUBLIC_DECK_SUCCESS:
-				return {
-					...state,
-				};
-			case actionTypes.DOWNLOAD_ADMIN_PUBLIC_DECK_FAIL:
-				return {
-					...state,
-					adminPublicDecks: [],
-					getCardsError: 'Download decks failed!',
-				};
+		case actionTypes.DOWNLOAD_ADMIN_PUBLIC_DECK_SUCCESS:
+			return {
+				...state,
+			};
+		case actionTypes.DOWNLOAD_ADMIN_PUBLIC_DECK_FAIL:
+			return {
+				...state,
+				adminPublicDecks: [],
+				getCardsError: 'Download decks failed!',
+			};
+		case actionTypes.GET_USERS_PUBLIC_DECKS_SUCCESS:
+			return {
+				...state,
+				usersPublicDecks: action.usersPublicDecks,
+			};
+		case actionTypes.GET_USERS_PUBLIC_DECKS_FAIL:
+			return {
+				...state,
+				usersPublicDecks: [],
+				getCardsError: 'Get public cards failed!',
+			};
 		default:
 			return state;
 	}
