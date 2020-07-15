@@ -160,3 +160,44 @@ export const clearUpdateCurrentUserNameError = () => {
 		type: actionTypes.CLEAR_UPDATE_CURRENT_USER_NAME_ERROR
 	};
 };
+
+const updatePasswordSuccess = () => {
+	return {
+		type: actionTypes.UPDATE_PASSWORD_SUCCESS
+	};
+};
+
+const updatePasswordFail = (error) => {
+	return {
+		type: actionTypes.UPDATE_PASSWORD_FAIL,
+		error: error
+	};
+};
+
+export const updatePassword = (oldPassword, newPassword, confirmPassword) => {
+	return dispatch => {
+		axios.put('/api/currentuser/password', { oldPassword, newPassword, confirmPassword })
+			.then(() => {
+				dispatch(updatePasswordSuccess());
+				dispatch(togglePasswordUpdatingForm(false));
+			})
+			.catch(err => {
+				if (err.response.status === 400) {
+					dispatch(updatePasswordFail(err.response.data));
+				}
+			});
+	};
+}
+
+export const togglePasswordUpdatingForm = (value) => {
+	return {
+		type: actionTypes.TOGGLE_PASSWORD_UPDATING_FORM,
+		value: value
+	};
+};
+
+export const clearUpdatePasswordError = () => {
+	return {
+		type: actionTypes.CLEAR_UPDATE_PASSWORD_ERROR
+	};
+};
