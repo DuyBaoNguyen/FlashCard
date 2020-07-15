@@ -1,0 +1,82 @@
+.cards-proposal-wrapper {
+  display: -ms-grid;
+  display: grid;
+  -ms-grid-columns: 30% 70%;
+      grid-template-columns: 30% 70%;
+  -webkit-column-gap: 20px;
+          column-gap: 20px;
+}
+
+.cards-proposal-wrapper .cards-proposal-back-card {
+  width: 100%;
+  height: 203px;
+  background: #FFFFFF;
+  -webkit-box-shadow: 0px 0px 30px rgba(0, 0, 0, 0.05);
+          box-shadow: 0px 0px 30px rgba(0, 0, 0, 0.05);
+  border-radius: 15px;
+  padding: 10px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  margin-bottom: 20px;
+}
+
+.cards-proposal-wrapper .cards-proposal-right .cards-proposal-back {
+  display: -ms-grid;
+  display: grid;
+  -ms-grid-columns: 50% 50%;
+      grid-template-columns: 50% 50%;
+  -webkit-column-gap: 20px;
+          column-gap: 20px;
+}
+
+.cards-proposal-wrapper .cards-proposal-right .cards-proposal-back .cards-proposal-back-title {
+  margin-bottom: 20px;
+}
+
+.cards-proposal-wrapper .cards-proposal-right .cards-proposal-buttons {
+  position: fixed;
+  bottom: 20px;
+  width: 820px;
+  display: -ms-grid;
+  display: grid;
+  -ms-grid-columns: 50% 50%;
+      grid-template-columns: 50% 50%;
+  -webkit-column-gap: 20px;
+          column-gap: 20px;
+}
+
+.cards-proposal-wrapper .cards-proposal-right .cards-proposal-buttons .cards-proposal-button-approve {
+  height: 50px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  background-color: #52C41A;
+}
+
+.cards-proposal-wrapper .cards-proposal-right .cards-proposal-buttons .cards-proposal-button-decline {
+  height: 50px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  background-color: #FE656D;
+}
+/*# sourceMappingURL=CardsProposal.css.map */
