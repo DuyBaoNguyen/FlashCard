@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.IO;
 using System.Net.Mime;
 using System.Threading.Tasks;
@@ -115,7 +116,17 @@ namespace FlashCard.Controllers
 			{
 				foreach (var error in result.Errors)
 				{
-					ModelState.AddModelError("", error.Description);
+					if (error.Code == "PasswordMismatch")
+					{
+						ModelState.AddModelError("OldPassword", error.Description);
+					}
+					else if (error.Code.StartsWith("Password"))
+					{
+						ModelState.AddModelError("NewPassword", error.Description);
+					}
+					else {
+						ModelState.AddModelError("", error.Description);
+					}
 				}
 				return BadRequest(ModelState);
 			}

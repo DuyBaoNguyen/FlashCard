@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Link, withRouter } from 'react-router-dom';
 import { Icon } from '@iconify/react';
-import userIcon from '@iconify/icons-uil/user';
+import changePasswordIcon from '@iconify/icons-uil/lock';
 import logoutIcon from '@iconify/icons-uil/signout';
 import arrowDown from '@iconify/icons-uil/angle-down';
 import { connect } from 'react-redux';
@@ -10,8 +10,10 @@ import Container from '../Container/Container';
 import NavigationItem from './NavigationItem/NavigationItem';
 import DropDown from '../DropDown/DropDown';
 import DropDownItem from '../DropDownItem/DropDownItem';
+import PasswordUpdatingForm from '../../User/PasswordUpdatingForm/PasswordUpdatingForm';
 import authService from '../../api-authorization/AuthorizeService';
 import { ApplicationPaths } from '../../api-authorization/ApiAuthorizationConstants';
+import * as actions from '../../../store/actions';
 import './Navigation.css';
 
 class Navigation extends Component {
@@ -37,7 +39,16 @@ class Navigation extends Component {
     this.setState({ isAuthenticated });
   }
 
+  handleOpenPasswordUpdatingForm = () => {
+    this.props.onTogglePasswordUpdatingForm(true);
+  }
+
+  handleClosePasswordUpdatingForm = () => {
+    this.props.onTogglePasswordUpdatingForm(false);
+  }
+
   render() {
+    const { passwordUpdatingFormOpened } = this.props;
     let navigation;
 
     if (this.state.isAuthenticated) {
@@ -66,10 +77,10 @@ class Navigation extends Component {
             postfix={<Icon icon={arrowDown} color="#fff" style={{ fontSize: 20 }} />}
             className="navigation-options">
             <DropDownItem
-              type="link"
-              path="/profile"
-              icon={<Icon icon={userIcon} />}
-              label="Profile" />
+              type="button"
+              icon={<Icon icon={changePasswordIcon} />}
+              label="Change password"
+              onClick={this.handleOpenPasswordUpdatingForm} />
             <DropDownItem
               type="link"
               path={logoutPath}
@@ -88,6 +99,9 @@ class Navigation extends Component {
             {navigation}
           </div>
         </Container>
+        <PasswordUpdatingForm 
+          isOpen={passwordUpdatingFormOpened} 
+          onClose={this.handleClosePasswordUpdatingForm} />
       </div>
     );
   }
@@ -95,8 +109,15 @@ class Navigation extends Component {
 
 const mapStateToProps = state => {
   return {
-    profile: state.home.profile
+    profile: state.home.profile,
+    passwordUpdatingFormOpened: state.home.passwordUpdatingFormOpened
   };
 };
 
-export default withRouter(connect(mapStateToProps)(Navigation));
+const mapDispatchToProps = dispatch => {
+  return {
+    onTogglePasswordUpdatingForm: (value) => dispatch(actions.togglePasswordUpdatingForm(value))
+  };
+}
+
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Navigation));

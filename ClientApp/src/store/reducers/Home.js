@@ -9,6 +9,7 @@ const initialState = {
   amountRememberedCardsStatistics: null,
   profile: null,
   nameUpdatingFormOpened: false,
+  passwordUpdatingFormOpened: false,
   loadings: {
     getDecksLoading: true
   },
@@ -20,7 +21,8 @@ const initialState = {
     getStatisticsError: false,
     getProfileError: false,
     updateCurrentUserNameError: null,
-    updateCurrentUserPictureError: false
+    updateCurrentUserPictureError: false,
+    updatePasswordError: null
   }
 };
 
@@ -151,6 +153,35 @@ export const homeReducer = (state = initialState, action) => {
           ...state.errors,
           updateCurrentUserNameError: null
         }
+      };
+    case actionTypes.UPDATE_PASSWORD_SUCCESS:
+      return {
+        ...state,
+        errors: {
+          ...state.errors,
+          updatePasswordError: null
+        }
+      };
+    case actionTypes.UPDATE_PASSWORD_FAIL:
+      return {
+        ...state,
+        errors: {
+          ...state.errors,
+          updatePasswordError: action.error
+        }
+      };
+    case actionTypes.CLEAR_UPDATE_PASSWORD_ERROR:
+      return {
+        ...state,
+        errors: {
+          ...state.errors,
+          updatePasswordError: null
+        }
+      };
+    case actionTypes.TOGGLE_PASSWORD_UPDATING_FORM:
+      return {
+        ...state,
+        passwordUpdatingFormOpened: action.value
       };
     default:
       return state;

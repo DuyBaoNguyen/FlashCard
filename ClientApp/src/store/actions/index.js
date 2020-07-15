@@ -7,7 +7,10 @@ export {
 	updateCurrentUserName,
 	updateCurrentUserPicture,
 	toggleNameUpdatingForm,
-	clearUpdateCurrentUserNameError
+	clearUpdateCurrentUserNameError,
+	updatePassword,
+	togglePasswordUpdatingForm,
+	clearUpdatePasswordError
 } from './Home';
 
 export { createDeck, editDeck } from './Deck';

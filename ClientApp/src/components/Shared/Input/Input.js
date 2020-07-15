@@ -10,7 +10,7 @@ const input = props => {
 
   return (
     <input
-      type="text"
+      type={props.type || "text"}
       className={classes.join(' ')}
       name={props.name}
       defaultValue={props.defaultValue}
