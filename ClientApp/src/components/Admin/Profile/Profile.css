@@ -9,7 +9,7 @@
   -webkit-box-flex: 1;
       -ms-flex: 1;
           flex: 1;
-  background: #FFFFFF;
+  background: #ffffff;
   -webkit-box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.06);
           box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.06);
   border-radius: 15px;
@@ -26,7 +26,7 @@
 }
 
 .profile-wrapper .profile-info-panel .profile-button .profile-button-delete {
-  background-color: #FE656D;
+  background-color: #fe656d;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -56,13 +56,13 @@
   font-weight: 500;
   font-size: 14px;
   text-align: right;
-  color: #9EACF4;
+  color: #9eacf4;
   margin-bottom: 20px;
 }
 
-.profile-wrapper .profile-avatar {
+.profile-wrapper .profile-picture {
   width: 167px;
-  background: #FFFFFF;
+  background: #ffffff;
   -webkit-box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.06);
           box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.06);
   border-radius: 15px;
@@ -70,17 +70,33 @@
   margin-left: 20px;
 }
 
-.profile-wrapper .profile-avatar img {
+.profile-wrapper .profile-picture .picture-wrapper {
+  height: 107px;
+  width: 107px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  border-radius: 50%;
+  border: 2px solid #9eacf4;
+  margin-right: 20px;
+}
+
+.profile-wrapper .profile-picture .picture-wrapper img {
   display: block;
   border-radius: 50%;
 }
 
-.profile-wrapper .profile-avatar .fake-picture {
-  width: 100%;
-  height: 100%;
-  border: 1px solid #eee;
+.profile-wrapper .profile-picture .picture-wrapper .fake-picture {
+  width: 99px;
+  height: 99px;
   border-radius: 50%;
-  background-color: #fafafa;
+  background-color: #f5f5f5;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;

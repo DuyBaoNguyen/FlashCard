@@ -5,7 +5,7 @@ namespace FlashCard.Contracts
 {
 	public interface IUserRepository : IRepositoryBase<ApplicationUser>
 	{
-		IQueryable<ApplicationUser> QueryByBeingNotAdmin(string adminId);
+		IQueryable<ApplicationUser> QueryByBeingNotAdmin(string adminId, string search = null);
 		IQueryable<ApplicationUser> QueryByIdAndNotAdmin(string adminId, string userId);
 	}
 }

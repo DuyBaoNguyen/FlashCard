@@ -1,24 +1,18 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+
 import * as actions from '../../../store/actions';
-import Button from '../../Shared/Button/Button';
+import NameUpdatingForm from '../NameUpdatingForm/NameUpdatingForm';
 import './Profile.css';
 
 class Profile extends Component {
 	constructor(props) {
 		super(props);
 		this.uploadImageInput = React.createRef();
-
-		this.state = {
-			onEditName: false,
-			displayName: this.props.profile?.displayName,
-		};
 	}
 
-	onClickName = () => {
-		this.setState({
-			onEditName: !this.state.onEditName,
-		});
+	handleClickName = () => {
+		this.props.onToggleNameUpdatingForm(true);
 	};
 
 	handleUploadImage = () => {
@@ -27,101 +21,70 @@ class Profile extends Component {
 
 	handleImageChange = (event) => {
 		if (event.target.files.length > 0) {
-			const { onUpdateAvatar } = this.props;
-			onUpdateAvatar(event.target.files[0]);
+			this.props.onUpdatePicture(event.target.files[0]);
 			event.target.value = null;
 		}
 	};
 
-	handleSubmit = (event) => {
-		// event.preventDefault();
-		this.props.onUpdateName(this.state.displayName);
-	};
-
-	handleInputChange = (event) => {
-		let target = event.target;
-		let name = target.name;
-		let value = target.value;
-		this.setState({
-			[name]: value,
-		});
-	};
+	handleCloseNameUpdatingForm = () => {
+		this.props.onToggleNameUpdatingForm(false);
+	}
 
 	render() {
-		let displayInfo = (
-			<div className="home-profile-info">
-				<div
-					className="home-profile-info-name"
-					onClick={() => this.onClickName()}
-				>
-					{this.props.profile?.displayName}
-				</div>
-				<div className="home-profile-info-email">
-					{this.props.profile?.email}
-				</div>
-			</div>
-		);
-		let displayEditName = (
-			<div className="">
-				<form onSubmit={this.handleSubmit}>
-					<div className="deck-form-input">
-						<label>Name</label>
-						<input
-							type="text"
-							name="displayName"
-							checked
-							defaultValue={this.props.profile?.displayName}
-							autoComplete="off"
-							onChange={(e) => this.handleInputChange(e)}
-						/>
-					</div>
+		const { profile, nameUpdatingFormOpened } = this.props;
 
-					<div className="deck-form-button">
-						<Button
-							className="deck-form-button-cancel"
-							onClick={() => this.onClickName()}
-						>
-							Cancel
-						</Button>
-						<Button
-							className="deck-form-button-create"
-							type="submit"
-							value="Submit"
-						>
-							Save
-						</Button>
-					</div>
-				</form>
-			</div>
-		);
 		return (
 			<div className="home-profile-wrapper">
 				<div
-					className="home-profile-avatar"
-					onClick={() => this.handleUploadImage()}
-				>
-					{' '}
+					className="home-profile-picture"
+					onClick={this.handleUploadImage}>
+					{profile?.pictureUrl
+						? (
+							<img src={profile.pictureUrl} alt="user_picture" width="88" height="88" />
+						)
+						: (
+							<div className="fake-picture">
+								{profile?.displayName.substr(0, 1)}
+							</div>
+						)
+					}
 					<input
 						type="file"
 						id="upload-image-input"
 						ref={this.uploadImageInput}
-						onChange={this.handleImageChange}
-					/>
+						onChange={this.handleImageChange} />
 				</div>
-				{this.state.onEditName ? displayEditName : displayInfo}
+				<div className="home-profile-info">
+					<div
+						className="home-profile-info-name"
+						onClick={this.handleClickName}>
+						{profile?.displayName}
+					</div>
+					<div className="home-profile-info-email">
+						{profile?.email}
+					</div>
+				</div>
+				<NameUpdatingForm
+					profile={profile}
+					isOpen={nameUpdatingFormOpened}
+					onClose={this.handleCloseNameUpdatingForm} />
 			</div>
 		);
 	}
 }
 
 const mapStateToProps = (state) => {
-	return { profile: state.home.profile };
+	return {
+		profile: state.home.profile,
+		nameUpdatingFormOpened: state.home.nameUpdatingFormOpened
+	};
 };
 
 const mapDispatchToProps = (dispatch) => {
 	return {
-		onUpdateName: (displayName) => dispatch(actions.updateName(displayName)),
-		onUpdateAvatar: (pictureUrl) => dispatch(actions.updateName(pictureUrl)),
+		onUpdateName: (displayName) => dispatch(actions.updateCurrentUserName(displayName)),
+		onUpdatePicture: (picture) => dispatch(actions.updateCurrentUserPicture(picture)),
+		onToggleNameUpdatingForm: (value) => dispatch(actions.toggleNameUpdatingForm(value))
 	};
 };
 

@@ -4,36 +4,47 @@ import { Icon } from '@iconify/react';
 import deleteIcon from '@iconify/icons-uil/trash-alt';
 
 import withErrorHandler from '../../../hoc/withErrorHandler';
-import * as actions from '../../../store/actions/index';
 import Button from '../../Shared/Button/Button';
+import Confirm from '../../Shared/Confirm/Confirm';
+import * as actions from '../../../store/actions/index';
 import './Profile.css';
 
 class Profile extends Component {
-	constructor(props) {
-		super(props);
-		this.state = {
-			activePage: 1,
-		};
-	}
-
-	onClickDeleteUser = (param) => {
-		// this.props.onDeleteCurrentUser(param);
+	state = {
+		deletingConfirmOpen: false
 	};
 
+	handleDeleteCurrentUser = () => {
+		const { onDeleteCurrentUser, currentUserId } = this.props;
+		onDeleteCurrentUser(currentUserId);
+		this.setState({ deletingConfirmOpen: false });
+	};
+
+	handleOpenDeletingConfirm = () => {
+		this.setState({ deletingConfirmOpen: true });
+	}
+
+	handleCloseDeletingConfirm = () => {
+		this.setState({ deletingConfirmOpen: false });
+	}
+
 	render() {
+		const { currentUser } = this.props;
+		const { deletingConfirmOpen } = this.state;
+
 		return (
 			<div className="profile-wrapper">
 				<div className="profile-info-panel">
 					<div className="profile-info">
 						<div className="profile-info-title">Name</div>
 						<div className="profile-info-content">
-							{this.props.currentUser.name}
+							{currentUser.name}
 						</div>
 					</div>
 					<div className="profile-info">
 						<div className="profile-info-title">Email</div>
 						<div className="profile-info-content">
-							{this.props.currentUser.email}
+							{currentUser.email}
 						</div>
 					</div>
 
@@ -41,24 +52,33 @@ class Profile extends Component {
 						<Button
 							className="profile-button-delete"
 							icon={<Icon icon={deleteIcon} />}
-							onClick={() => this.onClickDeleteUser(this.props.currentUserId)}
-						>
+							onClick={this.handleOpenDeletingConfirm}>
 							Delete this user
 						</Button>
 					</div>
 				</div>
-				<div className="profile-avatar">
-					{this.props.currentUser.pictureUrl
-						? (
-							<img src={this.props.currentUser.pictureUrl} alt="user_picture" width="107" height="107" />
-						)
-						: (
-							<div className="fake-picture">
-								{this.props.currentUser.name.substr(0, 1)}
-							</div>
-						)
-					}
+				<div className="profile-picture">
+					<div className="picture-wrapper">
+						{currentUser.pictureUrl
+							? (
+								<img src={currentUser.pictureUrl} alt="user_picture" width="99" height="99" />
+							)
+							: (
+								<div className="fake-picture">
+									{currentUser.name.substr(0, 1)}
+								</div>
+							)
+						}
+					</div>
 				</div>
+				<Confirm
+					isOpen={deletingConfirmOpen}
+					header="Delete"
+					message="Are you sure you want to delete this user?"
+					confirmColor="#fe656d"
+					onCancel={this.handleCloseDeletingConfirm}
+					onConfirm={this.handleDeleteCurrentUser}>
+				</Confirm>
 			</div>
 		);
 	}
@@ -73,7 +93,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
 	return {
-		onDeleteCurrentUser: (currentUserId) => dispatch(actions.deleteCurrentUser(currentUserId)),
+		onDeleteCurrentUser: (userId) => dispatch(actions.deleteCurrentUser(userId)),
 	};
 };
 

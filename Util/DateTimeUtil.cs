@@ -76,7 +76,7 @@ namespace FlashCard.Util
 
 			if (unit == "date")
 			{
-				return $"{prefix} {testedTime.Date}";
+				return $"{prefix} {testedTime.ToString("MM/dd/yyyy")}";
 			}
 			if (temp == 1)
 			{

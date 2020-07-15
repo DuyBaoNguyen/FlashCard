@@ -242,7 +242,7 @@ class EditCard extends Component {
         <Confirm
           isOpen={!!deletedBackId}
           header="Delete"
-          message="Are you sure you want to delete this back?"
+          message="Are you sure you want to delete this fact?"
           confirmLabel="Delete"
           confirmColor="#fe656d"
           onCancel={this.handleCloseBackDeletingConfirm}

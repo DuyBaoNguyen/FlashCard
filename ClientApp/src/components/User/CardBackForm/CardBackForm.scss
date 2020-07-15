@@ -66,11 +66,10 @@
       }
     }
     .card-back-form-features {
-      display: grid;
-      grid-template-columns: auto auto;
-      column-gap: 10px;
+      display: flex;
       .cancel-btn,
       .update-btn {
+        flex: 1;
         height: 50px;
         border: none;
         border-radius: 15px;
@@ -81,10 +80,12 @@
         background-color: #fff;
         color: #979797;
         box-shadow: 0px 3px 12px rgba(0, 0, 0, 0.06);
+        margin-right: 5px;
       }
       .update-btn {
         background-color: #9eacf4;
         color: #fff;
+        margin-left: 5px;
       }
     }
     .error-notification {

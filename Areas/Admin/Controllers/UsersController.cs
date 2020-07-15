@@ -37,7 +37,7 @@ namespace FlashCard.Areas.Admin.Controllers
 		[HttpGet]
 		[ProducesResponseType(200)]
 		[ProducesResponseType(403)]
-		public async Task<ActionResult<IEnumerable<UserDto>>> GetAllUsersNotAdmin()
+		public async Task<ActionResult<IEnumerable<UserDto>>> GetAllUsersNotAdmin(string search = null)
 		{
 			var user = await userManager.GetUser(User);
 			var userIsAdmin = await userManager.CheckAdminRole(user);
@@ -48,7 +48,7 @@ namespace FlashCard.Areas.Admin.Controllers
 			}
 
 			var usersNotAdmin = await repository.User
-				.QueryByBeingNotAdmin(user.Id)
+				.QueryByBeingNotAdmin(user.Id, search)
 				.AsNoTracking()
 				.MapToUserDto(imageService.UserPictureBaseUrl)
 				.ToListAsync();

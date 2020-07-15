@@ -4,8 +4,10 @@ export {
 	getProfile,
 	setDecksFilteredValue,
 	filterDecks,
-	updateName,
-	updateAvatar,
+	updateCurrentUserName,
+	updateCurrentUserPicture,
+	toggleNameUpdatingForm,
+	clearUpdateCurrentUserNameError
 } from './Home';
 
 export { createDeck, editDeck } from './Deck';

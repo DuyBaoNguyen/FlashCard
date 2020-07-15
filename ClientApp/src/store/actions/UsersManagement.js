@@ -15,17 +15,20 @@ const getUsersFail = () => {
 };
 
 export const getUsers = () => {
-	return (dispatch) => {
+	return (dispatch, getState) => {
 		axios.get('/api/admin/users')
 			.then((res) => {
 				dispatch(getUsersSuccess(res.data));
 
-				const firstUserId = res.data[0]?.id;
-				if (firstUserId) {
-					dispatch(setCurrentUserId(firstUserId));
-					dispatch(getCurrentUser(firstUserId));
-					dispatch(getCurrentUserDecks(firstUserId));
-					dispatch(getCurrentUserCards(firstUserId));
+				const { currentUserId } = getState().usersmanagement;
+				if (!res.data.find(user => user.id === currentUserId)) {
+					const firstUserId = res.data[0]?.id;
+					if (firstUserId) {
+						dispatch(setCurrentUserId(firstUserId));
+						dispatch(getCurrentUser(firstUserId));
+						dispatch(getCurrentUserDecks(firstUserId));
+						dispatch(getCurrentUserCards(firstUserId));
+					}
 				}
 			})
 			.catch(() => dispatch(getUsersFail()));
@@ -75,7 +78,10 @@ const deleteCurrentUserFail = () => {
 export const deleteCurrentUser = (currentUserId) => {
 	return (dispatch) => {
 		axios.delete(`/api/admin/users/${currentUserId}`)
-			.then(() => dispatch(deleteCurrentUserSuccess()))
+			.then(() => {
+				dispatch(deleteCurrentUserSuccess());
+				dispatch(getUsers());
+			})
 			.catch(() => dispatch(deleteCurrentUserFail()))
 	};
 };

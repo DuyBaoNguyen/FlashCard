@@ -4,18 +4,16 @@
 
   .profile-info-panel {
     flex: 1;
-    background: #FFFFFF;
-    // box-shadow: 0px 0px 30px rgba(0, 0, 0, 0.05);
+    background: #ffffff;
     box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.06);
-    // border: 1px solid rgba(0, 0, 0, 0.06);
     border-radius: 15px;
     padding: 30px;
 
     .profile-button {
       display: flex;
-      justify-content: flex-end ;
+      justify-content: flex-end;
       .profile-button-delete {
-        background-color: #FE656D;
+        background-color: #fe656d;
         display: flex;
         padding-left: 15px;
         padding-right: 15px;
@@ -39,37 +37,44 @@
         font-weight: 500;
         font-size: 14px;
         text-align: right;
-        color: #9EACF4;
+        color: #9eacf4;
         margin-bottom: 20px;
       }
     }
   }
 
-  .profile-avatar {
+  .profile-picture {
     width: 167px;
-    background: #FFFFFF;
-    // box-shadow: 0px 0px 30px rgba(0, 0, 0, 0.05);
+    background: #ffffff;
     box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.06);
-    // border: 1px solid rgba(0, 0, 0, 0.06);
     border-radius: 15px;
     padding: 30px;
     margin-left: 20px;
-    img {
-      display: block;
-      border-radius: 50%;
-    }
-    .fake-picture {
-      width: 100%;
-      height: 100%;
-      border: 1px solid #eee;
-      border-radius: 50%;
-      background-color: #fafafa;
+    .picture-wrapper {
+      height: 107px;
+      width: 107px;
       display: flex;
       justify-content: center;
       align-items: center;
-      font-size: 32px;
-      font-weight: 300;
-      color: #979797;
+      border-radius: 50%;
+      border: 2px solid #9eacf4;
+      margin-right: 20px;
+      img {
+        display: block;
+        border-radius: 50%;
+      }
+      .fake-picture {
+        width: 99px;
+        height: 99px;
+        border-radius: 50%;
+        background-color: #f5f5f5;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 32px;
+        font-weight: 300;
+        color: #979797;
+      }
     }
   }
 }
