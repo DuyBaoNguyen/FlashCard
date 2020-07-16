@@ -145,6 +145,17 @@ namespace FlashCard.Repositories
 				.Where(c => c.Approved);
 		}
 
+		public IQueryable<Card> QueryByBeingNotApproved(string userId)
+		{
+			return dbContext.Cards.Where(c => c.OwnerId == userId && c.Backs.Any(b => !b.Public || !b.Approved));
+		}
+
+		public IQueryable<Card> QueryByIdAndBeingNotApproved(string userId, int cardId)
+		{
+			return dbContext.Cards.Where(c => c.Id == cardId && c.OwnerId == userId &&
+				c.Backs.Any(b => !b.Public || !b.Approved));
+		}
+
 		public IQueryable<Card> QueryByFirstRememberedDate(string userId, int deckId, DateTime[] dates)
 		{
 			var queryCardIds = dbContext.CardAssignments

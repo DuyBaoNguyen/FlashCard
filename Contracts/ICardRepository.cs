@@ -19,6 +19,8 @@ namespace FlashCard.Contracts
 		IQueryable<Card> QueryRemainingByDeckId(string userId, int deckId, string front = null);
 		IQueryable<Card> QueryByBeingApproved(string front = null);
 		IQueryable<Card> QueryByBeingApprovedIncludesBacks();
+		IQueryable<Card> QueryByBeingNotApproved(string userId);
+		IQueryable<Card> QueryByIdAndBeingNotApproved(string userId, int cardId);
 		IQueryable<Card> QueryByFirstRememberedDate(string userId, int deckId, DateTime[] dates);
 		IQueryable<Card> QueryByFirstRememberedDate(string userId, DateTime[] dates);
 	}

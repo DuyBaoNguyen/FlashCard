@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net.Mime;
 using System.Threading.Tasks;
 using FlashCard.Contracts;
@@ -75,33 +76,47 @@ namespace FlashCard.Controllers
 		[ProducesResponseType(400)]
 		public async Task<IActionResult> Create(CardRequestModel cardRqModel)
 		{
-			var userId = UserUtil.GetUserId(User);
+			var user = await userManager.GetUser(User);
 			var cardSameFront = await repository.Card
-				.QueryByFront(userId, cardRqModel.Front)
-				.AsNoTracking()
+				.QueryByFront(user.Id, cardRqModel.Front)
 				.FirstOrDefaultAsync();
 
-			if (cardSameFront != null)
+			if (cardSameFront != null && (!cardSameFront.Public || cardSameFront.Approved))
 			{
 				ModelState.AddModelError("Front", "The front is taken.");
 				return BadRequest(ModelState);
 			}
 
+            var userIsAdmin = await userManager.CheckAdminRole(user);
 			var now = DateTime.Now;
-			var newCard = new Card()
+			
+			if (cardSameFront == null)
 			{
-				Front = cardRqModel.Front.Trim(),
-				CreatedDate = now,
-				LastModifiedDate = now,
-				OwnerId = userId,
-				AuthorId = userId
-			};
+				cardSameFront = new Card()
+				{
+					Front = cardRqModel.Front.Trim(),
+					Public = userIsAdmin,
+					Approved = userIsAdmin,
+					CreatedDate = now,
+					LastModifiedDate = now,
+					OwnerId = user.Id,
+					AuthorId = user.Id
+				};
+				repository.Card.Create(cardSameFront);
+			}
+			else
+			{
+				cardSameFront.Front = cardRqModel.Front.Trim();
+				cardSameFront.Public = true;
+				cardSameFront.Approved = true;
+				cardSameFront.CreatedDate = now;
+				cardSameFront.LastModifiedDate = now;
+			}
 
-			repository.Card.Create(newCard);
 			await repository.SaveChangesAsync();
 
-			return CreatedAtAction(nameof(GetCardById), new { Id = newCard.Id },
-				new { Message = "Created Successfully.", Id = newCard.Id });
+			return CreatedAtAction(nameof(GetCardById), new { Id = cardSameFront.Id },
+				new { Message = "Created Successfully.", Id = cardSameFront.Id });
 		}
 
 		[HttpPut("{id}")]
@@ -148,9 +163,9 @@ namespace FlashCard.Controllers
 		[ProducesResponseType(404)]
 		public async Task<IActionResult> Delete(int id)
 		{
-			var userId = UserUtil.GetUserId(User);
+			var user = await userManager.GetUser(User);
 			var existingCard = await repository.Card
-				.QueryByIdIncludesBacks(userId, id)
+				.QueryByIdIncludesBacks(user.Id, id)
 				.FirstOrDefaultAsync();
 
 			if (existingCard == null)
@@ -158,7 +173,24 @@ namespace FlashCard.Controllers
 				return NotFound();
 			}
 
-			repository.Card.Delete(existingCard);
+			var userIsAdmin = await userManager.CheckAdminRole(user);
+
+			if (userIsAdmin && existingCard.Backs.Any(b => b.Public != b.Approved))
+			{
+				existingCard.Approved = false;
+				foreach (var back in existingCard.Backs)
+				{
+					if (back.Approved)
+					{
+						repository.Back.Delete(back);
+					}
+				}
+			}
+			else
+			{
+				repository.Card.Delete(existingCard);
+			}
+
 			await repository.SaveChangesAsync();
 
 			foreach (var back in existingCard.Backs)

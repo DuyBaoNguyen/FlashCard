@@ -92,6 +92,24 @@ namespace FlashCard.Util
 			});
 		}
 
+		public static IQueryable<ProposedCardDto> MapToProposedCardDto(this IQueryable<Card> query, string imageBaseUrl)
+		{
+			return query.Select(c => new ProposedCardDto()
+			{
+				Id = c.Id,
+				Front = c.Front,
+				Backs = c.Backs.Where(b => !b.Public || !b.Approved).Select(b => new ProposedBackDto()
+				{
+					Id = b.Id,
+					Type = b.Type,
+					Meaning = b.Meaning,
+					Example = b.Example,
+					ImageUrl = b.Image != null ? Path.Combine(imageBaseUrl, b.Image) : b.Image,
+					Approved = b.Approved
+				})
+			});
+		}
+
 		public static IQueryable<ProposedCardDto> MapToProposedCardDto(this IQueryable<Card> query, string userId,
 			string imageBaseUrl)
 		{
