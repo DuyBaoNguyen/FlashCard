@@ -42,7 +42,7 @@ namespace FlashCard.Controllers
 			var decks = await repository.Deck
 				.Query(userId, name)
 				.AsNoTracking()
-				.MapToDeckDto()
+				.MapToDeckDto(imageService.UserPictureBaseUrl)
 				.ToListAsync();
 
 			var now = DateTime.Now;
@@ -65,7 +65,7 @@ namespace FlashCard.Controllers
 			var deck = await repository.Deck
 				.QueryByIdCheckingSharedDeck(userId, id)
 				.AsNoTracking()
-				.MapToDeckDto(userId)
+				.MapToDeckDto(imageService.UserPictureBaseUrl, userId)
 				.FirstOrDefaultAsync();
 
 			if (deck == null)

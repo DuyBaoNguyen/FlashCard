@@ -26,5 +26,11 @@ namespace FlashCard.Repositories
 		{
 			return dbContext.Backs.Where(b => b.Id == backId && b.Public != b.Approved && b.Card.OwnerId == userId);
 		}
+
+		public IQueryable<Back> QueryByBeingNotApproved(string userId, int[] backIds)
+		{
+			return dbContext.Backs.Where(b => backIds.Contains(b.Id) && b.Public != b.Approved && 
+				b.Card.OwnerId == userId);
+		}
 	}
 }

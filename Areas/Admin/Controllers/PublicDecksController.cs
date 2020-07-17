@@ -48,7 +48,7 @@ namespace FlashCard.Areas.Admin.Controllers
 			var notApprovedDecks = await repository.Deck
 				.QueryByBeingNotApproved()
 				.AsNoTracking()
-				.MapToDeckDto()
+				.MapToDeckDto(imageService.UserPictureBaseUrl)
 				.ToListAsync();
 
 			return notApprovedDecks;
@@ -71,7 +71,7 @@ namespace FlashCard.Areas.Admin.Controllers
 			var notApprovedDeck = await repository.Deck
 				.QueryByIdAndBeingNotApproved(id)
 				.AsNoTracking()
-				.MapToDeckDto()
+				.MapToDeckDto(imageService.UserPictureBaseUrl)
 				.FirstOrDefaultAsync();
 
 			if (notApprovedDeck == null)
@@ -99,7 +99,6 @@ namespace FlashCard.Areas.Admin.Controllers
 			var notApprovedDeck = await repository.Deck
 				.QueryByIdAndBeingNotApproved(id)
 				.AsNoTracking()
-				.MapToDeckDto()
 				.FirstOrDefaultAsync();
 
 			if (notApprovedDeck == null)

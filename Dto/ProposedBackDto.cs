@@ -8,5 +8,6 @@ namespace FlashCard.Dto
 		public string Example { get; set; }
 		public string ImageUrl { get; set; }
 		public bool Approved { get; set; }
+		public PersonDto Author { get; set; }
 	}
 }

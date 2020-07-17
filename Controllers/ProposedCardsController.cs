@@ -42,7 +42,7 @@ namespace FlashCard.Controllers
 			var card = await repository.Card
 				.QueryById(admin.Id, id)
 				.AsNoTracking()
-				.MapToProposedCardDto(userId, imageService.BackImageBaseUrl)
+				.MapToProposedCardDto(userId, imageService.BackImageBaseUrl, imageService.UserPictureBaseUrl)
 				.FirstOrDefaultAsync();
 
 			if (card == null)

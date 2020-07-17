@@ -8,7 +8,8 @@ namespace FlashCard.Util
 {
     public static class Mapper
 	{
-		public static IQueryable<DeckDto> MapToDeckDto(this IQueryable<Deck> query, string takerId = null)
+		public static IQueryable<DeckDto> MapToDeckDto(this IQueryable<Deck> query, string pictureBaseUrl,
+			string takerId = null)
 		{
 			return query.Select(d => new DeckDto()
 			{
@@ -30,14 +31,16 @@ namespace FlashCard.Util
 				{
 					Id = d.OwnerId,
 					Name = d.Owner.Name,
-					Email = d.Owner.Email
+					Email = d.Owner.Email,
+					PictureUrl = d.Owner.Picture != null ? Path.Combine(pictureBaseUrl, d.Owner.Picture) : null
 				},
 				Author = d.AuthorId != null
 					? new PersonDto()
 					{
 						Id = d.AuthorId,
 						Name = d.Author.Name,
-						Email = d.Author.Email
+						Email = d.Author.Email,
+						PictureUrl = d.Author.Picture != null ? Path.Combine(pictureBaseUrl, d.Author.Picture) : null
 					}
 					: null,
 				TotalCards = d.CardAssignments.Count,
@@ -46,7 +49,7 @@ namespace FlashCard.Util
 			});
 		}
 
-		public static IQueryable<PublicDeckDto> MapToPublicDeckDto(this IQueryable<Deck> query)
+		public static IQueryable<PublicDeckDto> MapToPublicDeckDto(this IQueryable<Deck> query, string pictureBaseUrl)
 		{
 			return query.Select(d => new PublicDeckDto()
 			{
@@ -58,14 +61,16 @@ namespace FlashCard.Util
 				{
 					Id = d.OwnerId,
 					Name = d.Owner.Name,
-					Email = d.Owner.Email
+					Email = d.Owner.Email,
+					PictureUrl = d.Owner.Picture != null ? Path.Combine(pictureBaseUrl, d.Owner.Picture) : null
 				},
 				Author = d.AuthorId != null
 					? new PersonDto()
 					{
 						Id = d.AuthorId,
 						Name = d.Author.Name,
-						Email = d.Author.Email
+						Email = d.Author.Email,
+						PictureUrl = d.Author.Picture != null ? Path.Combine(pictureBaseUrl, d.Author.Picture) : null
 					}
 					: null,
 				TotalCards = d.CardAssignments.Count
@@ -92,7 +97,8 @@ namespace FlashCard.Util
 			});
 		}
 
-		public static IQueryable<ProposedCardDto> MapToProposedCardDto(this IQueryable<Card> query, string imageBaseUrl)
+		public static IQueryable<ProposedCardDto> MapToProposedCardDto(this IQueryable<Card> query,
+			string imageBaseUrl, string pictureBaseUrl)
 		{
 			return query.Select(c => new ProposedCardDto()
 			{
@@ -105,13 +111,20 @@ namespace FlashCard.Util
 					Meaning = b.Meaning,
 					Example = b.Example,
 					ImageUrl = b.Image != null ? Path.Combine(imageBaseUrl, b.Image) : b.Image,
-					Approved = b.Approved
+					Approved = b.Approved,
+					Author = new PersonDto()
+					{
+						Id = b.AuthorId,
+						Name = b.Author.Name,
+						Email = b.Author.Email,
+						PictureUrl = b.Author.Picture != null ? Path.Combine(pictureBaseUrl, b.Author.Picture) : null
+					}
 				})
 			});
 		}
 
 		public static IQueryable<ProposedCardDto> MapToProposedCardDto(this IQueryable<Card> query, string userId,
-			string imageBaseUrl)
+			string imageBaseUrl, string pictureBaseUrl)
 		{
 			return query.Select(c => new ProposedCardDto()
 			{
@@ -124,7 +137,14 @@ namespace FlashCard.Util
 					Meaning = b.Meaning,
 					Example = b.Example,
 					ImageUrl = b.Image != null ? Path.Combine(imageBaseUrl, b.Image) : b.Image,
-					Approved = b.Approved
+					Approved = b.Approved,
+					Author = new PersonDto()
+					{
+						Id = b.AuthorId,
+						Name = b.Author.Name,
+						Email = b.Author.Email,
+						PictureUrl = b.Author.Picture != null ? Path.Combine(pictureBaseUrl, b.Author.Picture) : null
+					}
 				})
 			});
 		}
@@ -175,12 +195,7 @@ namespace FlashCard.Util
 					Name = t.Deck.Name
 				},
 				SucceededCards = t.TestedCards.Where(tc => !tc.Failed).Select(tc => tc.Card.Front),
-				FailedCards = t.TestedCards.Where(tc => tc.Failed).Select(tc => tc.Card.Front),
-				// FirstRememberedCards = t.TestedCards
-				// 	.Where(tc => tc.Card.FirstRememberedDate?.Day == t.DateTime.Day &&
-				// 		tc.Card.FirstRememberedDate?.Month == t.DateTime.Month &&
-				// 		tc.Card.FirstRememberedDate?.Year == t.DateTime.Year)
-				// 	.Select(tc => new CardDto())
+				FailedCards = t.TestedCards.Where(tc => tc.Failed).Select(tc => tc.Card.Front)
 			});
 		}
 

@@ -49,7 +49,7 @@ namespace FlashCard.Areas.Admin.Controllers
             var proposedCards = await repository.Card
                 .QueryByBeingNotApproved(user.Id)
                 .AsNoTracking()
-                .MapToProposedCardDto(imageService.BackImageBaseUrl)
+                .MapToProposedCardDto(imageService.BackImageBaseUrl, imageService.UserPictureBaseUrl)
                 .ToListAsync();
 
             return proposedCards;
@@ -71,7 +71,7 @@ namespace FlashCard.Areas.Admin.Controllers
             var proposedCard = await repository.Card
                 .QueryByIdAndBeingNotApproved(user.Id, id)
                 .AsNoTracking()
-                .MapToProposedCardDto(imageService.BackImageBaseUrl)
+                .MapToProposedCardDto(imageService.BackImageBaseUrl, imageService.UserPictureBaseUrl)
                 .FirstOrDefaultAsync();
 
             if (proposedCard == null)
@@ -82,52 +82,52 @@ namespace FlashCard.Areas.Admin.Controllers
             return proposedCard;
         }
 
-        [HttpPut("{id}")]
-        [ProducesResponseType(204)]
-        [ProducesResponseType(403)]
-        [ProducesResponseType(404)]
-        public async Task<IActionResult> ConsiderProposeCard(int id, BoolValueRequestModel valueRqModel)
-        {
-            var user = await userManager.GetUser(User);
-            var userIsAdmin = await userManager.CheckAdminRole(user);
+        // [HttpPut("{id}")]
+        // [ProducesResponseType(204)]
+        // [ProducesResponseType(403)]
+        // [ProducesResponseType(404)]
+        // public async Task<IActionResult> ConsiderProposeCard(int id, BoolValueRequestModel valueRqModel)
+        // {
+        //     var user = await userManager.GetUser(User);
+        //     var userIsAdmin = await userManager.CheckAdminRole(user);
 
-            if (!userIsAdmin)
-            {
-                return Forbid();
-            }
+        //     if (!userIsAdmin)
+        //     {
+        //         return Forbid();
+        //     }
 
-            var proposedCard = await repository.Card
-               .QueryByIdIncludesBacks(user.Id, id)
-               .FirstOrDefaultAsync();
+        //     var proposedCard = await repository.Card
+        //        .QueryByIdIncludesBacks(user.Id, id)
+        //        .FirstOrDefaultAsync();
 
-            if (proposedCard == null)
-            {
-                return NotFound();
-            }
+        //     if (proposedCard == null)
+        //     {
+        //         return NotFound();
+        //     }
 
-            if (valueRqModel.Value)
-            {
-                proposedCard.Approved = true;
-                foreach (var back in proposedCard.Backs)
-                {
-                    back.Approved = true;
-                }
-            }
-            else
-            {
-                if (proposedCard.Backs.Any(b => b.Approved))
-                {
-                    repository.Back.DeleteRange(proposedCard.Backs.Where(b => b.Public != b.Approved));
-                }
-                else
-                {
-                    repository.Card.Delete(proposedCard);
-                }
-            }
+        //     if (valueRqModel.Value)
+        //     {
+        //         proposedCard.Approved = true;
+        //         foreach (var back in proposedCard.Backs)
+        //         {
+        //             back.Approved = true;
+        //         }
+        //     }
+        //     else
+        //     {
+        //         if (proposedCard.Backs.Any(b => b.Approved))
+        //         {
+        //             repository.Back.DeleteRange(proposedCard.Backs.Where(b => b.Public != b.Approved));
+        //         }
+        //         else
+        //         {
+        //             repository.Card.Delete(proposedCard);
+        //         }
+        //     }
 
-            await repository.SaveChangesAsync();
+        //     await repository.SaveChangesAsync();
 
-            return NoContent();
-        }
+        //     return NoContent();
+        // }
     }
 }

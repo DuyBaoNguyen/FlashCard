@@ -170,7 +170,7 @@ namespace FlashCard.Areas.Admin.Controllers
 			var decks = await repository.Deck
 				.Query(userId)
 				.AsNoTracking()
-				.MapToDeckDto()
+				.MapToDeckDto(imageService.UserPictureBaseUrl)
 				.ToListAsync();
 
 			return decks;
@@ -202,7 +202,7 @@ namespace FlashCard.Areas.Admin.Controllers
 			var deck = await repository.Deck
 				.QueryById(userId, deckId)
 				.AsNoTracking()
-				.MapToDeckDto()
+				.MapToDeckDto(imageService.UserPictureBaseUrl)
 				.FirstOrDefaultAsync();
 
 			if (deck == null)

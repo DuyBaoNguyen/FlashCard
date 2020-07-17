@@ -39,7 +39,7 @@ namespace FlashCard.Controllers
 			var publicDecks = await repository.Deck
 				.QueryByBeingApprovedAndNotAdmin(admin.Id)
 				.AsNoTracking()
-				.MapToPublicDeckDto()
+				.MapToPublicDeckDto(imageService.UserPictureBaseUrl)
 				.ToListAsync();
 
 			return publicDecks;
@@ -54,7 +54,7 @@ namespace FlashCard.Controllers
 			var publicDeck = await repository.Deck
 				.QueryByIdAndBeingApprovedAndNotAdmin(admin.Id, id)
 				.AsNoTracking()
-				.MapToPublicDeckDto()
+				.MapToPublicDeckDto(imageService.UserPictureBaseUrl)
 				.FirstOrDefaultAsync();
 
 			if (publicDeck == null)

@@ -7,6 +7,7 @@ namespace FlashCard.Contracts
 	{
 		IQueryable<Back> QueryById(string userId, int backId);
 		IQueryable<Back> QueryByBeingProposed(string userId, string adminId, int backId);
-		IQueryable<Back> QueryByBeingNotApproved(string adminId, int backId);
+		IQueryable<Back> QueryByBeingNotApproved(string userId, int backId);
+		IQueryable<Back> QueryByBeingNotApproved(string userId, int[] backIds);
 	}
 }
