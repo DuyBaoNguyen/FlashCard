@@ -24,7 +24,8 @@ const rootReducer = combineReducers({
 	usersmanagement : reducers.usersManagementReducer,
 	market : reducers.marketReducer,
 	userDeckDetail: reducers.userDeckDetailReducer,
-	cardsProposal: reducers.cardsProposalReducer
+	cardsProposal: reducers.cardsProposalReducer,
+	publicDeckDetail: reducers.publicDeckDetailReducer
 });
 const store = createStore(rootReducer, applyMiddleware(thunk));
 // const store = createStore(rootReducer, composeEnhancers(applyMiddleware(thunk)));

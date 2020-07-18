@@ -41,6 +41,7 @@ class DeckDetail extends Component {
     const {
       profile,
       deck,
+      cards,
       percentPracticedCardsStatistics,
       amountRememberedCardsStatistics,
       selectedCard,
@@ -73,6 +74,8 @@ class DeckDetail extends Component {
           <DeckCards />
         </section>
         <PracticeOptions
+          deck={deck}
+          cards={cards}
           isOpen={practiceOptionsOpen}
           onClose={this.handleClosePracticeOptions} />
       </div>
@@ -84,6 +87,7 @@ const mapStateToProps = state => {
   return {
     profile: state.home.profile,
     deck: state.deckDetail.deck,
+    cards: state.deckDetail.cards,
     percentPracticedCardsStatistics: state.deckDetail.percentPracticedCardsStatistics,
     amountRememberedCardsStatistics: state.deckDetail.amountRememberedCardsStatistics,
     selectedCard: state.deckDetail.selectedCard,

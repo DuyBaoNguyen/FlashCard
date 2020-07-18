@@ -1,5 +1,7 @@
 import axios from '../../axios';
 import * as actionTypes from '../actions/actionTypes';
+import history from '../../history';
+import * as actions from './index';
 
 const getPublicCardsSuccess = (cardList) => {
 	return {
@@ -95,8 +97,18 @@ const downloadAdminPublicDeckFail = () => {
 export const downloadAdminPublicDeck = (id) => {
 	return (dispatch) => {
 		axios
-			.put(`/api/DownloadedDecks/${id}`)
-			.then(() => dispatch(downloadAdminPublicDeckSuccess()))
+			.put(`/api/downloadeddecks/${id}`)
+			.then(() => {
+				if (history.location.pathname.search(/^\/publicdecks\/\d+$/) > -1 ||
+					history.location.pathname.search(/^\/userpublicdecks\/\d+$/) > -1) {
+					const deckId = /\d+/.exec(history.location.pathname)[0];
+					dispatch(actions.getPublicDeck(deckId));
+				} else {
+					dispatch(getAdminPublicDecks());
+					dispatch(getUserPublicDecks());
+				}
+				dispatch(downloadAdminPublicDeckSuccess())
+			})
 			.catch(() => dispatch(downloadAdminPublicDeckFail()));
 	};
 };
@@ -160,8 +172,14 @@ export const pinPublicDeck = (deckId) => {
 	return dispatch => {
 		axios.post(`/api/publicdecks/${deckId}/shortcuts`)
 			.then(() => {
-				dispatch(getAdminPublicDecks());
-				dispatch(getUserPublicDecks());
+				if (history.location.pathname.search(/^\/publicdecks\/\d+$/) > -1 ||
+					history.location.pathname.search(/^\/userpublicdecks\/\d+$/) > -1) {
+					const deckId = /\d+/.exec(history.location.pathname)[0];
+					dispatch(actions.getPublicDeck(deckId));
+				} else {
+					dispatch(getAdminPublicDecks());
+					dispatch(getUserPublicDecks());
+				}
 				dispatch(pinPublicDeckSuccess());
 			})
 			.catch(() => dispatch(pinPublicDeckFail()));
@@ -184,8 +202,14 @@ export const unpinPublicDeck = (deckId) => {
 	return dispatch => {
 		axios.delete(`/api/shortcuts/${deckId}`)
 			.then(() => {
-				dispatch(getAdminPublicDecks());
-				dispatch(getUserPublicDecks());
+				if (history.location.pathname.search(/^\/publicdecks\/\d+$/) > -1 ||
+					history.location.pathname.search(/^\/userpublicdecks\/\d+$/) > -1) {
+					const deckId = /\d+/.exec(history.location.pathname)[0];
+					dispatch(actions.getPublicDeck(deckId));
+				} else {
+					dispatch(getAdminPublicDecks());
+					dispatch(getUserPublicDecks());
+				}
 				dispatch(unpinPublicDeckSuccess());
 			})
 			.catch(() => dispatch(unpinPublicDeckFail()));

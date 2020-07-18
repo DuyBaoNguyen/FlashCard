@@ -118,3 +118,14 @@ export {
 	declineCurrentCard,
 	declineCurrentBack,
 } from './CardsProposal';
+
+export {
+	getPublicDeck,
+	getPublicDeckCards,
+	selectPublicDeckCard,
+	unselectPublicDeckCard,
+	resetStateInPublicDeckDetailReducer,
+	updatePublicDeckCardsSearchString,
+	setPublicDeckCardsFilteredValue,
+	filterPublicDeckCards
+} from './PublicDeckDetail';

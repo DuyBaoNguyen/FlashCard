@@ -28,6 +28,10 @@ class PracticeOptions extends Component {
     selectedCards: []
   }
 
+  componentWillUnmount() {
+    this.props.onClose();
+  }
+
   handleClickAllCardsOption = () => {
     if (this.props.cards.length > 0) {
       this.props.history.push({
@@ -208,17 +212,11 @@ class PracticeOptions extends Component {
   }
 }
 
-const mapStateToProps = state => {
-  return {
-    deck: state.deckDetail.deck,
-    cards: state.deckDetail.cards
-  };
-};
-
 const mapDispatchToProps = dispatch => {
   return {
-    onSetPracticedCards: (cards) => dispatch(actions.getCardsInDeckSuccess(cards))
+    onSetPracticedCards: (cards) => dispatch(actions.getCardsInDeckSuccess(cards)),
+    onSetPracticeOptionsOpen: (value) => dispatch(actions.setPracticeOptionsOpen(value))
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(withRouter(PracticeOptions));
+export default connect(null, mapDispatchToProps)(withRouter(PracticeOptions));

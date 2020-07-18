@@ -29,7 +29,7 @@ class DeckWrapper extends Component {
 	componentDidMount() {
 		this.props.onGetDecks('');
 
-		if (!this.state.setLoading && !this.timeoutNumber) {
+		if (!this.state.setLoading) {
 			setTimeout(() => {
 				if (this.props.loading) {
 					this.setState({ setLoading: true });

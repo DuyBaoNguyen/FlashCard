@@ -8,4 +8,4 @@ export { usersManagementReducer } from './UsersManagement';
 export { marketReducer } from './Market';
 export { userDeckDetailReducer } from './UserDeckDetail';
 export { cardsProposalReducer } from './CardsProposal';
-
+export { publicDeckDetailReducer } from './PublicDeckDetail';

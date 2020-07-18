@@ -59,6 +59,7 @@ namespace FlashCard.Util
 				Description = d.Description,
 				Theme = d.Theme,
 				Pinned = d.SharedDecks.FirstOrDefault(s => s.UserId == userId).Pinned,
+				CreatedDate = d.CreatedDate,
 				Owner = new PersonDto()
 				{
 					Id = d.OwnerId,

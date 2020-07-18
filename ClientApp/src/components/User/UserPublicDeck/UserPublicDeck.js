@@ -23,11 +23,11 @@ class UserPublicDeck extends Component {
   }
 
   render() {
-    const { deck } = this.props;
+    const { deck, profile, location } = this.props;
 
     return (
       <div className="deck">
-        <Link to={`/decks/${deck.id}`}>
+        <Link to={{ pathname: `/userpublicdecks/${deck.id}`, state: { backUrl: location.pathname}}}>
           <div className="wrapper">
             <div
               className="deck-background-color"
@@ -43,28 +43,30 @@ class UserPublicDeck extends Component {
                   </div>
                 </div>
               </div>
-              <div className="public-deck-features">
-                {deck.pinned
-                  ? (
-                    <Button
-                      type="button"
-                      className="unpin-btn"
-                      icon={<Icon icon={unpinIcon} />}
-                      onClick={(event) => this.handleUnpinPublicDeck(event, deck.id)}>
-                      Unpin
-                    </Button>
-                  )
-                  : (
-                    <Button
-                      type="button"
-                      className="pin-btn"
-                      icon={<Icon icon={pinIcon} />}
-                      onClick={(event) => this.handlePinPublicDeck(event, deck.id)}>
-                      Pin
-                    </Button>
-                  )
-                }
-              </div>
+              {profile?.id !== deck.owner.id && (
+                <div className="public-deck-features">
+                  {deck.pinned
+                    ? (
+                      <Button
+                        type="button"
+                        className="unpin-btn"
+                        icon={<Icon icon={unpinIcon} />}
+                        onClick={(event) => this.handleUnpinPublicDeck(event, deck.id)}>
+                        Unpin
+                      </Button>
+                    )
+                    : (
+                      <Button
+                        type="button"
+                        className="pin-btn"
+                        icon={<Icon icon={pinIcon} />}
+                        onClick={(event) => this.handlePinPublicDeck(event, deck.id)}>
+                        Pin
+                      </Button>
+                    )
+                  }
+                </div>
+              )}
             </div>
             <div className="deck-background-white-1"></div>
             <div className="deck-background-white-2"></div>
@@ -75,6 +77,12 @@ class UserPublicDeck extends Component {
   }
 }
 
+const mapStateToProps = state => {
+  return {
+    profile: state.home.profile
+  };
+}
+
 const mapDispatchToProps = (dispatch) => {
   return {
     onPinPublicDeck: (deckId) => dispatch(actions.pinPublicDeck(deckId)),
@@ -82,4 +90,4 @@ const mapDispatchToProps = (dispatch) => {
   };
 };
 
-export default withRouter(connect(null, mapDispatchToProps)(withErrorHandler(UserPublicDeck)));
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(withErrorHandler(UserPublicDeck)));
