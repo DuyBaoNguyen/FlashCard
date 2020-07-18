@@ -38,7 +38,7 @@ class PublicDeck extends Component {
 
 		return (
 			<div className="deck">
-				<Link to={`/decks/${deck.id}`}>
+				<Link to={{ pathname: `/publicdecks/${deck.id}`, state: { backUrl: '/market' } }}>
 					<div className="wrapper">
 						<div
 							className="deck-background-color"

@@ -7,3 +7,4 @@ export { cardReducer } from './Card';
 export { usersManagementReducer } from './UsersManagement';
 export { marketReducer } from './Market';
 export { userDeckDetailReducer } from './UserDeckDetail';
+export { publicDeckDetailReducer } from './PublicDeckDetail';

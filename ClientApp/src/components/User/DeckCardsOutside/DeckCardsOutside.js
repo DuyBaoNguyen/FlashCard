@@ -35,7 +35,7 @@ class DeckCardsOutside extends Component {
     this.deckId = this.props.match.params.deckId;
     this.props.onGetDeckCardsOutside(this.deckId, '');
 
-    if (!this.state.setLoading && !this.timeoutNumber) {
+    if (!this.state.setLoading) {
       setTimeout(() => {
         if (this.props.loading) {
           this.setState({ setLoading: true });

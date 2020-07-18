@@ -18,6 +18,7 @@ import Market from './containers/User/Market/Market';
 import UsersManagement from './containers/Admin/UsersManagement/UsersManagement';
 import UserDeckDetail from './containers/Admin/UserDeckDetail/UserDeckDetail';
 import CardsProposal from './containers/Admin/CardsProposal/CardsProposal';
+import PublicDeckDetail from './containers/User/PublicDeckDetail/PublicDeckDetail';
 
 import AuthorizeRoute from './components/api-authorization/AuthorizeRoute';
 import ApiAuthorizationRoutes from './components/api-authorization/ApiAuthorizationRoutes';
@@ -45,8 +46,8 @@ class App extends Component {
 					<AuthorizeRoute exact path="/cards/create" component={CreateCard} />
 					<AuthorizeRoute exact path="/cards/:cardId/edit" component={EditCard} />
 					<AuthorizeRoute exact path="/market" component={Market} />
-
-
+					<AuthorizeRoute exact path="/publicdecks/:deckId" component={PublicDeckDetail} />
+					<AuthorizeRoute exact path="/userpublicdecks/:deckId" component={PublicDeckDetail} />
 					
 					{/* Admin management */}
 					<AuthorizeRoute exact path="/admin/users" component={UsersManagement} />

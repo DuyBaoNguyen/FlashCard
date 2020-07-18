@@ -31,7 +31,7 @@ class UserDeckCards extends Component {
 
     onGetUserDeckCards(match.params.userId, match.params.deckId);
 
-    if (!setLoading && !this.timeoutNumber) {
+    if (!setLoading) {
       setTimeout(() => {
         if (loading) {
           this.setState({ setLoading: true });

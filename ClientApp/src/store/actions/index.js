@@ -110,3 +110,14 @@ export {
 	deleteUserCard,
 	deleteUserDeck
 } from './UserDeckDetail';
+
+export {
+	getPublicDeck,
+	getPublicDeckCards,
+	selectPublicDeckCard,
+	unselectPublicDeckCard,
+	resetStateInPublicDeckDetailReducer,
+	updatePublicDeckCardsSearchString,
+	setPublicDeckCardsFilteredValue,
+	filterPublicDeckCards
+} from './PublicDeckDetail';

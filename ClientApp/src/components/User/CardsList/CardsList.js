@@ -32,7 +32,7 @@ class CardsList extends Component {
   componentDidMount() {
     this.props.onGetCards();
 
-    if (!this.state.setLoading && !this.timeoutNumber) {
+    if (!this.state.setLoading) {
       setTimeout(() => {
         if (this.props.loading) {
           this.setState({ setLoading: true });

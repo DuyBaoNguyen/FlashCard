@@ -1,3 +1,5 @@
+using System;
+
 namespace FlashCard.Dto
 {
 	public class PublicDeckDto
@@ -8,6 +10,7 @@ namespace FlashCard.Dto
 		public string Theme { get; set; }
 		public int? LocalDeckId { get; set; }
 		public bool Pinned { get; set; }
+		public DateTime CreatedDate { get; set; }
 		public PersonDto Owner { get; set; }
 		public PersonDto Author { get; set; }
 		public int TotalCards { get; set; }

@@ -39,7 +39,7 @@ class DeckCards extends Component {
   componentDidMount() {
     this.props.onGetDeckCardsInside(this.deckId);
 
-    if (!this.state.setLoading && !this.timeoutNumber) {
+    if (!this.state.setLoading) {
       setTimeout(() => {
         if (this.props.loading) {
           this.setState({ setLoading: true });
