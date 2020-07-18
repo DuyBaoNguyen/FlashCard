@@ -1,0 +1,20 @@
+.cards-proposal-back-user .cards-proposal-back-title {
+  color: #9eacf4;
+}
+
+.cards-proposal-back-user .cards-proposal-back-card {
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+}
+
+.cards-proposal-back-user .cards-proposal-back-card .cards-proposal-back-meaning {
+  color: #9eacf4;
+}
+
+.cards-proposal-back-user .cards-proposal-back-card .cards-proposal-back-type {
+  font-size: 14px;
+  color: grey;
+}
+/*# sourceMappingURL=UserCard.css.map */

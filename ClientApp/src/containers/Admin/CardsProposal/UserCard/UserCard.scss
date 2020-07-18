@@ -1,0 +1,15 @@
+.cards-proposal-back-user {
+  .cards-proposal-back-title {
+    color: #9eacf4;
+  }
+  .cards-proposal-back-card {
+    flex-direction: column;
+    .cards-proposal-back-meaning {
+      color: #9eacf4;
+    }
+    .cards-proposal-back-type {
+      font-size: 14px;
+      color: grey;
+    }
+  }
+}

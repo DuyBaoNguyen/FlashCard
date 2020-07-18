@@ -10,7 +10,7 @@ class CardsTable extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			activePage: 1
+			activePage: 1,
 		};
 	}
 
@@ -18,11 +18,9 @@ class CardsTable extends Component {
 		this.setState({ activePage: pageNumber });
 	}
 
-	onClickUser = (userId) => {
-		this.props.onSetCurrentUserId(userId);
-		this.props.onGetCurrentUser(userId);
-		this.props.onGetCurrenctUserDecks(userId);
-		this.props.onGetCurrenctUserCards(userId);
+	onClickCard = (cardId) => {
+		this.props.onGetCurrentProposalCard(cardId);
+		this.props.onGetCard(cardId);
 	};
 
 	render() {
@@ -35,7 +33,9 @@ class CardsTable extends Component {
 				activePage={this.state.activePage}
 				itemsCountPerPage={10}
 				totalItemsCount={
-					this.props.usersList !== null ? this.props.usersList.length : null
+					this.props.cardsProposalList !== null
+						? this.props.cardsProposalList.length
+						: null
 				}
 				pageRangeDisplayed={5}
 				onChange={this.handlePageChange.bind(this)}
@@ -44,19 +44,21 @@ class CardsTable extends Component {
 			/>
 		);
 
-		let users = this.props.usersList.map((user, index) => {
+		let cards = this.props.cardsProposalList.map((card, index) => {
 			return (
-				<tr 
-					key={user.id} 
-					className={user.id === currentUserId ? 'active' : null}
-					onClick={() => this.onClickUser(user.id)}>
+				<tr
+					key={card.id}
+					className={card.id === currentUserId ? 'active' : null}
+					onClick={() => this.onClickCard(card.id)}
+				>
 					<td className="users-table-width-small">{index + 1}</td>
-					<td className="users-table-width-medium">{user.name}</td>
-					<td className="users-table-width-large">	</td>
+					<td className="users-table-width-medium">{card.front}</td>
+					<td className="users-table-width-large">
+						{card.backs[0].author.email}
+					</td>
 				</tr>
 			);
 		});
-
 		return (
 			<div className="users-table-wrapper">
 				<div className="users-table-title">Cards Proposal</div>
@@ -65,13 +67,11 @@ class CardsTable extends Component {
 						<thead>
 							<tr className="users-table-header">
 								<th className="users-table-width-small first-cell">No.</th>
-								<th className="users-table-width-medium">Author</th>
-								<th className="users-table-width-large last-cell">Front</th>
+								<th className="users-table-width-medium">Front</th>
+								<th className="users-table-width-large last-cell">Author</th>
 							</tr>
 						</thead>
-						<tbody>
-							{users}
-						</tbody>
+						<tbody>{cards}</tbody>
 					</table>
 				</div>
 				<div className="users-table-pagination">{pagination}</div>
@@ -82,21 +82,17 @@ class CardsTable extends Component {
 
 const mapStateToProps = (state) => {
 	return {
-		usersList: state.usersmanagement.usersList,
-		currentUserId: state.usersmanagement.currentUserId,
-		currentUser: state.usersmanagement.currentUser,
-		currentUserData: state.usersmanagement.currentUserData,
-		currentUserDecks: state.usersmanagement.currentUserDecks,
+		card: state.card.card,
+		currentProposalCard: state.cardsProposal.currentProposalCard,
 	};
 };
 
 const mapDispatchToProps = (dispatch) => {
 	return {
 		onGetUsers: () => dispatch(actions.getUsers()),
-		onSetCurrentUserId: (id) => dispatch(actions.setCurrentUserId(id)),
-		onGetCurrentUser: (userId) => dispatch(actions.getCurrentUser(userId)),
-		onGetCurrenctUserDecks: (userId) => dispatch(actions.getCurrentUserDecks(userId)),
-		onGetCurrenctUserCards: (userId) => dispatch(actions.getCurrentUserCards(userId))
+		onGetCard: (cardId) => dispatch(actions.getCard(cardId)),
+		onGetCurrentProposalCard: (cardId) =>
+			dispatch(actions.getCurrentProposalCard(cardId)),
 	};
 };
 

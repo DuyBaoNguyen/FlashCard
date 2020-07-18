@@ -10,7 +10,7 @@ export {
 	clearUpdateCurrentUserNameError,
 	updatePassword,
 	togglePasswordUpdatingForm,
-	clearUpdatePasswordError
+	clearUpdatePasswordError,
 } from './Home';
 
 export { createDeck, editDeck } from './Deck';
@@ -84,10 +84,17 @@ export {
 	getCurrentUserCards,
 	selectUserCard,
 	unselectUserCard,
-	checkToUnselectUserCard
+	checkToUnselectUserCard,
 } from './UsersManagement';
 
-export { getPublicCards, selectPublicCard, downloadPublicCard, getAdminPublicDecks, downloadAdminPublicDeck, getUsersPublicDecks } from './Market.js';
+export {
+	getPublicCards,
+	selectPublicCard,
+	downloadPublicCard,
+	getAdminPublicDecks,
+	downloadAdminPublicDeck,
+	getUsersPublicDecks,
+} from './Market.js';
 
 export {
 	getUserDeck,
@@ -96,5 +103,12 @@ export {
 	unselectUserDeckCard,
 	resetStateInUserDeckDetailReducer,
 	deleteUserCard,
-	deleteUserDeck
+	deleteUserDeck,
 } from './UserDeckDetail';
+
+export {
+	getCardsProposal,
+	getCurrentProposalCard,
+	approveCurrentCard,
+	declineCurrentCard,
+} from './CardsProposal';
