@@ -66,7 +66,6 @@ export const approveCurrentCard = (currentProposalCard) => {
 		proposedBacks: backs,
 		approve: true,
 	};
-	console.log(form);
 	return (dispatch) => {
 		axios
 			.put(`/api/admin/proposedbacks`, form)
@@ -78,7 +77,7 @@ export const approveCurrentCard = (currentProposalCard) => {
 	};
 };
 
-const declineCurrentCardSuccess = (currentProposalCard) => {
+const declineCurrentCardSuccess = () => {
 	return {
 		type: actionTypes.APPROVE_CURRENT_CARD_SUCCESS,
 	};
@@ -103,9 +102,33 @@ export const declineCurrentCard = (currentProposalCard) => {
 		axios
 			.put(`/api/admin/proposedbacks`, form)
 			.then((res) => {
-				dispatch(approveCurrentCardSuccess(res.data));
+				dispatch(declineCurrentCardSuccess(res.data));
 				dispatch(getCardsProposal());
 			})
-			.catch((error) => dispatch(approveCurrentCardFail()));
+			.catch((error) => dispatch(declineCurrentCardFail()));
+	};
+};
+
+const declineCurrentBackSuccess = () => {
+	return {
+		type: actionTypes.DECLINE_CURRENT_BACK_SUCCESS,
+	};
+};
+
+const declineCurrentBackFail = () => {
+	return {
+		type: actionTypes.DECLINE_CURRENT_BACK_FAIL,
+	};
+};
+
+export const declineCurrentBack = (backId, cardId) => {
+	return (dispatch) => {
+		axios
+			.delete(`/api/admin/proposedbacks/${backId}`)
+			.then((res) => {
+				dispatch(declineCurrentBackSuccess(res.data));
+				dispatch(getCurrentProposalCard(cardId));
+			})
+			.catch((error) => dispatch(declineCurrentBackFail()));
 	};
 };

@@ -1,3 +1,33 @@
+.cards-proposal-back-user .cards-proposal-back-card {
+  position: relative;
+}
+
+.cards-proposal-back-user .cards-proposal-back-close-btn {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  padding: 5px;
+  border-radius: 50%;
+  color: #979797;
+  cursor: pointer;
+  -webkit-transition: color .15s ease-out, background-color .15s ease-out;
+  transition: color .15s ease-out, background-color .15s ease-out;
+}
+
+.cards-proposal-back-user .cards-proposal-back-close-btn:hover {
+  background-color: #eee;
+  color: #646464;
+}
+
 .cards-proposal-back-user .cards-proposal-back-title {
   color: #9eacf4;
 }

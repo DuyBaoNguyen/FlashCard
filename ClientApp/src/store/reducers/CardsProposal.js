@@ -46,6 +46,15 @@ export const cardsProposalReducer = (state = initialState, action) => {
 			return {
 				...state,
 			};
+		case actionTypes.DECLINE_CURRENT_BACK_SUCCESS:
+			return {
+				...state,
+				currentProposalCard: null,
+			};
+		case actionTypes.DECLINE_CURRENT_BACK_FAIL:
+			return {
+				...state,
+			};
 		default:
 			return state;
 	}

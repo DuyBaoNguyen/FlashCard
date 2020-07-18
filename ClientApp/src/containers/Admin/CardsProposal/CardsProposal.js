@@ -20,7 +20,7 @@ class CardsProposal extends Component {
 	onClickDecline = (card) => {
 		this.props.onDeclineCurrentCard(card);
 	};
-
+	
 	render() {
 		let content = (
 			<div className="cards-proposal-right">

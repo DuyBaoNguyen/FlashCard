@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import withErrorHandler from '../../../../hoc/withErrorHandler';
 import * as actions from '../../../../store/actions/index';
+import { Icon } from '@iconify/react';
+import closeIcon from '@iconify/icons-uil/multiply';
 
 import './UserCard.css';
 
@@ -13,10 +15,25 @@ class UserCard extends Component {
 		};
 	}
 
+	onClickDeclineBack = (backId, cardId) => {
+		this.props.onDeclineCurrentBack(backId, cardId);
+	};
+
 	render() {
 		let backs = this.props.currentProposalCard.backs.map((back, index) => {
 			return (
 				<div className="cards-proposal-back-card">
+					<span
+						className="cards-proposal-back-close-btn"
+						onClick={() =>
+							this.onClickDeclineBack(
+								back.id,
+								this.props.currentProposalCard.id
+							)
+						}
+					>
+						<Icon icon={closeIcon} style={{ fontSize: 16 }} />
+					</span>
 					<div className="cards-proposal-back-meaning">{back.meaning}</div>
 					<br />
 					<div className="cards-proposal-back-type">{back.type}</div>
@@ -42,6 +59,8 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
 	return {
+		onDeclineCurrentBack: (backId, cardId) =>
+			dispatch(actions.declineCurrentBack(backId, cardId)),
 	};
 };
 

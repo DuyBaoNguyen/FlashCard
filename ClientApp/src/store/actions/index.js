@@ -87,18 +87,18 @@ export {
 	checkToUnselectUserCard,
 } from './UsersManagement';
 
-export { 
-	getPublicCards, 
-	selectPublicCard, 
-	downloadPublicCard, 
-	getAdminPublicDecks, 
-	downloadAdminPublicDeck, 
+export {
+	getPublicCards,
+	selectPublicCard,
+	downloadPublicCard,
+	getAdminPublicDecks,
+	downloadAdminPublicDeck,
 	getUserPublicDecks,
 	updatePublicCardsSearchString,
 	updateAdminPublicDecksSearchString,
 	updateUserPublicDecksSearchString,
 	pinPublicDeck,
-	unpinPublicDeck
+	unpinPublicDeck,
 } from './Market.js';
 
 export {
@@ -116,4 +116,5 @@ export {
 	getCurrentProposalCard,
 	approveCurrentCard,
 	declineCurrentCard,
+	declineCurrentBack,
 } from './CardsProposal';
