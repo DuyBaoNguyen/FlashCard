@@ -179,6 +179,7 @@ namespace FlashCard.Controllers
 				Description = deckRqModel.Description == null || deckRqModel.Description.Trim().Length == 0
 					? null : deckRqModel.Description.Trim(),
 				Theme = deckRqModel.Theme,
+				Completed = true,
 				CreatedDate = now,
 				LastModifiedDate = now,
 				OwnerId = userId,

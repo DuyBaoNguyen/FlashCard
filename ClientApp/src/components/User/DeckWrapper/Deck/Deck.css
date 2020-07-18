@@ -83,6 +83,7 @@
 .deck .wrapper .deck-background-color .deck-info .deck-info-value-container .deck-info-value p {
   position: absolute;
   margin-left: 35px;
+  margin-bottom: 0;
   font-style: normal;
   font-weight: 500;
   font-size: 14px;

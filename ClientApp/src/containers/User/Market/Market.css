@@ -1,11 +1,13 @@
 .market-wrapper {
   width: 100%;
-  height: calc(100vh - 96px);
+  height: 655px;
   background: #FFFFFF;
   -webkit-box-shadow: 0px 0px 30px rgba(0, 0, 0, 0.05);
           box-shadow: 0px 0px 30px rgba(0, 0, 0, 0.05);
   border-radius: 15px;
   padding: 30px;
+  margin-bottom: 20px;
+  position: relative;
 }
 
 .market-wrapper .market-menu {
@@ -21,8 +23,8 @@
   margin-right: 20px;
   font-style: normal;
   font-weight: normal;
-  font-size: 14px;
-  color: #979797;
+  font-size: 15px;
+  color: #757575;
 }
 
 .market-wrapper .market-menu .market-page-active {

@@ -88,9 +88,16 @@ namespace FlashCard.Repositories
 			return dbContext.Decks.Where(d => d.OwnerId == userId && d.SourceId == sourceId);
 		}
 
-		public IQueryable<Deck> QueryByBeingApprovedAndNotAdmin(string adminId)
+		public IQueryable<Deck> QueryByBeingApprovedAndNotAdmin(string adminId, string deckName)
 		{
-			return dbContext.Decks.Where(d => d.OwnerId != adminId && d.Approved);
+			var queryDecks = dbContext.Decks.Where(d => d.OwnerId != adminId && d.Approved);
+
+			if (deckName != null && deckName.Trim().Length > 0)
+			{
+				queryDecks = queryDecks.Where(d => d.Name.ToLower().Contains(deckName.Trim().ToLower()));
+			}
+
+			return queryDecks.OrderBy(d => d.Name);
 		}
 
 		public IQueryable<Deck> QueryByIdAndBeingApprovedAndNotAdmin(string adminId, int deckId)

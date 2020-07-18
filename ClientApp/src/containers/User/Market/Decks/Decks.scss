@@ -1,58 +1,71 @@
 .market-decks-wrapper {
-  position: relative;
-  height: 80vh;
+  height: 490px;
+  padding-top: 10px;
+
+  .market-decks-search-box {
+    position: absolute;
+    top: 30px;
+    right: 30px;
+  }
+
   .decks {
     min-height: 428px;
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(3, 1fr);
     gap: 30px;
     padding-right: 10px;
   }
-}
 
-.deck-pagination {
-  position: relative;
-  left: 0;
-  bottom: 80px;
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
-  .pagination {
-    list-style-type: none;
-    padding-left: 0;
-
-    .pagination-item {
-      bottom: 10px;
-      display: inline-block;
-      font-size: 14px;
-      margin-left: 5px;
-      margin-right: 5px;
-      text-decoration: none;
-      background: #fff;
-      border-radius: 4px;
-      width: 24px;
-      height: 24px;
-      line-height: 24px;
-      text-align: center;
-      cursor: pointer;
-
-      a {
-        color: #757575;
+  .deck-pagination {
+    position: absolute;
+    left: 0;
+    bottom: 6px;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  
+    .pagination {
+      list-style-type: none;
+      padding-left: 0;
+  
+      .pagination-item {
+        bottom: 10px;
+        display: inline-block;
+        font-size: 14px;
+        margin-left: 5px;
+        margin-right: 5px;
+        text-decoration: none;
+        background: #fff;
+        border-radius: 4px;
+        width: 24px;
+        height: 24px;
+        line-height: 24px;
+        text-align: center;
+        cursor: pointer;
+  
+        a {
+          color: #757575;
+        }
+  
+        &:hover {
+          background-color: #f5f5f5;
+        }
       }
-
-      &:hover {
-        background-color: #f5f5f5;
+  
+      .pagination-item-active {
+        background: #9eacf4 !important;
+  
+        a {
+          color: white;
+        }
       }
     }
-
-    .pagination-item-active {
-      background: #9eacf4 !important;
-
-      a {
-        color: white;
-      }
-    }
+  }
+  .text-notify {
+    font-size: 15px;
+    color: #979797;
+    font-size: #979797;
+    white-space: nowrap;
   }
 }

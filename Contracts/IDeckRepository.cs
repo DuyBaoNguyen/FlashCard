@@ -18,7 +18,7 @@ namespace FlashCard.Contracts
 		IQueryable<Deck> QueryByIdAndBeingApproved(string adminId, int deckId);
 		IQueryable<Deck> QueryByHavingSource(string userId);
 		IQueryable<Deck> QueryBySourceId(string userId, int sourceId);
-		IQueryable<Deck> QueryByBeingApprovedAndNotAdmin(string adminId);
+		IQueryable<Deck> QueryByBeingApprovedAndNotAdmin(string adminId, string deckName = null);
 		IQueryable<Deck> QueryByIdAndBeingApprovedAndNotAdmin(string adminId, int deckId);
 		IQueryable<Deck> QueryByBeingShared(string userId);
 		IQueryable<Deck> QueryByCardIdsIncludesCardAssignmentsAndCard(int[] cardIds);

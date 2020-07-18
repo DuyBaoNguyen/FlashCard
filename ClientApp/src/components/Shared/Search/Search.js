@@ -15,7 +15,7 @@ const searchBox = props => {
       <span className="search-prefix">
         <Icon icon={searchIcon} />
       </span>
-      <input type="text" placeholder={props.placeholder} onChange={props.onChange} />
+      <input type="text" placeholder={props.placeholder} value={props.value} onChange={props.onChange} />
     </span>
   );
 };

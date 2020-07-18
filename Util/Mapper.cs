@@ -49,7 +49,8 @@ namespace FlashCard.Util
 			});
 		}
 
-		public static IQueryable<PublicDeckDto> MapToPublicDeckDto(this IQueryable<Deck> query, string pictureBaseUrl)
+		public static IQueryable<PublicDeckDto> MapToPublicDeckDto(this IQueryable<Deck> query, string userId,
+			string pictureBaseUrl)
 		{
 			return query.Select(d => new PublicDeckDto()
 			{
@@ -57,6 +58,7 @@ namespace FlashCard.Util
 				Name = d.Name,
 				Description = d.Description,
 				Theme = d.Theme,
+				Pinned = d.SharedDecks.FirstOrDefault(s => s.UserId == userId).Pinned,
 				Owner = new PersonDto()
 				{
 					Id = d.OwnerId,

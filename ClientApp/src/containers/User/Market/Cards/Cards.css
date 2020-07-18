@@ -1,28 +1,22 @@
 .market-cards-list-wrapper {
-  width: 100%;
-  height: 655px;
+  height: 456px;
+  padding-top: 40px;
 }
 
-.market-cards-list-wrapper .market-cards-list-header {
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-pack: end;
-      -ms-flex-pack: end;
-          justify-content: flex-end;
+.market-cards-list-wrapper .market-cards-search-box {
+  position: absolute;
+  top: 30px;
+  right: 30px;
 }
 
 .market-cards-list-wrapper .cards {
   width: 100%;
-  margin-top: 30px;
   margin-bottom: 10px;
   display: -ms-grid;
   display: grid;
-  -ms-grid-columns: auto auto auto auto auto auto;
-      grid-template-columns: auto auto auto auto auto auto;
-  -webkit-column-gap: 30px;
-          column-gap: 30px;
-  row-gap: 40px;
+  -ms-grid-columns: (1fr)[6];
+      grid-template-columns: repeat(6, 1fr);
+  gap: 50px 35px;
 }
 
 .market-cards-list-wrapper .cards .cards-button-download {
@@ -33,23 +27,14 @@
       -ms-flex-pack: center;
           justify-content: center;
   margin-top: 10px;
-  width: 95%;
-}
-
-.market-cards-list-wrapper .cards .card-wrapper {
-  width: 150px;
-}
-
-.market-cards-list-wrapper .cards .card-wrapper .card-front {
-  height: 150px;
-}
-
-.market-cards-list-wrapper .cards .card-wrapper .card-back {
-  height: 150px;
+  width: 100%;
 }
 
 .market-cards-list-wrapper .cards-pagination {
-  margin-top: 40px;
+  position: absolute;
+  left: 0;
+  bottom: 6px;
+  width: 100%;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -63,6 +48,7 @@
 
 .market-cards-list-wrapper .cards-pagination .pagination {
   list-style-type: none;
+  padding-left: 0;
 }
 
 .market-cards-list-wrapper .cards-pagination .pagination .pagination-item {
@@ -94,5 +80,12 @@
 
 .market-cards-list-wrapper .cards-pagination .pagination .pagination-item-active a {
   color: white;
+}
+
+.market-cards-list-wrapper .text-notify {
+  font-size: 15px;
+  color: #979797;
+  font-size: #979797;
+  white-space: nowrap;
 }
 /*# sourceMappingURL=Cards.css.map */

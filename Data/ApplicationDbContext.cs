@@ -65,7 +65,6 @@ namespace FlashCard.Data
 			builder.Entity<MatchedCard>().ToTable("MatchedCard");
 
 			builder.Entity<ApplicationUser>(u => u.Property(t => t.PasswordHash).HasColumnName("Password"));
-			builder.Entity<Deck>(d => d.Property(t => t.Completed).HasDefaultValue(true));
 
 			builder.Entity<CardAssignment>().HasKey(c => new { c.CardId, c.DeckId });
 			builder.Entity<SharedDeck>().HasKey(s => new { s.DeckId, s.UserId });

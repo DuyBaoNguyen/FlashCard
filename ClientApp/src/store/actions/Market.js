@@ -16,9 +16,9 @@ const getPublicCardsFail = () => {
 
 export const getPublicCards = (front) => {
 	return (dispatch, getState) => {
-		const { searchString } = getState().cards;
+		const { publicCardsSearchString } = getState().market;
 		axios
-			.get(`/api/publiccards?front=${front || searchString}`)
+			.get(`/api/publiccards?front=${front || publicCardsSearchString}`)
 			.then((res) => dispatch(getPublicCardsSuccess(res.data)))
 			.catch((err) => dispatch(getPublicCardsFail()));
 	};
@@ -53,8 +53,8 @@ export const downloadPublicCard = (id) => {
 	return (dispatch) => {
 		axios
 			.put(`/api/DownloadedCards/${id}`)
-			.then((res) => dispatch(downloadPublicCardSuccess(res.data)))
-			.catch((err) => dispatch(downloadPublicCardFail()));
+			.then(() => dispatch(downloadPublicCardSuccess()))
+			.catch(() => dispatch(downloadPublicCardFail()));
 	};
 };
 
@@ -71,17 +71,16 @@ const getAdminPublicDecksFail = () => {
 	};
 };
 
-export const getAdminPublicDecks = () => {
-	return (dispatch) => {
-		axios
-			.get(`/api/PublicDecks`)
-			// .then((res) => console.log(res))
+export const getAdminPublicDecks = (name) => {
+	return (dispatch, getState) => {
+		const { adminPublicDecksSearchString: searchString } = getState().market;
+		axios.get(`/api/publicdecks?name=${name || searchString}`)
 			.then((res) => dispatch(getAdminPublicDecksSuccess(res.data)))
 			.catch((err) => dispatch(getAdminPublicDecksFail()));
 	};
 };
 
-const downloadAdminPublicDeckSuccess = (adminPublicDecks) => {
+const downloadAdminPublicDeckSuccess = () => {
 	return {
 		type: actionTypes.DOWNLOAD_ADMIN_PUBLIC_DECK_SUCCESS,
 	};
@@ -97,31 +96,98 @@ export const downloadAdminPublicDeck = (id) => {
 	return (dispatch) => {
 		axios
 			.put(`/api/DownloadedDecks/${id}`)
-			// .then((res) => console.log(res))
-			.then((res) => dispatch(downloadAdminPublicDeckSuccess(res.data)))
-			.catch((err) => dispatch(downloadAdminPublicDeckFail()));
+			.then(() => dispatch(downloadAdminPublicDeckSuccess()))
+			.catch(() => dispatch(downloadAdminPublicDeckFail()));
 	};
 };
 
-const getUsersPublicDecksSuccess = (usersPublicDecks) => {
+const getUserPublicDecksSuccess = (userPublicDecks) => {
 	return {
-		type: actionTypes.GET_USERS_PUBLIC_DECKS_SUCCESS,
-		usersPublicDecks: usersPublicDecks,
+		type: actionTypes.GET_USER_PUBLIC_DECKS_SUCCESS,
+		userPublicDecks: userPublicDecks
 	};
 };
 
-const getUsersPublicDecksFail = () => {
+const getUserPublicDecksFail = () => {
 	return {
-		type: actionTypes.GET_USERS_PUBLIC_DECKS_SUCCESS,
+		type: actionTypes.GET_USER_PUBLIC_DECKS_FAIL
 	};
 };
 
-export const getUsersPublicDecks = () => {
-	return (dispatch) => {
-		axios
-			.get(`​/api​/UserPublicDecks`)
-			// .then((res) => console.log(res))
-			.then((res) => dispatch(getUsersPublicDecksSuccess(res.data)))
-			.catch((err) => dispatch(getUsersPublicDecksFail()));
+export const getUserPublicDecks = (name) => {
+	return (dispatch, getState) => {
+		const { userPublicDecksSearchString: searchString } = getState().market;
+		axios.get(`/api/userpublicdecks?name=${name || searchString}`)
+			.then((res) => dispatch(getUserPublicDecksSuccess(res.data)))
+			.catch(() => dispatch(getUserPublicDecksFail()));
+	};
+};
+
+export const updatePublicCardsSearchString = (value) => {
+	return {
+		type: actionTypes.UPDATE_PUBLIC_CARDS_SEARCH_STRING,
+		value: value
+	};
+};
+
+export const updateAdminPublicDecksSearchString = (value) => {
+	return {
+		type: actionTypes.UPDATE_ADMIN_PUBLIC_DECKS_SEARCH_STRING,
+		value: value
+	};
+};
+
+export const updateUserPublicDecksSearchString = (value) => {
+	return {
+		type: actionTypes.UPDATE_USER_PUBLIC_DECKS_SEARCH_STRING,
+		value: value
+	};
+};
+
+const pinPublicDeckSuccess = () => {
+	return {
+		type: actionTypes.PIN_PUBLIC_DECK_SUCCESS
+	};
+};
+
+const pinPublicDeckFail = () => {
+	return {
+		type: actionTypes.PIN_PUBLIC_DECK_FAIL
+	};
+};
+
+export const pinPublicDeck = (deckId) => {
+	return dispatch => {
+		axios.post(`/api/publicdecks/${deckId}/shortcuts`)
+			.then(() => {
+				dispatch(getAdminPublicDecks());
+				dispatch(getUserPublicDecks());
+				dispatch(pinPublicDeckSuccess());
+			})
+			.catch(() => dispatch(pinPublicDeckFail()));
+	};
+};
+
+const unpinPublicDeckSuccess = () => {
+	return {
+		type: actionTypes.UNPIN_PUBLIC_DECK_SUCCESS
+	};
+};
+
+const unpinPublicDeckFail = () => {
+	return {
+		type: actionTypes.UNPIN_PUBLIC_DECK_FAIL
+	};
+};
+
+export const unpinPublicDeck = (deckId) => {
+	return dispatch => {
+		axios.delete(`/api/shortcuts/${deckId}`)
+			.then(() => {
+				dispatch(getAdminPublicDecks());
+				dispatch(getUserPublicDecks());
+				dispatch(unpinPublicDeckSuccess());
+			})
+			.catch(() => dispatch(unpinPublicDeckFail()));
 	};
 };

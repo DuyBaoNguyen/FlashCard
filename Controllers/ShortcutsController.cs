@@ -59,5 +59,26 @@ namespace FlashCard.Controllers
 
 			return sharedDecks;
 		}
+
+		[HttpDelete("{deckId}")]
+		[ProducesResponseType(204)]
+		[ProducesResponseType(404)]
+		public async Task<IActionResult> DeleteShortcut(int deckId)
+		{
+			var userId = UserUtil.GetUserId(User);
+			var sharedDeck = await repository.SharedDeck
+				.QueryByUserIdAndDeckIdAndBeingPinned(userId, deckId)
+				.FirstOrDefaultAsync();
+			
+			if (sharedDeck == null)
+			{
+				return NotFound();
+			}
+
+			sharedDeck.Pinned = false;
+			await repository.SaveChangesAsync();
+
+			return NoContent();
+		}
 	}
 }

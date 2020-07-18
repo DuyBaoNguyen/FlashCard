@@ -1,0 +1,21 @@
+.deck {
+  .deck-background-color {
+    position: relative;
+
+    .public-deck-features {
+      position: absolute;
+      bottom: 20px;
+      right: 20px;
+      display: flex;
+      align-items: flex-end;
+
+      .download-btn, .open-btn, .pin-btn, .unpin-btn {
+        box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.06);
+        border: 1px solid #fff;
+        margin-left: 10px;
+        padding-left: 15px;
+        padding-right: 15px;
+      }
+    }
+  }
+}

@@ -33,13 +33,14 @@ namespace FlashCard.Controllers
 
 		[HttpGet]
 		[ProducesResponseType(200)]
-		public async Task<ActionResult<IEnumerable<PublicDeckDto>>> GetAllUserPublicDecks()
+		public async Task<ActionResult<IEnumerable<PublicDeckDto>>> GetAllUserPublicDecks(string name)
 		{
+			var userId = UserUtil.GetUserId(User);
 			var admin = await userManager.GetAdmin();
 			var publicDecks = await repository.Deck
-				.QueryByBeingApprovedAndNotAdmin(admin.Id)
+				.QueryByBeingApprovedAndNotAdmin(admin.Id, name)
 				.AsNoTracking()
-				.MapToPublicDeckDto(imageService.UserPictureBaseUrl)
+				.MapToPublicDeckDto(userId, imageService.UserPictureBaseUrl)
 				.ToListAsync();
 
 			return publicDecks;
@@ -50,11 +51,12 @@ namespace FlashCard.Controllers
 		[ProducesResponseType(404)]
 		public async Task<ActionResult<PublicDeckDto>> GetUserPublicDeck(int id)
 		{
+			var userId = UserUtil.GetUserId(User);
 			var admin = await userManager.GetAdmin();
 			var publicDeck = await repository.Deck
 				.QueryByIdAndBeingApprovedAndNotAdmin(admin.Id, id)
 				.AsNoTracking()
-				.MapToPublicDeckDto(imageService.UserPictureBaseUrl)
+				.MapToPublicDeckDto(userId, imageService.UserPictureBaseUrl)
 				.FirstOrDefaultAsync();
 
 			if (publicDeck == null)
