@@ -7,5 +7,6 @@ namespace FlashCard.Contracts
     {
         IQueryable<SharedDeck> QueryByUserId(string userId);
         IQueryable<SharedDeck> QueryByUserIdAndDeckId(string userId, int deckId);
+        IQueryable<SharedDeck> QueryByUserIdAndDeckIdAndBeingPinned(string userId, int deckId);
     }
 }

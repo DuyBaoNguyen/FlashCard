@@ -87,13 +87,18 @@ export {
 	checkToUnselectUserCard,
 } from './UsersManagement';
 
-export {
-	getPublicCards,
-	selectPublicCard,
-	downloadPublicCard,
-	getAdminPublicDecks,
-	downloadAdminPublicDeck,
-	getUsersPublicDecks,
+export { 
+	getPublicCards, 
+	selectPublicCard, 
+	downloadPublicCard, 
+	getAdminPublicDecks, 
+	downloadAdminPublicDeck, 
+	getUserPublicDecks,
+	updatePublicCardsSearchString,
+	updateAdminPublicDecksSearchString,
+	updateUserPublicDecksSearchString,
+	pinPublicDeck,
+	unpinPublicDeck
 } from './Market.js';
 
 export {

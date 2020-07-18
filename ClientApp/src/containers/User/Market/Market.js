@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 
 import Cards from './Cards/Cards';
 import Decks from './Decks/Decks';
-import UsersDecks from './UsersDeck/UsersDeck';
+import UserDecks from './UserDecks/UserDecks';
 
 import './Market.css';
 
@@ -10,7 +10,7 @@ class Market extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			activePage: 1,
+			activePage: 3,
 		};
 	}
 
@@ -28,7 +28,7 @@ class Market extends Component {
 			return <Decks />;
 		}
 		if (this.state.activePage === 3) {
-			return <UsersDecks />;
+			return <UserDecks />;
 		}
 	};
 
@@ -51,7 +51,7 @@ class Market extends Component {
 						className={this.state.activePage === 2 ? 'market-page-active' : ''}
 						onClick={() => this.onChangePage(2)}
 					>
-						Decks from Admin
+						Decks
 					</li>
 					<li
 						className={this.state.activePage === 3 ? 'market-page-active' : ''}

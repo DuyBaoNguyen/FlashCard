@@ -2,17 +2,17 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import Pagination from 'react-js-pagination';
 
-import PublicDeck from '../../../../components/User/PublicDeck/PublicDeck';
-import Search from '../../../../components/Shared/Search/Search';
+import UserPublicDeck from '../../../../components/User/UserPublicDeck/UserPublicDeck';
 import Loading from '../../../../components/Shared/Loading/Loading';
-import withErrorHandler from '../../../../hoc/withErrorHandler';
+import Search from '../../../../components/Shared/Search/Search';
 import { TIME_OUT_DURATION } from '../../../../applicationConstants';
+import withErrorHandler from '../../../../hoc/withErrorHandler';
 import * as actions from '../../../../store/actions/index';
-import './Decks.css';
+import './UserDecks.css';
 
 const AMOUNT_DECKS = 6;
 
-class Decks extends Component {
+class UserDecks extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
@@ -22,7 +22,7 @@ class Decks extends Component {
 	}
 
 	componentDidMount() {
-		this.props.onGetAdminPublicDecks();
+		this.props.onGetUserPublicDecks();
 
 		if (!this.state.setLoading) {
 			setTimeout(() => {
@@ -40,7 +40,7 @@ class Decks extends Component {
 	handleSearchDecks = (event) => {
 		const searchString = event.target.value;
 		this.props.onUpdateSearchString(searchString);
-		this.props.onGetAdminPublicDecks(searchString);
+		this.props.onGetUserPublicDecks(searchString);
 		this.setState({ activePage: 1 });
 	}
 
@@ -54,12 +54,9 @@ class Decks extends Component {
 			decksList = (
 				<div className="decks">
 					{decks
-						.filter((deck, index) =>
-							index >= (this.state.activePage - 1) * AMOUNT_DECKS &&
-							index <= this.state.activePage * AMOUNT_DECKS - 1
-						)
+						.filter((deck, index) => index >= (activePage - 1) * AMOUNT_DECKS && index <= activePage * AMOUNT_DECKS - 1)
 						.map(deck => (
-							<PublicDeck key={deck.id} deck={deck} />
+							<UserPublicDeck key={deck.id} deck={deck} />
 						))}
 				</div>
 			);
@@ -78,7 +75,6 @@ class Decks extends Component {
 					itemClass="pagination-item"
 				/>
 			);
-
 		}
 
 		return (
@@ -101,20 +97,20 @@ class Decks extends Component {
 
 const mapStateToProps = (state) => {
 	return {
-		decks: state.market.adminPublicDecks,
-		loading: state.market.loadings.getAdminPublicDecksLoading,
-		searchString: state.market.adminPublicDecksSearchString
+		decks: state.market.userPublicDecks,
+		searchString: state.market.userPublicDecksSearchString,
+		loading: state.market.loadings.getUserPublicDecksLoading
 	};
 };
 
 const mapDispatchToProps = (dispatch) => {
 	return {
-		onGetAdminPublicDecks: (name) => dispatch(actions.getAdminPublicDecks(name)),
-		onUpdateSearchString: (value) => dispatch(actions.updateAdminPublicDecksSearchString(value))
+		onGetUserPublicDecks: (name) => dispatch(actions.getUserPublicDecks(name)),
+		onUpdateSearchString: (value) => dispatch(actions.updateUserPublicDecksSearchString(value))
 	};
 };
 
 export default connect(
 	mapStateToProps,
 	mapDispatchToProps
-)(withErrorHandler(Decks));
+)(withErrorHandler(UserDecks));

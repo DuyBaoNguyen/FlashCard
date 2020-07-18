@@ -21,5 +21,10 @@ namespace FlashCard.Repositories
         {
             return dbContext.SharedDecks.Where(s => s.UserId == userId && s.DeckId == deckId);
         }
+
+        public IQueryable<SharedDeck> QueryByUserIdAndDeckIdAndBeingPinned(string userId, int deckId)
+        {
+            return dbContext.SharedDecks.Where(s => s.UserId == userId && s.DeckId == deckId && s.Pinned);
+        }
     }
 }

@@ -1,0 +1,25 @@
+.deck .deck-background-color {
+  position: relative;
+}
+
+.deck .deck-background-color .public-deck-features {
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: end;
+      -ms-flex-align: end;
+          align-items: flex-end;
+}
+
+.deck .deck-background-color .public-deck-features .download-btn, .deck .deck-background-color .public-deck-features .open-btn, .deck .deck-background-color .public-deck-features .pin-btn, .deck .deck-background-color .public-deck-features .unpin-btn {
+  -webkit-box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.06);
+          box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.06);
+  border: 1px solid #fff;
+  margin-left: 10px;
+  padding-left: 15px;
+  padding-right: 15px;
+}
+/*# sourceMappingURL=PublicDeck.css.map */

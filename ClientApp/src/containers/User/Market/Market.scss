@@ -1,13 +1,13 @@
 .market-wrapper {
   width: 100%;
-  height: calc(100vh - 96px);
+  // height: calc(100vh - 96px);
+  height: 655px;
   background: #FFFFFF;
   box-shadow: 0px 0px 30px rgba(0, 0, 0, 0.05);
   border-radius: 15px;
   padding: 30px;
-  // .user-panel {
-  //   position: relative;
-  // }
+  margin-bottom: 20px;
+  position: relative;
 
   .market-menu {
     margin-top: 0;
@@ -21,8 +21,8 @@
       margin-right: 20px;
       font-style: normal;
       font-weight: normal;
-      font-size: 14px;
-      color: #979797;
+      font-size: 15px;
+      color: #757575;
     }
 
     .market-page-active {

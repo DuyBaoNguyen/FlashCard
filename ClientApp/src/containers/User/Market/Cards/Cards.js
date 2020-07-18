@@ -1,18 +1,13 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import Pagination from 'react-js-pagination';
+import { Icon } from '@iconify/react';
+import downloadIcon from '@iconify/icons-uil/arrow-to-bottom';
 
 import withErrorHandler from '../../../../hoc/withErrorHandler';
 import * as actions from '../../../../store/actions/index';
-
-import { Icon } from '@iconify/react';
-import plusIcon from '@iconify/icons-uil/plus';
-import editIcon from '@iconify/icons-uil/edit';
-import deleteIcon from '@iconify/icons-uil/trash-alt';
-import Pagination from 'react-js-pagination';
-
 import Search from '../../../../components/Shared/Search/Search';
 import Button from '../../../../components/Shared/Button/Button';
-import Filter from '../../../../components/Shared/Filter/Filter';
 import Card from '../../../../components/User/Card/Card';
 import Loading from '../../../../components/Shared/Loading/Loading';
 import { TIME_OUT_DURATION } from '../../../../applicationConstants';
@@ -31,9 +26,9 @@ class Cards extends Component {
 	}
 
 	componentDidMount() {
-		this.props.onGetPublicCards('');
+		this.props.onGetPublicCards();
 
-		if (!this.state.setLoading && !this.timeoutNumber) {
+		if (!this.state.setLoading) {
 			setTimeout(() => {
 				if (this.props.loading) {
 					this.setState({ setLoading: true });
@@ -42,9 +37,9 @@ class Cards extends Component {
 		}
 	}
 
-	handleClickCard = (cardId) => {
-		this.props.onSelectCard(cardId);
-	};
+	// handleClickCard = (cardId) => {
+	// 	this.props.onSelectCard(cardId);
+	// };
 
 	handlePageChange = (pageNumber) => {
 		this.setState({ activePage: pageNumber });
@@ -53,7 +48,7 @@ class Cards extends Component {
 	handleSearchCards = (event) => {
 		const searchString = event.target.value;
 		this.props.onUpdateSearchString(searchString);
-		this.props.onGetCards(searchString);
+		this.props.onGetPublicCards(searchString);
 		this.setState({ activePage: 1 });
 	};
 
@@ -62,13 +57,13 @@ class Cards extends Component {
 	};
 
 	render() {
-		const { cards, loading } = this.props;
+		const { cards, loading, searchString } = this.props;
 		let { activePage, setLoading } = this.state;
 		let cardsList = loading ? (
 			setLoading && <Loading />
 		) : (
-			<p className="text-notify">There are no cards here!</p>
-		);
+				<p className="text-notify">There are no cards here!</p>
+			);
 		let pagination;
 
 		if (cards?.length > 0 && !loading) {
@@ -82,14 +77,19 @@ class Cards extends Component {
 						)
 						.map((card) => {
 							return (
-								<div className=''>
+								<div key={card.id}>
 									<Card
-									key={card.id}
-									displayStatus
-									card={card}
-									onClick={this.handleClickCard}
-								/>
-								<Button className='cards-button-download' onClick={() => this.props.onDownloadPublicCard(card.id)}>Download</Button>
+										key={card.id}
+										displayStatus
+										card={card}
+										onClick={this.handleClickCard}
+									/>
+									<Button 
+										className='cards-button-download' 
+										icon={<Icon icon={downloadIcon} />}
+										onClick={() => this.props.onDownloadPublicCard(card.id)}>
+										Download
+									</Button>
 								</div>
 							);
 						})}
@@ -115,7 +115,11 @@ class Cards extends Component {
 			<div className="market-cards-list-wrapper">
 				<div className="market-cards-list-header">
 					<div className="market-cards-list-header-features">
-						<Search placeholder="Search..." onChange={this.handleSearchCards} />
+						<Search
+							className="market-cards-search-box"
+							placeholder="Search..."
+							value={searchString}
+							onChange={this.handleSearchCards} />
 					</div>
 				</div>
 				{cardsList}
@@ -128,7 +132,8 @@ class Cards extends Component {
 const mapStateToProps = (state) => {
 	return {
 		cards: state.market.cardList,
-		// loading: state.cards.loadings.getCardsLoading,
+		loading: state.market.loadings.getPublicCardsLoading,
+		searchString: state.market.publicCardsSearchString
 	};
 };
 
@@ -136,9 +141,8 @@ const mapDispatchToProps = (dispatch) => {
 	return {
 		onGetPublicCards: (front) => dispatch(actions.getPublicCards(front)),
 		onSelectCard: (id) => dispatch(actions.selectPublicCard(id)),
-		onUpdateSearchString: (value) =>
-			dispatch(actions.updateCardsSearchString(value)),
-			onDownloadPublicCard: (id) => dispatch(actions.downloadPublicCard(id))
+		onUpdateSearchString: (value) => dispatch(actions.updatePublicCardsSearchString(value)),
+		onDownloadPublicCard: (id) => dispatch(actions.downloadPublicCard(id))
 	};
 };
 

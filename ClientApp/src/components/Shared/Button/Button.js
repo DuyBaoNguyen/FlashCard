@@ -14,7 +14,7 @@ const button = props => {
 
   if (props.type === 'link') {
     return (
-      <Link to={props.path} className={classes.join(' ')}>
+      <Link tag="button" to={props.path} className={classes.join(' ')} onClick={props.onClick}>
         {!!props.icon && (
           <span className="icon">
             {props.icon}
