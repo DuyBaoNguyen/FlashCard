@@ -129,3 +129,9 @@ export {
 	setPublicDeckCardsFilteredValue,
 	filterPublicDeckCards
 } from './PublicDeckDetail';
+
+export { 
+	proposeCard,
+	clearProposeCardError,
+	toggleCardProposingForm
+} from './CardProposal';

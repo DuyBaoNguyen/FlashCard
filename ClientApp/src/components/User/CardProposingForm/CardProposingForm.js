@@ -10,7 +10,7 @@ import Input from '../../Shared/Input/Input';
 import Select from '../../Shared/Select/Select';
 import * as actions from '../../../store/actions';
 import * as util from '../../../util/util';
-import './CardBackForm.css';
+import './CardProposingForm.css';
 
 const animationDuration = {
   enter: 200,
@@ -18,6 +18,15 @@ const animationDuration = {
 };
 
 const initialForm = {
+  front: {
+    value: '',
+    valid: true,
+    validation: {
+      required: true
+    },
+    touched: false,
+    error: null
+  },
   meaning: {
     value: '',
     valid: true,
@@ -51,7 +60,7 @@ const initialForm = {
   valid: true
 };
 
-class CardBackForm extends Component {
+class CardProposingForm extends Component {
   constructor(props) {
     super(props);
 
@@ -63,32 +72,17 @@ class CardBackForm extends Component {
   }
 
   static getDerivedStateFromProps(nextProps, prevState) {
-    if (nextProps.back && prevState.form.meaning.value === '') {
-      return {
-        ...prevState,
-        form: {
-          ...prevState.form,
-          meaning: {
-            ...prevState.form.meaning,
-            value: nextProps.back.meaning
-          },
-          type: {
-            ...prevState.form.type,
-            value: nextProps.back.type
-          },
-          example: {
-            ...prevState.form.example,
-            value: nextProps.back.example
-          }
-        }
-      }
-    }
     if (nextProps.error) {
-      nextProps.onClearUpdateBackError();
+      nextProps.onClearProposeCardError();
       return {
         ...prevState,
         form: {
           ...prevState.form,
+          front: {
+            ...prevState.form.meaning,
+            valid: nextProps.error.Front ? false : true,
+            error: nextProps.error.Front ? nextProps.error.Front[0] : null
+          },
           meaning: {
             ...prevState.form.meaning,
             valid: nextProps.error.Meaning ? false : true,
@@ -141,27 +135,28 @@ class CardBackForm extends Component {
   }
 
   handleSumit = (event) => {
-    const { card, back, onUpdateBack, onCreateBack } = this.props;
+    const { onProposeCard } = this.props;
     const { form } = this.state;
 
     event.preventDefault();
     if (form.valid) {
-      const newBack = {
+      const card = {
+        front: form.front.value,
         meaning: form.meaning.value,
         type: form.type.value,
         example: form.example.value,
         image: form.image.value
       };
-      if (back) {
-        onUpdateBack(card.id, back.id, newBack);
-      } else {
-        onCreateBack(card.id, newBack);
-      }
+      onProposeCard(card);
     }
   }
 
   handleClickCancel = () => {
     this.props.onClose();
+  }
+
+  handleTransitionExited = () => {
+    this.setState({ form: initialForm });
   }
 
   handleImageChange = (event) => {
@@ -214,16 +209,12 @@ class CardBackForm extends Component {
     this.backImageInput.current.value = null;
   }
 
-  handleTransitionExited = () => {
-    this.setState({ form: initialForm });
-  }
-
   render() {
-    const { back, isOpen } = this.props;
+    const { isOpen } = this.props;
     const { form } = this.state;
 
     return (
-      <div className="card-back-form">
+      <div className="card-proposing-form">
         <BackDrop isOpen={isOpen} onClick={this.handleClickCancel} />
         <Transition
           mountOnEnter
@@ -232,24 +223,33 @@ class CardBackForm extends Component {
           timeout={animationDuration}
           onExited={this.handleTransitionExited}>
           {state => {
-            const backFormClasses = [
-              'card-back-form-wrapper',
-              state === 'entering' ? 'card-back-form-open' : (state === 'exiting' ? 'card-back-form-close' : null)
+            const cardProposingFormClasses = [
+              'card-proposing-form-wrapper',
+              state === 'entering' ? 'card-proposing-form-open' : (state === 'exiting' ? 'card-proposing-form-close' : null)
             ];
 
             return (
-              <div className={backFormClasses.join(' ')}>
-                <div className="card-back-form-header">
-                  {back ? 'Edit fact' : 'Create fact'}
-                </div>
+              <div className={cardProposingFormClasses.join(' ')}>
+                <div className="card-proposing-form-header">Propose card</div>
                 <form onSubmit={this.handleSumit}>
-                  <div className="card-back-form-input">
+                  <div className="card-proposing-form-input">
+                    <label>Front</label>
+                    <Input
+                      name="front"
+                      autoComplete="off"
+                      autoFocus
+                      touched={form.front.touched}
+                      valid={form.front.valid}
+                      onChange={this.handleInputChange} />
+                    {!form.front.valid && (
+                      <div className="error-notification">
+                        {form.front.error}
+                      </div>
+                    )}
                     <label>Meaning</label>
                     <Input
                       name="meaning"
-                      defaultValue={back?.meaning}
                       autoComplete="off"
-                      autoFocus
                       touched={form.meaning.touched}
                       valid={form.meaning.valid}
                       onChange={this.handleInputChange} />
@@ -261,7 +261,6 @@ class CardBackForm extends Component {
                     <label>Type</label>
                     <Select
                       name="type"
-                      defaultValue={back?.type}
                       touched={form.type.touched}
                       valid={form.type.valid}
                       onChange={this.handleInputChange}>
@@ -280,7 +279,6 @@ class CardBackForm extends Component {
                     <label>Example</label>
                     <Input
                       name="example"
-                      defaultValue={back?.example}
                       autoComplete="off"
                       touched={form.example.touched}
                       valid={form.example.valid}
@@ -290,46 +288,42 @@ class CardBackForm extends Component {
                         {form.example.error}
                       </div>
                     )}
-                    {!back && (
-                      <>
-                        <label>Image</label>
-                        <div className="image-container" onClick={this.handleClickImageContainer}>
-                          {form.image.value
-                            ? (
-                              <>
-                                <img
-                                  alt=""
-                                  width="100"
-                                  height="100"
-                                  ref={this.backImage}
-                                  className="back-image" />
-                                <button
-                                  type="button"
-                                  className="remove-image-btn"
-                                  onClick={this.handleRemoveImage}>
-                                  <Icon icon={removeImageIcon} color="#fff" style={{ fontSize: 20 }} />
-                                </button>
-                              </>
-                            )
-                            : (
-                              <Icon icon={imageIcon} color="#ddd" style={{ fontSize: 32 }} />
-                            )
-                          }
-                        </div>
-                        <input
-                          type="file"
-                          id="back-image-input"
-                          ref={this.backImageInput}
-                          onChange={this.handleImageChange} />
-                      </>
-                    )}
-                  </div>
-                  {!form.image.valid && (
-                    <div className="error-notification">
-                      {form.image.error}
+                    <label>Image</label>
+                    <div className="image-container" onClick={this.handleClickImageContainer}>
+                      {form.image.value
+                        ? (
+                          <>
+                            <img
+                              alt=""
+                              width="100"
+                              height="100"
+                              ref={this.backImage}
+                              className="back-image" />
+                            <button
+                              type="button"
+                              className="remove-image-btn"
+                              onClick={this.handleRemoveImage}>
+                              <Icon icon={removeImageIcon} color="#fff" style={{ fontSize: 20 }} />
+                            </button>
+                          </>
+                        )
+                        : (
+                          <Icon icon={imageIcon} color="#ddd" style={{ fontSize: 32 }} />
+                        )
+                      }
                     </div>
-                  )}
-                  <div className="card-back-form-features">
+                    {!form.image.valid && (
+                      <div className="error-notification">
+                        {form.image.error}
+                      </div>
+                    )}
+                    <input
+                      type="file"
+                      id="back-image-input"
+                      ref={this.backImageInput}
+                      onChange={this.handleImageChange} />
+                  </div>
+                  <div className="card-proposing-form-features">
                     <button
                       className="cancel-btn"
                       type="button"
@@ -339,7 +333,7 @@ class CardBackForm extends Component {
                     <button
                       className="update-btn"
                       type="submit">
-                      {back ? 'Update' : 'Create'}
+                      Propose
                     </button>
                   </div>
                 </form>
@@ -354,16 +348,15 @@ class CardBackForm extends Component {
 
 const mapStateToProps = state => {
   return {
-    error: state.card.errors.updateBackError
+    error: state.cardProposal.proposeCardError
   };
 };
 
 const mapDispatchToProps = dispatch => {
   return {
-    onCreateBack: (cardId, back) => dispatch(actions.createBack(cardId, back)),
-    onUpdateBack: (cardId, backId, back) => dispatch(actions.updateBack(cardId, backId, back)),
-    onClearUpdateBackError: () => dispatch(actions.clearUpdateBackError())
+    onProposeCard: (card) => dispatch(actions.proposeCard(card)),
+    onClearProposeCardError: () => dispatch(actions.clearProposeCardError())
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(CardBackForm);
+export default connect(mapStateToProps, mapDispatchToProps)(CardProposingForm);

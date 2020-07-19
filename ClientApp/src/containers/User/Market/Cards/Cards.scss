@@ -2,11 +2,20 @@
   height: 456px;
   padding-top: 40px;
 
-  .market-cards-search-box {
+  .market-cards-list-header-features {
     position: absolute;
     top: 30px;
     right: 30px;
+    
+    .market-cards-propose-btn {
+      margin-right: 10px;
+    }
   }
+  // .market-cards-search-box {
+  //   position: absolute;
+  //   top: 30px;
+  //   right: 30px;
+  // }
 
   .cards {
     width: 100%;
