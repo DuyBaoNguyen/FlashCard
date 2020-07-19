@@ -40,13 +40,13 @@ class PublicDeckInfo extends Component {
   handleUnpinPublicDeck = () => {
     this.props.onUnpinPublicDeck(this.props.match.params.deckId);
   }
-  
+
   handleClickPractice = () => {
     this.props.onSetPracticeOptionsOpen(true);
   }
 
   render() {
-    const { deck, showLess, location } = this.props;
+    const { deck, showLess, location, profile } = this.props;
     const { downloadingConfirmOpen } = this.state;
     const downloadable = location.pathname.search(/^\/publicdecks\/\d+$/) > -1;
 
@@ -98,15 +98,31 @@ class PublicDeckInfo extends Component {
               <span className="deck-field-extra-value">{deck?.owner.email}</span>
             </span>
           </div>
+          {!showLess && (
+            <div className="deck-features">
+              <Button
+                type="button"
+                className="practice-btn"
+                onClick={this.handleClickPractice}>
+                Practice
+              </Button>
+              <Button
+                type="link"
+                className="match-btn"
+                path={`/decks/match/${deck?.id}`}>
+                Match game
+              </Button>
+            </div>
+          )}
         </Collapse>
-        {!showLess && (
-          <>
-            <div className="deck-features first-child">
+        <div className={`deck-features ${!downloadable ? 'not-downloadable' : null}`}>
+          {profile?.id !== deck?.owner.id && (
+            <>
               {deck?.pinned
                 ? (
                   <Button
                     type="button"
-                    className="unpin-btn left-btn"
+                    className="unpin-btn"
                     icon={<Icon icon={unpinIcon} />}
                     onClick={this.handleUnpinPublicDeck}>
                     Unpin
@@ -115,50 +131,42 @@ class PublicDeckInfo extends Component {
                 : (
                   <Button
                     type="button"
-                    className="pin-btn left-btn"
+                    className="pin-btn"
                     icon={<Icon icon={pinIcon} />}
                     onClick={this.handlePinPublicDeck}>
                     Pin
                   </Button>
                 )
               }
-              {downloadable && (
-                <>
-                  {deck?.localDeckId
-                    ? (
-                      <Button
-                        type="link"
-                        className="open-btn right-btn"
-                        path={{ pathname: `/decks/${deck.localDeckId}`, state: { backUrl: location.pathname } }}>
-                        Open
-                      </Button>
-                    )
-                    : (
-                      <Button
-                        className="download-btn right-btn"
-                        icon={<Icon icon={downloadIcon} />}
-                        onClick={this.handleOpenDownloadingConfirm} >
-                        Download
-                      </Button>
-                    )
-                  }
-                </>
-              )}
-            </div>
-          </>
-        )}
-        <div className="deck-features">
-          <Button
-            type="button"
-            className="left-btn"
-            onClick={this.handleClickPractice}>
-            Practice
-          </Button>
+            </>
+          )}
+          {downloadable && (
+            <>
+              {deck?.localDeckId
+                ? (
+                  <Button
+                    type="link"
+                    className="open-local-btn"
+                    path={{ pathname: `/decks/${deck.localDeckId}`, state: { backUrl: location.pathname } }}>
+                    Open local
+                  </Button>
+                )
+                : (
+                  <Button
+                    className="download-btn"
+                    icon={<Icon icon={downloadIcon} />}
+                    onClick={this.handleOpenDownloadingConfirm} >
+                    Download
+                  </Button>
+                )
+              }
+            </>
+          )}
           <Button
             type="link"
-            className="right-btn"
-            path={`/decks/match/${deck?.id}`}>
-            Match game
+            className="open-btn"
+            path={{ pathname: `/decks/${deck?.id}`, state: { backUrl: location.pathname } }}>
+            Open
           </Button>
         </div>
         <Confirm
@@ -174,6 +182,12 @@ class PublicDeckInfo extends Component {
   }
 }
 
+const mapStateToProps = state => {
+  return {
+    profile: state.home.profile
+  };
+}
+
 const mapDispatchToProps = dispatch => {
   return {
     onDownloadPublicDeck: (deckId) => dispatch(actions.downloadAdminPublicDeck(deckId)),
@@ -183,4 +197,4 @@ const mapDispatchToProps = dispatch => {
   };
 };
 
-export default withRouter(connect(null, mapDispatchToProps)(PublicDeckInfo));
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(PublicDeckInfo));
