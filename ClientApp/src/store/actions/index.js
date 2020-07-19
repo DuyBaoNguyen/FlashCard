@@ -55,7 +55,7 @@ export {
 	getCardsInDeckSuccess,
 } from './Testing';
 
-export { getMatchCards, updateMatchCards } from './MatchCard';
+export { getMatchCards, updateMatchCards, resetMatchCards } from './MatchCard';
 
 export {
 	createCard,

@@ -162,6 +162,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
 	return {
 		onGetMatchCards: (id) => dispatch(actions.getMatchCards(id)),
+		onResetMatchCards: () => dispatch(actions.resetMatchCards()),
 		onUpdateMatchCards: (cardList, currentSelectCards, matchedCards) =>
 			dispatch(
 				actions.updateMatchCards(cardList, currentSelectCards, matchedCards)

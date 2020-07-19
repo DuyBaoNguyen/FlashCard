@@ -49,6 +49,11 @@ export const matchCardReducer = (state = initialState, action) => {
 				currentSelectCards: action.currentSelectCards,
 				matchedCards: action.matchedCards,
 			};
+			case actionTypes.RESET_MATCH_CARDS:
+				return {
+					...state,
+					matchedCards: [],
+				};
 		default:
 			return state;
 	}
