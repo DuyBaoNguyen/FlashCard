@@ -69,6 +69,7 @@ class Navigation extends Component {
           {profile?.role === 'administrator' && (
             <>
               <NavigationItem to="/admin/users" label="Users" />
+              <NavigationItem to="/admin/cardproposals" label="Card Proposals" />
             </>
           )}
           <DropDown

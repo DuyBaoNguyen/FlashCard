@@ -52,7 +52,7 @@ class App extends Component {
 					{/* Admin management */}
 					<AuthorizeRoute exact path="/admin/users" component={UsersManagement} />
 					<AuthorizeRoute exact path="/admin/users/:userId/decks/:deckId" component={UserDeckDetail} />
-					<AuthorizeRoute exact path="/admin/cardsproposal" component={CardsProposal} />
+					<AuthorizeRoute exact path="/admin/cardproposals" component={CardsProposal} />
 
 					<Route path={ApplicationPaths.ApiAuthorizationPrefix} component={ApiAuthorizationRoutes} />
 

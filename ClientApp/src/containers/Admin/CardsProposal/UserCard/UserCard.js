@@ -22,7 +22,7 @@ class UserCard extends Component {
 	render() {
 		let backs = this.props.currentProposalCard.backs.map((back, index) => {
 			return (
-				<div className="cards-proposal-back-card">
+				<div key={back.id} className="cards-proposal-back-card">
 					{this.props.currentProposalCard.backs.length === 1 ? (
 						''
 					) : (

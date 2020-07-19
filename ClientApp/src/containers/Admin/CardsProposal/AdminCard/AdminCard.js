@@ -21,7 +21,7 @@ class AdminCard extends Component {
 		);
 		let backs = this.props.card.backs.map((back, index) => {
 			return (
-				<div className="cards-proposal-back-card">
+				<div key={back.id} className="cards-proposal-back-card">
 					<div className="cards-proposal-back-meaning">{back.meaning}</div>
 					<br />
 					<div className="cards-proposal-back-type">{back.type}</div>

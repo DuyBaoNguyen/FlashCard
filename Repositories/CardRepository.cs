@@ -173,5 +173,10 @@ namespace FlashCard.Repositories
 				.Where(c => c.OwnerId == userId && c.FirstRememberedDate != null &&
 					dates.Contains(c.FirstRememberedDate.Value.Date));
 		}
+
+		public IQueryable<Card> QueryBySourceId(int cardId)
+		{
+			return dbContext.Cards.Where(c => c.SourceId == cardId);
+		}
 	}
 }

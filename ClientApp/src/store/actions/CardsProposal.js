@@ -64,7 +64,7 @@ export const approveCurrentCard = (currentProposalCard) => {
 	});
 	let form = {
 		proposedBacks: backs,
-		approve: true,
+		approved: true,
 	};
 	return (dispatch) => {
 		axios
@@ -95,9 +95,8 @@ export const declineCurrentCard = (currentProposalCard) => {
 	});
 	let form = {
 		proposedBacks: backs,
-		approve: false,
+		approved: false,
 	};
-	console.log(form);
 	return (dispatch) => {
 		axios
 			.put(`/api/admin/proposedbacks`, form)

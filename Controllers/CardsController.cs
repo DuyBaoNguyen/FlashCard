@@ -200,6 +200,15 @@ namespace FlashCard.Controllers
 			}
 			else
 			{
+				var derivedCards = await repository.Card
+					.QueryBySourceId(existingCard.Id)
+					.ToListAsync();
+
+				foreach (var derivedCard in derivedCards)
+				{
+					derivedCard.SourceId = null;
+				}
+
 				repository.Card.Delete(existingCard);
 			}
 
