@@ -57,7 +57,7 @@ class PublicDeckCards extends Component {
   }
 
   render() {
-    const { cards, loading, profile } = this.props;
+    const { cards, loading } = this.props;
     const { activePage, setLoading } = this.state;
     let cardsList = loading ? setLoading && <Loading /> : <p className="text-notify">There are no cards here!</p>;
     let pagination;

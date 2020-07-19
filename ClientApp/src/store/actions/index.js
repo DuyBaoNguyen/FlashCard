@@ -135,3 +135,16 @@ export {
 	clearProposeCardError,
 	toggleCardProposingForm
 } from './CardProposal';
+
+export {
+	getProposedPublicDecks
+} from './PublicDecksManagement';
+
+export {
+	getProposedPublicDeck,
+	getProposedPublicDeckCards,
+	resetStateInProposedPublicDeckDetailReducer,
+	selectProposedPublicDeckCard,
+	unselectProposedPublicDeckCard,
+	approveProposedPublicDeck
+} from './ProposedPublicDeckDetail';

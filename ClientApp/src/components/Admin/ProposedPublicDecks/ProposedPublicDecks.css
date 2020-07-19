@@ -1,0 +1,146 @@
+.proposed-public-decks-wrapper {
+  background: #ffffff;
+  -webkit-box-shadow: 0px 0px 30px rgba(0, 0, 0, 0.05);
+          box-shadow: 0px 0px 30px rgba(0, 0, 0, 0.05);
+  border-radius: 15px;
+  padding: 30px 30px;
+  width: 100%;
+  height: 655px;
+  position: relative;
+}
+
+.proposed-public-decks-wrapper .proposed-public-decks-header {
+  color: #535353;
+  font-weight: 600;
+  font-size: 18px;
+  margin-bottom: 10px;
+}
+
+.proposed-public-decks-wrapper .proposed-public-decks-pagination {
+  position: absolute;
+  left: 0;
+  bottom: 6px;
+  width: 100%;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+.proposed-public-decks-wrapper .proposed-public-decks-pagination .pagination {
+  list-style-type: none;
+  padding-left: 0;
+}
+
+.proposed-public-decks-wrapper .proposed-public-decks-pagination .pagination .pagination-item {
+  display: inline-block;
+  font-size: 14px;
+  margin-left: 5px;
+  margin-right: 5px;
+  text-decoration: none;
+  background: #fff;
+  border-radius: 4px;
+  width: 24px;
+  height: 24px;
+  line-height: 24px;
+  text-align: center;
+  cursor: pointer;
+}
+
+.proposed-public-decks-wrapper .proposed-public-decks-pagination .pagination .pagination-item a {
+  color: #757575;
+}
+
+.proposed-public-decks-wrapper .proposed-public-decks-pagination .pagination .pagination-item:hover {
+  background-color: #f5f5f5;
+}
+
+.proposed-public-decks-wrapper .proposed-public-decks-pagination .pagination .pagination-item-active {
+  background: #9eacf4 !important;
+}
+
+.proposed-public-decks-wrapper .proposed-public-decks-pagination .pagination .pagination-item-active a {
+  color: white;
+}
+
+.proposed-public-decks-wrapper table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+}
+
+.proposed-public-decks-wrapper table tr:nth-child(even) {
+  background: #f7f7f7;
+}
+
+.proposed-public-decks-wrapper table tr:last-child th:first-child {
+  border-top-left-radius: 10px;
+}
+
+.proposed-public-decks-wrapper table tr:last-child th:last-child {
+  border-top-right-radius: 10px;
+}
+
+.proposed-public-decks-wrapper table tr:last-child td:first-child {
+  border-bottom-left-radius: 10px;
+}
+
+.proposed-public-decks-wrapper table tr:last-child td:last-child {
+  border-bottom-right-radius: 10px;
+}
+
+.proposed-public-decks-wrapper table tr td:nth-child(1) {
+  width: 10%;
+}
+
+.proposed-public-decks-wrapper table tr td:nth-child(2) {
+  width: 60%;
+}
+
+.proposed-public-decks-wrapper table tr td:nth-child(3) {
+  width: 30%;
+}
+
+.proposed-public-decks-wrapper table th {
+  height: 40px;
+  background: #9eacf4;
+  color: white;
+  border-collapse: collapse;
+  padding-left: 15px;
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.proposed-public-decks-wrapper table td a {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  border-collapse: collapse;
+  padding: 8px 5px 9px 15px;
+  font-size: 14px;
+  line-height: 1.5;
+  color: #979797;
+  cursor: pointer;
+  -webkit-transition: 0.3s;
+  transition: 0.3s;
+}
+
+.proposed-public-decks-wrapper table tr:hover td a {
+  color: #9eacf4;
+}
+
+.proposed-public-decks-wrapper .text-notify {
+  font-size: 15px;
+  color: #979797;
+  font-size: #979797;
+  white-space: nowrap;
+}
+/*# sourceMappingURL=ProposedPublicDecks.css.map */

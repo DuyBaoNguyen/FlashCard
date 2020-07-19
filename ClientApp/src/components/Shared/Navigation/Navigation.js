@@ -70,6 +70,7 @@ class Navigation extends Component {
             <>
               <NavigationItem to="/admin/users" label="Users" />
               <NavigationItem to="/admin/cardproposals" label="Card Proposals" />
+              <NavigationItem to="/admin/publicdecks" label="Public Decks" />
             </>
           )}
           <DropDown

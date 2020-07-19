@@ -1,0 +1,65 @@
+.proposed-public-deck-cards-wrapper {
+  background: #ffffff;
+  box-shadow: 0px 0px 30px rgba(0, 0, 0, 0.05);
+  border-radius: 15px;
+  padding: 30px;
+  width: 100%;
+  height: 655px;
+  .cards {
+    min-height: 428px;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: repeat(3, 1fr);
+    gap: 17px 30px;
+  }
+  .cards-pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    .pagination {
+      list-style-type: none;
+      padding-left: 0;
+      .pagination-item {
+        display: inline-block;
+        font-size: 14px;
+        margin-left: 5px;
+        margin-right: 5px;
+        text-decoration: none;
+        background: #fff;
+        border-radius: 4px;
+        width: 24px;
+        height: 24px;
+        line-height: 24px;
+        text-align: center;
+        cursor: pointer;
+        a {
+          color: #757575;
+        }
+        &:hover {
+          background-color: #f5f5f5;
+        }
+      }
+      .pagination-item-active {
+        background: #9eacf4 !important;
+        a {
+          color: white;
+        }
+      }
+    }
+  }
+  .proposed-public-deck-cards-header {
+    color: #535353;
+    font-style: normal;
+    font-weight: 600;
+    font-size: 18px;
+    display: flex;
+    justify-content: flex-start;
+    margin-bottom: 10px;
+  }
+  .text-notify {
+    font-size: 15px;
+    color: #979797;
+    font-size: #979797;
+    white-space: nowrap;
+  }
+}
