@@ -8,33 +8,52 @@ import pinIcon from '@iconify/icons-mdi/pin-outline';
 import unpinIcon from '@iconify/icons-mdi/pin-off-outline';
 
 import Button from '../../Shared/Button/Button';
+import Confirm from '../../Shared/Confirm/Confirm';
 import * as actions from '../../../store/actions/index';
 import withErrorHandler from '../../../hoc/withErrorHandler';
 import './PublicDeck.css';
 
 class PublicDeck extends Component {
-	onClickDownloadDeck = (event, id) => {
-		event.preventDefault();
-		this.props.onDownloadAdminPublicDeck(id);
+	state = {
+		downloadingConfirmOpen: false
 	};
 
-	handleOpenLocalDeck = (event, deckId) => {
+	handleOpenDownloadingConfirm = (event) => {
 		event.preventDefault();
-		this.props.history.push({ pathname: `/decks/${deckId}`, state: { backUrl: '/market' } });
+		this.setState({ downloadingConfirmOpen: true });
 	}
 
-	handlePinPublicDeck = (event, deckId) => {
-		event.preventDefault();
-		this.props.onPinPublicDeck(deckId);
+	handleCloseDownloadingConfirm = () => {
+		this.setState({ downloadingConfirmOpen: false });
 	}
 
-	handleUnpinPublicDeck = (event, deckId) => {
+	handleDownloadDeck = (event) => {
 		event.preventDefault();
-		this.props.onUnpinPublicDeck(deckId);
+		this.props.onDownloadAdminPublicDeck(this.props.deck.id);
+		this.handleCloseDownloadingConfirm();
+	};
+
+	handleOpenLocalDeck = (event) => {
+		event.preventDefault();
+		this.props.history.push({
+			pathname: `/decks/${this.props.deck.localDeckId}`,
+			state: { backUrl: '/market' }
+		});
+	}
+
+	handlePinPublicDeck = (event) => {
+		event.preventDefault();
+		this.props.onPinPublicDeck(this.props.deck.id);
+	}
+
+	handleUnpinPublicDeck = (event) => {
+		event.preventDefault();
+		this.props.onUnpinPublicDeck(this.props.deck.id);
 	}
 
 	render() {
 		const { deck } = this.props;
+		const { downloadingConfirmOpen } = this.state;
 
 		return (
 			<div className="deck">
@@ -61,7 +80,7 @@ class PublicDeck extends Component {
 											type="button"
 											className="unpin-btn"
 											icon={<Icon icon={unpinIcon} />}
-											onClick={(event) => this.handleUnpinPublicDeck(event, deck.id)}>
+											onClick={this.handleUnpinPublicDeck}>
 											Unpin
 										</Button>
 									)
@@ -70,7 +89,7 @@ class PublicDeck extends Component {
 											type="button"
 											className="pin-btn"
 											icon={<Icon icon={pinIcon} />}
-											onClick={(event) => this.handlePinPublicDeck(event, deck.id)}>
+											onClick={this.handlePinPublicDeck}>
 											Pin
 										</Button>
 									)
@@ -80,7 +99,7 @@ class PublicDeck extends Component {
 										<Button
 											type="button"
 											className="open-btn"
-											onClick={(event) => this.handleOpenLocalDeck(event, deck.localDeckId)}>
+											onClick={this.handleOpenLocalDeck}>
 											Open
 										</Button>
 									)
@@ -88,7 +107,7 @@ class PublicDeck extends Component {
 										<Button
 											className="download-btn"
 											icon={<Icon icon={downloadIcon} />}
-											onClick={(event) => this.onClickDownloadDeck(event, deck.id)} >
+											onClick={this.handleOpenDownloadingConfirm} >
 											Download
 										</Button>
 									)
@@ -99,6 +118,14 @@ class PublicDeck extends Component {
 						<div className="deck-background-white-2"></div>
 					</div>
 				</Link>
+				<Confirm
+					isOpen={downloadingConfirmOpen}
+					header="Download"
+					message="Do you want to download this deck?"
+					confirmColor="#5ad95a"
+					onCancel={this.handleCloseDownloadingConfirm}
+					onConfirm={this.handleDownloadDeck}>
+				</Confirm>
 			</div>
 		);
 	}
