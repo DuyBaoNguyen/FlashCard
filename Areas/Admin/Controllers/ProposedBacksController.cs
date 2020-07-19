@@ -138,6 +138,14 @@ namespace FlashCard.Areas.Admin.Controllers
             repository.Back.Delete(notApprovedBack);
             await repository.SaveChangesAsync();
 
+            if (notApprovedBack.Image != null)
+            {
+                if (!imageService.TryDeleteImage(notApprovedBack.Image, ImageType.Image))
+                {
+                    logger.LogError("An error occurs when deleting the image with name {0}", notApprovedBack.Image);
+                }
+            }
+
             return NoContent();
         }
     }

@@ -114,7 +114,7 @@ namespace FlashCard.Controllers
 
 				foreach (var publicBack in publicCard.Backs)
 				{
-					if (!ownedCard.Backs.Any(b => b.SourceId == publicBack.Id))
+					if (publicBack.Approved && !ownedCard.Backs.Any(b => b.SourceId == publicBack.Id))
 					{
 						var imageName = imageService.DuplicateImage(publicBack.Image);
 						if (publicBack.Image != null && imageName == null)

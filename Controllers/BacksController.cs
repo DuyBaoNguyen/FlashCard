@@ -177,6 +177,15 @@ namespace FlashCard.Controllers
 				return NotFound();
 			}
 
+			var derivedBacks = await repository.Back
+				.QueryBySourceId(back.Id)
+				.ToListAsync();
+
+			foreach (var derivedBack in derivedBacks)
+			{
+				derivedBack.SourceId = null;
+			}
+
 			repository.Back.Delete(back);
 			await repository.SaveChangesAsync();
 

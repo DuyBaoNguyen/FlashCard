@@ -174,6 +174,18 @@ namespace FlashCard.Controllers
 			}
 
 			var userIsAdmin = await userManager.CheckAdminRole(user);
+			var rootBackIds = existingCard.Backs
+				.Where(b => b.Public == b.Approved)
+				.Select(b => b.Id)
+				.ToArray();
+			var derivedBacks = await repository.Back
+				.QueryBySourceId(rootBackIds)
+				.ToListAsync();
+
+			foreach (var derivedBack in derivedBacks)
+			{
+				derivedBack.SourceId = null;
+			}
 
 			if (userIsAdmin && existingCard.Backs.Any(b => b.Public != b.Approved))
 			{
@@ -195,7 +207,7 @@ namespace FlashCard.Controllers
 
 			foreach (var back in existingCard.Backs)
 			{
-				if (back.Image != null)
+				if (back.Public == back.Approved && back.Image != null)
 				{
 					if (!imageService.TryDeleteImage(back.Image, ImageType.Image))
 					{

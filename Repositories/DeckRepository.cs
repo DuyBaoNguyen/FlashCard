@@ -88,6 +88,11 @@ namespace FlashCard.Repositories
 			return dbContext.Decks.Where(d => d.OwnerId == userId && d.SourceId == sourceId);
 		}
 
+		public IQueryable<Deck> QueryBySourceId(int sourceId)
+		{
+			return dbContext.Decks.Where(d => d.SourceId == sourceId);
+		}
+
 		public IQueryable<Deck> QueryByBeingApprovedAndNotAdmin(string adminId, string deckName)
 		{
 			var queryDecks = dbContext.Decks.Where(d => d.OwnerId != adminId && d.Approved);

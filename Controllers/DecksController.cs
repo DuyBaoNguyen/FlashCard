@@ -270,6 +270,15 @@ namespace FlashCard.Controllers
 				return NotFound();
 			}
 
+			var derivedDecks = await repository.Deck
+				.QueryBySourceId(existingDeck.Id)
+				.ToListAsync();
+
+			foreach (var deck in derivedDecks)
+			{
+				deck.SourceId = null;
+			}
+
 			repository.Deck.Delete(existingDeck);
 			await repository.SaveChangesAsync();
 
