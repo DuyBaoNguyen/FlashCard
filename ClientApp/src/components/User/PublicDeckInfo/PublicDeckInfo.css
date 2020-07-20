@@ -34,11 +34,6 @@
   font-style: italic;
   margin-bottom: 16px;
   line-height: 1.4;
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-  text-overflow: ellipsis;
 }
 
 .public-deck-info-wrapper .deck-info .deck-field {
@@ -82,19 +77,16 @@
   padding-bottom: 18px;
 }
 
-.public-deck-info-wrapper .deck-info .deck-features:last-child {
+.public-deck-info-wrapper .deck-info .deck-features:last-child .practice-btn {
   margin-bottom: 10px;
-  -ms-grid-columns: auto auto;
-      grid-template-columns: auto auto;
 }
 
 .public-deck-info-wrapper .deck-features {
   display: -ms-grid;
   display: grid;
-  -ms-grid-columns: auto auto auto;
-      grid-template-columns: auto auto auto;
-  gap: 10px;
-  margin-bottom: 20px;
+  -ms-grid-columns: auto auto;
+      grid-template-columns: auto auto;
+  gap: 20px;
 }
 
 .public-deck-info-wrapper .deck-features a, .public-deck-info-wrapper .deck-features button {
@@ -107,8 +99,7 @@
   font-weight: 600;
 }
 
-.public-deck-info-wrapper .deck-features.not-downloadable {
-  -ms-grid-columns: auto auto;
-      grid-template-columns: auto auto;
+.public-deck-info-wrapper .deck-features .pin-btn, .public-deck-info-wrapper .deck-features .unpin-btn, .public-deck-info-wrapper .deck-features .open-btn, .public-deck-info-wrapper .deck-features .download-btn, .public-deck-info-wrapper .deck-features .practice-btn {
+  margin-bottom: 20px;
 }
 /*# sourceMappingURL=PublicDeckInfo.css.map */

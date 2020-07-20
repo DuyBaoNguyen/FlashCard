@@ -12,6 +12,7 @@ namespace FlashCard.Dto
 		public bool Public { get; set; }
 		public bool Approved { get; set; }
 		public bool Completed { get; set; }
+		public bool Pinned { get; set; }
 		public DateTime CreatedDate { get; set; }
 		public DateTime LastModifiedDate { get; set; }
 		public string LastTestedTime { get; set; }

@@ -2,7 +2,7 @@ import * as actionTypes from '../actions/actionTypes';
 
 const initialState = {
 	createDeckError: null,
-	editDeckError: null,
+	editDeckError: null
 };
 
 export const deckReducer = (state = initialState, action) => {
@@ -10,14 +10,14 @@ export const deckReducer = (state = initialState, action) => {
 		case actionTypes.CREATE_DECK_SUCCESS:
 			return {
 				...state,
-				getDeckError: null,
+				createDeckError: null,
 			};
 		case actionTypes.CREATE_DECK_FAIL:
 			return {
 				...state,
-				getDeckError: 'Create deck failed!',
+				createDeckError: action.error,
 			};
-			case actionTypes.EDIT_DECK_SUCCESS:
+		case actionTypes.EDIT_DECK_SUCCESS:
 			return {
 				...state,
 				editDeckError: null,
@@ -25,7 +25,13 @@ export const deckReducer = (state = initialState, action) => {
 		case actionTypes.EDIT_DECK_FAIL:
 			return {
 				...state,
-				editDeckError: 'Edit deck failed!',
+				editDeckError: action.error,
+			};
+		case actionTypes.CLEAR_UPDATE_DECK_ERROR:
+			return {
+				...state,
+				createDeckError: null,
+				editDeckError: null
 			};
 		default:
 			return state;

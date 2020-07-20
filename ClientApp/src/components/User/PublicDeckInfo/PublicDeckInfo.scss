@@ -24,11 +24,6 @@
       font-style: italic;
       margin-bottom: 16px;
       line-height: 1.4;
-      display: -webkit-box;
-      -webkit-line-clamp: 2;
-      -webkit-box-orient: vertical;
-      overflow: hidden;
-      text-overflow: ellipsis;
     }
     .deck-field {
       display: flex;
@@ -61,22 +56,26 @@
       padding-bottom: 18px;
     }
     .deck-features:last-child {
-      margin-bottom: 10px;
-      grid-template-columns: auto auto;
+      // width: 100%;
+      // margin-bottom: 10px;
+      // grid-template-columns: auto auto;
+      // display: block;
+      .practice-btn {
+        margin-bottom: 10px;
+      }
     }
   }
   .deck-features {
     display: grid;
-    grid-template-columns: auto auto auto;
-    gap: 10px;
-    margin-bottom: 20px;
+    grid-template-columns: auto auto;
+    gap: 20px;
     a, button {
       display: flex;
       justify-content: center;
       font-weight: 600;
     }
-    &.not-downloadable {
-      grid-template-columns: auto auto;
+    .pin-btn, .unpin-btn, .open-btn, .download-btn, .practice-btn {
+      margin-bottom: 20px;
     }
   }
 }

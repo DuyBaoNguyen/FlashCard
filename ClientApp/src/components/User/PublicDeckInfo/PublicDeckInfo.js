@@ -98,7 +98,7 @@ class PublicDeckInfo extends Component {
               <span className="deck-field-extra-value">{deck?.owner.email}</span>
             </span>
           </div>
-          {!showLess && (
+          {/* {!showLess && (
             <div className="deck-features">
               <Button
                 type="button"
@@ -113,9 +113,19 @@ class PublicDeckInfo extends Component {
                 Match game
               </Button>
             </div>
+          )} */}
+          {!showLess && (
+            <div className="deck-features">
+              <Button
+                type="link"
+                className="practice-btn"
+                path={{ pathname: `/decks/${deck?.id}`, state: { backUrl: location.pathname } }}>
+                Practice
+              </Button>
+            </div>
           )}
         </Collapse>
-        <div className={`deck-features ${!downloadable ? 'not-downloadable' : null}`}>
+        <div className="deck-features">
           {profile?.id !== deck?.owner.id && (
             <>
               {deck?.pinned
@@ -146,7 +156,7 @@ class PublicDeckInfo extends Component {
                 ? (
                   <Button
                     type="link"
-                    className="open-local-btn"
+                    className="open-btn"
                     path={{ pathname: `/decks/${deck.localDeckId}`, state: { backUrl: location.pathname } }}>
                     Open local
                   </Button>
@@ -162,12 +172,6 @@ class PublicDeckInfo extends Component {
               }
             </>
           )}
-          <Button
-            type="link"
-            className="open-btn"
-            path={{ pathname: `/decks/${deck?.id}`, state: { backUrl: location.pathname } }}>
-            Open
-          </Button>
         </div>
         <Confirm
           isOpen={downloadingConfirmOpen}

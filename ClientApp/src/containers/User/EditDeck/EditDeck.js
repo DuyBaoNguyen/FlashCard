@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+
+import DeckForm from '../../../components/User/DeckForm/DeckForm';
 import * as actions from '../../../store/actions';
 import withErrorHandler from '../../../hoc/withErrorHandler';
-import DeckForm from '../../../components/User/DeckForm/DeckForm';
-
 import './EditDeck.css';
 
 class EditDeck extends Component {
@@ -13,17 +13,11 @@ class EditDeck extends Component {
 	}
 
 	render() {
-		const { deck, backUrl } = this.props;
+		const { deck } = this.props;
 		return (
 			<div className="create-deck-wrapper">
 				<div className="form">
-					<DeckForm
-						deck={deck}
-						id={this.props.match.params.deckId}
-						editDeck={true}
-						header="Edit deck"
-						backUrl={backUrl}
-					/>
+					<DeckForm deck={deck} />
 				</div>
 			</div>
 		);

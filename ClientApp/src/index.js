@@ -16,6 +16,7 @@ const rootElement = document.getElementById('root');
 //   window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ : null || compose;
 const rootReducer = combineReducers({
 	home: reducers.homeReducer,
+	deck: reducers.deckReducer,
 	deckDetail: reducers.deckDetailReducer,
 	testing: reducers.testingReducer,
 	matchCard: reducers.matchCardReducer,

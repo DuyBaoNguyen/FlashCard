@@ -13,7 +13,11 @@ export {
 	clearUpdatePasswordError,
 } from './Home';
 
-export { createDeck, editDeck } from './Deck';
+export { 
+	createDeck, 
+	editDeck,
+	clearUpdateDeckError
+} from './Deck';
 
 export {
 	getDeck,

@@ -8,6 +8,7 @@ import cardIcon from '@iconify/icons-mdi/credit-card-outline';
 import succeededCardIcon from '@iconify/icons-mdi/credit-card-check-outline';
 import failedCardIcon from '@iconify/icons-mdi/credit-card-remove-outline';
 import createdDateIcon from '@iconify/icons-uil/calendar-alt';
+import pinIcon from '@iconify/icons-mdi/pin-outline';
 import { connect } from 'react-redux';
 import { Collapse } from 'react-collapse';
 
@@ -46,6 +47,15 @@ class DeckInfo extends Component {
     this.setState({ deletingConfirmOpen: false });
   }
 
+  handleTogglePinned = (event) => {
+    const value = event.target.checked;
+    if (value) {
+      this.props.onPinPublicDeck(this.props.deck.id);
+    } else {
+      this.props.onUnpinPublicDeck(this.props.deck.id);
+    }
+  }
+
   render() {
     const { deck, updateDeckPublicStatusError, showLess, profile } = this.props;
     const { deletingConfirmOpen } = this.state;
@@ -59,41 +69,66 @@ class DeckInfo extends Component {
               changeable={deck?.public}
               postfix={<Icon icon={optionIcon} style={{ fontSize: 20 }} />}
               className="deck-info-dropdown">
-              <DropDownItem
-                type="link"
-                path={{
-                  pathname: `/decks/${deck?.id}/edit`,
-                  backUrl: `/decks/${deck?.id}`
-                }}
-                icon={<Icon icon={editIcon} color="#646464" />}
-                label="Edit deck" />
-              <DropDownItem
-                className="delete-deck-btn"
-                type="button"
-                icon={<Icon icon={deleteIcon} color="red" />}
-                label="Delete this deck"
-                onClick={this.handleOpenDeletingConfirm} />
-              <DropDownItem type="line" />
-              <DropDownItem
-                className="public-deck"
-                icon={<Icon icon={publicIcon} color="#646464" />}
-                label={(
-                  <>
-                    Public
-                    {deck?.public === true && deck?.approved === false && (
-                      <i className="pending-notification">( pending )</i>
-                    )}
-                  </>
-                )}>
-                <div className="switch-wrapper">
-                  <Switch
-                    checked={deck?.public && !updateDeckPublicStatusError}
-                    onChange={(event) => this.handleChangePublic(event)} />
-                </div>
-              </DropDownItem>
+              {deck && profile && (
+                <>
+                  {deck.owner.id !== profile.id
+                    ? (
+                      <DropDownItem
+                          className="public-deck"
+                          icon={<Icon icon={pinIcon} color="#646464" />}
+                          label="Pinned">
+                          <div className="switch-wrapper">
+                            <Switch
+                              checked={deck.pinned}
+                              onChange={this.handleTogglePinned} />
+                          </div>
+                        </DropDownItem>
+                    )
+                    : (
+                      <>
+                        <DropDownItem
+                          type="link"
+                          path={{
+                            pathname: `/decks/${deck?.id}/edit`,
+                            state: { backUrl: `/decks/${deck?.id}` }
+                          }}
+                          icon={<Icon icon={editIcon} color="#646464" />}
+                          label="Edit deck" />
+                        <DropDownItem
+                          className="delete-deck-btn"
+                          type="button"
+                          icon={<Icon icon={deleteIcon} color="red" />}
+                          label="Delete this deck"
+                          onClick={this.handleOpenDeletingConfirm} />
+                        <DropDownItem type="line" />
+                        <DropDownItem
+                          className="public-deck"
+                          icon={<Icon icon={publicIcon} color="#646464" />}
+                          label={(
+                            <>
+                              Public
+                                {deck?.public === true && deck?.approved === false && (
+                                <i className="pending-notification">( pending )</i>
+                              )}
+                            </>
+                          )}>
+                          <div className="switch-wrapper">
+                            <Switch
+                              checked={deck?.public && !updateDeckPublicStatusError}
+                              onChange={(event) => this.handleChangePublic(event)} />
+                          </div>
+                        </DropDownItem>
+                      </>
+                    )
+                  }
+                </>
+              )}
             </DropDown>
           </div>
           {deck?.name}
+          {profile && deck && profile.id !== deck.owner.id && (
+            <span className="public-deck-badge">( Public deck )</span>
+          )}
         </div>
         <Collapse
           isOpened={!showLess}
@@ -180,7 +215,9 @@ const mapDispatchToProps = dispatch => {
   return {
     onDeleteDeck: (id) => dispatch(actions.deleteDeck(id)),
     onUpdateDeckPublicStatus: (id, value) => dispatch(actions.updateDeckPublicStatus(id, value)),
-    onSetPracticeOptionsOpen: (value) => dispatch(actions.setPracticeOptionsOpen(value))
+    onSetPracticeOptionsOpen: (value) => dispatch(actions.setPracticeOptionsOpen(value)),
+    onPinPublicDeck: (deckId) => dispatch(actions.pinPublicDeck(deckId)),
+    onUnpinPublicDeck: (deckId) => dispatch(actions.unpinPublicDeck(deckId))
   };
 };
 

@@ -104,7 +104,7 @@ class DeckCards extends Component {
   }
 
   render() {
-    const { profile, cards, loading } = this.props;
+    const { profile, cards, deck, loading } = this.props;
     let { activePage, setLoading, deletedCardId, removedCardId } = this.state;
     let cardsList = loading ? setLoading && <Loading /> : <p className="text-notify">There are no cards here!</p>;
     let pagination;
@@ -169,12 +169,14 @@ class DeckCards extends Component {
         <div className="deck-cards-header">
           <p>Cards in deck</p>
           <div className="deck-cards-header-features">
-            <Button
-              type="link"
-              path={`/decks/${this.deckId}/addcards`}
-              className="deck-cards-header-features-add"
-              icon={<Icon icon={plusIcon} />} >
-            </Button>
+            {deck && profile && deck.owner.id === profile.id && (
+              <Button
+                type="link"
+                path={`/decks/${this.deckId}/addcards`}
+                className="deck-cards-header-features-add"
+                icon={<Icon icon={plusIcon} />} >
+              </Button>
+            )}
             {profile?.role === Roles.User && (
               <Filter
                 className="deck-card-header-features-filter"
@@ -218,6 +220,7 @@ const mapStateToProps = state => {
   return {
     profile: state.home.profile,
     cards: state.deckDetail.cards,
+    deck: state.deckDetail.deck,
     loading: state.deckDetail.loadings.getCardsInsideLoading
   };
 };

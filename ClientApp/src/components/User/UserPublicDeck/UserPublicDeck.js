@@ -5,6 +5,7 @@ import { Icon } from '@iconify/react';
 import cardIcon from '@iconify/icons-mdi/credit-card-outline';
 import pinIcon from '@iconify/icons-mdi/pin-outline';
 import unpinIcon from '@iconify/icons-mdi/pin-off-outline';
+import ownerIcon from '@iconify/icons-uil/user';
 
 import Button from '../../Shared/Button/Button';
 import * as actions from '../../../store/actions/index';
@@ -27,7 +28,7 @@ class UserPublicDeck extends Component {
 
     return (
       <div className="deck">
-        <Link to={{ pathname: `/userpublicdecks/${deck.id}`, state: { backUrl: location.pathname}}}>
+        <Link to={{ pathname: `/userpublicdecks/${deck.id}`, state: { backUrl: location.pathname } }}>
           <div className="wrapper">
             <div
               className="deck-background-color"
@@ -36,6 +37,12 @@ class UserPublicDeck extends Component {
               <div className="deck-name">{deck.name}</div>
               <div className="deck-description">{deck.description}</div>
               <div className="deck-info">
+                <div className="deck-info-value-container">
+                  <div className="deck-info-value">
+                    <Icon icon={ownerIcon} style={{ color: '#ffffff', fontSize: '24px' }} />
+                    <p>{deck.owner.name}</p>
+                  </div>
+                </div>
                 <div className="deck-info-value-container">
                   <div className="deck-info-value">
                     <Icon icon={cardIcon} style={{ color: '#ffffff', fontSize: '24px' }} />

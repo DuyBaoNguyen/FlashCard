@@ -12,3 +12,4 @@ export { publicDeckDetailReducer } from './PublicDeckDetail';
 export { cardProposalReducer } from './CardProposal';
 export { publicDecksManagementReducer } from './PublicDecksManagement';
 export { proposedPublicDeckDetailReducer } from './ProposedPublicDeckDetail';
+export { deckReducer } from './Deck';
