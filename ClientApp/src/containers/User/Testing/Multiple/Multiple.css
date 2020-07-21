@@ -13,14 +13,14 @@
   margin-top: 50px;
   height: 50px;
   font-size: 18px;
+  font-weight: 300;
   line-height: 28px;
   color: #979797;
 }
 
 .multiple-wrapper .multiple-card {
   position: relative;
-  margin: 50px;
-  float: center;
+  height: auto;
 }
 
 .multiple-wrapper .multiple-card .multiple-card-layer-1 {
@@ -36,6 +36,10 @@
   font-size: 20px;
   color: white;
   position: absolute;
+  top: 0;
+  left: 50%;
+  -webkit-transform: translateX(-50%);
+          transform: translateX(-50%);
   width: 189px;
   height: 126px;
   background: #9eacf4;
@@ -48,7 +52,9 @@
 .multiple-wrapper .multiple-card .multiple-card-layer-2 {
   position: absolute;
   top: 5px;
-  left: 5px;
+  left: calc(50% + 5px);
+  -webkit-transform: translateX(-50%);
+          transform: translateX(-50%);
   width: 189px;
   height: 126px;
   background: -webkit-gradient(linear, left bottom, left top, from(#ffffff), to(#ffffff)), #ffffff;
@@ -62,7 +68,9 @@
 .multiple-wrapper .multiple-card .multiple-card-layer-3 {
   position: absolute;
   top: 10px;
-  left: 10px;
+  left: calc(50% + 10px);
+  -webkit-transform: translateX(-50%);
+          transform: translateX(-50%);
   width: 189px;
   height: 126px;
   background: -webkit-gradient(linear, left bottom, left top, from(#ffffff), to(#ffffff)), #ffffff;
@@ -74,12 +82,7 @@
 }
 
 .multiple-wrapper .multiple-answers {
-  width: 300px;
-  position: absolute;
-  height: 200px;
-  margin-top: 150px;
-  display: -ms-grid;
-  display: grid;
+  margin-top: 200px;
 }
 
 .multiple-wrapper .answer {
@@ -94,11 +97,13 @@
           align-items: center;
   width: 100%;
   height: 54px;
+  margin-bottom: 12px;
   -webkit-box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
           box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
   border-radius: 15px;
   -webkit-transition: 0.3s;
   transition: 0.3s;
+  cursor: pointer;
 }
 
 .multiple-wrapper .answer:hover {
@@ -117,12 +122,14 @@
 .multiple-result .multiple-button-next button {
   width: 100%;
   height: 53px;
+  font-size: 16px;
   background: #9eacf4;
   border: none;
   border-radius: 15px;
   color: white;
   -webkit-transition: 0.1s;
   transition: 0.1s;
+  cursor: pointer;
 }
 
 .multiple-result .multiple-button-next button:active {

@@ -29,28 +29,31 @@
 }
 
 .result-wrapper .result-table .result-info .result-title {
-  font-size: 14px;
-  line-height: 32px;
+  font-size: 16px;
+  line-height: 28px;
   color: #979797;
 }
 
 .result-wrapper .result-table .result-info .result-value {
   text-align: right;
-  font-size: 14px;
-  font-weight: bold;
-  line-height: 32px;
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 28px;
   color: #9eacf4;
 }
 
 .result-wrapper .result-button button {
   width: 307px;
   height: 53px;
+  font-size: 16px;
   background: #9eacf4;
   border: none;
   border-radius: 15px;
   color: white;
   -webkit-transition: 0.1s;
   transition: 0.1s;
+  margin-top: 15px;
+  cursor: pointer;
 }
 
 .result-wrapper .result-button button:active {

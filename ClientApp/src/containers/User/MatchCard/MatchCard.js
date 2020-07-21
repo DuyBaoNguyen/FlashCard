@@ -26,7 +26,7 @@ class MatchCard extends Component {
 		this.setState({
 			isFinish: false,
 		});
-		console.log(cardList, currentSelectCards, matchedCards);
+		// console.log(cardList, currentSelectCards, matchedCards);
 
 		if (currentSelectCards.length === 2) {
 			if (this.compareCards(currentSelectCards)) {

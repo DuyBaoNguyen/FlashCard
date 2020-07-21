@@ -6,16 +6,15 @@
     position: absolute;
     top: 30px;
     right: 30px;
+    display: flex;
     
     .market-cards-propose-btn {
+      height: 32px;
       margin-right: 10px;
+      padding-left: 15px;
+      padding-right: 15px;
     }
   }
-  // .market-cards-search-box {
-  //   position: absolute;
-  //   top: 30px;
-  //   right: 30px;
-  // }
 
   .cards {
     width: 100%;

@@ -50,19 +50,19 @@ class Multiple extends Component {
 		let wrongAnswer1 = newCards[1].backs[0].meaning;
 		let wrongAnswer2 = newCards[2].backs[0].meaning;
 
-		console.log(rightAnswer, wrongAnswer1, wrongAnswer2);
+		// console.log(rightAnswer, wrongAnswer1, wrongAnswer2);
 		answers.push(
-			<div className="multiple-right-answer answer" onClick={this.onClickRight}>
+			<div key="1" className="multiple-right-answer answer" onClick={this.onClickRight}>
 				{rightAnswer}
 			</div>
 		);
 		answers.push(
-			<div className="multiple-wrong-answer answer" onClick={this.onClickWrong}>
+			<div key="2" className="multiple-wrong-answer answer" onClick={this.onClickWrong}>
 				{wrongAnswer1}
 			</div>
 		);
 		answers.push(
-			<div className="multiple-wrong-answer answer" onClick={this.onClickWrong}>
+			<div key="3" className="multiple-wrong-answer answer" onClick={this.onClickWrong}>
 				{wrongAnswer2}
 			</div>
 		);
@@ -95,7 +95,7 @@ class Multiple extends Component {
 
 		let resultMultipleQuestion = (
 			<div className="multiple-result">
-				<Animated animationIn="bounceIn" animationInDelay="0" isVisible={true}>
+				<Animated animationIn="bounceIn" animationInDelay={0} isVisible={true}>
 					{this.state.isCorrect ? (
 						<p style={{ color: '#52c41a' }}>Correct!</p>
 					) : (

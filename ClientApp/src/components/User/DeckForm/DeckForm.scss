@@ -15,8 +15,8 @@
     transform: translateX(-50%);
     .deck-form-button {
       display: grid;
-      grid-template-columns: auto auto;
-      column-gap: 10px;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
       .deck-form-button-cancel {
         width: 100%;
         height: 50px;

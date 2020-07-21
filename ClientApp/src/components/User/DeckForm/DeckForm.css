@@ -28,10 +28,9 @@
 .deck-form .deck-form-wrapper .deck-form-button {
   display: -ms-grid;
   display: grid;
-  -ms-grid-columns: auto auto;
-      grid-template-columns: auto auto;
-  -webkit-column-gap: 10px;
-          column-gap: 10px;
+  -ms-grid-columns: (1fr)[2];
+      grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
 }
 
 .deck-form .deck-form-wrapper .deck-form-button .deck-form-button-cancel {

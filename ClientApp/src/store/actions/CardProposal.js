@@ -8,7 +8,7 @@ const proposeCardSuccess = () => {
 };
 
 const proposeCardFail = (error) => {
-  console.log(error);
+  // console.log(error);
   return {
     type: actionTypes.PROPOSE_CARD_FAIL,
     error: error

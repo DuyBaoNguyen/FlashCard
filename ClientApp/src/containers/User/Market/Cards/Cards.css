@@ -7,10 +7,16 @@
   position: absolute;
   top: 30px;
   right: 30px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
 }
 
 .market-cards-list-wrapper .market-cards-list-header-features .market-cards-propose-btn {
+  height: 32px;
   margin-right: 10px;
+  padding-left: 15px;
+  padding-right: 15px;
 }
 
 .market-cards-list-wrapper .cards {

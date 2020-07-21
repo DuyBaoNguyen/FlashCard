@@ -1,5 +1,4 @@
 import * as actionTypes from '../actions/actionTypes';
-import * as utils from '../../util/util';
 
 const initialState = {
 	cardsProposalList: [],

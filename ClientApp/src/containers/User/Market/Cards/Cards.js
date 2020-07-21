@@ -3,7 +3,6 @@ import { connect } from 'react-redux';
 import Pagination from 'react-js-pagination';
 import { Icon } from '@iconify/react';
 import downloadIcon from '@iconify/icons-uil/arrow-to-bottom';
-import plusIcon from '@iconify/icons-uil/plus';
 
 import withErrorHandler from '../../../../hoc/withErrorHandler';
 import * as actions from '../../../../store/actions/index';
@@ -38,10 +37,6 @@ class Cards extends Component {
 			}, TIME_OUT_DURATION);
 		}
 	}
-
-	// handleClickCard = (cardId) => {
-	// 	this.props.onSelectCard(cardId);
-	// };
 
 	handlePageChange = (pageNumber) => {
 		this.setState({ activePage: pageNumber });
@@ -130,8 +125,8 @@ class Cards extends Component {
 						<Button
 							className="market-cards-propose-btn"
 							type="button"
-							icon={<Icon icon={plusIcon} />}
 							onClick={this.handleOpenCardProposingForm}>
+							Propose
 						</Button>
 						<Search
 							className="market-cards-search-box"

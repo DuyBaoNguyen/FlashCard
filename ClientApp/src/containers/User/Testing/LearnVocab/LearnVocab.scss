@@ -7,11 +7,13 @@
 		button {
 			width: 100%;
 			height: 53px;
+			font-size: 16px;
 			background: #52c41a;
 			border: none;
 			border-radius: 15px;
 			color: white;
 			transition: 0.1s;
+			cursor: pointer;
 			&:active {
 				transition: 0.1s;
 				transform: translateY(10px);
@@ -22,11 +24,13 @@
 		button {
 			width: 100%;
 			height: 53px;
+			font-size: 16px;
 			background: #fe656d;
 			border: none;
 			border-radius: 15px;
 			color: white;
 			transition: 0.1s;
+			cursor: pointer;
 			&:active {
 				transition: 0.1s;
 				transform: translateY(10px);
@@ -37,11 +41,13 @@
 		button {
 			width: 195%;
 			height: 53px;
+			font-size: 16px;
 			background: #9eacf4;
 			border: none;
 			border-radius: 15px;
 			color: white;
 			transition: 0.1s;
+			cursor: pointer;
 			&:active {
 				transition: 0.1s;
 				transform: translateY(10px);
@@ -62,14 +68,59 @@
 	.testing-card-front {
 		color: #535353;
 		line-height: 30px;
-		font-size: 20px;
+		font-size: 24px;
+		.vocabulary {
+			position: relative;
+		}
+		.utterance {
+			position: absolute;
+			top: 100%;
+			left: 50%;
+			transform: translateX(-50%);
+			width: 40px;
+			height: 40px;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			margin-top: 5px;
+			border-radius: 50%;
+			transition: background-color 0.2s ease;
+			cursor: pointer;
+			&:hover {
+				background-color: #f1f1f1;
+			}
+		}
 	}
 	.testing-card-back {
 		line-height: 30px;
     font-size: 20px;
     .back-card {
-      text-align: left;
-      width: 450px;
+			width: 450px;
+			position: relative;
+			.back-meaning {
+				font-size: 20px;
+				color: #535353;
+				margin-bottom: 10px;
+			}
+			.back-type {
+				font-size: 18px;
+				font-style: italic;
+				color: #4686ff;
+				margin-bottom: 10px;
+			}
+			.back-example {
+				font-size: 17px;
+				color: #757575;
+			}
+			.back-image {
+				float: right;
+				border-radius: 10px;
+				margin-left: 20px;
+			}
     }
 	}
+}
+
+.learn-wrapper {
+	margin-top: 20px;
 }
