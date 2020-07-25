@@ -2,6 +2,31 @@
 	display: flex;
 	justify-content: center;
 	align-items: center;
+	padding-top: 20px;
+	position: relative;
+	.back-feature {
+		position: absolute;
+		top: 0;
+		left: 0;
+    font-size: 14px;
+    a {
+      color: #979797;
+      transition: color 0.15s ease-out;
+      position: relative;
+      .back-feature-icon {
+        position: absolute;
+        top: -2px;
+        left: -8px;
+        font-size: 22px;
+      }
+      .back-feature-label {
+        padding-left: 18px;
+      }
+      &:hover {
+        color: #757575;
+      }
+    }
+  }
 	.testing-container {
 		width: 726px;
 		.testing-progress {

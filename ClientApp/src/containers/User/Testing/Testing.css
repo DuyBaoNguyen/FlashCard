@@ -8,6 +8,37 @@
   -webkit-box-align: center;
       -ms-flex-align: center;
           align-items: center;
+  padding-top: 20px;
+  position: relative;
+}
+
+.testing-wrapper .back-feature {
+  position: absolute;
+  top: 0;
+  left: 0;
+  font-size: 14px;
+}
+
+.testing-wrapper .back-feature a {
+  color: #979797;
+  -webkit-transition: color 0.15s ease-out;
+  transition: color 0.15s ease-out;
+  position: relative;
+}
+
+.testing-wrapper .back-feature a .back-feature-icon {
+  position: absolute;
+  top: -2px;
+  left: -8px;
+  font-size: 22px;
+}
+
+.testing-wrapper .back-feature a .back-feature-label {
+  padding-left: 18px;
+}
+
+.testing-wrapper .back-feature a:hover {
+  color: #757575;
 }
 
 .testing-wrapper .testing-container {

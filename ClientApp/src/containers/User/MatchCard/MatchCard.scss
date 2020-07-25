@@ -7,10 +7,11 @@
     width: 726px;
 
     .match-back-feature {
-      margin-bottom: 10px;
+      margin: 0 15px 10px;
       color: #979797;
       position: relative;
       left: 0;
+      transition: color 0.15s ease-out;
 
       .match-back-feature-icon {
         position: absolute;
@@ -21,6 +22,9 @@
       .match-back-feature-label {
         font-size: 14px;
         padding-left: 18px;
+      }
+      &:hover {
+        color: #757575;
       }
     }
   }
@@ -43,6 +47,8 @@
       border: none;
       border-radius: 15px;
       color: white;
+      font-size: 16px;
+      cursor: pointer;
       transition: 0.1s;
 
       &:active {
@@ -68,6 +74,8 @@
       background: #FFFFFF;
       box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.06);
       border-radius: 15px;
+      cursor: pointer;
+      user-select: none;
       transition: 0.1s;
 
       &:hover {
@@ -78,7 +86,8 @@
       p {
         font-style: normal;
         // font-weight: bold;
-        font-size: 14px;
+        margin-bottom: 0;
+        font-size: 15px;
         text-align: center;
         transition: 0.1s;
       }

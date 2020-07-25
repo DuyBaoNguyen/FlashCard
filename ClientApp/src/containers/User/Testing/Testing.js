@@ -4,6 +4,10 @@ import 'react-sweet-progress/lib/style.css';
 import LearnVocab from './LearnVocab/LearnVocab';
 import Result from './Result/Result';
 import { connect } from 'react-redux';
+import { Link } from 'react-router-dom';
+import { Icon } from '@iconify/react';
+import arrowLeftIcon from '@iconify/icons-uil/angle-left';
+
 import * as actions from '../../../store/actions';
 import withErrorHandler from '../../../hoc/withErrorHandler';
 import './Testing.css';
@@ -230,8 +234,16 @@ class Testing extends Component {
 		);
 		return (
 			<div className="testing-wrapper">
+				<div className="back-feature">
+					<Link to={`/decks/${this.props.match.params.deckId}`}>
+						<span className="back-feature-icon">
+							<Icon icon={arrowLeftIcon} />
+						</span>
+						<span className="back-feature-label"> Back</span>
+					</Link>
+				</div>
 				<div className="testing-container">
-					<RouteLeavingGuard 
+					<RouteLeavingGuard
 						when={!this.state.isFinish}
 						navigate={path => history.push(path)}
 						shouldBlockNavigation={location => true} />
