@@ -35,7 +35,7 @@ class UserCard extends Component {
 								)
 							}
 						>
-							<Icon icon={closeIcon} style={{ fontSize: 16 }} />
+							{/* <Icon icon={closeIcon} style={{ fontSize: 16 }} /> */}
 						</span>
 					)}
 					{/* <div className="cards-proposal-back-author">{back.author.name}</div> */}
