@@ -38,11 +38,24 @@ class UserCard extends Component {
 							<Icon icon={closeIcon} style={{ fontSize: 16 }} />
 						</span>
 					)}
-					<div className="cards-proposal-back-meaning">{back.meaning}</div>
-					<br />
-					<div className="cards-proposal-back-type">{back.type}</div>
-					<br />
-					<div className="cards-proposal-back-example">{back.example}</div>
+					{/* <div className="cards-proposal-back-author">{back.author.name}</div> */}
+
+					<div className="cards-proposal-back-left">
+						<div className="cards-proposal-back-example">
+							Author:{' '}
+							<span className="cards-proposal-back-meaning">
+								{back.author.name}
+							</span>
+						</div>
+						<br />
+
+						<div className="cards-proposal-back-meaning">{back.meaning}</div>
+
+						<br />
+						<div className="cards-proposal-back-type">{back.type}</div>
+						<br />
+						<div className="cards-proposal-back-example">{back.example}</div>
+					</div>
 				</div>
 			);
 		});
