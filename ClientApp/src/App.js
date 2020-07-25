@@ -19,6 +19,8 @@ import UsersManagement from './containers/Admin/UsersManagement/UsersManagement'
 import UserDeckDetail from './containers/Admin/UserDeckDetail/UserDeckDetail';
 import CardsProposal from './containers/Admin/CardsProposal/CardsProposal';
 import PublicDeckDetail from './containers/User/PublicDeckDetail/PublicDeckDetail';
+import PublicDecksManagement from './containers/Admin/PublicDecksManagement/PublicDecksManagement';
+import ProposedPublicDeckDetail from './containers/Admin/ProposedPublicDeckDetail/ProposedPublicDeckDetail';
 
 import AuthorizeRoute from './components/api-authorization/AuthorizeRoute';
 import ApiAuthorizationRoutes from './components/api-authorization/ApiAuthorizationRoutes';
@@ -49,14 +51,15 @@ class App extends Component {
 					<AuthorizeRoute exact path="/publicdecks/:deckId" component={PublicDeckDetail} />
 					<AuthorizeRoute exact path="/userpublicdecks/:deckId" component={PublicDeckDetail} />
 					
-					{/* Admin management */}
 					<AuthorizeRoute exact path="/admin/users" component={UsersManagement} />
 					<AuthorizeRoute exact path="/admin/users/:userId/decks/:deckId" component={UserDeckDetail} />
 					<AuthorizeRoute exact path="/admin/cardproposals" component={CardsProposal} />
+					<AuthorizeRoute exact path="/admin/publicdecks" component={PublicDecksManagement} />
+					<AuthorizeRoute exact path="/admin/publicdecks/:deckId" component={ProposedPublicDeckDetail} />
 
 					<Route path={ApplicationPaths.ApiAuthorizationPrefix} component={ApiAuthorizationRoutes} />
 
-					{/* <Redirect to="/" /> */}
+					<Redirect to="/" />
 				</Switch>
 			</Layout>
 		);

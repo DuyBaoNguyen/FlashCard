@@ -12,3 +12,5 @@ export const Roles =  {
   Admin: 'administrator',
   User: 'user'
 };
+
+export const Themes = ['#95dded', '#9eacf4', '#ffb1b1', '#fdd39d', '#b7eb8f', '#ebaaea'];

@@ -1,0 +1,38 @@
+.proposed-public-deck-detail {
+  display: flex;
+  margin-right: -20px;
+  .back-feature {
+    font-size: 14px;
+    a {
+      color: #979797;
+      transition: color 0.15s ease-out;
+      position: relative;
+      .back-feature-icon {
+        position: absolute;
+        top: -2px;
+        left: -8px;
+        font-size: 22px;
+      }
+      .back-feature-label {
+        padding-left: 18px;
+      }
+      &:hover {
+        color: #757575;
+      }
+    }
+  }
+  section {
+    overflow: visible;
+    padding-right: 20px;
+  }
+  .left-section {
+    width: 33.33%;
+    .user-deck-info-wrapper,
+    .card-info {
+      margin-top: 20px;
+    }
+  }
+  .right-section {
+    width: 66.67%;
+  }
+}

@@ -42,7 +42,7 @@ const initialForm = {
     error: null
   },
   image: {
-    value: '',
+    value: null,
     valid: true,
     validation: {},
     touched: false,
@@ -157,13 +157,11 @@ class CardBackForm extends Component {
       } else {
         onCreateBack(card.id, newBack);
       }
-      this.setState({ form: initialForm });
     }
   }
 
   handleClickCancel = () => {
     this.props.onClose();
-    this.setState({ form: initialForm });
   }
 
   handleImageChange = (event) => {
@@ -177,9 +175,20 @@ class CardBackForm extends Component {
       const updatedForm = { ...this.state.form };
       const imageState = {
         ...this.state.form.image,
-        value: event.target.files[0]
+        value: event.target.files[0],
+        error: null,
+        valid: true
       };
       updatedForm.image = imageState;
+      updatedForm.valid = true;
+
+      for (let key in updatedForm) {
+        if (key !== 'valid') {
+          updatedForm.valid = updatedForm.valid && updatedForm[key].valid;
+        }
+      }
+
+      this.backImageInput.current.value = null;
 
       this.setState({ form: updatedForm });
     }
@@ -196,13 +205,17 @@ class CardBackForm extends Component {
     const updatedForm = { ...this.state.form };
     const imageState = {
       ...this.state.form.image,
-      value: ''
+      value: null
     };
     updatedForm.image = imageState;
 
     this.setState({ form: updatedForm });
 
     this.backImageInput.current.value = null;
+  }
+
+  handleTransitionExited = () => {
+    this.setState({ form: initialForm });
   }
 
   render() {
@@ -216,7 +229,8 @@ class CardBackForm extends Component {
           mountOnEnter
           unmountOnExit
           in={isOpen}
-          timeout={animationDuration}>
+          timeout={animationDuration}
+          onExited={this.handleTransitionExited}>
           {state => {
             const backFormClasses = [
               'card-back-form-wrapper',
@@ -310,6 +324,11 @@ class CardBackForm extends Component {
                       </>
                     )}
                   </div>
+                  {!form.image.valid && (
+                    <div className="error-notification">
+                      {form.image.error}
+                    </div>
+                  )}
                   <div className="card-back-form-features">
                     <button
                       className="cancel-btn"

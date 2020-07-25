@@ -8,26 +8,29 @@
   -webkit-box-pack: center;
       -ms-flex-pack: center;
           justify-content: center;
-  height: 80vh;
+  position: relative;
 }
 
 .deck-form .deck-form-wrapper {
-  width: 563px;
-  height: 460px;
+  width: 560px;
   background: #ffffff;
   -webkit-box-shadow: 0px 0px 30px rgba(0, 0, 0, 0.05);
           box-shadow: 0px 0px 30px rgba(0, 0, 0, 0.05);
   border-radius: 15px;
   padding: 30px;
+  position: absolute;
+  top: 100px;
+  left: 50%;
+  -webkit-transform: translateX(-50%);
+          transform: translateX(-50%);
 }
 
 .deck-form .deck-form-wrapper .deck-form-button {
   display: -ms-grid;
   display: grid;
-  -ms-grid-columns: auto auto;
-      grid-template-columns: auto auto;
-  -webkit-column-gap: 10px;
-          column-gap: 10px;
+  -ms-grid-columns: (1fr)[2];
+      grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
 }
 
 .deck-form .deck-form-wrapper .deck-form-button .deck-form-button-cancel {
@@ -73,7 +76,7 @@
 }
 
 .deck-form .deck-form-wrapper .deck-form-circle {
-  margin-top: 30px;
+  margin-top: 20px;
   margin-bottom: 20px;
   display: -webkit-box;
   display: -ms-flexbox;
@@ -91,7 +94,8 @@
 }
 
 .deck-form .deck-form-wrapper .deck-form-circle input:checked ~ .button-circle span {
-  border: 0px solid white;
+  width: 55px;
+  height: 55px;
 }
 
 .deck-form .deck-form-wrapper .deck-form-circle .button-circle {
@@ -104,16 +108,15 @@
 }
 
 .deck-form .deck-form-wrapper .deck-form-circle .button-circle span {
-  border: 10px solid white;
   display: block;
   position: absolute;
-  width: 60px;
-  height: 60px;
+  width: 40px;
+  height: 40px;
   padding: 0;
   top: 50%;
   left: 50%;
   -webkit-transform: translate(-50%, -50%);
-  transform: translate(-50%, -50%);
+          transform: translate(-50%, -50%);
   border-radius: 100%;
   background: #ffffff;
   -webkit-transition: ease 0.3s;
@@ -125,46 +128,34 @@
 }
 
 .deck-form .deck-form-wrapper .deck-form-header {
-  height: 47px;
-  font-style: normal;
-  font-weight: 600;
+  font-weight: 500;
   font-size: 24px;
-  line-height: 32px;
   color: #535353;
-}
-
-.deck-form .deck-form-wrapper .deck-form-input {
-  margin-top: 20px;
-  margin-bottom: 10px;
-  display: -ms-grid;
-  display: grid;
+  margin-bottom: 20px;
 }
 
 .deck-form .deck-form-wrapper .deck-form-input label {
-  margin-bottom: 20px;
-  height: 8px;
-  font-style: normal;
-  font-weight: 500;
+  display: inline-block;
+  margin-bottom: 8px;
+  font-weight: 400;
   font-size: 14px;
-  line-height: 22px;
   color: #979797;
+  margin-top: 20px;
 }
 
-.deck-form .deck-form-wrapper .deck-form-input input {
-  height: 40px;
-  background: #ffffff;
-  border: 1px solid #d9d9d9;
-  -webkit-box-sizing: border-box;
-          box-sizing: border-box;
-  border-radius: 4px;
-  padding: 10px;
-  -webkit-transition: 0.3s;
-  transition: 0.3s;
+.deck-form .deck-form-wrapper .deck-form-input label:first-child {
+  margin-top: 0;
 }
 
-.deck-form .deck-form-wrapper .deck-form-input input:focus {
-  -webkit-transition: 0.3s;
-  transition: 0.3s;
-  border: 2px solid #9eacf4;
+.deck-form .deck-form-wrapper .error-notification {
+  font-size: 13px;
+  color: red;
+  font-style: italic;
+  margin-top: 5px;
+}
+
+.deck-form .deck-form-wrapper .theme-error {
+  margin-top: -20px;
+  margin-bottom: 20px;
 }
 /*# sourceMappingURL=DeckForm.css.map */

@@ -10,6 +10,7 @@ import Search from '../../../../components/Shared/Search/Search';
 import Button from '../../../../components/Shared/Button/Button';
 import Card from '../../../../components/User/Card/Card';
 import Loading from '../../../../components/Shared/Loading/Loading';
+import CardProposingForm from '../../../../components/User/CardProposingForm/CardProposingForm';
 import { TIME_OUT_DURATION } from '../../../../applicationConstants';
 import './Cards.css';
 
@@ -37,10 +38,6 @@ class Cards extends Component {
 		}
 	}
 
-	// handleClickCard = (cardId) => {
-	// 	this.props.onSelectCard(cardId);
-	// };
-
 	handlePageChange = (pageNumber) => {
 		this.setState({ activePage: pageNumber });
 	};
@@ -56,8 +53,18 @@ class Cards extends Component {
 		this.props.onDeleteCard(cardId);
 	};
 
+	handleOpenCardProposingForm = () => {
+		this.props.onToggleCardProposingForm(true);
+		this.props.onClearProposeCardError();
+	}
+
+	handleCloseCardProposingForm = () => {
+		this.props.onToggleCardProposingForm(false);
+		this.props.onClearProposeCardError();
+	}
+
 	render() {
-		const { cards, loading, searchString } = this.props;
+		const { cards, loading, searchString, cardProposingFormOpen } = this.props;
 		let { activePage, setLoading } = this.state;
 		let cardsList = loading ? (
 			setLoading && <Loading />
@@ -84,8 +91,8 @@ class Cards extends Component {
 										card={card}
 										onClick={this.handleClickCard}
 									/>
-									<Button 
-										className='cards-button-download' 
+									<Button
+										className='cards-button-download'
 										icon={<Icon icon={downloadIcon} />}
 										onClick={() => this.props.onDownloadPublicCard(card.id)}>
 										Download
@@ -115,6 +122,12 @@ class Cards extends Component {
 			<div className="market-cards-list-wrapper">
 				<div className="market-cards-list-header">
 					<div className="market-cards-list-header-features">
+						<Button
+							className="market-cards-propose-btn"
+							type="button"
+							onClick={this.handleOpenCardProposingForm}>
+							Propose
+						</Button>
 						<Search
 							className="market-cards-search-box"
 							placeholder="Search..."
@@ -124,6 +137,9 @@ class Cards extends Component {
 				</div>
 				{cardsList}
 				<div className="cards-pagination">{pagination}</div>
+				<CardProposingForm
+					isOpen={cardProposingFormOpen}
+					onClose={this.handleCloseCardProposingForm} />
 			</div>
 		);
 	}
@@ -133,7 +149,8 @@ const mapStateToProps = (state) => {
 	return {
 		cards: state.market.cardList,
 		loading: state.market.loadings.getPublicCardsLoading,
-		searchString: state.market.publicCardsSearchString
+		searchString: state.market.publicCardsSearchString,
+		cardProposingFormOpen: state.cardProposal.cardProposingFormOpen
 	};
 };
 
@@ -142,7 +159,9 @@ const mapDispatchToProps = (dispatch) => {
 		onGetPublicCards: (front) => dispatch(actions.getPublicCards(front)),
 		onSelectCard: (id) => dispatch(actions.selectPublicCard(id)),
 		onUpdateSearchString: (value) => dispatch(actions.updatePublicCardsSearchString(value)),
-		onDownloadPublicCard: (id) => dispatch(actions.downloadPublicCard(id))
+		onDownloadPublicCard: (id) => dispatch(actions.downloadPublicCard(id)),
+		onToggleCardProposingForm: (value) => dispatch(actions.toggleCardProposingForm(value)),
+		onClearProposeCardError: () => dispatch(actions.clearProposeCardError())
 	};
 };
 

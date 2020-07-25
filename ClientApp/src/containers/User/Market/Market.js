@@ -10,7 +10,7 @@ class Market extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			activePage: 2,
+			activePage: 1,
 		};
 	}
 

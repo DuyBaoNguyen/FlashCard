@@ -6,7 +6,7 @@ import { withRouter } from 'react-router-dom';
 import Card from '../../User/Card/Card';
 import Loading from '../../Shared/Loading/Loading';
 import Search from '../../Shared/Search/Search';
-import Filter from '../../Shared/Filter/Filter';
+// import Filter from '../../Shared/Filter/Filter';
 import * as actions from '../../../store/actions';
 import { TIME_OUT_DURATION } from '../../../applicationConstants';
 import './PublicDeckCards.css';
@@ -57,7 +57,7 @@ class PublicDeckCards extends Component {
   }
 
   render() {
-    const { cards, loading, profile } = this.props;
+    const { cards, loading } = this.props;
     const { activePage, setLoading } = this.state;
     let cardsList = loading ? setLoading && <Loading /> : <p className="text-notify">There are no cards here!</p>;
     let pagination;
@@ -71,7 +71,7 @@ class PublicDeckCards extends Component {
                 <Card
                   key={card.id}
                   card={card}
-                  displayStatus
+                  // displayStatus
                   onClick={this.handleClickCard} />
               );
             })}
@@ -98,13 +98,13 @@ class PublicDeckCards extends Component {
         <div className="public-deck-cards-header">
           <p>Cards in deck</p>
           <div className="public-deck-cards-header-features">
-            <Filter
+            {/* <Filter
               className="public-deck-cards-header-features-filter"
               onChange={this.handleChangeFilteredValue}>
               <option value="all">All</option>
               <option value="remembered">Remembered</option>
               <option value="not remembered">Not remembered</option>
-            </Filter>
+            </Filter> */}
             <Search
               placeholder="Search..."
               onChange={this.handleSearchCards} />

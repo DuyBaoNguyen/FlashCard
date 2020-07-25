@@ -9,3 +9,7 @@ export { marketReducer } from './Market';
 export { userDeckDetailReducer } from './UserDeckDetail';
 export { cardsProposalReducer } from './CardsProposal';
 export { publicDeckDetailReducer } from './PublicDeckDetail';
+export { cardProposalReducer } from './CardProposal';
+export { publicDecksManagementReducer } from './PublicDecksManagement';
+export { proposedPublicDeckDetailReducer } from './ProposedPublicDeckDetail';
+export { deckReducer } from './Deck';

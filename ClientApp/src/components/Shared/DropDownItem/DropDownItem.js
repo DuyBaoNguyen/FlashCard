@@ -36,7 +36,7 @@ class DropDownItem extends Component {
 
     if (this.props.type === 'link') {
       return (
-        <Link to={this.props.path} className={classes.join(' ')} onClick={this.handleClick}>
+        <Link to={this.props.path} className={classes.join(' ')}>
           {dropDownItemContent}
         </Link>
       );

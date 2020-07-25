@@ -27,6 +27,7 @@ namespace FlashCard.Util
 					.FirstOrDefault(t => takerId != null ? t.TakerId == takerId : t.TakerId == d.OwnerId).DateTime
 					.ToString(),
 				FromPublic = d.OwnerId != d.AuthorId,
+				Pinned = d.SharedDecks.FirstOrDefault(s => s.UserId == takerId).Pinned,
 				Owner = new PersonDto()
 				{
 					Id = d.OwnerId,

@@ -13,7 +13,11 @@ export {
 	clearUpdatePasswordError,
 } from './Home';
 
-export { createDeck, editDeck } from './Deck';
+export { 
+	createDeck, 
+	editDeck,
+	clearUpdateDeckError
+} from './Deck';
 
 export {
 	getDeck,
@@ -129,3 +133,22 @@ export {
 	setPublicDeckCardsFilteredValue,
 	filterPublicDeckCards
 } from './PublicDeckDetail';
+
+export { 
+	proposeCard,
+	clearProposeCardError,
+	toggleCardProposingForm
+} from './CardProposal';
+
+export {
+	getProposedPublicDecks
+} from './PublicDecksManagement';
+
+export {
+	getProposedPublicDeck,
+	getProposedPublicDeckCards,
+	resetStateInProposedPublicDeckDetailReducer,
+	selectProposedPublicDeckCard,
+	unselectProposedPublicDeckCard,
+	approveProposedPublicDeck
+} from './ProposedPublicDeckDetail';

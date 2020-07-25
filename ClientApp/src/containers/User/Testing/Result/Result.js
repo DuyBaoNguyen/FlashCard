@@ -36,7 +36,7 @@ class Result extends Component {
 				</Animated>
 				<Animated
 					animationIn="bounceIn"
-					animationInDelay="600"
+					animationInDelay={600}
 					isVisible={true}
 				>
 					<div className="result-table">

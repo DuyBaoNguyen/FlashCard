@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Net.Mime;
 using System.Threading.Tasks;
 using FlashCard.Contracts;
@@ -53,40 +54,73 @@ namespace FlashCard.Controllers
 		}
 
 		[HttpPost]
-		[ProducesResponseType(201)]
+		[ProducesResponseType(200)]
 		[ProducesResponseType(400)]
-		public async Task<IActionResult> ProposeCard(CardRequestModel cardRqModel)
+		public async Task<IActionResult> ProposeCard([FromForm] ProposedCardRequestModel cardRqModel)
 		{
+			if (cardRqModel.Image != null)
+			{
+				if (cardRqModel.Image.Length > 5242880)
+				{
+					ModelState.AddModelError("Image", "File is not exceeded 5MB.");
+				}
+				if (!ImageUtil.CheckExtensions(cardRqModel.Image))
+				{
+					ModelState.AddModelError("Image",
+						"Accepted images that images are with an extension of .png, .jpg, .jpeg or .bmp.");
+				}
+				if (!ModelState.IsValid)
+				{
+					return BadRequest(ModelState);
+				}
+			}
+
 			var admin = await userManager.GetAdmin();
 			var card = await repository.Card
 				.QueryByFront(admin.Id, cardRqModel.Front)
 				.AsNoTracking()
 				.FirstOrDefaultAsync();
-
-			if (card != null)
-			{
-				return CreatedAtAction(nameof(GetProposedCardById), new { Id = card.Id },
-					new { Message = "Created Successfully.", Id = card.Id });
-			}
-
 			var userId = UserUtil.GetUserId(User);
 			var now = DateTime.Now;
-			var newCard = new Card()
+
+			if (card == null)
 			{
-				Front = cardRqModel.Front.Trim(),
+				card = new Card()
+				{
+					Front = cardRqModel.Front.Trim(),
+					Public = true,
+					Approved = false,
+					CreatedDate = now,
+					LastModifiedDate = now,
+					Owner = admin,
+					AuthorId = userId
+				};
+				repository.Card.Create(card);
+				await repository.SaveChangesAsync();
+			}
+
+			var imageName = await imageService.UploadImage(cardRqModel.Image, ImageType.Image);
+			var newBack = new Back()
+			{
+				Type = cardRqModel.Type == null || cardRqModel.Type.Trim().Length == 0
+					? null : cardRqModel.Type.Trim().ToLower(),
+				Meaning = cardRqModel.Meaning == null || cardRqModel.Meaning.Trim().Length == 0
+					? null : cardRqModel.Meaning.Trim(),
+				Example = cardRqModel.Example == null || cardRqModel.Example.Trim().Length == 0
+					? null : cardRqModel.Example.Trim(),
+				Image = imageName,
 				Public = true,
 				Approved = false,
 				CreatedDate = now,
 				LastModifiedDate = now,
-				Owner = admin,
+				CardId = card.Id,
 				AuthorId = userId
 			};
+			repository.Back.Create(newBack);
 
-			repository.Card.Create(newCard);
 			await repository.SaveChangesAsync();
 
-			return CreatedAtAction(nameof(GetProposedCardById), new { Id = newCard.Id },
-				new { Message = "Created Successfully.", Id = newCard.Id });
+			return Ok();
 		}
 
 		[HttpPost("{id}/backs")]

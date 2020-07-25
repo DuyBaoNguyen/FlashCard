@@ -1,0 +1,97 @@
+.proposed-public-deck-info-wrapper {
+  background: #ffffff;
+  -webkit-box-shadow: 0px 0px 30px rgba(0, 0, 0, 0.05);
+          box-shadow: 0px 0px 30px rgba(0, 0, 0, 0.05);
+  border-radius: 15px;
+  padding: 30px;
+  margin-top: 20px;
+}
+
+.proposed-public-deck-info-wrapper .proposed-public-deck-info-header {
+  color: #535353;
+  font-style: normal;
+  font-weight: 600;
+  font-size: 18px;
+  margin-bottom: 20px;
+}
+
+.proposed-public-deck-info-wrapper .proposed-public-deck-info {
+  -webkit-transition: height 0.15s;
+  transition: height 0.15s;
+}
+
+.proposed-public-deck-info-wrapper .proposed-public-deck-info .deck-description {
+  color: #aaa;
+  font-size: 14px;
+  font-style: italic;
+  margin-bottom: 16px;
+  line-height: 1.4;
+}
+
+.proposed-public-deck-info-wrapper .proposed-public-deck-info .deck-field {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  padding-bottom: 16px;
+}
+
+.proposed-public-deck-info-wrapper .proposed-public-deck-info .deck-field span {
+  font-size: 14px;
+}
+
+.proposed-public-deck-info-wrapper .proposed-public-deck-info .deck-field .deck-field-label {
+  color: #979797;
+}
+
+.proposed-public-deck-info-wrapper .proposed-public-deck-info .deck-field .deck-field-label .deck-field-icon {
+  vertical-align: middle;
+  margin-right: 10px;
+}
+
+.proposed-public-deck-info-wrapper .proposed-public-deck-info .deck-field .deck-field-value {
+  color: #9eacf4;
+  font-weight: 500;
+  text-align: right;
+}
+
+.proposed-public-deck-info-wrapper .proposed-public-deck-info .deck-field .deck-field-value .deck-field-extra-value {
+  display: block;
+  color: #aaa;
+  font-size: 13px;
+  font-weight: 400;
+  margin-top: 5px;
+}
+
+.proposed-public-deck-info-wrapper .proposed-public-deck-info .deck-field:last-child {
+  padding-bottom: 18px;
+}
+
+.proposed-public-deck-info-wrapper .deck-features {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+}
+
+.proposed-public-deck-info-wrapper .deck-features a,
+.proposed-public-deck-info-wrapper .deck-features button {
+  -webkit-box-flex: 1;
+      -ms-flex: 1;
+          flex: 1;
+  display: block;
+  text-align: center;
+  font-weight: 600;
+}
+
+.proposed-public-deck-info-wrapper .deck-features .approve-btn {
+  margin-right: 10px;
+  background-color: #52c41a;
+}
+
+.proposed-public-deck-info-wrapper .deck-features .decline-btn {
+  margin-left: 10px;
+  background-color: #fe656d;
+}
+/*# sourceMappingURL=ProposedPublicDeckInfo.css.map */

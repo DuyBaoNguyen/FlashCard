@@ -176,6 +176,9 @@ export const pinPublicDeck = (deckId) => {
 					history.location.pathname.search(/^\/userpublicdecks\/\d+$/) > -1) {
 					const deckId = /\d+/.exec(history.location.pathname)[0];
 					dispatch(actions.getPublicDeck(deckId));
+				} else if (history.location.pathname.search(/^\/decks\/\d+$/) > -1) {
+					const deckId = /\d+/.exec(history.location.pathname)[0];
+					dispatch(actions.getDeck(deckId));
 				} else {
 					dispatch(getAdminPublicDecks());
 					dispatch(getUserPublicDecks());
@@ -206,6 +209,9 @@ export const unpinPublicDeck = (deckId) => {
 					history.location.pathname.search(/^\/userpublicdecks\/\d+$/) > -1) {
 					const deckId = /\d+/.exec(history.location.pathname)[0];
 					dispatch(actions.getPublicDeck(deckId));
+				} else if (history.location.pathname.search(/^\/decks\/\d+$/) > -1) {
+					const deckId = /\d+/.exec(history.location.pathname)[0];
+					dispatch(actions.getDeck(deckId));
 				} else {
 					dispatch(getAdminPublicDecks());
 					dispatch(getUserPublicDecks());

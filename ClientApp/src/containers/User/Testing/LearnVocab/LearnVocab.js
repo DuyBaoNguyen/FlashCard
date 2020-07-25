@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
 import ReactCardFlip from 'react-card-flip';
-// import { connect } from 'react-redux';
-// import * as actions from '../../../store/actions';
-// import withErrorHandler from '../../../hoc/withErrorHandler';
+import { Icon } from '@iconify/react';
+import volumeIcon from '@iconify/icons-uil/volume';
 
+import { speak } from '../../../../textToSpeech';
+import { NOT_SPEAKING_SPEAKER_COLOR, SPEAKING_SPEAKER_COLOR } from '../../../../applicationConstants';
 import './LearnVocab.css';
 
 class LearnVocab extends Component {
@@ -14,6 +15,8 @@ class LearnVocab extends Component {
 			isFlipped: false,
 			isNext: false,
 			isDelete: false,
+			speakerColor: NOT_SPEAKING_SPEAKER_COLOR,
+      isSpeaking: false
 		};
 	}
 
@@ -39,6 +42,26 @@ class LearnVocab extends Component {
 		});
 		this.props.onNext(this.state.isDelete, this.props.currentVocab?.id);
 	};
+
+	handleSpeak = (word) => {
+    if (!this.state.isSpeaking) {
+      speak(word, this.handleStartSpeech, this.handleEndSpeech);
+    }
+	}
+	
+	handleStartSpeech = () => {
+    this.setState({
+      speakerColor: SPEAKING_SPEAKER_COLOR,
+      isSpeaking: true
+    });
+  }
+
+  handleEndSpeech = () => {
+    this.setState({
+      speakerColor: NOT_SPEAKING_SPEAKER_COLOR,
+      isSpeaking: false
+    });
+  }
 
 	render() {
 		let buttons = (
@@ -103,18 +126,33 @@ class LearnVocab extends Component {
 			<div className="testing-card">
 				<div className="testing-card-front">
 					{this.props.currentVocab !== null
-						? this.props.currentVocab?.front
+						? (
+							<div className="vocabulary">
+								{this.props.currentVocab?.front}
+								<div className="utterance" onClick={() => this.handleSpeak(this.props.currentVocab?.front)}>
+									<Icon icon={volumeIcon} color={this.state.speakerColor} style={{ fontSize: 24 }} />
+								</div>
+							</div>
+						)
 						: instructionFront}
 				</div>
-			</div>
+			</div >
 		);
 
 		let back = this.props.currentVocab?.backs.map((back, index) => {
 			return (
 				<div key={back.id} className="back-card">
-					<b style={{ color: '#9eacf4' }}>{back.meaning}</b>
-					<p style={{ fontStyle: 'italic' }}>{back.type}</p>
-					<p>{back.example}</p>
+					{back.imageUrl && (
+						<img
+							src={back.imageUrl}
+							alt="back_image"
+							className="back-image"
+							width="120"
+							height="120" />
+					)}
+					<p className="back-meaning">{back.meaning}</p>
+					<p className="back-type">{back.type}</p>
+					<p className="back-example">{back.example}</p>
 				</div>
 			);
 		});

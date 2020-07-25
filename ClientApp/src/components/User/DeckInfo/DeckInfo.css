@@ -13,6 +13,7 @@
   font-size: 18px;
   margin-bottom: 20px;
   position: relative;
+  padding-right: 20px;
 }
 
 .deck-info-wrapper .deck-info-header .deck-info-options {
@@ -52,6 +53,14 @@
   font-size: 13px;
   vertical-align: bottom;
   color: #979797;
+}
+
+.deck-info-wrapper .deck-info-header .public-deck-badge {
+  margin-left: 10px;
+  font-weight: 500;
+  font-size: 13px;
+  color: #9eacf4;
+  white-space: nowrap;
 }
 
 .deck-info-wrapper .deck-info {
@@ -113,7 +122,8 @@
   gap: 20px;
 }
 
-.deck-info-wrapper .deck-features a, .deck-info-wrapper .deck-features button {
+.deck-info-wrapper .deck-features a,
+.deck-info-wrapper .deck-features button {
   display: block;
   text-align: center;
   font-weight: 600;

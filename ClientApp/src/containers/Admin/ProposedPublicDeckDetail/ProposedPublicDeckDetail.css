@@ -1,0 +1,51 @@
+.proposed-public-deck-detail {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  margin-right: -20px;
+}
+
+.proposed-public-deck-detail .back-feature {
+  font-size: 14px;
+}
+
+.proposed-public-deck-detail .back-feature a {
+  color: #979797;
+  -webkit-transition: color 0.15s ease-out;
+  transition: color 0.15s ease-out;
+  position: relative;
+}
+
+.proposed-public-deck-detail .back-feature a .back-feature-icon {
+  position: absolute;
+  top: -2px;
+  left: -8px;
+  font-size: 22px;
+}
+
+.proposed-public-deck-detail .back-feature a .back-feature-label {
+  padding-left: 18px;
+}
+
+.proposed-public-deck-detail .back-feature a:hover {
+  color: #757575;
+}
+
+.proposed-public-deck-detail section {
+  overflow: visible;
+  padding-right: 20px;
+}
+
+.proposed-public-deck-detail .left-section {
+  width: 33.33%;
+}
+
+.proposed-public-deck-detail .left-section .user-deck-info-wrapper,
+.proposed-public-deck-detail .left-section .card-info {
+  margin-top: 20px;
+}
+
+.proposed-public-deck-detail .right-section {
+  width: 66.67%;
+}
+/*# sourceMappingURL=ProposedPublicDeckDetail.css.map */

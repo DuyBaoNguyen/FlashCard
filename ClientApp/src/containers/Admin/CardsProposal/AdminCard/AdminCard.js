@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import withErrorHandler from '../../../../hoc/withErrorHandler';
-import * as actions from '../../../../store/actions/index';
 
+import withErrorHandler from '../../../../hoc/withErrorHandler';
 import './AdminCard.css';
 
 class AdminCard extends Component {
@@ -45,11 +44,4 @@ const mapStateToProps = (state) => {
 	};
 };
 
-const mapDispatchToProps = (dispatch) => {
-	return {};
-};
-
-export default connect(
-	mapStateToProps,
-	mapDispatchToProps
-)(withErrorHandler(AdminCard));
+export default connect(mapStateToProps)(withErrorHandler(AdminCard));

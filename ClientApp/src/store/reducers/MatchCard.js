@@ -12,7 +12,7 @@ export const matchCardReducer = (state = initialState, action) => {
 		case actionTypes.GET_MATCH_CARDS_SUCCESS:
 			let cardsArray = [];
 			let cardList = action.cardList;
-			let card = cardList.map((card, index) =>
+			cardList.map((card, index) =>
 				cardsArray.push({
 					content: card.front,
 					isMatched: false,
@@ -20,7 +20,7 @@ export const matchCardReducer = (state = initialState, action) => {
 					type: index,
 				})
 			);
-			card = cardList.map((card, index) =>
+			cardList.map((card, index) =>
 				cardsArray.push({
 					content: card.backs[0].meaning,
 					isMatched: false,
@@ -28,7 +28,7 @@ export const matchCardReducer = (state = initialState, action) => {
 					type: index,
 				})
 			);
-			console.log(cardsArray);
+			// console.log(cardsArray);
 			return {
 				...state,
 				cardList: cardsArray.sort(function (a, b) {

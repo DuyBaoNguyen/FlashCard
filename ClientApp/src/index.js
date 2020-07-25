@@ -16,6 +16,7 @@ const rootElement = document.getElementById('root');
 //   window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ : null || compose;
 const rootReducer = combineReducers({
 	home: reducers.homeReducer,
+	deck: reducers.deckReducer,
 	deckDetail: reducers.deckDetailReducer,
 	testing: reducers.testingReducer,
 	matchCard: reducers.matchCardReducer,
@@ -25,7 +26,10 @@ const rootReducer = combineReducers({
 	market : reducers.marketReducer,
 	userDeckDetail: reducers.userDeckDetailReducer,
 	cardsProposal: reducers.cardsProposalReducer,
-	publicDeckDetail: reducers.publicDeckDetailReducer
+	publicDeckDetail: reducers.publicDeckDetailReducer,
+	cardProposal: reducers.cardProposalReducer,
+	publicDecksManagement: reducers.publicDecksManagementReducer,
+	proposedPublicDeckDetail: reducers.proposedPublicDeckDetailReducer
 });
 const store = createStore(rootReducer, applyMiddleware(thunk));
 // const store = createStore(rootReducer, composeEnhancers(applyMiddleware(thunk)));
