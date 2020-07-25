@@ -55,27 +55,27 @@
     .deck-field:last-child {
       padding-bottom: 18px;
     }
-    .deck-features:last-child {
-      // width: 100%;
-      // margin-bottom: 10px;
-      // grid-template-columns: auto auto;
-      // display: block;
-      .practice-btn {
-        margin-bottom: 10px;
-      }
-    }
   }
   .deck-features {
     display: grid;
-    grid-template-columns: auto auto;
     gap: 20px;
+    margin-bottom: 20px;
     a, button {
       display: flex;
       justify-content: center;
       font-weight: 600;
     }
-    .pin-btn, .unpin-btn, .open-btn, .download-btn, .practice-btn {
-      margin-bottom: 20px;
+    &.pinable.downloadable {
+      grid-template-columns: auto auto;
+    }
+    &:last-child {
+      grid-template-columns: none !important;
+      &.downloadable {
+        margin-bottom: 10px;
+      }
+      &.pinable {
+        margin-bottom: 10px;
+      }
     }
   }
 }

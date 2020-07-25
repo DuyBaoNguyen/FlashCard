@@ -14,7 +14,7 @@ import './PublicDeckDetail.css';
 
 class PublicDeckDetail extends Component {
   UNSAFE_componentWillMount() {
-    this.backUrl = this.props.location.state?.backUrl || '/';
+    this.backUrl = this.props.location.state?.backUrl || '/market';
   }
 
   componentDidMount() {

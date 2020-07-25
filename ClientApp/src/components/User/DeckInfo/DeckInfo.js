@@ -8,7 +8,7 @@ import cardIcon from '@iconify/icons-mdi/credit-card-outline';
 import succeededCardIcon from '@iconify/icons-mdi/credit-card-check-outline';
 import failedCardIcon from '@iconify/icons-mdi/credit-card-remove-outline';
 import createdDateIcon from '@iconify/icons-uil/calendar-alt';
-import pinIcon from '@iconify/icons-mdi/pin-outline';
+import pinIcon from '@iconify/icons-ic/round-pin';
 import { connect } from 'react-redux';
 import { Collapse } from 'react-collapse';
 

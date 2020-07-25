@@ -152,3 +152,8 @@ export {
 	unselectProposedPublicDeckCard,
 	approveProposedPublicDeck
 } from './ProposedPublicDeckDetail';
+
+export {
+	selectPractice,
+	unselectPractice
+} from './Statistics';

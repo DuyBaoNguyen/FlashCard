@@ -3,8 +3,8 @@ import { connect } from 'react-redux';
 import { Link, withRouter } from 'react-router-dom';
 import { Icon } from '@iconify/react';
 import cardIcon from '@iconify/icons-mdi/credit-card-outline';
-import pinIcon from '@iconify/icons-mdi/pin-outline';
-import unpinIcon from '@iconify/icons-mdi/pin-off-outline';
+import pinIcon from '@iconify/icons-ic/round-pin';
+import unpinIcon from '@iconify/icons-ic/round-pin-off';
 import ownerIcon from '@iconify/icons-uil/user';
 
 import Button from '../../Shared/Button/Button';

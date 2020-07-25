@@ -8,6 +8,7 @@ import * as actions from '../../../store/actions';
 import withErrorHandler from '../../../hoc/withErrorHandler';
 import './Testing.css';
 import Multiple from './Multiple/Multiple';
+import RouteLeavingGuard from '../../../components/Shared/RouteLeavingGuard/RouteLeavingGuard';
 import { PracticeMode } from '../../../applicationConstants';
 
 class Testing extends Component {
@@ -196,6 +197,8 @@ class Testing extends Component {
 	};
 
 	render() {
+		const { history } = this.props;
+
 		let testingOption = this.testingFieldOptions();
 		let testingField = (
 			<>
@@ -228,6 +231,10 @@ class Testing extends Component {
 		return (
 			<div className="testing-wrapper">
 				<div className="testing-container">
+					<RouteLeavingGuard 
+						when={!this.state.isFinish}
+						navigate={path => history.push(path)}
+						shouldBlockNavigation={location => true} />
 					{this.state.isStart === true ? testingField : startButton}
 				</div>
 			</div>

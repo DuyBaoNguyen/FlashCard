@@ -1,0 +1,91 @@
+.statistics-info {
+  background: #ffffff;
+  -webkit-box-shadow: 0px 0px 30px rgba(0, 0, 0, 0.05);
+          box-shadow: 0px 0px 30px rgba(0, 0, 0, 0.05);
+  border-radius: 15px;
+  padding: 30px 0;
+  height: 618px;
+  overflow: visible;
+}
+
+.statistics-info .statistics-info-header {
+  color: #535353;
+  font-style: normal;
+  font-weight: 600;
+  font-size: 18px;
+  margin: 0 30px 20px 30px;
+  background-color: #fff;
+}
+
+.statistics-info .statistics-items {
+  height: 517px;
+  padding: 0 30px;
+  overflow: auto;
+  position: relative;
+}
+
+.statistics-info .statistics-items .date-label {
+  margin: 10px -30px 0 -30px;
+  padding: 0 30px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #757575;
+  background-color: #fff;
+  position: -webkit-sticky;
+  position: sticky;
+  top: 0;
+}
+
+.statistics-info .statistics-items .date-label.date-label-today {
+  color: #ffb922;
+}
+
+.statistics-info .statistics-items .bottom-line {
+  display: block;
+  height: 1px;
+  margin-top: 8px;
+  padding: 0 30px;
+  background-color: #eee;
+}
+
+.statistics-info .statistics-items > :first-child .date-label {
+  margin-top: 0;
+}
+
+.statistics-info .practice {
+  border-radius: 10px;
+  background: #ffffff;
+  padding: 18px;
+  margin: 10px 0;
+  color: #666666;
+  cursor: pointer;
+  -webkit-box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.06);
+          box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.06);
+}
+
+.statistics-info .practice .practice-datetime {
+  float: right;
+  font-size: 14px;
+  color: #9eacf4;
+}
+
+.statistics-info .practice .deck-name {
+  margin-bottom: 12px;
+}
+
+.statistics-info .practice .remembered-cards {
+  display: -webkit-inline-box;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+  color: #979797;
+  font-size: 14px;
+}
+
+.statistics-info .practice .remembered-cards span:last-child {
+  margin-left: 10px;
+}
+
+.statistics-info .practice:last-child {
+  margin-bottom: 15px;
+}
+/*# sourceMappingURL=StatisticsInfo.css.map */

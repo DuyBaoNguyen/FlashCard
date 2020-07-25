@@ -1,4 +1,5 @@
 import React, { PureComponent } from 'react';
+import { Link, withRouter } from 'react-router-dom';
 import { Icon } from '@iconify/react';
 import leftArrowIcon from '@iconify/icons-uil/angle-right';
 import rightArrowIcon from '@iconify/icons-uil/angle-left';
@@ -20,7 +21,12 @@ class Statistics extends PureComponent {
   }
 
   render() {
-    const { amountRememberedCardsChartData, percentPracticedCardsChartData, className } = this.props;
+    const { 
+      amountRememberedCardsChartData, 
+      percentPracticedCardsChartData, 
+      className,
+      location
+    } = this.props;
     const { left } = this.state;
 
     const statisticsClasses = ['statistics-wrapper'];
@@ -28,11 +34,26 @@ class Statistics extends PureComponent {
       statisticsClasses.push(className);
     }
 
-    let chartName = <p className="chart-name">Amount of remembered cards</p>;
+    let path = {
+      pathname: `${location.pathname}/statistics`.replace('//', '/'),
+      state: { backUrl: location.pathname }
+    };
+
+    let chartName = (
+      <p className="chart-name">
+        Remembered cards
+        <Link to={path}> (more)</Link>
+      </p>
+    );
     const chartClasses = ['charts-container'];
     if (!left) {
       chartClasses.push('right');
-      chartName = <p className="chart-name">Percent practiced cards</p>;
+      chartName = (
+        <p className="chart-name">
+          Percent practiced cards
+          <Link to={path}> (more)</Link>
+        </p>
+      );
     }
 
     return (
@@ -60,4 +81,4 @@ class Statistics extends PureComponent {
   }
 }
 
-export default Statistics;
+export default withRouter(Statistics);
