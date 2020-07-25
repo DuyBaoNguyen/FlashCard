@@ -4,8 +4,8 @@ import { Link, withRouter } from 'react-router-dom';
 import { Icon } from '@iconify/react';
 import cardIcon from '@iconify/icons-mdi/credit-card-outline';
 import downloadIcon from '@iconify/icons-uil/arrow-to-bottom';
-import pinIcon from '@iconify/icons-mdi/pin-outline';
-import unpinIcon from '@iconify/icons-mdi/pin-off-outline';
+import pinIcon from '@iconify/icons-ic/round-pin';
+import unpinIcon from '@iconify/icons-ic/round-pin-off';
 
 import Button from '../../Shared/Button/Button';
 import Confirm from '../../Shared/Confirm/Confirm';
@@ -106,7 +106,7 @@ class PublicDeck extends Component {
 									: (
 										<Button
 											className="download-btn"
-											icon={<Icon icon={downloadIcon} />}
+											icon={<Icon icon={downloadIcon} style={{ fontSize: 17 }} />}
 											onClick={this.handleOpenDownloadingConfirm} >
 											Download
 										</Button>

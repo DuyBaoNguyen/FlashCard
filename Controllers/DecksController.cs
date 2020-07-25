@@ -694,7 +694,6 @@ namespace FlashCard.Controllers
 				return NotFound();
 			}
 
-			var amountTests = 2;
 			var dates = DateTimeUtil.GetDaysOfWeek();
 
 			var tests = await repository.Test
@@ -732,7 +731,7 @@ namespace FlashCard.Controllers
 						? tests.Sum(t => t.TestedCards.Where(tc => tc.Failed).Count()) : 0,
 					GradePointAverage = tests == null || tests.Count() == 0
 						? 0 : Math.Round(tests.Average(t => t.Score) * 100, 0),
-					Tests = tests != null ? tests.Take(amountTests).MapToTestDto() : null,
+					Tests = tests != null ? tests.MapToTestDto() : null,
 					RememberedCards = rememberedCards != null ? rememberedCards.Select(t => t.Front) : null
 				};
 			});
@@ -755,7 +754,6 @@ namespace FlashCard.Controllers
 				return NotFound();
 			}
 
-			var amountMatches = 2;
 			var dates = DateTimeUtil.GetDaysOfWeek();
 
 			var matches = await repository.Match
@@ -775,7 +773,7 @@ namespace FlashCard.Controllers
 						? matches.Sum(m => m.MatchedCards.Where(mc => mc.Failed).Count()) : 0,
 					GradePointAverage = matches == null || matches.Count() == 0
 						? 0 : Math.Round(matches.Average(m => m.Score) * 100, 0),
-					Tests = matches != null ? matches.Take(amountMatches).MapToMatchDto() : null
+					Tests = matches != null ? matches.MapToMatchDto() : null
 				};
 			});
 

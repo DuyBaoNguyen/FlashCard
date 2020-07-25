@@ -93,7 +93,7 @@ class Cards extends Component {
 									/>
 									<Button
 										className='cards-button-download'
-										icon={<Icon icon={downloadIcon} />}
+										icon={<Icon icon={downloadIcon} style={{ fontSize: 17 }} />}
 										onClick={() => this.props.onDownloadPublicCard(card.id)}>
 										Download
 									</Button>

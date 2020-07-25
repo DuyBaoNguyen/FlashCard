@@ -77,16 +77,11 @@
   padding-bottom: 18px;
 }
 
-.public-deck-info-wrapper .deck-info .deck-features:last-child .practice-btn {
-  margin-bottom: 10px;
-}
-
 .public-deck-info-wrapper .deck-features {
   display: -ms-grid;
   display: grid;
-  -ms-grid-columns: auto auto;
-      grid-template-columns: auto auto;
   gap: 20px;
+  margin-bottom: 20px;
 }
 
 .public-deck-info-wrapper .deck-features a, .public-deck-info-wrapper .deck-features button {
@@ -99,7 +94,21 @@
   font-weight: 600;
 }
 
-.public-deck-info-wrapper .deck-features .pin-btn, .public-deck-info-wrapper .deck-features .unpin-btn, .public-deck-info-wrapper .deck-features .open-btn, .public-deck-info-wrapper .deck-features .download-btn, .public-deck-info-wrapper .deck-features .practice-btn {
-  margin-bottom: 20px;
+.public-deck-info-wrapper .deck-features.pinable.downloadable {
+  -ms-grid-columns: auto auto;
+      grid-template-columns: auto auto;
+}
+
+.public-deck-info-wrapper .deck-features:last-child {
+  -ms-grid-columns: none !important;
+      grid-template-columns: none !important;
+}
+
+.public-deck-info-wrapper .deck-features:last-child.downloadable {
+  margin-bottom: 10px;
+}
+
+.public-deck-info-wrapper .deck-features:last-child.pinable {
+  margin-bottom: 10px;
 }
 /*# sourceMappingURL=PublicDeckInfo.css.map */

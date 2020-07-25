@@ -6,6 +6,7 @@ import arrowLeftIcon from '@iconify/icons-uil/angle-left';
 import * as actions from '../../../store/actions';
 import { Link } from 'react-router-dom';
 import withErrorHandler from '../../../hoc/withErrorHandler';
+import RouteLeavingGuard from '../../../components/Shared/RouteLeavingGuard/RouteLeavingGuard';
 import './MatchCard.css';
 
 class MatchCard extends Component {
@@ -90,6 +91,7 @@ class MatchCard extends Component {
 		let cardsDisplay = this.props.cardList?.map((card, index) => {
 			return (
 				<div
+					key={index}
 					className="match-card"
 					style={card.isMatched === false ? isNotMatched : isMatched}
 					onClick={() => this.onSelectCard(card)}
@@ -120,7 +122,7 @@ class MatchCard extends Component {
 
 		let result = (
 			<div className="match-result">
-				<Animated animationIn="bounceIn" animationInDelay="0" isVisible={true}>
+				<Animated animationIn="bounceIn" animationInDelay={0} isVisible={true}>
 					<p className="match-result-header" style={{ fontSize: '40px' }}>
 						<span role="img" aria-label="clap">👏🏻</span>
 						<span role="img" aria-label="clap">👏🏻</span>
@@ -129,7 +131,7 @@ class MatchCard extends Component {
 				</Animated>
 				<Animated
 					animationIn="bounceIn"
-					animationInDelay="300"
+					animationInDelay={300}
 					isVisible={true}
 				>
 					<p className="match-result-header">
@@ -146,6 +148,10 @@ class MatchCard extends Component {
 		return (
 			<div className="match-wrapper">
 				{!this.state.isFinish ? matchContainer : result}
+				<RouteLeavingGuard
+					when={!this.state.isFinish}
+					navigate={path => this.props.history.push(path)}
+					shouldBlockNavigation={location => true} />
 			</div>
 		);
 	}

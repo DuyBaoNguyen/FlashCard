@@ -3,8 +3,8 @@ import { withRouter } from 'react-router-dom';
 import { Icon } from '@iconify/react';
 import cardIcon from '@iconify/icons-mdi/credit-card-outline';
 import downloadIcon from '@iconify/icons-uil/arrow-to-bottom';
-import pinIcon from '@iconify/icons-mdi/pin-outline';
-import unpinIcon from '@iconify/icons-mdi/pin-off-outline';
+import pinIcon from '@iconify/icons-ic/round-pin';
+import unpinIcon from '@iconify/icons-ic/round-pin-off';
 import createdDateIcon from '@iconify/icons-uil/calendar-alt';
 import ownerIcon from '@iconify/icons-uil/user';
 import { connect } from 'react-redux';
@@ -115,7 +115,8 @@ class PublicDeckInfo extends Component {
             </div>
           )} */}
           {!showLess && (
-            <div className="deck-features">
+            <div
+              className={`deck-features ${downloadable ? 'downloadable' : ''} ${profile?.id !== deck?.owner.id ? 'pinable' : ''}`}>
               <Button
                 type="link"
                 className="practice-btn"
@@ -125,54 +126,59 @@ class PublicDeckInfo extends Component {
             </div>
           )}
         </Collapse>
-        <div className="deck-features">
-          {profile?.id !== deck?.owner.id && (
-            <>
-              {deck?.pinned
-                ? (
-                  <Button
-                    type="button"
-                    className="unpin-btn"
-                    icon={<Icon icon={unpinIcon} />}
-                    onClick={this.handleUnpinPublicDeck}>
-                    Unpin
-                  </Button>
-                )
-                : (
-                  <Button
-                    type="button"
-                    className="pin-btn"
-                    icon={<Icon icon={pinIcon} />}
-                    onClick={this.handlePinPublicDeck}>
-                    Pin
-                  </Button>
-                )
-              }
-            </>
-          )}
-          {downloadable && (
-            <>
-              {deck?.localDeckId
-                ? (
-                  <Button
-                    type="link"
-                    className="open-btn"
-                    path={{ pathname: `/decks/${deck.localDeckId}`, state: { backUrl: location.pathname } }}>
-                    Open local
-                  </Button>
-                )
-                : (
-                  <Button
-                    className="download-btn"
-                    icon={<Icon icon={downloadIcon} />}
-                    onClick={this.handleOpenDownloadingConfirm} >
-                    Download
-                  </Button>
-                )
-              }
-            </>
-          )}
-        </div>
+        {(downloadable || profile?.id !== deck?.owner.id) && (
+          <>
+            <div
+              className={`deck-features ${downloadable ? 'downloadable' : ''} ${profile?.id !== deck?.owner.id ? 'pinable' : ''}`}>
+              {profile?.id !== deck?.owner.id && (
+                <>
+                  {deck?.pinned
+                    ? (
+                      <Button
+                        type="button"
+                        className="unpin-btn"
+                        icon={<Icon icon={unpinIcon} />}
+                        onClick={this.handleUnpinPublicDeck}>
+                        Unpin
+                      </Button>
+                    )
+                    : (
+                      <Button
+                        type="button"
+                        className="pin-btn"
+                        icon={<Icon icon={pinIcon} />}
+                        onClick={this.handlePinPublicDeck}>
+                        Pin
+                      </Button>
+                    )
+                  }
+                </>
+              )}
+              {downloadable && (
+                <>
+                  {deck?.localDeckId
+                    ? (
+                      <Button
+                        type="link"
+                        className="open-btn"
+                        path={{ pathname: `/decks/${deck.localDeckId}`, state: { backUrl: location.pathname } }}>
+                        Open local
+                      </Button>
+                    )
+                    : (
+                      <Button
+                        className="download-btn"
+                        icon={<Icon icon={downloadIcon} style={{ fontSize: 17 }} />}
+                        onClick={this.handleOpenDownloadingConfirm} >
+                        Download
+                      </Button>
+                    )
+                  }
+                </>
+              )}
+            </div>
+          </>
+        )}
         <Confirm
           isOpen={downloadingConfirmOpen}
           header="Download"
