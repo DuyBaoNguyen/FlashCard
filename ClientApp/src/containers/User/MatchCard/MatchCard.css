@@ -67,6 +67,7 @@
   display: grid;
   -ms-grid-columns: auto auto auto auto;
       grid-template-columns: auto auto auto auto;
+  text-align: center;
 }
 
 .match-wrapper .match-cards .match-card {
@@ -84,8 +85,8 @@
   height: 130px;
   margin: 15px;
   background: #FFFFFF;
-  -webkit-box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
-          box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+  -webkit-box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.06);
+          box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.06);
   border-radius: 15px;
   -webkit-transition: 0.1s;
   transition: 0.1s;
@@ -100,7 +101,6 @@
 
 .match-wrapper .match-cards .match-card p {
   font-style: normal;
-  font-weight: bold;
   font-size: 14px;
   text-align: center;
   -webkit-transition: 0.1s;
