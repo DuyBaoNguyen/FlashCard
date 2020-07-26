@@ -52,6 +52,10 @@
   margin-top: 0;
 }
 
+.statistics-info .statistics-items > :last-child .practice:last-child {
+  margin-bottom: 10px;
+}
+
 .statistics-info .practice {
   border-radius: 10px;
   background: #ffffff;

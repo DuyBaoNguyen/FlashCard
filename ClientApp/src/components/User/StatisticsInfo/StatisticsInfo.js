@@ -37,6 +37,10 @@ class StatisticsInfo extends Component {
     }
   }
 
+  componentWillUnmount() {
+    this.props.onUnselectPractice();
+  }
+
   handleSelectPractice = (practice, rememberedCards) => {
     this.props.onSelectPractice(practice, rememberedCards);
   }
@@ -97,7 +101,8 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => ({
   onGetStatistics: () => dispatch(actions.getStatistics()),
   onGetDeckStatistics: (deckId) => dispatch(actions.getDeckStatistics(deckId)),
-  onSelectPractice: (practice, rememberedCards) => dispatch(actions.selectPractice(practice, rememberedCards))
+  onSelectPractice: (practice, rememberedCards) => dispatch(actions.selectPractice(practice, rememberedCards)),
+  onUnselectPractice: () => dispatch(actions.unselectPractice())
 });
 
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(withErrorHandler(StatisticsInfo)));

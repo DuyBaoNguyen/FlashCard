@@ -43,6 +43,11 @@
         margin-top: 0;
       }
     }
+    &>:last-child {
+      .practice:last-child {
+        margin-bottom: 10px;
+      }
+    }
   }
   .practice {
     border-radius: 10px;
