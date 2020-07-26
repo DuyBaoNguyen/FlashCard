@@ -207,7 +207,7 @@ class Testing extends Component {
 		let testingField = (
 			<>
 				<div className="testing-progress">
-					<Progress percent={this.state.process} />
+					<Progress percent={isNaN(this.state.process) === true ? 0 : this.state.process} />
 					{testingOption}
 				</div>
 			</>
