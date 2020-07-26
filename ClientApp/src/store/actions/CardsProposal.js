@@ -1,5 +1,6 @@
 import * as actionTypes from './actionTypes';
 import axios from '../../axios';
+import * as actions from './index';
 
 const getCardsProposalSuccess = (cardsProposalList) => {
 	return {
@@ -15,10 +16,18 @@ const getCardsProposalFail = () => {
 };
 
 export const getCardsProposal = () => {
-	return (dispatch) => {
+	return (dispatch, getState) => {
 		axios
 			.get(`api/admin/proposedcards`)
-			.then((res) => dispatch(getCardsProposalSuccess(res.data)))
+			.then((res) => {
+				dispatch(getCardsProposalSuccess(res.data));
+				if (!getState().cardsProposal.selectedCard && res.data.length > 0) {
+					const cardId = res.data[0].id;
+					dispatch(selectProposedCard(cardId));
+					dispatch(getCurrentProposalCard(cardId));
+					dispatch(actions.getCard(cardId));
+				}
+			})
 			.catch((error) => dispatch(getCardsProposalFail()));
 	};
 };
@@ -128,5 +137,18 @@ export const declineCurrentBack = (backId, cardId) => {
 				dispatch(getCurrentProposalCard(cardId));
 			})
 			.catch((error) => dispatch(declineCurrentBackFail()));
+	};
+};
+
+export const selectProposedCard = (cardId) => {
+	return {
+		type: actionTypes.SELECT_PROPOSED_CARD,
+		cardId: cardId
+	};
+};
+
+export const unselectProposedCard = () => {
+	return {
+		type: actionTypes.UNSELECT_PROPOSED_CARD
 	};
 };

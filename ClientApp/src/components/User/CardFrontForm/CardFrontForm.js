@@ -57,7 +57,8 @@ class CardFrontForm extends Component {
           front: {
             ...prevState.form.front,
             valid: false,
-            error: nextProps.error.Front[0]
+            error: nextProps.error.Front[0],
+            touched: true
           },
           valid: false
         }

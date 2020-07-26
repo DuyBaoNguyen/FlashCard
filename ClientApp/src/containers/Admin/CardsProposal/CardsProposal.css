@@ -1,15 +1,13 @@
 .cards-proposal-wrapper {
-  display: -ms-grid;
-  display: grid;
-  -ms-grid-columns: 30% 70%;
-      grid-template-columns: 30% 70%;
-  -webkit-column-gap: 20px;
-          column-gap: 20px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  margin-right: -20px;
 }
 
 .cards-proposal-wrapper .cards-proposal-back-card {
   width: 100%;
-  height: 203px;
+  min-height: 203px;
   background: #FFFFFF;
   -webkit-box-shadow: 0px 0px 30px rgba(0, 0, 0, 0.05);
           box-shadow: 0px 0px 30px rgba(0, 0, 0, 0.05);
@@ -27,13 +25,23 @@
   margin-bottom: 20px;
 }
 
+.cards-proposal-wrapper .cards-proposal-left {
+  width: 30%;
+  padding-right: 20px;
+}
+
+.cards-proposal-wrapper .cards-proposal-right {
+  width: 70%;
+  padding-right: 20px;
+  position: relative;
+}
+
 .cards-proposal-wrapper .cards-proposal-right .cards-proposal-back {
   display: -ms-grid;
   display: grid;
-  -ms-grid-columns: 50% 50%;
-      grid-template-columns: 50% 50%;
-  -webkit-column-gap: 20px;
-          column-gap: 20px;
+  -ms-grid-columns: (1fr)[2];
+      grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
 }
 
 .cards-proposal-wrapper .cards-proposal-right .cards-proposal-back .cards-proposal-back-title {
@@ -41,33 +49,28 @@
 }
 
 .cards-proposal-wrapper .cards-proposal-right .cards-proposal-buttons {
-  position: fixed;
-  bottom: 20px;
-  width: 820px;
-  display: -ms-grid;
-  display: grid;
-  -ms-grid-columns: 50% 50%;
-      grid-template-columns: 50% 50%;
-  -webkit-column-gap: 20px;
-          column-gap: 20px;
-}
-
-.cards-proposal-wrapper .cards-proposal-right .cards-proposal-buttons .cards-proposal-button-approve {
-  height: 50px;
+  position: absolute;
+  bottom: 0;
+  width: 100%;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
-  -webkit-box-pack: center;
-      -ms-flex-pack: center;
-          justify-content: center;
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
+}
+
+.cards-proposal-wrapper .cards-proposal-right .cards-proposal-buttons .cards-proposal-button-approve {
+  width: 50%;
+  margin-right: 20px;
   background-color: #52C41A;
 }
 
 .cards-proposal-wrapper .cards-proposal-right .cards-proposal-buttons .cards-proposal-button-decline {
-  height: 50px;
+  width: 50%;
+  margin-right: 20px;
+  background-color: #FE656D;
+}
+
+.cards-proposal-wrapper .cards-proposal-right .text-notification {
+  height: 100%;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -77,6 +80,7 @@
   -webkit-box-align: center;
       -ms-flex-align: center;
           align-items: center;
-  background-color: #FE656D;
+  color: #979797;
+  font-size: 15px;
 }
 /*# sourceMappingURL=CardsProposal.css.map */

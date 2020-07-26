@@ -3,6 +3,7 @@ import * as actionTypes from '../actions/actionTypes';
 const initialState = {
 	cardsProposalList: [],
 	currentProposalCard: null,
+	selectedCard: null
 };
 
 export const cardsProposalReducer = (state = initialState, action) => {
@@ -31,6 +32,7 @@ export const cardsProposalReducer = (state = initialState, action) => {
 			return {
 				...state,
 				currentProposalCard: null,
+				selectedCard: null
 			};
 		case actionTypes.APPROVE_CURRENT_CARD_FAIL:
 			return {
@@ -48,12 +50,22 @@ export const cardsProposalReducer = (state = initialState, action) => {
 		case actionTypes.DECLINE_CURRENT_BACK_SUCCESS:
 			return {
 				...state,
-				currentProposalCard: null,
+				// currentProposalCard: null,
 			};
 		case actionTypes.DECLINE_CURRENT_BACK_FAIL:
 			return {
 				...state,
 			};
+		case actionTypes.SELECT_PROPOSED_CARD:
+			return {
+				...state,
+				selectedCard: state.cardsProposalList.find(card => card.id === action.cardId)
+			}
+		case actionTypes.UNSELECT_PROPOSED_CARD:
+			return {
+				...state,
+				selectedCard: null
+			}
 		default:
 			return state;
 	}

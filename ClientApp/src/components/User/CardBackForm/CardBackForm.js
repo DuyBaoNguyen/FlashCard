@@ -92,22 +92,26 @@ class CardBackForm extends Component {
           meaning: {
             ...prevState.form.meaning,
             valid: nextProps.error.Meaning ? false : true,
-            error: nextProps.error.Meaning ? nextProps.error.Meaning[0] : null
+            error: nextProps.error.Meaning ? nextProps.error.Meaning[0] : null,
+            touched: true
           },
           type: {
             ...prevState.form.type,
             valid: nextProps.error.Type ? false : true,
-            error: nextProps.error.Type ? nextProps.error.Type[0] : null
+            error: nextProps.error.Type ? nextProps.error.Type[0] : null,
+            touched: true
           },
           example: {
             ...prevState.form.example,
             valid: nextProps.error.Example ? false : true,
-            error: nextProps.error.Example ? nextProps.error.Example[0] : null
+            error: nextProps.error.Example ? nextProps.error.Example[0] : null,
+            touched: true
           },
           image: {
             ...prevState.form.image,
             valid: nextProps.error.Image ? false : true,
-            error: nextProps.error.Image ? nextProps.error.Image[0] : null
+            error: nextProps.error.Image ? nextProps.error.Image[0] : null,
+            touched: true
           },
           valid: false
         }

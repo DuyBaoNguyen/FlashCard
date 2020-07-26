@@ -1,9 +1,16 @@
 .cards-proposal-back-admin .cards-proposal-back-title {
+  color: #656565;
+}
+
+.cards-proposal-back-admin .cards-proposal-back-title span {
   color: #9eacf4;
+  font-weight: 500;
+  font-size: 16px;
 }
 
 .cards-proposal-back-admin .cards-proposal-back-blank {
-  color: grey;
+  color: #979797;
+  font-size: 15px;
 }
 
 .cards-proposal-back-admin .cards-proposal-back-card {

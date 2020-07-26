@@ -4,13 +4,17 @@ import withErrorHandler from '../../../hoc/withErrorHandler';
 import * as actions from '../../../store/actions/index';
 import UserCard from './UserCard/UserCard';
 import CardsTable from './CardsTable/CardsTable';
-import Button from '../../../components/Shared/Button/Button';
+import OptionButton from '../../../components/Shared/OptionButton/OptionButton';
 import './CardsProposal.css';
 import AdminCard from './AdminCard/AdminCard';
 
 class CardsProposal extends Component {
 	componentDidMount() {
 		this.props.onGetCardsProposal();
+	}
+
+	componentWillUnmount() {
+		this.props.onUnselectCard();
 	}
 
 	onClickApprove = (card) => {
@@ -20,27 +24,35 @@ class CardsProposal extends Component {
 	onClickDecline = (card) => {
 		this.props.onDeclineCurrentCard(card);
 	};
-	
+
 	render() {
 		let content = (
 			<div className="cards-proposal-right">
-				<div className="cards-proposal-back">
-					<AdminCard /> <UserCard />
-				</div>
-				<div className="cards-proposal-buttons">
-					<Button
-						className="cards-proposal-button-approve"
-						onClick={() => this.onClickApprove(this.props.currentProposalCard)}
-					>
-						Approve
-					</Button>
-					<Button
-						className="cards-proposal-button-decline"
-						onClick={() => this.onClickDecline(this.props.currentProposalCard)}
-					>
-						Decline
-					</Button>
-				</div>
+				{this.props.cardsProposalList.length > 0
+					? (
+						<>
+							<div className="cards-proposal-back">
+								<AdminCard /> <UserCard />
+							</div>
+							<div className="cards-proposal-buttons">
+								<OptionButton
+									className="cards-proposal-button-approve"
+									onClick={() => this.onClickApprove(this.props.currentProposalCard)}
+								>
+									Approve
+								</OptionButton>
+								<OptionButton
+									className="cards-proposal-button-decline"
+									onClick={() => this.onClickDecline(this.props.currentProposalCard)}
+								>
+									Decline
+								</OptionButton>
+							</div>
+						</>
+					) : (
+						<div className="text-notification">Click a proposal to see more information!</div>
+					)
+				}
 			</div>
 		);
 		return (
@@ -48,7 +60,7 @@ class CardsProposal extends Component {
 				<div className="cards-proposal-left">
 					<CardsTable cardsProposalList={this.props.cardsProposalList} />
 				</div>
-				{this.props.currentProposalCard === null ? '' : content}
+				{content}
 			</div>
 		);
 	}
@@ -68,6 +80,7 @@ const mapDispatchToProps = (dispatch) => {
 			dispatch(actions.approveCurrentCard(currentProposalCard)),
 		onDeclineCurrentCard: (currentProposalCard) =>
 			dispatch(actions.declineCurrentCard(currentProposalCard)),
+		onUnselectCard: () => dispatch(actions.unselectProposedCard())
 	};
 };
 

@@ -1,11 +1,10 @@
 .cards-proposal-wrapper {
-  display: grid;
-  grid-template-columns: 30% 70%;
-  column-gap: 20px;
+  display: flex;
+  margin-right: -20px;
 
   .cards-proposal-back-card {
     width: 100%;
-    height: 203px;
+    min-height: 203px;
     background: #FFFFFF;
     box-shadow: 0px 0px 30px rgba(0, 0, 0, 0.05);
     border-radius: 15px;
@@ -16,11 +15,19 @@
     margin-bottom: 20px;
   }
 
+  .cards-proposal-left {
+    width: 30%;
+    padding-right: 20px;
+  }
+
   .cards-proposal-right {
+    width: 70%;
+    padding-right: 20px;
+    position: relative;
     .cards-proposal-back {
       display: grid;
-      grid-template-columns: 50% 50%;
-      column-gap: 20px;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 20px;
 
       .cards-proposal-back-title {
         margin-bottom: 20px;
@@ -28,28 +35,31 @@
     }
 
     .cards-proposal-buttons {
-      position: fixed;
-      bottom: 20px;
-      width: 820px;
-      display: grid;
-      grid-template-columns: 50% 50%;
-      column-gap: 20px;
+      position: absolute;
+      bottom: 0;
+      width: 100%;
+      display: flex;
 
       .cards-proposal-button-approve {
-        height: 50px;
-        display: flex;
-        justify-content: center;
-        align-items: center;
+        width: 50%;
+        margin-right: 20px;
         background-color: #52C41A;
       }
 
       .cards-proposal-button-decline {
-        height: 50px;
-        display: flex;
-        justify-content: center;
-        align-items: center;
+        width: 50%;
+        margin-right: 20px;
         background-color: #FE656D;
       }
+    }
+
+    .text-notification {
+      height: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: #979797;
+      font-size: 15px;
     }
   }
 }

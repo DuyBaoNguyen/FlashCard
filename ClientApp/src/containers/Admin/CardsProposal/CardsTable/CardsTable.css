@@ -140,4 +140,10 @@
 .users-table-wrapper .users-table .users-table-width-large {
   width: 250px;
 }
+
+.users-table-wrapper .text-notify {
+  font-size: 15px;
+  color: #979797;
+  white-space: nowrap;
+}
 /*# sourceMappingURL=CardsTable.css.map */

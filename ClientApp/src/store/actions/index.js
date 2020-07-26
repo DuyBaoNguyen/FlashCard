@@ -121,6 +121,8 @@ export {
 	approveCurrentCard,
 	declineCurrentCard,
 	declineCurrentBack,
+	selectProposedCard,
+	unselectProposedCard
 } from './CardsProposal';
 
 export {

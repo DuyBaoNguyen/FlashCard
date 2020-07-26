@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
+import Back from '../../../../components/User/Back/Back';
 import withErrorHandler from '../../../../hoc/withErrorHandler';
 import './AdminCard.css';
 
@@ -18,21 +19,20 @@ class AdminCard extends Component {
 				This card has not been in Admin card list yet!
 			</div>
 		);
-		let backs = this.props.card.backs.map((back, index) => {
+		let backs = this.props.card?.backs.map((back, index) => {
 			return (
 				<div key={back.id} className="cards-proposal-back-card">
-					<div className="cards-proposal-back-meaning">{back.meaning}</div>
-					<br />
-					<div className="cards-proposal-back-type">{back.type}</div>
-					<br />
-					<div className="cards-proposal-back-example">{back.example}</div>
+					<Back back={back} />
 				</div>
 			);
 		});
 		return (
 			<div className="cards-proposal-back-admin">
-				<div className="cards-proposal-back-title">{`${this.props.card.front}`}</div>
-				{this.props.card.backs.length === 0 ? blank : backs}
+				<div className="cards-proposal-back-title">
+					Proposal for&nbsp;
+					" <span>{this.props.card?.front}</span> "
+				</div>
+				{this.props.card?.backs.length === 0 ? blank : backs}
 			</div>
 		);
 	}
