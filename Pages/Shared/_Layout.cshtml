@@ -20,8 +20,8 @@
     <link rel="stylesheet" href="~/Identity/css/site.css" />
     <link rel="stylesheet" href="~/css/login/login.css" />
 </head>
-<body>
-    <header>
+<body class="m-0">
+    @* <header>
         <nav class="navbar navbar-expand-sm navbar-light navbar-toggleable-sm bg-white border-bottom box-shadow mb-3">
             <div class="container">
                 <a class="navbar-brand" href="~/">FlashCard</a>
@@ -46,19 +46,19 @@
                 </div>
             </div>
         </nav>
-    </header>
+    </header> *@
 
     <div class="container">
         <partial name="_CookieConsentPartial" optional />
-        <main role="main" class="pb-3">
+        <main role="main">
             @RenderBody()
         </main>
     </div>
-    <footer class="footer border-top text-muted">
+    @* <footer class="footer border-top text-muted">
         <div class="container">
             &copy; 2019 - FlashCard - <a asp-area="" asp-page="/Privacy/Index">Privacy</a>
         </div>
-    </footer>
+    </footer> *@
 
     <environment include="Development">
         <script src="~/Identity/lib/jquery/dist/jquery.js"></script>
