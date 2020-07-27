@@ -117,12 +117,19 @@ namespace FlashCard.Repositories
 				.Where(d => d.Id == deckId && d.Approved);
 		}
 
-		public IQueryable<Deck> QueryByBeingShared(string userId)
+		public IQueryable<Deck> QueryByBeingShared(string userId, string deckName)
 		{
 			var querySharedDeckIds = dbContext.SharedDecks
 				.Where(sd => sd.UserId == userId && sd.Pinned)
 				.Select(sd => sd.DeckId);
-			return dbContext.Decks.Where(d => d.Approved && querySharedDeckIds.Contains(d.Id));
+			var queryDecks = dbContext.Decks.Where(d => d.Approved && querySharedDeckIds.Contains(d.Id));
+
+			if (deckName != null && deckName.Trim().Length > 0)
+			{
+				queryDecks = queryDecks.Where(d => d.Name.ToLower().Contains(deckName.Trim().ToLower()));
+			}
+
+			return queryDecks.OrderBy(d => d.Name);
 		}
 
 		public IQueryable<Deck> QueryByCardIdsIncludesCardAssignmentsAndCard(int[] cardIds)

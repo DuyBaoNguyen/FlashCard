@@ -7,6 +7,7 @@ import Profile from '../../../components/User/Profile/Profile';
 
 import Statistics from '../../../components/User/Statistics/Statistics';
 import DeckWrapper from '../../../components/User/DeckWrapper/DeckWrapper';
+import Shortcuts from '../../../components/User/Shortcuts/Shortcuts';
 import { Roles } from '../../../applicationConstants';
 import './Home.css';
 
@@ -19,7 +20,8 @@ class Home extends Component {
 		const { 
 			profile,
 			percentPracticedCardsStatistics,
-			amountRememberedCardsStatistics
+			amountRememberedCardsStatistics,
+			tab
 		} = this.props;
 
 		return (
@@ -33,7 +35,14 @@ class Home extends Component {
 					)}
 				</section>
 				<section className="right-section">
-					<DeckWrapper className="deck-wrapper" />
+					{tab === 1
+						? (
+							<DeckWrapper />
+						)	
+						: (
+							<Shortcuts />
+						)
+					}
 				</section>
 			</div>
 		);
@@ -45,6 +54,7 @@ const mapStateToProps = (state) => {
 		profile: state.home.profile,
 		percentPracticedCardsStatistics: state.home.percentPracticedCardsStatistics,
 		amountRememberedCardsStatistics: state.home.amountRememberedCardsStatistics,
+		tab: state.home.tab
 	};
 };
 

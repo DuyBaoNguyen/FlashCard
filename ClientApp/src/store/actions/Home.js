@@ -16,9 +16,10 @@ export const getDecksFailed = () => {
 };
 
 export const getDecks = (name) => {
-	return (dispatch) => {
+	return (dispatch, getState) => {
+		const { decksSearchString: searchString } = getState().home;
 		axios
-			.get(`/api/decks?name=${name}`)
+			.get(`/api/decks?name=${name || searchString}`)
 			.then((res) => {
 				dispatch(getDecksSuccess(res.data));
 			})
@@ -199,5 +200,62 @@ export const togglePasswordUpdatingForm = (value) => {
 export const clearUpdatePasswordError = () => {
 	return {
 		type: actionTypes.CLEAR_UPDATE_PASSWORD_ERROR
+	};
+};
+
+const getShortcutsSuccess = (shortcuts) => {
+	return {
+		type: actionTypes.GET_SHORTCUTS_SUCCESS,
+		shortcuts: shortcuts
+	}
+};
+
+const getShortcutsFail = () => {
+	return {
+		type: actionTypes.GET_SHORTCUTS_FAIL
+	}
+};
+
+export const getShortcuts = (name) => {
+	return (dispatch, getState) => {
+		const { shortcutsSearchString: searchString } = getState().home;
+		axios.get(`/api/shortcuts?name=${name || searchString}`)
+			.then(res => dispatch(getShortcutsSuccess(res.data)))
+			.catch(() => dispatch(getShortcutsFail()));
+	};
+};
+
+export const updateShortcutsSearchString = (value) => {
+	return {
+		type: actionTypes.UPDATE_SHORTCUTS_SEARCH_STRING,
+		value: value
+	};
+};
+
+export const updateDecksSearchString = (value) => {
+	return {
+		type: actionTypes.UPDATE_DECKS_SEARCH_STRING,
+		value: value
+	};
+};
+
+export const updateShortcutsFilteredValue = (value) => {
+	return {
+		type: actionTypes.UPDATE_SHORTCUTS_FILTERED_VALUE,
+		value: value
+	};
+};
+
+export const filterShortcuts = (filteredValue) => {
+	return {
+		type: actionTypes.FILTER_SHORTCUTS,
+		filteredValue: filteredValue
+	};
+};
+
+export const changeHomeTab = (tab) => {
+	return {
+		type: actionTypes.CHANGE_HOME_TAB,
+		tab: tab
 	};
 };

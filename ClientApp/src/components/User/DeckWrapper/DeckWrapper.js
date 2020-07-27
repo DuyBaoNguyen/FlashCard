@@ -39,7 +39,9 @@ class DeckWrapper extends Component {
 	}
 
 	handleSearchDeck = (event) => {
-		this.props.onGetDecks(event.target.value);
+		const value = event.target.value;
+		this.props.onUpdateDecksSearchString(value);
+		this.props.onGetDecks(value);
 		this.setState({ activePage: 1 });
 	};
 
@@ -49,8 +51,12 @@ class DeckWrapper extends Component {
 		this.setState({ activePage: 1 });
 	}
 
+	handleChangeTab = () => {
+    this.props.onChangeHomeTab(2);
+  }
+
 	render() {
-		const { loading, profile } = this.props;
+		const { loading, profile, filteredValue, searchString } = this.props;
 		const { setLoading } = this.state;
 		let deckList = loading ? setLoading && <Loading /> : <p className="text-notify">There are no decks here!</p>;
 		let pagination;
@@ -85,7 +91,14 @@ class DeckWrapper extends Component {
 		return (
 			<div className="deck-wrapper">
 				<div className="deck-header">
-					<p>My decks</p>
+					<div className="decks-header-labels">
+						<span className="decks-header-active-label">My decks</span>
+						<span
+							className="decks-header-label"
+							onClick={this.handleChangeTab}>
+							My shortcuts
+            </span>
+					</div>
 					<div className="deck-header-features">
 						<Button
 							className="deck-header-features-add"
@@ -96,6 +109,7 @@ class DeckWrapper extends Component {
 						{profile?.role === Roles.User && (
 							<Filter
 								className="deck-header-features-filter"
+								value={filteredValue}
 								onChange={this.handleFilteredValueChange}>
 								<option value="all">All</option>
 								<option value="completed">Completed</option>
@@ -104,6 +118,7 @@ class DeckWrapper extends Component {
 						)}
 						<Search
 							placeholder="Search..."
+							value={searchString}
 							onChange={this.handleSearchDeck}
 						/>
 					</div>
@@ -120,7 +135,9 @@ const mapStateToProps = (state) => {
 	return {
 		profile: state.home.profile,
 		decks: state.home.decks,
-		loading: state.home.loadings.getDecksLoading
+		loading: state.home.loadings.getDecksLoading,
+		filteredValue: state.home.filteredValues.decksFilteredValue,
+		searchString: state.home.decksSearchString
 	};
 };
 
@@ -128,7 +145,9 @@ const mapDispatchToProps = (dispatch) => {
 	return {
 		onGetDecks: (name) => dispatch(actions.getDecks(name)),
 		onFilterDecks: (filteredValue) => dispatch(actions.filterDecks(filteredValue)),
-		onSetDecksFilteredValue: (filteredValue) => dispatch(actions.setDecksFilteredValue(filteredValue))
+		onSetDecksFilteredValue: (filteredValue) => dispatch(actions.setDecksFilteredValue(filteredValue)),
+		onUpdateDecksSearchString: (value) => dispatch(actions.updateDecksSearchString(value)),
+		onChangeHomeTab: (tab) => dispatch(actions.changeHomeTab(tab))
 	};
 };
 

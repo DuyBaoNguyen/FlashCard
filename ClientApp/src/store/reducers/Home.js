@@ -4,20 +4,28 @@ import * as utils from '../../util/util';
 const initialState = {
   decks: [],
   originalDecks: [],
+  shortcuts: [],
+  originalShortcuts: [],
   statistics: null,
   percentPracticedCardsStatistics: null,
   amountRememberedCardsStatistics: null,
   profile: null,
   nameUpdatingFormOpened: false,
   passwordUpdatingFormOpened: false,
+  decksSearchString: '',
+  shortcutsSearchString: '',
+  tab: 1,
   loadings: {
-    getDecksLoading: true
+    getDecksLoading: true,
+    getShortcutsLoading: true
   },
   filteredValues: {
-    decksFilteredValue: ''
+    decksFilteredValue: '',
+    shortcutsFilteredValue: ''
   },
   errors: {
     getDeckError: false,
+    getShortcutsError: false,
     getStatisticsError: false,
     getProfileError: false,
     updateCurrentUserNameError: null,
@@ -55,6 +63,62 @@ export const homeReducer = (state = initialState, action) => {
           ...state.errors,
           getDeckError: true
         }
+      };
+    case actionTypes.GET_SHORTCUTS_SUCCESS:
+      return {
+        ...state,
+        shortcuts: utils.filterDecks(action.shortcuts, state.filteredValues.shortcutsFilteredValue),
+        originalShortcuts: action.shortcuts,
+        loadings: {
+          ...state.loadings,
+          getShortcutsLoading: false
+        },
+        errors: {
+          ...state.errors,
+          getShortcutsError: false
+        }
+      };
+    case actionTypes.GET_SHORTCUTS_FAIL:
+      return {
+        ...state,
+        shortcuts: [],
+        originalShortcuts: [],
+        loadings: {
+          ...state.loadings,
+          getShortcutsLoading: false
+        },
+        errors: {
+          ...state.errors,
+          getShortcutsError: true
+        }
+      };
+    case actionTypes.UPDATE_SHORTCUTS_SEARCH_STRING:
+      return {
+        ...state,
+        shortcutsSearchString: action.value
+      };
+    case actionTypes.UPDATE_DECKS_SEARCH_STRING:
+      return {
+        ...state,
+        decksSearchString: action.value
+      };
+    case actionTypes.UPDATE_SHORTCUTS_FILTERED_VALUE:
+      return {
+        ...state,
+        filteredValues: {
+          ...state.filteredValues,
+          shortcutsFilteredValue: action.value
+        }
+      };
+    case actionTypes.FILTER_SHORTCUTS:
+      return {
+        ...state,
+        shortcuts: utils.filterDecks(state.originalShortcuts, action.filteredValue)
+      };
+    case actionTypes.CHANGE_HOME_TAB:
+      return {
+        ...state,
+        tab: action.tab
       };
     case actionTypes.GET_STATISTICS_SUCCESS:
       return {

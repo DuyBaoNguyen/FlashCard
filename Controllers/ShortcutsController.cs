@@ -5,6 +5,7 @@ using System.Net.Mime;
 using System.Threading.Tasks;
 using FlashCard.Contracts;
 using FlashCard.Dto;
+using FlashCard.Services;
 using FlashCard.Util;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -19,21 +20,23 @@ namespace FlashCard.Controllers
 	public class ShortcutsController : ControllerBase
 	{
 		private readonly IRepositoryWrapper repository;
+		private readonly IImageService imageService;
 
-		public ShortcutsController(IRepositoryWrapper repository)
+		public ShortcutsController(IRepositoryWrapper repository, IImageService imageService)
 		{
 			this.repository = repository;
+			this.imageService = imageService;
 		}
 
 		[HttpGet]
 		[ProducesResponseType(200)]
-		public async Task<ActionResult<IEnumerable<DeckDto>>> GetAllShortcuts()
+		public async Task<ActionResult<IEnumerable<DeckDto>>> GetAllShortcuts(string name)
 		{
 			var userId = UserUtil.GetUserId(User);
 			var sharedDecks = await repository.Deck
-				.QueryByBeingShared(userId)
+				.QueryByBeingShared(userId, name)
 				.AsNoTracking()
-				.MapToDeckDto(userId)
+				.MapToDeckDto(imageService.UserPictureBaseUrl, userId)
 				.ToListAsync();
 
 			var now = DateTime.Now;

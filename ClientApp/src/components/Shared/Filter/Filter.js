@@ -12,7 +12,7 @@ const filter = props => {
     <select
       className={classes.join(' ')}
       name={props.name}
-      defaultValue={props.defaultValue}
+      value={props.value}
       onChange={props.onChange}>
       {props.children}
     </select>

@@ -11,6 +11,12 @@ export {
 	updatePassword,
 	togglePasswordUpdatingForm,
 	clearUpdatePasswordError,
+	getShortcuts,
+	updateShortcutsSearchString,
+	updateDecksSearchString,
+	updateShortcutsFilteredValue,
+	filterShortcuts,
+	changeHomeTab
 } from './Home';
 
 export { 
