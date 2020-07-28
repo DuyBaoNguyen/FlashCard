@@ -5,7 +5,6 @@ import Pagination from 'react-js-pagination';
 import PublicDeck from '../../../../components/User/PublicDeck/PublicDeck';
 import Search from '../../../../components/Shared/Search/Search';
 import Loading from '../../../../components/Shared/Loading/Loading';
-import withErrorHandler from '../../../../hoc/withErrorHandler';
 import { TIME_OUT_DURATION } from '../../../../applicationConstants';
 import * as actions from '../../../../store/actions/index';
 import './Decks.css';
@@ -114,7 +113,4 @@ const mapDispatchToProps = (dispatch) => {
 	};
 };
 
-export default connect(
-	mapStateToProps,
-	mapDispatchToProps
-)(withErrorHandler(Decks));
+export default connect(mapStateToProps, mapDispatchToProps)(Decks);

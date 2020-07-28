@@ -4,7 +4,6 @@ import Pagination from 'react-js-pagination';
 import { Icon } from '@iconify/react';
 import downloadIcon from '@iconify/icons-uil/arrow-to-bottom';
 
-import withErrorHandler from '../../../../hoc/withErrorHandler';
 import * as actions from '../../../../store/actions/index';
 import Search from '../../../../components/Shared/Search/Search';
 import Button from '../../../../components/Shared/Button/Button';
@@ -165,7 +164,4 @@ const mapDispatchToProps = (dispatch) => {
 	};
 };
 
-export default connect(
-	mapStateToProps,
-	mapDispatchToProps
-)(withErrorHandler(Cards));
+export default connect(mapStateToProps, mapDispatchToProps)(Cards);

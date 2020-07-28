@@ -14,6 +14,9 @@ import './Home.css';
 class Home extends Component {
 	componentDidMount() {
 		this.props.onGetStatistics();
+		if (this.props.originalShortcuts.length === 0) {
+			this.props.onGetShortcuts();
+		}
 	}
 
 	render() {
@@ -54,7 +57,8 @@ const mapStateToProps = (state) => {
 		profile: state.home.profile,
 		percentPracticedCardsStatistics: state.home.percentPracticedCardsStatistics,
 		amountRememberedCardsStatistics: state.home.amountRememberedCardsStatistics,
-		tab: state.home.tab
+		tab: state.home.tab,
+		originalShortcuts: state.home.originalShortcuts
 	};
 };
 
@@ -62,6 +66,7 @@ const mapDispatchToProps = (dispatch) => {
 	return {
 		onGetProfile: () => dispatch(actions.getProfile()),
 		onGetStatistics: () => dispatch(actions.getStatistics()),
+		onGetShortcuts: () => dispatch(actions.getShortcuts())
 	};
 };
 

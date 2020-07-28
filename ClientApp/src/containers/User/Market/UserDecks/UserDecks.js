@@ -6,7 +6,6 @@ import UserPublicDeck from '../../../../components/User/UserPublicDeck/UserPubli
 import Loading from '../../../../components/Shared/Loading/Loading';
 import Search from '../../../../components/Shared/Search/Search';
 import { TIME_OUT_DURATION } from '../../../../applicationConstants';
-import withErrorHandler from '../../../../hoc/withErrorHandler';
 import * as actions from '../../../../store/actions/index';
 import './UserDecks.css';
 
@@ -110,7 +109,4 @@ const mapDispatchToProps = (dispatch) => {
 	};
 };
 
-export default connect(
-	mapStateToProps,
-	mapDispatchToProps
-)(withErrorHandler(UserDecks));
+export default connect(mapStateToProps, mapDispatchToProps)(UserDecks);

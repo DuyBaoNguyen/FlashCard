@@ -575,7 +575,10 @@ namespace FlashCard.Controllers
 					var sharedCards = await repository.SharedCard
 						.QueryByUserIdAndDeckId(user.Id, sharedDeck.DeckId)
 						.ToListAsync();
-					sharedDeck.Completed = !sharedCards.Any(s => !s.Remembered);
+					var amountCards = await repository.Card
+						.QueryByDeckId(sharedDeck.DeckId)
+						.CountAsync();
+					sharedDeck.Completed = sharedCards.Count == amountCards && !sharedCards.Any(s => !s.Remembered);
 				}
 			}
 

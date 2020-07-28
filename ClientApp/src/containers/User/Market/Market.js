@@ -1,9 +1,11 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 
 import Cards from './Cards/Cards';
 import Decks from './Decks/Decks';
 import UserDecks from './UserDecks/UserDecks';
-
+import withErrorHandler from '../../../hoc/withErrorHandler';
+import * as actions from '../../../store/actions';
 import './Market.css';
 
 class Market extends Component {
@@ -12,6 +14,22 @@ class Market extends Component {
 		this.state = {
 			activePage: 1,
 		};
+	}
+
+	componentDidMount() {
+		const {
+			adminPublicDecks,
+			userPublicDecks,
+			onGetAdminPublicDecks,
+			onGetUserPublicDecks
+		} = this.props;
+
+		if (adminPublicDecks.length === 0) {
+			onGetAdminPublicDecks();
+		}
+		if (userPublicDecks.length === 0) {
+			onGetUserPublicDecks();
+		}
 	}
 
 	onChangePage = (param) => {
@@ -66,4 +84,18 @@ class Market extends Component {
 	}
 }
 
-export default Market;
+const mapStateToProps = state => {
+	return {
+		adminPublicDecks: state.market.adminPublicDecks,
+		userPublicDecks: state.market.userPublicDecks
+	};
+};
+
+const mapDispatchToProps = dispatch => {
+	return {
+		onGetAdminPublicDecks: () => dispatch(actions.getAdminPublicDecks()),
+		onGetUserPublicDecks: () => dispatch(actions.getUserPublicDecks())
+	};
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(withErrorHandler(Market));
