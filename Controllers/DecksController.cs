@@ -388,7 +388,7 @@ namespace FlashCard.Controllers
 			}
 
 			var cards = await repository.Card
-				.QueryByDeckId(id, null, remembered)
+				.QueryByDeckId(id)
 				.AsNoTracking()
 				.MapToCardDto(imageService.BackImageBaseUrl)
 				.ToListAsync();
@@ -403,6 +403,11 @@ namespace FlashCard.Controllers
 				{
 					card.Remembered = sharedCards.FirstOrDefault(s => s.CardId == card.Id)?.Remembered ?? false;
 				}
+			}
+
+			if (remembered != null)
+			{
+				cards = cards.Where(c => c.Remembered == remembered.Value).ToList();
 			}
 
 			amount = amount < 0 || amount > cards.Count ? cards.Count : amount;
