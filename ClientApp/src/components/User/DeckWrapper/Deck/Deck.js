@@ -25,14 +25,14 @@ class Deck extends Component {
                 {profile?.role === Roles.User && deck.lastTestedTime !== null && (
                   <div className="deck-info-value-container">
                     <div className="deck-info-value">
-                      <Icon icon={clockIcon} style={{ color: '#ffffff', fontSize: '24px' }} />
+                      <Icon icon={clockIcon} style={{ color: '#ffffff', fontSize: '22px' }} />
                       <p>{deck.lastTestedTime}</p>
                     </div>
                   </div>
                 )}
                 <div className="deck-info-value-container">
                   <div className="deck-info-value">
-                    <Icon icon={cardIcon} style={{ color: '#ffffff', fontSize: '24px' }} />
+                    <Icon icon={cardIcon} style={{ color: '#ffffff', fontSize: '22px' }} />
                     <p>
                       {deck.totalCards}
                       {profile?.role === Roles.User && deck.completed && (
@@ -45,11 +45,11 @@ class Deck extends Component {
                   {profile?.role === Roles.User && !deck.completed && (
                     <>
                       <div className="deck-info-value">
-                        <Icon icon={succeededCardIcon} style={{ color: '#ffffff', fontSize: '24px' }} />
+                        <Icon icon={succeededCardIcon} style={{ color: '#ffffff', fontSize: '22px' }} />
                         <p>{deck.totalSucceededCards}</p>
                       </div>
                       <div className="deck-info-value">
-                        <Icon icon={failedCardIcon} style={{ color: '#ffffff', fontSize: '24px' }} />
+                        <Icon icon={failedCardIcon} style={{ color: '#ffffff', fontSize: '22px' }} />
                         <p>{deck.totalFailedCards}</p>
                       </div>
                     </>
