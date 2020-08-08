@@ -244,7 +244,7 @@ class CardBackForm extends Component {
             return (
               <div className={backFormClasses.join(' ')}>
                 <div className="card-back-form-header">
-                  {back ? 'Edit fact' : 'Create fact'}
+                  {back ? 'Edit back' : 'Create back'}
                 </div>
                 <form onSubmit={this.handleSumit}>
                   <div className="card-back-form-input">
@@ -323,6 +323,7 @@ class CardBackForm extends Component {
                         <input
                           type="file"
                           id="back-image-input"
+                          accept="image/*"
                           ref={this.backImageInput}
                           onChange={this.handleImageChange} />
                       </>
