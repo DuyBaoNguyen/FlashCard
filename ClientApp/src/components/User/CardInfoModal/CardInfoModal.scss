@@ -1,0 +1,10 @@
+.card-info-modal {
+  .card-info {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 376px;
+    z-index: 200;
+  }
+}

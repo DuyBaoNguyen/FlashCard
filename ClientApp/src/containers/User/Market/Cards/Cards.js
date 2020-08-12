@@ -10,6 +10,7 @@ import Button from '../../../../components/Shared/Button/Button';
 import Card from '../../../../components/User/Card/Card';
 import Loading from '../../../../components/Shared/Loading/Loading';
 import CardProposingForm from '../../../../components/User/CardProposingForm/CardProposingForm';
+import CardInfoModal from '../../../../components/User/CardInfoModal/CardInfoModal';
 import { TIME_OUT_DURATION } from '../../../../applicationConstants';
 import './Cards.css';
 
@@ -62,8 +63,16 @@ class Cards extends Component {
 		this.props.onClearProposeCardError();
 	}
 
+	handleClickCard = (cardId) => {
+		this.props.onSelectCard(cardId);
+	}
+
+	handleCloseCard = () => {
+		this.props.onUnselectCard();
+	}
+
 	render() {
-		const { cards, loading, searchString, cardProposingFormOpen } = this.props;
+		const { cards, loading, searchString, cardProposingFormOpen, selectedCard } = this.props;
 		let { activePage, setLoading } = this.state;
 		let cardsList = loading ? (
 			setLoading && <Loading />
@@ -88,6 +97,7 @@ class Cards extends Component {
 										key={card.id}
 										displayStatus
 										card={card}
+										notFliped
 										onClick={this.handleClickCard}
 									/>
 									<Button
@@ -139,6 +149,10 @@ class Cards extends Component {
 				<CardProposingForm
 					isOpen={cardProposingFormOpen}
 					onClose={this.handleCloseCardProposingForm} />
+				<CardInfoModal
+					card={selectedCard}
+					open={!!selectedCard}
+					onClose={this.handleCloseCard} />
 			</div>
 		);
 	}
@@ -149,7 +163,8 @@ const mapStateToProps = (state) => {
 		cards: state.market.cardList,
 		loading: state.market.loadings.getPublicCardsLoading,
 		searchString: state.market.publicCardsSearchString,
-		cardProposingFormOpen: state.cardProposal.cardProposingFormOpen
+		cardProposingFormOpen: state.cardProposal.cardProposingFormOpen,
+		selectedCard: state.market.selectedCard
 	};
 };
 
@@ -157,6 +172,7 @@ const mapDispatchToProps = (dispatch) => {
 	return {
 		onGetPublicCards: (front) => dispatch(actions.getPublicCards(front)),
 		onSelectCard: (id) => dispatch(actions.selectPublicCard(id)),
+		onUnselectCard: () => dispatch(actions.unselectPublicCard()),
 		onUpdateSearchString: (value) => dispatch(actions.updatePublicCardsSearchString(value)),
 		onDownloadPublicCard: (id) => dispatch(actions.downloadPublicCard(id)),
 		onToggleCardProposingForm: (value) => dispatch(actions.toggleCardProposingForm(value)),

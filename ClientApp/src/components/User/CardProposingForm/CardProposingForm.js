@@ -326,6 +326,7 @@ class CardProposingForm extends Component {
                       type="file"
                       id="back-image-input"
                       ref={this.backImageInput}
+                      accept="image/*"
                       onChange={this.handleImageChange} />
                   </div>
                   <div className="card-proposing-form-features">

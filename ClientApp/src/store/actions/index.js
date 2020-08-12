@@ -100,6 +100,7 @@ export {
 export {
 	getPublicCards,
 	selectPublicCard,
+	unselectPublicCard,
 	downloadPublicCard,
 	getAdminPublicDecks,
 	downloadAdminPublicDeck,
