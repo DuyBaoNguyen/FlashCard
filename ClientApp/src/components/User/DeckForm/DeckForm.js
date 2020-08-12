@@ -71,17 +71,20 @@ class DeckForm extends Component {
 					name: {
 						...prevState.form.name,
 						valid: nextProps.error.Name ? false : true,
-						error: nextProps.error.Name ? nextProps.error.Name[0] : null
+						error: nextProps.error.Name ? nextProps.error.Name[0] : null,
+						touched: true
 					},
 					description: {
 						...prevState.form.description,
 						valid: nextProps.error.Description ? false : true,
-						error: nextProps.error.Description ? nextProps.error.Description[0] : null
+						error: nextProps.error.Description ? nextProps.error.Description[0] : null,
+						touched: true
 					},
 					theme: {
 						...prevState.form.theme,
 						valid: nextProps.error.Theme ? false : true,
-						error: nextProps.error.Theme ? nextProps.error.Theme[0] : null
+						error: nextProps.error.Theme ? nextProps.error.Theme[0] : null,
+						touched: true
 					},
 					valid: false
 				}
@@ -206,7 +209,7 @@ class DeckForm extends Component {
 							<button
 								className="deck-form-button-create"
 								type="submit">
-								{deck ? 'Edit' : 'Create'}
+								{deck ? 'Update' : 'Create'}
 							</button>
 						</div>
 					</form>

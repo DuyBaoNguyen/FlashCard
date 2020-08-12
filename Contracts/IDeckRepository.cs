@@ -23,6 +23,7 @@ namespace FlashCard.Contracts
 		IQueryable<Deck> QueryByIdAndBeingApprovedAndNotAdmin(string adminId, int deckId);
 		IQueryable<Deck> QueryByBeingShared(string userId, string deckName = null);
 		IQueryable<Deck> QueryByCardIdsIncludesCardAssignmentsAndCard(int[] cardIds);
+		IQueryable<Deck> QueryByCardId(int cardId);
 		Task LoadCards(Deck deck);
 	}
 }

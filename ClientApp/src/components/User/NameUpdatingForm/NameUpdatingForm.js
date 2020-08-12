@@ -53,7 +53,7 @@ class NameUpdatingForm extends Component {
           displayName: {
             ...prevState.form.displayName,
             valid: false,
-            error: nextProps.error.displayName[0]
+            error: nextProps.error.DisplayName ? nextProps.error.DisplayName[0] : null
           },
           valid: false
         }

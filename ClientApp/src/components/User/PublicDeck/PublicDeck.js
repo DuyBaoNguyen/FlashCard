@@ -68,7 +68,7 @@ class PublicDeck extends Component {
 							<div className="deck-info">
 								<div className="deck-info-value-container">
 									<div className="deck-info-value">
-										<Icon icon={cardIcon} style={{ color: '#ffffff', fontSize: '24px' }} />
+										<Icon icon={cardIcon} style={{ color: '#ffffff', fontSize: '22px' }} />
 										<p>{deck.totalCards}</p>
 									</div>
 								</div>

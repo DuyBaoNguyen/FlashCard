@@ -182,13 +182,13 @@ class EditCard extends Component {
                   <DropDownItem
                     type="button"
                     icon={<Icon icon={editIcon} color="#646464" />}
-                    label="Edit fact"
+                    label="Edit back"
                     onClick={() => this.handleEditBack(back.id)} />
                   <DropDownItem
                     className="delete-back-btn"
                     type="button"
                     icon={<Icon icon={deleteIcon} color="red" />}
-                    label="Delete fact"
+                    label="Delete back"
                     onClick={() => this.handleOpenBackDeletingConfirm(back.id)} />
                   <DropDownItem type="line" />
                   <DropDownItem
@@ -210,6 +210,7 @@ class EditCard extends Component {
           <input
             type="file"
             id="upload-image-input"
+            accept="image/*"
             ref={this.uploadImageInput}
             onChange={this.handleImageChange} />
           {card?.backs.length < 2 && (
@@ -217,7 +218,7 @@ class EditCard extends Component {
               type="button"
               className="add-back-btn"
               onClick={this.handleAddBack}>
-              Add fact
+              Add back
             </Button>
           )}
         </div>
@@ -242,7 +243,7 @@ class EditCard extends Component {
         <Confirm
           isOpen={!!deletedBackId}
           header="Delete"
-          message="Are you sure you want to delete this fact?"
+          message="Are you sure you want to delete this back?"
           confirmLabel="Delete"
           confirmColor="#fe656d"
           onCancel={this.handleCloseBackDeletingConfirm}
@@ -251,7 +252,7 @@ class EditCard extends Component {
         <Confirm
           isOpen={!!deletedImageBackId}
           header="Delete"
-          message="Are you sure you want to delete the image of this fact?"
+          message="Are you sure you want to delete the image of this back?"
           confirmLabel="Delete"
           confirmColor="#fe656d"
           onCancel={this.handleCloseBackImageDeletingConfirm}

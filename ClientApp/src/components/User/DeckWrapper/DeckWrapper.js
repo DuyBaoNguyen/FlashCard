@@ -93,11 +93,13 @@ class DeckWrapper extends Component {
 				<div className="deck-header">
 					<div className="decks-header-labels">
 						<span className="decks-header-active-label">My decks</span>
-						<span
-							className="decks-header-label"
-							onClick={this.handleChangeTab}>
-							My shortcuts
-            </span>
+						{profile?.role === Roles.User && (
+							<span
+								className="decks-header-label"
+								onClick={this.handleChangeTab}>
+								My shortcuts
+							</span>
+						)}
 					</div>
 					<div className="deck-header-features">
 						<Button
