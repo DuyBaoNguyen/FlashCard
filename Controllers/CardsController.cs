@@ -125,9 +125,9 @@ namespace FlashCard.Controllers
 		[ProducesResponseType(404)]
 		public async Task<IActionResult> Update(int id, CardRequestModel cardRqModel)
 		{
-			var userId = UserUtil.GetUserId(User);
+			var user = await userManager.GetUser(User);
 			var existingCard = await repository.Card
-				.QueryById(userId, id)
+				.QueryById(user.Id, id)
 				.FirstOrDefaultAsync();
 
 			if (existingCard == null)
@@ -136,23 +136,30 @@ namespace FlashCard.Controllers
 			}
 
 			var cardSameFront = await repository.Card
-				.QueryByFront(userId, cardRqModel.Front)
+				.QueryByFront(user.Id, cardRqModel.Front)
 				.AsNoTracking()
 				.FirstOrDefaultAsync();
 
-			if (cardSameFront != null)
+			if (cardSameFront != null && cardSameFront.Id != existingCard.Id)
 			{
-				if (cardSameFront.Id == existingCard.Id)
-				{
-					return NoContent();
-				}
-
 				ModelState.AddModelError("Front", "The front is taken.");
 				return BadRequest(ModelState);
 			}
 
+			var notChanged = existingCard.Front.ToLower() == cardRqModel.Front.Trim().ToLower();
+
 			existingCard.Front = cardRqModel.Front.Trim();
 			existingCard.LastModifiedDate = DateTime.Now;
+
+			var decks = await repository.Deck
+				.QueryByCardId(existingCard.Id)
+				.ToListAsync();
+			var userIsAdmin = await userManager.CheckAdminRole(user);
+			foreach (var deck in decks)
+			{
+				deck.Approved = deck.Approved && (userIsAdmin || notChanged);
+			}
+
 			await repository.SaveChangesAsync();
 
 			return NoContent();
@@ -250,15 +257,6 @@ namespace FlashCard.Controllers
 					return BadRequest(ModelState);
 				}
 			}
-			// if ((backRqModel.Meaning == null || backRqModel.Meaning.Length == 0)
-			// 	&& (backRqModel.Image == null || backRqModel.Image.Length == 0))
-			// {
-			// 	ModelState.AddModelError("", "Card must at least have either meaning or image.");
-			// }
-			// if (!ModelState.IsValid)
-			// {
-			// 	return BadRequest(ModelState);
-			// }
 
 			var user = await UserUtil.GetUser(userManager, User);
 			var card = await repository.Card
@@ -291,6 +289,15 @@ namespace FlashCard.Controllers
 			};
 
 			repository.Back.Create(newBack);
+
+			var decks = await repository.Deck
+				.QueryByCardId(card.Id)
+				.ToListAsync();
+			foreach (var deck in decks)
+			{
+				deck.Approved = deck.Approved && userIsAdmin;
+			}
+
 			await repository.SaveChangesAsync();
 
 			return CreatedAtAction("GetBack", "Backs", new { Id = newBack.Id },

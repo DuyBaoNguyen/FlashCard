@@ -199,9 +199,9 @@ namespace FlashCard.Controllers
 		[ProducesResponseType(404)]
 		public async Task<IActionResult> Update(int id, DeckRequestModel deckRqModel)
 		{
-			var userId = UserUtil.GetUserId(User);
+			var user = await userManager.GetUser(User);
 			var existingDeck = await repository.Deck
-				.QueryById(userId, id)
+				.QueryById(user.Id, id)
 				.FirstOrDefaultAsync();
 
 			if (existingDeck == null)
@@ -210,7 +210,7 @@ namespace FlashCard.Controllers
 			}
 
 			var deckSameName = await repository.Deck
-				.QueryByName(userId, deckRqModel.Name)
+				.QueryByName(user.Id, deckRqModel.Name)
 				.AsNoTracking()
 				.FirstOrDefaultAsync();
 
@@ -220,11 +220,17 @@ namespace FlashCard.Controllers
 				return BadRequest(ModelState);
 			}
 
+			var notChanged = true;
+			notChanged = existingDeck.Name.ToLower() == deckRqModel.Name.Trim().ToLower() && notChanged;
+			notChanged = existingDeck.Description.ToLower() == deckRqModel.Description.Trim().ToLower() && notChanged;
+			var userIsAdmin = await userManager.CheckAdminRole(user);
+
 			existingDeck.Name = deckRqModel.Name.Trim();
 			existingDeck.Description = deckRqModel.Description == null || deckRqModel.Description.Trim().Length == 0
 				? null : deckRqModel.Description.Trim();
 			existingDeck.Theme = deckRqModel.Theme;
 			existingDeck.LastModifiedDate = DateTime.Now;
+			existingDeck.Approved = existingDeck.Approved && (userIsAdmin || notChanged);
 
 			await repository.SaveChangesAsync();
 
@@ -290,9 +296,9 @@ namespace FlashCard.Controllers
 		[ProducesResponseType(404)]
 		public async Task<IActionResult> AddCardToDeck(int deckId, int cardId)
 		{
-			var userId = UserUtil.GetUserId(User);
+			var user = await userManager.GetUser(User);
 			var deck = await repository.Deck
-				.QueryByIdIncludesCardAssignments(userId, deckId)
+				.QueryByIdIncludesCardAssignments(user.Id, deckId)
 				.FirstOrDefaultAsync();
 
 			if (deck == null)
@@ -301,7 +307,7 @@ namespace FlashCard.Controllers
 			}
 
 			var card = await repository.Card
-				.QueryById(userId, cardId)
+				.QueryById(user.Id, cardId)
 				.FirstOrDefaultAsync();
 
 			if (card == null)
@@ -313,6 +319,9 @@ namespace FlashCard.Controllers
 				return NoContent();
 			}
 
+			var userIsAdmin = await userManager.CheckAdminRole(user);
+
+			deck.Approved = deck.Approved && userIsAdmin;
 			deck.CardAssignments.Add(new CardAssignment() { Card = card });
 
 			if (deck.Completed && !card.Remembered)

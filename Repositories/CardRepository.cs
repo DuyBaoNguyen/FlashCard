@@ -114,12 +114,12 @@ namespace FlashCard.Repositories
 			if (front == null || front.Length == 0)
 			{
 				return dbContext.Cards
-				.Where(c => c.OwnerId == userId && !queryCardIds.Contains(c.Id))
+				.Where(c => c.OwnerId == userId && (!c.Public || c.Approved) && !queryCardIds.Contains(c.Id))
 				.OrderBy(c => c.Front);
 			}
 
 			return dbContext.Cards
-				.Where(c => c.OwnerId == userId && !queryCardIds.Contains(c.Id) &&
+				.Where(c => c.OwnerId == userId && (!c.Public || c.Approved) && !queryCardIds.Contains(c.Id) &&
 					c.Front.ToLower().Contains(front.ToLower()))
 				.OrderBy(c => c.Front);
 		}

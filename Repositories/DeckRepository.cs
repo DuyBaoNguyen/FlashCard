@@ -151,5 +151,14 @@ namespace FlashCard.Repositories
 				await dbContext.Entry(cardAssignment).Reference(ca => ca.Card).LoadAsync();
 			}
 		}
+
+		public IQueryable<Deck> QueryByCardId(int cardId)
+		{
+			var queryDeckIds = dbContext.CardAssignments
+				.Where(c => c.CardId == cardId)
+				.Select(c => c.DeckId);
+
+			return dbContext.Decks.Where(d => queryDeckIds.Contains(d.Id));
+		}
 	}
 }

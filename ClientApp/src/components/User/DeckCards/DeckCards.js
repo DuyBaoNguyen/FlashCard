@@ -119,26 +119,29 @@ class DeckCards extends Component {
                   key={card.id}
                   displayStatus
                   card={card}
-                  options={[
-                    {
-                      type: 'link',
-                      path: { pathname: `/cards/${card.id}/edit`, state: { backUrl: `/decks/${this.deckId}` } },
-                      icon: <Icon icon={editIcon} color="#646464" />,
-                      label: { value: 'Edit card' }
-                    },
-                    {
-                      type: 'button',
-                      icon: <Icon icon={removeIcon} color="red" />,
-                      label: { value: 'Remove card', color: 'red' },
-                      onClick: () => this.handleOpenRemovingConfirm(card.id)
-                    },
-                    {
-                      type: 'button',
-                      icon: <Icon icon={deleteIcon} color="red" />,
-                      label: { value: 'Delete card', color: 'red' },
-                      onClick: () => this.handleOpenDeletingConfirm(card.id)
-                    }
-                  ]}
+                  options={profile?.id === deck?.owner.id
+                    ? [
+                      {
+                        type: 'link',
+                        path: { pathname: `/cards/${card.id}/edit`, state: { backUrl: `/decks/${this.deckId}` } },
+                        icon: <Icon icon={editIcon} color="#646464" />,
+                        label: { value: 'Edit card' }
+                      },
+                      {
+                        type: 'button',
+                        icon: <Icon icon={removeIcon} color="red" />,
+                        label: { value: 'Remove card', color: 'red' },
+                        onClick: () => this.handleOpenRemovingConfirm(card.id)
+                      },
+                      {
+                        type: 'button',
+                        icon: <Icon icon={deleteIcon} color="red" />,
+                        label: { value: 'Delete card', color: 'red' },
+                        onClick: () => this.handleOpenDeletingConfirm(card.id)
+                      }
+                    ]
+                    : null
+                  }
                   onClick={this.handleClickCard} />
               );
             })}

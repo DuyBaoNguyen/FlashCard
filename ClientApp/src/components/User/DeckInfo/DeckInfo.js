@@ -64,66 +64,70 @@ class DeckInfo extends Component {
       <div className="deck-info-wrapper">
         <div className="deck-info-header">
           <div className="deck-info-options">
-            <DropDown
-              right
-              changeable={deck?.public}
-              postfix={<Icon icon={optionIcon} style={{ fontSize: 20 }} />}
-              className="deck-info-dropdown">
-              {deck && profile && (
-                <>
-                  {deck.owner.id !== profile.id
-                    ? (
+            {deck && profile && (
+              <>
+                {deck.owner.id !== profile.id
+                  ? (
+                    <DropDown
+                      right
+                      changeable={deck?.public}
+                      postfix={<Icon icon={optionIcon} style={{ fontSize: 20 }} />}
+                      className="deck-info-dropdown">
                       <DropDownItem
-                          className="public-deck"
-                          icon={<Icon icon={pinIcon} color="#646464" />}
-                          label="Pinned">
-                          <div className="switch-wrapper">
-                            <Switch
-                              checked={deck.pinned}
-                              onChange={this.handleTogglePinned} />
-                          </div>
-                        </DropDownItem>
-                    )
-                    : (
-                      <>
-                        <DropDownItem
-                          type="link"
-                          path={{
-                            pathname: `/decks/${deck?.id}/edit`,
-                            state: { backUrl: `/decks/${deck?.id}` }
-                          }}
-                          icon={<Icon icon={editIcon} color="#646464" />}
-                          label="Edit deck" />
-                        <DropDownItem
-                          className="delete-deck-btn"
-                          type="button"
-                          icon={<Icon icon={deleteIcon} color="red" />}
-                          label="Delete this deck"
-                          onClick={this.handleOpenDeletingConfirm} />
-                        <DropDownItem type="line" />
-                        <DropDownItem
-                          className="public-deck"
-                          icon={<Icon icon={publicIcon} color="#646464" />}
-                          label={(
-                            <>
-                              Public
+                        className="public-deck"
+                        icon={<Icon icon={pinIcon} color="#646464" />}
+                        label="Pinned">
+                        <div className="switch-wrapper">
+                          <Switch
+                            checked={deck.pinned}
+                            onChange={this.handleTogglePinned} />
+                        </div>
+                      </DropDownItem>
+                    </DropDown>
+                  )
+                  : (
+                    <DropDown
+                      right
+                      changeable={deck?.public}
+                      postfix={<Icon icon={optionIcon} style={{ fontSize: 20 }} />}
+                      className="deck-info-dropdown">
+                      <DropDownItem
+                        type="link"
+                        path={{
+                          pathname: `/decks/${deck?.id}/edit`,
+                          state: { backUrl: `/decks/${deck?.id}` }
+                        }}
+                        icon={<Icon icon={editIcon} color="#646464" />}
+                        label="Edit deck" />
+                      <DropDownItem
+                        className="delete-deck-btn"
+                        type="button"
+                        icon={<Icon icon={deleteIcon} color="red" />}
+                        label="Delete this deck"
+                        onClick={this.handleOpenDeletingConfirm} />
+                      <DropDownItem type="line" />
+                      <DropDownItem
+                        className="public-deck"
+                        icon={<Icon icon={publicIcon} color="#646464" />}
+                        label={(
+                          <>
+                            Public
                                 {deck?.public === true && deck?.approved === false && (
-                                <i className="pending-notification">( pending )</i>
-                              )}
-                            </>
-                          )}>
-                          <div className="switch-wrapper">
-                            <Switch
-                              checked={deck?.public && !updateDeckPublicStatusError}
-                              onChange={(event) => this.handleChangePublic(event)} />
-                          </div>
-                        </DropDownItem>
-                      </>
-                    )
-                  }
-                </>
-              )}
-            </DropDown>
+                              <i className="pending-notification">( pending )</i>
+                            )}
+                          </>
+                        )}>
+                        <div className="switch-wrapper">
+                          <Switch
+                            checked={deck?.public && !updateDeckPublicStatusError}
+                            onChange={(event) => this.handleChangePublic(event)} />
+                        </div>
+                      </DropDownItem>
+                    </DropDown>
+                  )
+                }
+              </>
+            )}
           </div>
           {deck?.name}
           {profile && deck && profile.id !== deck.owner.id && (
