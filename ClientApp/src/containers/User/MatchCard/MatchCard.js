@@ -81,7 +81,7 @@ class MatchCard extends Component {
 
 		let isSelected = {
 			fontSize: '20px',
-			color: '#9eacf4',
+			color: '#91a4ff',
 		};
 
 		let isNotSelected = {

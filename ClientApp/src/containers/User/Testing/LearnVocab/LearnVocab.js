@@ -117,7 +117,7 @@ class LearnVocab extends Component {
 				images of the card.
 				<br />
 				<br />
-				Press <b style={{ color: '#9eacf4' }}>Next</b> button below to go to the
+				Press <b style={{ color: '#91a4ff' }}>Next</b> button below to go to the
 				next card. 👌🏻
 			</div>
 		);

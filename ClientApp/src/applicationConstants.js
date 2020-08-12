@@ -13,4 +13,4 @@ export const Roles =  {
   User: 'user'
 };
 
-export const Themes = ['#95dded', '#9eacf4', '#ffb1b1', '#fdd39d', '#b7eb8f', '#ebaaea'];
+export const Themes = ['#5bd1eb', '#f74a4a', '#4099ed', '#fcb356', '#84e339', '#c695ec'];

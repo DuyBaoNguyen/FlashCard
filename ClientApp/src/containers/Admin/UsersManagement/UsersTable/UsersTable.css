@@ -53,7 +53,7 @@
 }
 
 .users-table-wrapper .users-table-pagination .pagination .pagination-item-active {
-  background: #9eacf4 !important;
+  background: #91a4ff !important;
 }
 
 .users-table-wrapper .users-table-pagination .pagination .pagination-item-active a {
@@ -87,7 +87,7 @@
 
 .users-table-wrapper .users-table th {
   height: 40px;
-  background: #9eacf4;
+  background: #91a4ff;
   color: white;
   border-collapse: collapse;
   padding-left: 15px;
@@ -114,11 +114,11 @@
 }
 
 .users-table-wrapper .users-table tr:hover td {
-  color: #9eacf4;
+  color: #91a4ff;
 }
 
 .users-table-wrapper .users-table tr.active td {
-  color: #9eacf4;
+  color: #91a4ff;
 }
 
 .users-table-wrapper .users-table tr:last-child td:first-child {

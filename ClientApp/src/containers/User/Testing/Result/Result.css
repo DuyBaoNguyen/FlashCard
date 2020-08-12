@@ -3,7 +3,7 @@
 }
 
 .result-wrapper .result-header {
-  color: #9eacf4;
+  color: #91a4ff;
   width: 100%;
   line-height: 60px;
   font-size: 40px;
@@ -39,14 +39,14 @@
   font-size: 16px;
   font-weight: 500;
   line-height: 28px;
-  color: #9eacf4;
+  color: #91a4ff;
 }
 
 .result-wrapper .result-button button {
   width: 307px;
   height: 53px;
   font-size: 16px;
-  background: #9eacf4;
+  background: #91a4ff;
   border: none;
   border-radius: 15px;
   color: white;

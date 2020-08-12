@@ -43,7 +43,7 @@
       }
 
       .pagination-item-active {
-        background: #9eacf4 !important;
+        background: #91a4ff !important;
 
         a {
           color: white;
@@ -78,7 +78,7 @@
 
     th {
       height: 40px;
-      background: #9eacf4;
+      background: #91a4ff;
       color: white;
       border-collapse: collapse;
       padding-left: 15px;
@@ -104,11 +104,11 @@
     }
 
     tr:hover td {
-      color: #9eacf4;
+      color: #91a4ff;
     }
 
     tr.active td {
-      color: #9eacf4;
+      color: #91a4ff;
     }
 
     tr:last-child {

@@ -61,7 +61,7 @@
 }
 
 .proposed-public-decks-wrapper .proposed-public-decks-pagination .pagination .pagination-item-active {
-  background: #9eacf4 !important;
+  background: #91a4ff !important;
 }
 
 .proposed-public-decks-wrapper .proposed-public-decks-pagination .pagination .pagination-item-active a {
@@ -108,7 +108,7 @@
 
 .proposed-public-decks-wrapper table th {
   height: 40px;
-  background: #9eacf4;
+  background: #91a4ff;
   color: white;
   border-collapse: collapse;
   padding-left: 15px;
@@ -134,7 +134,7 @@
 }
 
 .proposed-public-decks-wrapper table tr:hover td a {
-  color: #9eacf4;
+  color: #91a4ff;
 }
 
 .proposed-public-decks-wrapper .text-notify {
