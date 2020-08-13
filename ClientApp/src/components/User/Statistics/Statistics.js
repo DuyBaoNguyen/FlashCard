@@ -41,8 +41,8 @@ class Statistics extends PureComponent {
 
     let chartName = (
       <p className="chart-name">
-        Remembered cards
-        <Link to={path}> (more)</Link>
+        Remembered cards&nbsp;
+        <Link to={path}>(more)</Link>
       </p>
     );
     const chartClasses = ['charts-container'];
@@ -50,8 +50,8 @@ class Statistics extends PureComponent {
       chartClasses.push('right');
       chartName = (
         <p className="chart-name">
-          Percent practiced cards
-          <Link to={path}> (more)</Link>
+          Percent practiced cards&nbsp;
+          <Link to={path}>(more)</Link>
         </p>
       );
     }

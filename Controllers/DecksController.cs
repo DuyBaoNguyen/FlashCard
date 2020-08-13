@@ -222,7 +222,7 @@ namespace FlashCard.Controllers
 
 			var notChanged = true;
 			notChanged = existingDeck.Name.ToLower() == deckRqModel.Name.Trim().ToLower() && notChanged;
-			notChanged = existingDeck.Description.ToLower() == deckRqModel.Description.Trim().ToLower() && notChanged;
+			notChanged = existingDeck.Description?.ToLower() == deckRqModel.Description?.Trim().ToLower() && notChanged;
 			var userIsAdmin = await userManager.CheckAdminRole(user);
 
 			existingDeck.Name = deckRqModel.Name.Trim();

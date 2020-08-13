@@ -23,6 +23,9 @@
       margin-bottom: 18px;
       a {
         color: #4686ff;
+        &:hover {
+          text-decoration: underline;
+        }
       }
     }
   }

@@ -41,6 +41,10 @@
   color: #4686ff;
 }
 
+.statistics-wrapper .statistics-header .chart-name a:hover {
+  text-decoration: underline;
+}
+
 .statistics-wrapper .charts-container {
   width: calc(200% + 50px);
   display: -webkit-box;

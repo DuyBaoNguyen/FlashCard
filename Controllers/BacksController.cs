@@ -94,7 +94,7 @@ namespace FlashCard.Controllers
 			}
 
 			var notChanged = true;
-			notChanged = back.Meaning?.ToLower() == backRqModel.Meaning?.Trim().ToLower() && notChanged;
+			notChanged = back.Meaning.ToLower() == backRqModel.Meaning.Trim().ToLower() && notChanged;
 			notChanged = back.Type?.ToLower() == backRqModel.Type?.Trim().ToLower() && notChanged;
 			notChanged = back.Example?.ToLower() == backRqModel.Example?.Trim().ToLower() && notChanged;
 
