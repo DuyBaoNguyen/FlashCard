@@ -56,6 +56,7 @@ class App extends Component {
 					
 					<AuthorizeRoute exact path="/admin/users" component={UsersManagement} />
 					<AuthorizeRoute exact path="/admin/users/:userId/decks/:deckId" component={UserDeckDetail} />
+					<AuthorizeRoute exact path="/admin/users/:userId/statistics" component={StatisticsDetail} />
 					<AuthorizeRoute exact path="/admin/cardproposals" component={CardsProposal} />
 					<AuthorizeRoute exact path="/admin/publicdecks" component={PublicDecksManagement} />
 					<AuthorizeRoute exact path="/admin/publicdecks/:deckId" component={ProposedPublicDeckDetail} />
