@@ -66,6 +66,12 @@
   font-weight: 600;
   font-size: 18px;
   margin-bottom: 20px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
 }
 
 .users-table-wrapper .users-table {

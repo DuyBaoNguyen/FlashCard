@@ -16,21 +16,22 @@ const getUsersFail = () => {
 
 export const getUsers = () => {
 	return (dispatch, getState) => {
-		axios.get('/api/admin/users')
+		const { searchString } = getState().usersmanagement;
+		axios.get(`/api/admin/users?search=${searchString}`)
 			.then((res) => {
 				dispatch(getUsersSuccess(res.data));
 
-				const { currentUserId } = getState().usersmanagement;
-				if (!res.data.find(user => user.id === currentUserId)) {
-					const firstUserId = res.data[0]?.id;
-					if (firstUserId) {
-						dispatch(setCurrentUserId(firstUserId));
-						dispatch(getCurrentUser(firstUserId));
-						dispatch(getCurrentUserStatistics(firstUserId));
-						dispatch(getCurrentUserDecks(firstUserId));
-						dispatch(getCurrentUserCards(firstUserId));
-					}
-				}
+				// const { currentUserId } = getState().usersmanagement;
+				// if (!res.data.find(user => user.id === currentUserId)) {
+				// 	const firstUserId = res.data[0]?.id;
+				// 	if (firstUserId) {
+				// 		dispatch(setCurrentUserId(firstUserId));
+				// 		dispatch(getCurrentUser(firstUserId));
+				// 		dispatch(getCurrentUserStatistics(firstUserId));
+				// 		dispatch(getCurrentUserDecks(firstUserId));
+				// 		dispatch(getCurrentUserCards(firstUserId));
+				// 	}
+				// }
 			})
 			.catch(() => dispatch(getUsersFail()));
 	};
@@ -168,4 +169,11 @@ export const getCurrentUserStatistics = (currentUserId) => {
 			.then(res => dispatch(getCurrentUserStatisticsSuccess(res.data)))
 			.catch(() => dispatch(getCurrentUserStatisticsFail()));
 	}
+};
+
+export const updateUserSearchString = (value) => {
+	return {
+		type: actionTypes.UPDATE_USER_SEARCH_STRING,
+		value: value
+	};
 };

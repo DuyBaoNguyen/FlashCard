@@ -11,6 +11,7 @@ const initialState = {
 	currentUserStatistics: null,
 	currentUserPercentPracticedCardsStatistics: null,
 	currentUserAmountRememberedCardsStatistics: null,
+	searchString: '',
 	errors: {
 		getUsersError: false,
 		getCurrentUserError: false,
@@ -156,6 +157,11 @@ export const usersManagementReducer = (state = initialState, action) => {
 					...state.errors,
 					getCurrentUserStatisticsError: true
 				}
+			};
+		case actionTypes.UPDATE_USER_SEARCH_STRING:
+			return {
+				...state,
+				searchString: action.value
 			};
 		default:
 			return state;

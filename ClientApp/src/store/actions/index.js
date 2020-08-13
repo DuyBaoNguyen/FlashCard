@@ -95,7 +95,8 @@ export {
 	selectUserCard,
 	unselectUserCard,
 	checkToUnselectUserCard,
-	getCurrentUserStatistics
+	getCurrentUserStatistics,
+	updateUserSearchString
 } from './UsersManagement';
 
 export {

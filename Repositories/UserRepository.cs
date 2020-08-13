@@ -18,7 +18,7 @@ namespace FlashCard.Repositories
 
 			if (search != null && search.Trim().Length > 0)
 			{
-				queryUsers.Where(u => u.Name.Contains(search) || u.Email.Contains(search));
+				queryUsers = queryUsers.Where(u => u.Name.Contains(search) || u.Email.Contains(search));
 			}
 			return queryUsers.OrderBy(u => u.Name);
 		}

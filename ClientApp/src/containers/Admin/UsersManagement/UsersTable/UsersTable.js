@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import withErrorHandler from '../../../../hoc/withErrorHandler';
 import * as actions from '../../../../store/actions/index';
 import Pagination from 'react-js-pagination';
-
+import Search from '../../../../components/Shared/Search/Search';
 import './UsersTable.css';
 
 class UsersTable extends Component {
@@ -26,8 +26,13 @@ class UsersTable extends Component {
 		this.props.onGetCurrentUserCards(userId);
 	};
 
+	handleSearchUsers = (event) => {
+		this.props.onUpdateUserSearchString(event.target.value);
+		this.props.onGetUsers();
+	}
+
 	render() {
-		const { currentUserId } = this.props;
+		const { currentUserId, searchString } = this.props;
 		let pagination = (
 			<Pagination
 				hideFirstLastPages
@@ -47,8 +52,8 @@ class UsersTable extends Component {
 
 		let users = this.props.usersList.map((user, index) => {
 			return (
-				<tr 
-					key={user.id} 
+				<tr
+					key={user.id}
 					className={user.id === currentUserId ? 'active' : null}
 					onClick={() => this.onClickUser(user.id)}>
 					<td className="users-table-width-small">{index + 1}</td>
@@ -60,7 +65,13 @@ class UsersTable extends Component {
 
 		return (
 			<div className="users-table-wrapper">
-				<div className="users-table-title">Users</div>
+				<div className="users-table-title">
+					Users
+					<Search
+						placeholder="Search..."
+						value={searchString}
+						onChange={this.handleSearchUsers} />
+				</div>
 				<div className="users-table">
 					<table>
 						<thead>
@@ -88,6 +99,7 @@ const mapStateToProps = (state) => {
 		currentUser: state.usersmanagement.currentUser,
 		currentUserData: state.usersmanagement.currentUserData,
 		currentUserDecks: state.usersmanagement.currentUserDecks,
+		searchString: state.usersmanagement.searchString
 	};
 };
 
@@ -98,7 +110,8 @@ const mapDispatchToProps = (dispatch) => {
 		onGetCurrentUser: (userId) => dispatch(actions.getCurrentUser(userId)),
 		onGetCurrentUserDecks: (userId) => dispatch(actions.getCurrentUserDecks(userId)),
 		onGetCurrentUserCards: (userId) => dispatch(actions.getCurrentUserCards(userId)),
-		onGetCurrentUserStatistics: (userId) => dispatch(actions.getCurrentUserStatistics(userId))
+		onGetCurrentUserStatistics: (userId) => dispatch(actions.getCurrentUserStatistics(userId)),
+		onUpdateUserSearchString: (value) => dispatch(actions.updateUserSearchString(value))
 	};
 };
 
