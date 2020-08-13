@@ -21,8 +21,9 @@ class UsersTable extends Component {
 	onClickUser = (userId) => {
 		this.props.onSetCurrentUserId(userId);
 		this.props.onGetCurrentUser(userId);
-		this.props.onGetCurrenctUserDecks(userId);
-		this.props.onGetCurrenctUserCards(userId);
+		this.props.onGetCurrentUserStatistics(userId);
+		this.props.onGetCurrentUserDecks(userId);
+		this.props.onGetCurrentUserCards(userId);
 	};
 
 	render() {
@@ -95,8 +96,9 @@ const mapDispatchToProps = (dispatch) => {
 		onGetUsers: () => dispatch(actions.getUsers()),
 		onSetCurrentUserId: (id) => dispatch(actions.setCurrentUserId(id)),
 		onGetCurrentUser: (userId) => dispatch(actions.getCurrentUser(userId)),
-		onGetCurrenctUserDecks: (userId) => dispatch(actions.getCurrentUserDecks(userId)),
-		onGetCurrenctUserCards: (userId) => dispatch(actions.getCurrentUserCards(userId))
+		onGetCurrentUserDecks: (userId) => dispatch(actions.getCurrentUserDecks(userId)),
+		onGetCurrentUserCards: (userId) => dispatch(actions.getCurrentUserCards(userId)),
+		onGetCurrentUserStatistics: (userId) => dispatch(actions.getCurrentUserStatistics(userId))
 	};
 };
 

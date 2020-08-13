@@ -6,7 +6,7 @@
       grid-template-columns: repeat(4, 1fr);
   -ms-grid-rows: (1fr)[3];
       grid-template-rows: repeat(3, 1fr);
-  gap: 19px 19px;
+  gap: 19px 22px;
 }
 
 .user-cards-wrapper .cards-pagination {

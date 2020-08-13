@@ -1,4 +1,5 @@
 import * as actionTypes from '../actions/actionTypes';
+import * as utils from '../../util/util';
 
 const initialState = {
 	usersList: [],
@@ -7,12 +8,16 @@ const initialState = {
 	currentUserDecks: [],
 	currentUserCards: [],
 	selectedCard: null,
+	currentUserStatistics: null,
+	currentUserPercentPracticedCardsStatistics: null,
+	currentUserAmountRememberedCardsStatistics: null,
 	errors: {
 		getUsersError: false,
 		getCurrentUserError: false,
 		getCurrentUserDecksError: false,
 		getCurrentUserCardsError: false,
-		deleteCurrentUserError: false
+		deleteCurrentUserError: false,
+		getCurrentUserStatisticsError: false
 	}
 };
 
@@ -129,6 +134,28 @@ export const usersManagementReducer = (state = initialState, action) => {
 			return {
 				...state,
 				selectedCard: state.selectedCard?.id === action.cardId ? null : state.selectedCard
+			};
+		case actionTypes.GET_CURRENT_USER_STATISTICS_SUCCESS:
+			return {
+				...state,
+				currentUserStatistics: action.statistics,
+				currentUserPercentPracticedCardsStatistics: utils.transformPercentPracticedCardsStatistics(action.statistics),
+				currentUserAmountRememberedCardsStatistics: utils.transformAmountRememberedCardsStatistics(action.statistics),
+				errors: {
+					...state.errors,
+					getCurrentUserStatisticsError: false
+				}
+			};
+		case actionTypes.GET_CURRENT_USER_STATISTICS_FAIL:
+			return {
+				...state,
+				currentUserStatistics: null,
+				currentUserPercentPracticedCardsStatistics: null,
+				currentUserAmountRememberedCardsStatistics: null,
+				errors: {
+					...state.errors,
+					getCurrentUserStatisticsError: true
+				}
 			};
 		default:
 			return state;

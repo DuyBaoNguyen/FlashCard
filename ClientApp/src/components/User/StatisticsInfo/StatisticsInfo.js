@@ -10,6 +10,12 @@ import './StatisticsInfo.css';
 
 class StatisticsInfo extends Component {
   componentDidMount() {
+    const userId = this.props.match.params.userId;
+    if (userId) {
+      this.props.onGetCurrentUserStatistics(userId);
+      return;
+    }
+
     const deckId = this.props.match.params.deckId;
     if (deckId) {
       this.props.onGetDeckStatistics(deckId);
@@ -22,11 +28,21 @@ class StatisticsInfo extends Component {
     const { 
       generalStatistics, 
       deckStatistics, 
+      currentUserStatistics,
       match, 
       selectedPractice,
       onSelectPractice
     } = this.props;
-    const statistics = match.params.deckId ? deckStatistics : generalStatistics;
+    let statistics;
+
+    if (match.params.userId) {
+      statistics = currentUserStatistics;
+    } else if (match.params.deckId) {
+      statistics = deckStatistics;
+    } else {
+      statistics = generalStatistics;
+    }
+
     if (statistics && !selectedPractice) {
       const now = new Date();
       for (let item of statistics) {
@@ -46,8 +62,21 @@ class StatisticsInfo extends Component {
   }
 
   render() {
-    const { generalStatistics, deckStatistics, match } = this.props;
-    const statistics = match.params.deckId ? deckStatistics : generalStatistics;
+    const { 
+      generalStatistics, 
+      deckStatistics, 
+      currentUserStatistics,
+      match 
+    } = this.props;
+    let statistics;
+
+    if (match.params.userId) {
+      statistics = currentUserStatistics;
+    } else if (match.params.deckId) {
+      statistics = deckStatistics;
+    } else {
+      statistics = generalStatistics;
+    }
 
     return (
       <div className="statistics-info">
@@ -95,12 +124,14 @@ class StatisticsInfo extends Component {
 const mapStateToProps = state => ({
   generalStatistics: state.home.statistics,
   deckStatistics: state.deckDetail.statistics,
+  currentUserStatistics: state.usersmanagement.currentUserStatistics,
   selectedPractice: state.statistics.selectPractice
 });
 
 const mapDispatchToProps = dispatch => ({
   onGetStatistics: () => dispatch(actions.getStatistics()),
   onGetDeckStatistics: (deckId) => dispatch(actions.getDeckStatistics(deckId)),
+  onGetCurrentUserStatistics: (userId) => dispatch(actions.getCurrentUserStatistics(userId)),
   onSelectPractice: (practice, rememberedCards) => dispatch(actions.selectPractice(practice, rememberedCards)),
   onUnselectPractice: () => dispatch(actions.unselectPractice())
 });

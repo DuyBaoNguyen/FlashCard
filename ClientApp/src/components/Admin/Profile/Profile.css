@@ -1,11 +1,25 @@
 .profile-wrapper {
+  height: 555px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+}
+
+.profile-wrapper .profile-info-wrapper {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
   width: 100%;
 }
 
-.profile-wrapper .profile-info-panel {
+.profile-wrapper .profile-info-wrapper .profile-info-panel {
   -webkit-box-flex: 1;
       -ms-flex: 1;
           flex: 1;
@@ -16,7 +30,7 @@
   padding: 30px;
 }
 
-.profile-wrapper .profile-info-panel .profile-button {
+.profile-wrapper .profile-info-wrapper .profile-info-panel .profile-button {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -25,7 +39,7 @@
           justify-content: flex-end;
 }
 
-.profile-wrapper .profile-info-panel .profile-button .profile-button-delete {
+.profile-wrapper .profile-info-wrapper .profile-info-panel .profile-button .profile-button-delete {
   background-color: #fe656d;
   display: -webkit-box;
   display: -ms-flexbox;
@@ -34,7 +48,7 @@
   padding-right: 15px;
 }
 
-.profile-wrapper .profile-info-panel .profile-info {
+.profile-wrapper .profile-info-wrapper .profile-info-panel .profile-info {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -43,7 +57,7 @@
           justify-content: space-between;
 }
 
-.profile-wrapper .profile-info-panel .profile-info .profile-info-title {
+.profile-wrapper .profile-info-wrapper .profile-info-panel .profile-info .profile-info-title {
   font-style: normal;
   font-weight: normal;
   font-size: 14px;
@@ -51,7 +65,7 @@
   margin-bottom: 20px;
 }
 
-.profile-wrapper .profile-info-panel .profile-info .profile-info-content {
+.profile-wrapper .profile-info-wrapper .profile-info-panel .profile-info .profile-info-content {
   font-style: normal;
   font-weight: 500;
   font-size: 14px;
@@ -60,7 +74,7 @@
   margin-bottom: 20px;
 }
 
-.profile-wrapper .profile-picture {
+.profile-wrapper .profile-info-wrapper .profile-picture {
   width: 167px;
   background: #ffffff;
   -webkit-box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.06);
@@ -70,7 +84,7 @@
   margin-left: 20px;
 }
 
-.profile-wrapper .profile-picture .picture-wrapper {
+.profile-wrapper .profile-info-wrapper .profile-picture .picture-wrapper {
   height: 107px;
   width: 107px;
   display: -webkit-box;
@@ -87,12 +101,12 @@
   margin-right: 20px;
 }
 
-.profile-wrapper .profile-picture .picture-wrapper img {
+.profile-wrapper .profile-info-wrapper .profile-picture .picture-wrapper img {
   display: block;
   border-radius: 50%;
 }
 
-.profile-wrapper .profile-picture .picture-wrapper .fake-picture {
+.profile-wrapper .profile-info-wrapper .profile-picture .picture-wrapper .fake-picture {
   width: 99px;
   height: 99px;
   border-radius: 50%;
@@ -109,5 +123,62 @@
   font-size: 32px;
   font-weight: 300;
   color: #979797;
+}
+
+.profile-wrapper .profile-header {
+  color: #535353;
+  font-style: normal;
+  font-weight: 600;
+  font-size: 18px;
+  margin: 20px 0 14px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+}
+
+.profile-wrapper .profile-header a {
+  font-size: 14px;
+  font-weight: normal;
+  color: #4686ff;
+}
+
+.profile-wrapper .profile-header a:hover {
+  text-decoration: underline;
+}
+
+.profile-wrapper .profile-header a.disabled-link {
+  color: #979797;
+  text-decoration: none;
+}
+
+.profile-wrapper .contributed-cards {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+.profile-wrapper .contributed-cards span {
+  font-size: 15px;
+  color: #8f8f8f;
+  margin-left: 10px;
+}
+
+.profile-wrapper .charts {
+  display: -ms-grid;
+  display: grid;
+  -ms-grid-columns: auto auto;
+      grid-template-columns: auto auto;
+  gap: 20px;
+}
+
+.profile-wrapper .charts .chart-content p {
+  font-size: 15px;
+  color: #8f8f8f;
 }
 /*# sourceMappingURL=Profile.css.map */

@@ -95,6 +95,7 @@ export {
 	selectUserCard,
 	unselectUserCard,
 	checkToUnselectUserCard,
+	getCurrentUserStatistics
 } from './UsersManagement';
 
 export {

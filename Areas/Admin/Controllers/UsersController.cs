@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net.Mime;
 using System.Threading.Tasks;
 using FlashCard.Contracts;
@@ -365,6 +367,72 @@ namespace FlashCard.Areas.Admin.Controllers
 			}
 
 			return NoContent();
+		}
+
+		[HttpGet("{userId}/test")]
+		[ProducesResponseType(200)]
+		public async Task<ActionResult> GetUserStatistics(string userId)
+		{
+			var user = await userManager.GetUser(User);
+			var userIsAdmin = await userManager.CheckAdminRole(user);
+
+			if (!userIsAdmin)
+			{
+				return Forbid();
+			}
+
+			var relativeUser = await repository.User
+				.QueryByIdAndNotAdmin(user.Id, userId)
+				.AsNoTracking()
+				.FirstOrDefaultAsync();
+			if (relativeUser == null)
+			{
+				return NotFound();
+			}
+
+			var dates = DateTimeUtil.GetDaysOfWeek();
+			var tests = await repository.Test
+				.QueryIncludesTestedCards(userId, dates)
+				.AsNoTracking()
+				.ToListAsync();
+			var groups = tests.GroupBy(t => t.DateTime.Date).ToDictionary(g => g.Key);
+
+			var queryRememberedCards = repository.Card
+				.QueryByFirstRememberedDate(userId, dates)
+				.AsNoTracking()
+				.Select(c => new { FirstRememberedDate = c.FirstRememberedDate.Value.Date, Front = c.Front })
+				.Union( 
+					repository.SharedCard
+						.QueryByFirstRememberedDate(userId, dates)
+						.AsNoTracking()
+						.Select(sc => new { FirstRememberedDate = sc.FirstRememberedDate.Value.Date, Front = sc.Card.Front })
+				);
+
+			var rememberedCards = await queryRememberedCards.Distinct().ToListAsync();
+			var rememberedCardsGroups = rememberedCards
+				.GroupBy(c => c.FirstRememberedDate)
+				.ToDictionary(g => g.Key);
+
+			var statistics = dates.Select(d =>
+			{
+				var tests = groups.ContainsKey(d) ? groups[d] : null;
+				var rememberedCards = rememberedCardsGroups.ContainsKey(d) ? rememberedCardsGroups[d] : null;
+
+				return new
+				{
+					DateTime = d,
+					TotalCards = tests != null
+						? tests.Sum(t => t.TestedCards.Count) : 0,
+					FailedCards = tests != null
+						? tests.Sum(t => t.TestedCards.Where(tc => tc.Failed).Count()) : 0,
+					GradePointAverage = tests == null || tests.Count() == 0
+						? 0 : Math.Round(tests.Average(t => t.Score) * 100, 0),
+					Tests = tests != null ? tests.MapToTestDto() : null,
+					RememberedCards = rememberedCards != null ? rememberedCards.Select(t => t.Front) : null
+				};
+			});
+
+			return Ok(statistics);
 		}
 	}
 }

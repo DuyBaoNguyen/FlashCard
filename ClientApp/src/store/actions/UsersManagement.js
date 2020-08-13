@@ -26,6 +26,7 @@ export const getUsers = () => {
 					if (firstUserId) {
 						dispatch(setCurrentUserId(firstUserId));
 						dispatch(getCurrentUser(firstUserId));
+						dispatch(getCurrentUserStatistics(firstUserId));
 						dispatch(getCurrentUserDecks(firstUserId));
 						dispatch(getCurrentUserCards(firstUserId));
 					}
@@ -146,4 +147,25 @@ export const checkToUnselectUserCard = (cardId) => {
 		type: actionTypes.CHECK_TO_UNSELECT_USER_CARD,
 		cardId: cardId
 	};
+};
+
+const getCurrentUserStatisticsSuccess = (statistics) => {
+	return {
+		type: actionTypes.GET_CURRENT_USER_STATISTICS_SUCCESS,
+		statistics: statistics
+	};
+};
+
+const getCurrentUserStatisticsFail = () => {
+	return {
+		type: actionTypes.GET_CURRENT_USER_STATISTICS_FAIL
+	};
+};
+
+export const getCurrentUserStatistics = (currentUserId) => {
+	return dispatch => {
+		axios.get(`/api/admin/users/${currentUserId}/test`)
+			.then(res => dispatch(getCurrentUserStatisticsSuccess(res.data)))
+			.catch(() => dispatch(getCurrentUserStatisticsFail()));
+	}
 };
