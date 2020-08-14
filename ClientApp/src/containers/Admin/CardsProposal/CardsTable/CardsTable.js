@@ -35,7 +35,7 @@ class CardsTable extends Component {
 					prevPageText="<"
 					nextPageText=">"
 					activePage={this.state.activePage}
-					itemsCountPerPage={10}
+					itemsCountPerPage={12}
 					totalItemsCount={
 						this.props.cardsProposalList !== null
 							? this.props.cardsProposalList.length
